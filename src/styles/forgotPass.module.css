@@ -1,0 +1,29 @@
+.title {
+  font-size: 26px;
+  font-weight: 900;
+  font-family: Greycliff CF, var(--mantine-font-family);
+}
+
+.controls {
+  @media (max-width: var(--mantine-breakpoint-xs)) {
+    flex-direction: column-reverse;
+  }
+}
+
+.control {
+  @media (max-width: var(--mantine-breakpoint-xs)) {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 991px) {
+  .wrapper {
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Ensure content stacks vertically if needed */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    margin: 0; /* Remove any margins */
+    height: 50vh;
+  }
+}

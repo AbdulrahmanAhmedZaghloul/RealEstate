@@ -1,0 +1,45 @@
+@import "/node_modules/@abdulrysr/saudi-riyal-new-symbol-font/style.css";
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+:root {
+  --color-1: #6e62e5;
+  --color-2: #1b2559;
+  --color-3: #2b3674;
+  --color-4: #7a739f;
+  --color-5: #ffffff;
+  --color-6: #F4F7FE;
+  --color-7: #ffffff;
+  --color-8: #0d0f11;
+
+  --color-border: #f4f6f9;
+  --color-select: #F1EFFC;
+  --color-9: #B8C0CC;
+
+
+  /* background-color: ; */
+  --font-family-base: "Poppins", sans-serif;
+  --font-family-secondary: "Inter", sans-serif;
+
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+[data-mantine-color-scheme="dark"] {
+  --color-1: #bd92fc;
+  --color-2: #e3e3e3;
+  --color-3: #b8c0cc;
+  --color-4: #B8C0CC;
+  --color-5: #121519;
+  --color-6: #0d0f11;
+  --color-7: #191d23;
+  --color-border: #191d23;
+  --color-select: #F1EFFC;
+  --color-9: #B8C0CC;
+
+}

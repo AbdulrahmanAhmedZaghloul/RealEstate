@@ -1,0 +1,108 @@
+.header {
+  padding: 1rem 2rem;
+}
+
+.inner {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Desktop Links */
+.links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.links a {
+  /* color: ; */
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+
+}
+
+.links a:hover {
+  color: #1c7ed6;
+}
+
+.authButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.GetButtons {
+  border-radius: 10px;
+  border-width: 1px;
+  background-color: var(--color-1);
+}
+
+.SignButtons {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+/* Burger hidden by default */
+.burger {
+  display: none;
+}
+
+/* Drawer styles */
+.drawerLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.links .navLinks {
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 150%;
+  letter-spacing: 0%;
+  color: var(--color-2);;
+}
+
+.links .navLinks:hover {
+  color: #848485 !important;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+
+  .links,
+  .authButtons {
+    display: none;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .drawerLinks .navLinks {
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 150%;
+    letter-spacing: 0%;
+    color: var(--color-2);;
+    list-style-type: none;
+    text-decoration: none;
+  }
+
+  .drawerLinks .navLinks:hover {
+    color: #848485 !important;
+  }
+}

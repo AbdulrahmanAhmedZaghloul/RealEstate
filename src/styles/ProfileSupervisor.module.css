@@ -1,0 +1,381 @@
+.container {
+  padding: 20px;
+  background-color: var(--color-5);
+}
+
+.employePosition {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--color-3);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.profile {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  /* background-color: yellow; */
+}
+
+.profile svg {
+  /* background-color: turquoise; */
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  border-radius: 16px;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: #cfcfd1;
+}
+
+.gridCol {
+  display: block !important;
+}
+
+.gridCol h2 {
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--color-2);
+}
+
+.gridCol h3 {
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px !important;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-3);
+ }
+
+.profileImage {
+  margin-right: 20px;
+}
+
+.pictureImage {
+  background-color: var(--color-3);
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(217, 216, 213);
+  letter-spacing: 4px;
+}
+
+.profileImage {
+  /* flex: 1; */
+  display: flex;
+  align-items: center;
+}
+
+.profileInfo {
+  /* background-color: chocolate; */
+  padding-left: 35px;
+}
+
+.profileInfo h2 {
+  font-family: Inter;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--color-3);
+}
+
+.profileInfo p {
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--color-3);
+}
+
+.personalInfo {
+  margin-bottom: 20px;
+  border: 1px solid #cfcfd1;
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.personalInfo div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* margin-bottom: 10px; */
+}
+
+.personalInfo div svg {
+  border-radius: 16px;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: #dbdbdb;
+}
+
+.personalInfo div h3 {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-3);
+}
+
+.personalInfo ul {
+  list-style: none;
+  padding: 0;
+}
+
+.personalInfo li {
+  margin-bottom: 10px;
+}
+
+.active {
+  width: 100px !important;
+  height: 26px;
+  background-color: #e9ffef;
+  color: #409261 !important;
+  position: relative;
+  margin: 0;
+  font-weight: 200;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background-color: #409261;
+  border-radius: 100%;
+  left: 5px;
+  top: 45%;
+}
+
+.gridColSelling {
+  padding: 2rem;
+}
+
+.selling {
+  border-radius: 10px;
+  border: 1px solid #cfcfd1;
+  text-align: center;
+  padding: 1.3rem 2rem;
+}
+
+.selling h5 {
+  font-family: Inter;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-3);
+  margin: 0.8rem;
+  margin-bottom: 1.5rem !important;
+}
+
+.MonH6 {
+  /* padding-top: 5px; */
+  border-top: 1px solid #cfcfd1;
+  margin: 0;
+}
+
+.selling div h6 {
+  font-family: Inter;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-3);
+  margin: 0.5rem;
+  margin-top: 1rem !important;
+  margin-bottom: 0 !important;
+}
+
+.Monthly {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Monthly h3 {
+  font-family: Inter;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--color-2);
+}
+
+.Monthlysvg h4 {
+  font-family: Inter;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -2%;
+  color: var(--color-4);
+}
+.Monthlysvg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Monthlysvg svg {
+  cursor: pointer;
+}
+.Dropdown {
+  margin-top: -10px;
+  width: fit-content !important;
+}
+
+.chart {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  height: 100%;
+}
+
+.dropdown {
+  margin-bottom: 20px;
+  max-width: 95px;
+  cursor: pointer;
+
+  border: 0px;
+  font-size: 14px;
+  color: var(--color-4);
+  float: right;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* Consistent padding */
+  padding: 6px 24px 6px 10px;
+
+  /* Consistent background positioning */
+  background: url("../assets/downArrow.svg") no-repeat right 0px center;
+  background-size: 22px;
+}
+
+.properties {
+  margin-bottom: 20px;
+}
+
+.propertyList {
+  display: flex;
+  justify-content: space-between;
+}
+
+.propertyItem {
+  flex: 1;
+  text-align: center;
+  background-color: #fff;
+  padding: 10px;
+  margin: 0 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.propertyItem img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  flex: 1;
+  margin: 0 10px;
+  width: 292px;
+  height: 163px;
+}
+
+.cardTitle {
+  margin-left: 24px;
+  margin-top: 24px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--color-2);
+}
+
+.cardCount {
+  margin-left: 24px;
+  margin-right: 24px;
+  margin-top: 10px;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-2);
+  border-bottom: #e3e7ec 1px solid;
+  padding-bottom: 5px;
+  text-align: center;
+}
+.cardRevenue {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-2);
+  margin-top: 5px;
+  text-align: center;
+}
+
+.cardDropdown,
+.dropdown {
+  cursor: pointer;
+
+  border: 0px;
+  font-size: 14px;
+  color: var(--color-4);
+  float: right;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* Consistent padding */
+  padding: 6px 24px 6px 10px;
+
+  /* Consistent background positioning */
+  background: url("../assets/downArrow.svg") no-repeat right 0px center;
+  background-size: 22px;
+}
+
+/* Specific styles for cardDropdown */
+.cardDropdown {
+  margin-top: 24px;
+  margin-right: 8px;
+  max-width: 95px;
+}

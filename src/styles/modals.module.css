@@ -1,0 +1,64 @@
+.amenitiesBadge {
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 54px;
+  border: 1px solid #ccc;
+  font-size: 12px;
+  font-weight: 400;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: "inline-block";
+  position: "relative";
+}
+
+.amenitiesBadge:hover {
+  background-color: #e0e7ff; /* Light blue hover effect */
+  color: #1e3a8a; /* Darker text color on hover */
+}
+
+.addButton {
+  background-color: var(--color-3); 
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  width: 20%;
+  height: 48px;
+  border-radius: 8px;
+ 
+}
+.doneButton{
+
+  background-color: var(--color-3);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  width: 30%;
+  height: 48px;
+  border-radius: 8px;
+}
+.resetButton{
+  background-color: var(--color-5);
+  border: 1px solid var(--color-3);
+  color:var(--color-3);
+  font-size: 12px;
+  font-weight: 600;
+  width: 30%;
+  height: 48px;
+  border-radius: 8px;
+}
+
+.addButton:hover, .doneButton:hover, .resetButton:hover {
+  background-color: #e0e7ff; /* Light blue hover effect */
+  color: #1e3a8a; /* Darker text color on hover */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+@media (max-width: 991px) {
+  .addButton {
+    width: 100%;
+  }
+  .doneButton{
+    width: 100%;
+  }
+  .resetButton{
+    width: 100%;
+  }
+}

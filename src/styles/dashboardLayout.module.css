@@ -1,0 +1,47 @@
+.navbar {
+  width: 80px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.linksContainer {
+  margin-left: 10px;
+}
+
+.link {
+  width: 70px;
+  justify-content: center;
+}
+
+.link span {
+  display: none;
+}
+
+.footer {
+  margin-left: 10px;
+}
+
+.profileContainer {
+  display: none;
+}
+
+.avatar {
+  margin: 20px auto;
+}
+.mainContent {
+  background-color: var(--color-5);
+  /* margin-left: 290px; */
+}
+
+@media (max-width: 991px) {
+  .mainContent {
+    margin-left: 0px !important;
+    background-color: var(--color-5);
+    padding: 0;
+  }
+  .navbar{
+    border-radius: 15px;
+    transition:  0.3s ease-in-out;
+
+  }
+}

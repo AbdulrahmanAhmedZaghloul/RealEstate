@@ -1,0 +1,84 @@
+.positionTarget {
+    position: relative;
+    float: right;
+    cursor: pointer;
+}
+
+
+.positionBox {
+    background-color: var(--color-5);
+    width: 378px !important;
+    height: 500px;
+    top: 16px;
+    left: 550px;
+    border-radius: 16px;
+    border-width: 1.2px;
+    margin-left: -30px;
+    margin-top: -70px;
+    overflow: auto;
+}
+
+.positionFlex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.positionFlex span {
+
+    font-family: Inter;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: var(--color-2);
+}
+
+.divFlex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    /* background-color: crimson; */
+}
+
+.divImage img {
+    width: 48px;
+    height: 48px;
+    border-radius: 100px;
+    margin-right: 0.5rem;
+}
+
+.divImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: aqua; */
+
+}
+
+.name {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0%;
+    color: var(--color-2);
+}
+
+.Add {
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0%;
+    color:var(--color-2);
+}
+
+.data {
+    /* background-color: chartreuse; */
+}
+
+.data p {
+    color: var(--color-2);
+    /* background-color: chartreuse; */
+}

@@ -1,0 +1,79 @@
+.flexNav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+    padding: 1rem;
+}
+
+.flexNav button{
+    width: 102px;
+    height: 43px;
+    background-color: var(--color-1);
+    font-family: 'Poppins';
+    font-weight: 500;
+    color: #fff;
+    line-height: 150%;
+    border: none;
+    border-radius: 10px;
+    /* background-color:"#" */
+}
+
+.Step{
+     height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Step1{ 
+     margin: auto;
+     text-align: center;
+}
+
+
+.Step  div p{
+font-family: 'Poppins';
+font-size:18px;
+font-weight: 400;
+letter-spacing: 3%;
+line-height: 32px;
+color: #454545;
+margin: 0;
+}
+
+
+.Step div h3{
+font-family: 'Poppins';
+font-size:32px;
+font-weight: 700;
+letter-spacing: 3%;
+line-height: 32px;
+color: var(--color-2);;
+margin: 2rem 0;
+
+}
+
+
+
+.Step div button{ 
+width: 300px;
+height: 40px;
+color: #fff;
+background-color: var(--color-1);
+border: none;
+border-radius: 10px;
+margin: 2.5rem 0;
+cursor: pointer;
+}
+
+.plan {
+ text-align: start;
+ display: flex;
+ justify-content: start;
+ align-items: start;
+ gap: 10px;
+ margin: 10px 0;
+}

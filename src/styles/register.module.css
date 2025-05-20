@@ -1,0 +1,81 @@
+.title {
+  font-family:
+    Greycliff CF,
+    var(--mantine-font-family);
+  font-weight: 900;
+}
+
+.RegisterContainer {
+  padding: 2rem;
+  margin: auto;
+}
+
+.Paperimg{
+  width: 18%;
+  margin-bottom:10px;
+}
+
+.PaperContainer{
+  margin: auto;
+}
+
+.PaperButton{
+  background-color: var(--color-1);
+}
+
+.imageContainer {
+  margin-top: 40px;
+  background-color: var(--color-1);
+  border-radius: 10px;
+  padding: 2rem;
+  padding-bottom: 5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.imageContainer p {
+  font-family: 'Inter';
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 45px;
+  color: aliceblue;
+
+  z-index: 12;
+  position: relative;
+}
+
+.imageContainer h2 {
+  font-family: 'Inter';
+  font-weight: bold;
+  font-size: 32px;
+  line-height: 45px;
+  color: aliceblue;
+
+  z-index: 12;
+  position: relative;
+}
+
+.imageContainer img {
+  width: 90%;
+  height: 100%;
+  border-radius: 10px;
+  margin-left: auto;
+  display: flex;
+  justify-content: end;
+  z-index: 12;
+  position: relative;
+}
+
+.position1 {
+  position: absolute;
+  top: 0px;
+  right: 3rem;
+  width: 20%;
+}
+
+.position2 {
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  width: 20%;
+}

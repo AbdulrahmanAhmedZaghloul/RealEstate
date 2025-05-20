@@ -1,0 +1,42 @@
+.Group {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  cursor: pointer;
+}
+
+.Groupsvg svg {
+  padding: 10px;
+  margin: auto;
+}
+
+.divsvg {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-direction: column;
+}
+
+.divRadio {
+  width: 100%;
+  padding: 10px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: 1px solid var(--color-border);
+}
+
+.languageButton {
+  border: none;
+  padding: 5px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 300;
+  background-color: var(--color-1);
+  color: var(--color-select);
+  cursor: pointer;
+  /* background-color: #f1effc; */
+}

@@ -1,0 +1,672 @@
+.card {
+  /* max-width: 1000px; */
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+}
+
+.Down {
+  margin-left: 10px;
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 30px;
+  vertical-align: middle;
+  color: var(--color-4);
+  border: #eeedf4 1px solid;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+
+/* 2image */
+
+.widthImageContainer {
+  width: 40%;
+  padding: 7px;
+}
+
+.widthImageContainer img {
+  width: 100%;
+  padding: 0.6rem;
+  height: 253px;
+  border-radius: 6%;
+}
+
+/* 1image */
+
+.ImageContainerBig {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.ImageContainerBig p {
+  position: absolute;
+  bottom: 2rem;
+  left: 77%;
+  background-color: rgb(255, 255, 255);
+  width: 120px;
+  font-size: 12px;
+  border-radius: 20px;
+  padding: 3px 10px 5px 3px;
+  text-align: center;
+  line-height: 20px;
+}
+
+.ImageContainerBig .mainImage {
+  width: 100%;
+  height: 500px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.positionGrid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 90%;
+  margin-bottom: 2rem;
+}
+
+.positionGridCol {
+  width: 70%;
+}
+
+.imageStarSpan {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 20px;
+  width: 30%;
+}
+
+.positionStar {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.positionStar img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.imageStarSpan img {
+  width: 100%;
+  border-radius: 5px;
+  margin-left: 90px;
+}
+
+/* .imageStar {
+  border-radius: 1rem;
+  width: 100%;
+  height: 50% !important;
+ }
+  */
+.positionStar {
+  position: relative;
+  width: 100%;
+}
+
+.SeeStar {
+  background-color: var(--color-5);
+  padding: 5px 10px;
+  border-radius: 0.9rem;
+  position: absolute;
+  bottom: 15%;
+  right: 15%;
+  font-size: 13px;
+}
+
+/* .imageStarSpan img {
+  width: 100%;
+  height: 34.5%;
+  object-fit: cover;
+  border-radius: 0.5rem; 
+}*/
+
+/* .positionGridCol {
+  margin: 0;
+  background-color: var(--color-2);
+  width: 70%;
+}
+
+.imageStarSpan {
+  width: 30%;
+  padding: 10px;
+}
+
+.positionGrid {
+  width: 100%;
+  margin: 0;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: yellow;
+} */
+
+.mainImage {
+  width: 100%;
+  height: auto;
+}
+
+.thumbnailContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+}
+
+.details {
+  /* padding: 20px; */
+  display: flex;
+  flex-direction: column;
+}
+
+.price {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-1);
+  margin-right: 15px;
+}
+
+.downPayment {
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-4);
+  border-radius: 30px;
+  border: 1px solid var(--color-border);
+  padding: 5px 10px;
+}
+
+.viewContainer {
+  border: 1px solid #e9e9e9;
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.viewImage {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.viewImage span {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+
+  vertical-align: middle;
+  color: #23262a;
+}
+
+.viewText {
+  border-top: #e2e2e2 1px solid;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.viewText span {
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-1);
+  text-align: center;
+}
+
+.title {
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-2);
+}
+
+.locationMap {
+  width: 100%;
+  height: 300px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.flexLocation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.svgLocation {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.svgLocation svg {
+  margin-right: 10px;
+}
+
+.location {
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-4);
+}
+
+.time {
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-4);
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.description h4 {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-3);
+}
+
+.description p {
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-2);
+}
+
+.ContractSection h4 {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-3);
+  margin-bottom: 10px;
+}
+
+.ContractSection {}
+
+.ContractImage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #d1d1d1;
+  border-radius: 7px;
+}
+
+.ContractImage img {
+  width: 100%;
+  height: 386px;
+  padding: 10px;
+  object-fit: cover;
+  filter: blur(3px);
+}
+
+.ContractText {
+  position: absolute;
+  height: 386px;
+  right: 0;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ContractButton {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ContractButton Button:hover {
+  background-color: transparent;
+}
+
+.ContractButton Button {
+  background-color: transparent;
+  padding: 5px;
+  margin: 0;
+  border: 1px silver solid;
+  border-radius: 10px;
+}
+
+.documents p {
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: #23262a;
+  border: 1px solid var(--color-border);
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+.ContractsInformation {
+  margin-top: 20px;
+}
+
+.InformationGrid {
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  margin-top: 10px;
+}
+
+.InformationButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.InformationButton h3 {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-3);
+}
+
+.InformationButton button {
+  background-color: transparent;
+  padding: 5px;
+  margin: 0;
+  border: 1px silver solid;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.InformationButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.InformationButton Button:hover {
+  background-color: transparent;
+}
+
+.InformationType {
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--color-2);
+}
+
+.InformationSale {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-3);
+}
+
+.Location {
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-3);
+}
+
+.LocationPrivado {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.LocationPrivado span {
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-2);
+  margin-left: 10px;
+}
+
+.SeeLocation img {
+  width: 100%;
+  height: 400px;
+  top: 2280px;
+  left: 1px;
+  object-fit: cover;
+  /* position: relative; */
+}
+
+.SeeLocation {
+  position: relative;
+}
+
+.SeeLocation span {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  background-color: var(--color-5);
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border: 1px solid #444343;
+  border-radius: 10px;
+}
+
+/* ///////////////////////////////// */
+.agentInfo {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.agentDetails {
+  display: flex;
+  align-items: center;
+}
+
+.agentImage {
+  border-radius: 50%;
+  margin-right: 10px;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.agentName {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--color-3);
+}
+
+.document {
+  margin-top: 20px;
+}
+
+.document h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--color-3);
+}
+
+.document a {
+  font-size: 14px;
+  color: #1e90ff;
+  text-decoration: none;
+}
+
+.document a:hover {
+  text-decoration: underline;
+}
+
+.agentSection {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.agentSection img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.agentSection div {
+  display: flex;
+  flex-direction: column;
+}
+
+.agentSection div p {
+  margin: 0;
+}
+
+.agentSection div button {
+  margin-top: 5px;
+}
+
+@media (max-width: 991px) {
+  .widthImageContainer {
+    display: none;
+  }
+
+  .ImageContainerBig {
+    width: 100%;
+    padding: 0;
+  }
+
+  .mainImage {
+    height: 250px !important;
+    border-radius: 0 !important;
+  }
+
+  .ImageContainerBig p {
+    left: 73%;
+    bottom: 0;
+    width: 95px !important;
+    height: 28px !important;
+    font-size: 12px !important;
+    padding: 0;
+    padding-top: 4px;
+  }
+
+  .card {
+    padding: 0 !important;
+  }
+
+  .imageStar {
+    width: 100% !important;
+  }
+
+  .positionStar {
+    width: 100% !important;
+  }
+
+  .positionGridCol {
+    width: 100% !important;
+
+  }
+
+  .positionGrid {
+    width: 100% !important;
+    margin: 0;
+  }
+
+  .details {
+    padding: 20px;
+  }
+
+  .SeeStar {
+    display: none;
+  }
+
+  .viewContainer {
+    width: 80%;
+  }
+}

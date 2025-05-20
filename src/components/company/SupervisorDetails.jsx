@@ -275,11 +275,7 @@ const handleOpenChangePassword = () => {
 
   return (
     <div
-      style={{
-        backgroundColor: "#fff",
-        borderRadius: "20px",
-        border: "1px solid transparent",
-      }}
+  
       className={classes.container}
     >
       <div className={classes.header}>

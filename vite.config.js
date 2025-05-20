@@ -3,11 +3,9 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // base: '/RealEstate',
-    plugins: [react()],
+  plugins: [react()],
   server: {
     host: '0.0.0.0'
-  }
-    // base: '/RealEstateSmart',
-
+  },
+  base: './' // 🔥 مهم لروابط الملفات والصور تشتغل صح على Netlify
 })

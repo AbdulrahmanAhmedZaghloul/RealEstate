@@ -222,14 +222,7 @@ function EmployeeDetails() {
       // Map API data to state
       console.log(apiData);
       setKpiData(apiData);
-      // setData({
-      //   timeFrame: apiData.time_frame,
-      //   period: apiData.period,
-      //   employeeStats: apiData.employee_stats,
-      //   rankings: apiData.rankings,
-      //   periodTotals: apiData.period_totals,
-      //   trends: apiData.trends,
-      // });
+   
     } catch (error) {
       console.error("Error fetching KPI data:", error);
       notifications.show({
@@ -379,6 +372,7 @@ function EmployeeDetails() {
         }} className={classes.employePosition}>{t.Employee}</span>
         <Notifications />
       </div>
+
       <div className={classes.profile}>
         <div className={classes.profileImage}>
           <img src={`${employee.picture_url}`} alt="Profile" />
@@ -415,11 +409,7 @@ function EmployeeDetails() {
         </svg>
       </div>
 
-      <div style={{
-        border: "1px solid #cfcfd1",
-
-
-      }} className={classes.personalInfo}>
+      <div   className={classes.personalInfo}>
         <div >
           <h3 style={{
           }}>{t.PersonalInfo}</h3>
@@ -498,10 +488,12 @@ function EmployeeDetails() {
           </Grid.Col>
         </Grid>
       </div>
+
       <div className={classes.summary}>
         <div style={{
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-        }} className={classes.card}>
+        }} 
+        className={classes.card}>
           <div style={{
           }}
             className={classes.cardTitle}>{t.Selling}</div>
@@ -567,7 +559,8 @@ function EmployeeDetails() {
 
       <div style={{
         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-      }} className={classes.chart}>
+      }}
+       className={classes.chart}>
         <span style={{ fontSize: "20px", fontWeight: "bold" }}>
           {t.YearlyPerformance} <br />
         </span>

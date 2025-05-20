@@ -258,7 +258,7 @@
 }
 
 .chart {
-  background-color: #fff;
+  background-color:var(--color-7);
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -320,7 +320,7 @@
 }
 
 .card {
-  background-color: #fff;
+  background-color: var( --color-7);
   border-radius: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;

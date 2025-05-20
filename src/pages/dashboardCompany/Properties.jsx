@@ -285,7 +285,7 @@ function Properties() {
               >
                 <Card.Section radius="md">
                   <Image
-                    src={`${listing.employee.picture_url}`}
+                    src={`${listing.picture_url}`}
                     alt={listing.title}
                     h="233px"
                     radius="md"

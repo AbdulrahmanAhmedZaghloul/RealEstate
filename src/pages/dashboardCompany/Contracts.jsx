@@ -10,11 +10,9 @@ import { useAuth } from "../../context/authContext";
 import { notifications } from "@mantine/notifications";
 import AddContractsModal from "../../components/modals/addContractsModal";
 import FilterContractsModal from "../../components/modals/filterContractsModal";
-import area from "../../assets/area.svg";
-import downArrow from "../../assets/downArrow.svg";
+
 import Notifications from "../../components/company/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
-import { useMantineColorScheme } from "@mantine/core";
 import { useTranslation } from "../../context/LanguageContext";
 import { useProperties } from "../../hooks/queries/useProperties";
 import { useContracts } from "../../hooks/queries/useContracts";
@@ -22,10 +20,6 @@ import { useAddContract } from "../../hooks/mutations/useAddContract";
 import Rooms from "../../components/icons/rooms";
 import Bathrooms from "../../components/icons/bathrooms";
 import Area from "../../components/icons/area";
-import AddIcon from "../../components/icons/addIcon";
-import Dropdown from "../../components/icons/dropdown";
-import FilterIcon from "../../components/icons/filterIcon";
-
 function Contracts() {
 
   const {
@@ -62,17 +56,17 @@ function Contracts() {
     { open: openFilterModal, close: closeFilterModal },
   ] = useDisclosure(false);
   // Form validation using Mantine's useForm
-  const { colorScheme } = useMantineColorScheme();
-
   useEffect(() => {
-    setContracts(contractsData?.contracts.data || []);
+    setContracts(contractsData?.data?.contracts || []);
+
     setApprovedListings(
       listingsData?.data?.listings?.filter(
         (listing) => listing.status === "approved"
       ) || []
     );
-  }, [contractsData?.contracts.data, listingsData]);
-// console.log(contractsData.contracts.data);
+  }, [contractsData, listingsData]);
+
+  // console.log(contractsData.contracts.data);
 
   const mutation = useAddContract(user.token, close);
   const handleAddContract = (values) => {
@@ -292,12 +286,11 @@ function Contracts() {
             </Center>
           ) : (
             paginatedContracts.map((contract) => (
-              
-              
+
+
               <div
                 key={contract.id}
                 className={classes.contractCard}
-                // style={{ cursor: "pointer" }}
                 onClick={() => navigate(`/dashboard/Contracts/${contract.id}`)}
                 style={{
                   cursor: "pointer",
@@ -307,7 +300,7 @@ function Contracts() {
               >
                 {console.log(contract)}
                 <Image
-                  src={contract.real_estate?.image}
+                  src={contract.document_url}
                   alt="Property"
                   className={classes.contractImage}
                 />
@@ -352,7 +345,7 @@ function Contracts() {
                     <span>
                       {contract.real_estate.area
                         ? contract.real_estate.area
-                        : "-"}{" "}
+                        : "-"} 
                       sqm
                     </span>
                   </div>

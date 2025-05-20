@@ -198,9 +198,9 @@ function Profile() {
     formData.append("company_name", formName);
     formData.append("phone_number", formPhone);
     formData.append("address", formAddress);
-    formData.append("bio", formBio);
+    formData.append("bio", bio);
     if (imageFile) formData.append("picture", imageFile);
-    console.log(formData.formPhone);
+    console.log(bio);
 
     mutationEditProfile.mutate(formData);
     setIsUpdatingProfile(false);
@@ -302,7 +302,6 @@ function Profile() {
                 <GridCol span={12} className={classes.AvatarBio}>
                   <h4>{t.bio}</h4>
                   <Text>{bio}</Text>
-                  {console.log(bio)}
                 </GridCol>
               ) : (
                 ""

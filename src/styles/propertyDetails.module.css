@@ -168,7 +168,8 @@
 }
 
 .svgSpan {
-  margin-top: 5px;;
+  margin-top: 5px;
+  ;
 }
 
 .svgSpan span {
@@ -191,40 +192,33 @@
 .BoxImage {
   padding: 2rem;
   margin: auto;
-  /* border: 1px solid #ccc; */
+  border: 1px solid var(--color-border);
   border-radius: 6%;
   width: 95%;
- }
+}
 
 .divImage {
   position: relative;
   align-items: center;
   margin: auto;
   width: 95%;
-  /* background-color: rgb(171, 50, 205); */
-  margin-bottom: 10px;
+   margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
 
 }
 
-.divImage img {
+ .Avatar{
   width: 30%;
-  border-radius: 100px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-  padding: 1px;
-  margin: auto;
-}
+  height: 30%;
+  border-radius: 50%;
+ }
 .spanImage {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  max-width: 70%;
-  /* position: absolute; */
-  /* top: 25%; */
-  /* left: 33%; */
+  max-width: 70%; 
   font-weight: 600;
   font-size: 16px;
   align-items: center;
@@ -243,7 +237,7 @@
 }
 
 .TextView {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--color-border);
 }
 
 .TextView .View {
@@ -268,7 +262,8 @@
   letter-spacing: 0%;
   vertical-align: middle;
   color: var(--color-3);
-  margin-top: 20px;;
+  margin-top: 20px;
+  ;
 }
 
 .listing {
@@ -376,14 +371,17 @@
   .widthImageContainer {
     display: none;
   }
+
   .ImageContainerBig {
     width: 100%;
     padding: 0;
   }
+
   .mainImage {
     height: 250px !important;
     border-radius: 0 !important;
   }
+
   .ImageContainerBig p {
     left: 73%;
     bottom: 0;
@@ -393,34 +391,42 @@
     padding: 0;
     padding-top: 4px;
   }
+
   .card {
     padding: 0;
   }
+
   .item {
     margin-left: 10px;
   }
+
   .price {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
     max-width: 100%;
   }
+
   .Fully {
     margin-left: 5px;
     font-size: 16px !important;
   }
-  .svgP{
+
+  .svgP {
     margin: 0;
     margin-left: 5px;
   }
-  .Description, .listing{
+
+  .Description,
+  .listing {
     margin-left: 10px;
     margin-bottom: 20px;
   }
-  .BoxImage{
+
+  .BoxImage {
     width: 80%;
     margin: 0;
     margin-left: 10px;
   }
-  
+
 }

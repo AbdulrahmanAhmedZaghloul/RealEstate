@@ -19,6 +19,8 @@ import { BurgerButton } from "../buttons/burgerButton";
 import Notifications from "./Notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import { IconEye, IconEyeOff } from "@tabler/icons-react"; // أو أي مكتبة أيقونات مستخدمة
+import EditIcon from "../icons/edit";
+import DeleteIcon from "../icons/DeleteIcon";
 
 function EmployeeDetails() {
   const [employee, setEmployee] = useState(null);
@@ -222,7 +224,7 @@ function EmployeeDetails() {
       // Map API data to state
       console.log(apiData);
       setKpiData(apiData);
-   
+
     } catch (error) {
       console.error("Error fetching KPI data:", error);
       notifications.show({
@@ -383,59 +385,28 @@ function EmployeeDetails() {
             }}>{employee.email}</p>
           </div>
         </div>
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 48 48"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          cursor={"pointer"}
+        <span
+          style={{
+            cursor: "pointer",
+          }}
           onClick={openDeleteModal}
-          className={classes.deleteIcon}
-        >
-          <rect
-            x="0.75"
-            y="0.75"
-            width="46.5"
-            height="46.5"
-            rx="15.25"
-            stroke="var(--color-border)"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M19 33C18.45 33 17.9793 32.8043 17.588 32.413C17.1967 32.0217 17.0007 31.5507 17 31V18H16V16H21V15H27V16H32V18H31V31C31 31.55 30.8043 32.021 30.413 32.413C30.0217 32.805 29.5507 33.0007 29 33H19ZM29 18H19V31H29V18ZM21 29H23V20H21V29ZM25 29H27V20H25V29Z"
-            fill="#666666"
-          />
-        </svg>
+          className={classes.deleteIcon}>
+          <DeleteIcon />
+        </span>
+
       </div>
 
-      <div   className={classes.personalInfo}>
+      <div className={classes.personalInfo}>
         <div >
           <h3 style={{
           }}>{t.PersonalInfo}</h3>
-          <svg
-            width="48"
-            height="48"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            cursor={"pointer"}
-            onClick={openEditModal}
-          >
-            <rect
-              x="0.75"
-              y="0.75"
-              width="46.5"
-              height="46.5"
-              rx="15.25"
-              stroke="var(--color-border)"
-              strokeWidth="1.5"
-            />
-            <path
-              d="M18.414 27.89L28.556 17.748L27.142 16.334L17 26.476V27.89H18.414ZM19.243 29.89H15V25.647L26.435 14.212C26.6225 14.0245 26.8768 13.9192 27.142 13.9192C27.4072 13.9192 27.6615 14.0245 27.849 14.212L30.678 17.041C30.8655 17.2285 30.9708 17.4828 30.9708 17.748C30.9708 18.0132 30.8655 18.2675 30.678 18.455L19.243 29.89ZM15 31.89H33V33.89H15V31.89Z"
-              fill="#666666"
-            />
-          </svg>
+          <span style={{
+            cursor: "pointer",
+          }} onClick={openEditModal}>
+            <EditIcon />
+
+          </span>
+
         </div>
         <Grid>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
@@ -451,12 +422,7 @@ function EmployeeDetails() {
             <h3 style={{
             }}>{employee.position}</h3>
           </Grid.Col>
-          <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2 style={{
-            }}>{t.EmployeeID}</h2>
-            <h3 style={{
-            }}>{employee.employee_id}</h3>
-          </Grid.Col>
+
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
             <h2 style={{
             }}>{t.Supervisor}</h2>
@@ -492,8 +458,8 @@ function EmployeeDetails() {
       <div className={classes.summary}>
         <div style={{
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-        }} 
-        className={classes.card}>
+        }}
+          className={classes.card}>
           <div style={{
           }}
             className={classes.cardTitle}>{t.Selling}</div>
@@ -560,7 +526,7 @@ function EmployeeDetails() {
       <div style={{
         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
       }}
-       className={classes.chart}>
+        className={classes.chart}>
         <span style={{ fontSize: "20px", fontWeight: "bold" }}>
           {t.YearlyPerformance} <br />
         </span>

@@ -30,6 +30,11 @@ import { useEditUser } from "../../hooks/mutations/useEditUser";
 import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
 import AddIcon from "../../components/icons/addIcon";
+import Search from "../../components/icons/search";
+import EditIcon from "../../components/icons/edit";
+import DeleteIcon from "../../components/icons/DeleteIcon";
+import RightDown from "../../components/icons/RightDown";
+import DownStaff from "../../components/icons/DownStaff";
 
 const jobColors = {
   supervisor: "orange",
@@ -63,6 +68,7 @@ function Staff() {
   const { user } = useAuth();
   const [addModalOpened, { open: openAddModal, close: closeAddModal }] =
     useDisclosure(false);
+    
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] =
     useDisclosure(false);
 
@@ -75,8 +81,7 @@ function Staff() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState(null);
-  const { colorScheme } = useMantineColorScheme();
-
+ 
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
@@ -231,55 +236,18 @@ function Staff() {
   const isRemoveUserLoading = mutationRemoveUser.isPending;
 
   // Add a new function to confirm and delete the user
-  const confirmDeleteUser = async () => {
-    if (!employeeToDelete) return;
 
-    const { userId, isSupervisor } = employeeToDelete;
-    setLoading(true);
+const confirmDeleteUser = () => {
+  if (!employeeToDelete) return;
 
-    try {
-      const endpoint = isSupervisor
-        ? `/api/supervisors/${userId}`
-        : `/api/employees/${userId}`;
-      await axiosInstance.delete(endpoint, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      });
-
-      isSupervisor
-        ? setSupervisors((prev) => prev.filter((user) => user.id !== userId))
-        : setEmployees((prev) => prev.filter((user) => user.id !== userId));
-
-      isSupervisor
-        ? setSearchedSupervisors((prev) =>
-          prev.filter((user) => user.id !== userId)
-        )
-        : setSearchedEmployees((prev) =>
-          prev.filter((user) => user.id !== userId)
-        );
-
-      fetchSupervisors();
-      fetchEmployees();
-
-      notifications.show({
-        title: "Success",
-        message: "User removed successfully!",
-        color: "green",
-      });
-    } catch (error) {
-      console.error("Error removing user:", error);
-      notifications.show({
-        title: "Error",
-        message: error.response?.data?.message || "Failed to remove user",
-        color: "red",
-      });
-    } finally {
-      setLoading(false);
+  // تنفيذ الحذف باستخدام useRemoveUser hook
+  mutationRemoveUser.mutate({ employeeToDelete }, {
+    onSuccess: () => {
       closeDeleteModal();
       setEmployeeToDelete(null);
-    }
-    mutationRemoveUser.mutate({ employeeToDelete });
-    setEmployeeToDelete(null);
-  };
+    },
+  });
+};
 
   const mutationEditUser = useEditUser(user.token, closeEditModal);
   const isEditUserLoading = mutationEditUser.isPending;
@@ -399,6 +367,7 @@ function Staff() {
       </>
     );
   }
+
   return (
     <>
       <Card
@@ -431,11 +400,7 @@ function Staff() {
                 border: "1px solid var(--color-border)",
               }}
             />
-
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M16.893 16.92L19.973 20M19 11.5C19 13.4891 18.2098 15.3968 16.8033 16.8033C15.3968 18.2098 13.4891 19 11.5 19C9.51088 19 7.60322 18.2098 6.1967 16.8033C4.79018 15.3968 4 13.4891 4 11.5C4 9.51088 4.79018 7.60322 6.1967 6.1967C7.60322 4.79018 9.51088 4 11.5 4C13.4891 4 15.3968 4.79018 16.8033 6.1967C18.2098 7.60322 19 9.51088 19 11.5Z" stroke="#2B3674" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+            <Search />
 
           </div>
 
@@ -445,9 +410,9 @@ function Staff() {
               value={filter}
               mr={10}
               onChange={handleFilterChange} // Call the sorting function here
-              rightSection={<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.4198 0.452003L13.4798 1.513L7.70277 7.292C7.6102 7.38516 7.50012 7.45909 7.37887 7.50953C7.25762 7.55998 7.12759 7.58595 6.99627 7.58595C6.86494 7.58595 6.73491 7.55998 6.61366 7.50953C6.49241 7.45909 6.38233 7.38516 6.28977 7.292L0.509766 1.513L1.56977 0.453002L6.99477 5.877L12.4198 0.452003Z" fill="#7A739F" />
-              </svg>}
+              rightSection={
+                <FilterIcon />
+              }
               data={[
                 { value: "Most seller", label: "Most seller" },
                 { value: "Least seller", label: "Least seller" },
@@ -484,20 +449,19 @@ function Staff() {
               onClick={openAddModal}
               style={{
                 cursor: "pointer",
-
                 border: "1px solid var(--color-border)",
               }}
             >
-              <svg style={{ marginRight: "13px" }} width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 8H1C0.71667 8 0.479337 7.904 0.288004 7.712C0.0966702 7.52 0.000670115 7.28267 3.44827e-06 7C-0.000663218 6.71734 0.0953369 6.48 0.288004 6.288C0.48067 6.096 0.718003 6 1 6H6V1C6 0.71667 6.096 0.479337 6.288 0.288004C6.48 0.0966702 6.71734 0.000670115 7 3.44827e-06C7.28267 -0.000663218 7.52034 0.0953369 7.713 0.288004C7.90567 0.48067 8.00134 0.718003 8 1V6H13C13.2833 6 13.521 6.096 13.713 6.288C13.905 6.48 14.0007 6.71734 14 7C13.9993 7.28267 13.9033 7.52034 13.712 7.713C13.5207 7.90567 13.2833 8.00134 13 8H8V13C8 13.2833 7.904 13.521 7.712 13.713C7.52 13.905 7.28267 14.0007 7 14C6.71734 13.9993 6.48 13.9033 6.288 13.712C6.096 13.5207 6 13.2833 6 13V8Z" fill="#7A739F" />
-              </svg>{t.Add}
+              <span style={{ marginRight: "13px" }} >
+                <AddIcon />
+              </span>
+              {t.Add}
             </button>
           </div>
         </div>
         <Table.ScrollContainer>
           <Table
             style={{
-              backgroundColor: "",
               border: "1px solid var(--color-white)",
             }}
             verticalSpacing="xs"
@@ -505,16 +469,14 @@ function Staff() {
           >
             <Table.Thead
               style={{
-                backgroundColor: "",
                 borderRadius: "20px",
-                border: "1px solid var(--color-white)",
+                border: "1px solid var(--color-border)",
               }}
             >
               <Table.Tr
                 style={{
-                  backgroundColor: "",
                   borderRadius: "20px",
-                  border: "1px solid var(--color-white)",
+                  border: "1px solid var(--color-border)",
                 }}
               >
                 <Table.Th className={classes.tableth}>{t.Users}</Table.Th>
@@ -528,27 +490,17 @@ function Staff() {
             {searchQuery === "" && filter === null ? (
               <Table.Tbody
                 style={{
-                  backgroundColor: "",
                   borderRadius: "20px",
-                  border: "1px solid var(--color-white)",
+                  border: "1px solid var(--color-border)",
                 }}
               >
-                {/* {supervisors.map((supervisor) => ( */}
                 {paginatedSupervisors.map((supervisor) => (
                   <React.Fragment key={supervisor.supervisor_id}>
                     <Table.Tr
-                      style={{
-                        backgroundColor: "",
-                      }}
                       key={supervisor.supervisor_id}
                     >
                       <Table.Td
-                        style={
-                          {
-                            // backgroundColor:   "",
-                            // borderRadius: "20px",
-                          }
-                        }
+
                         className={classes.tablebody}
                         w="20%"
                       >
@@ -563,9 +515,9 @@ function Staff() {
                             }
                           >
                             {expandedSupervisors[supervisor.supervisor_id] ? (
-                              <img src={down} />
+                              <DownStaff />
                             ) : (
-                              <img src={right} />
+                              <RightDown />
                             )}
                           </ActionIcon>
                           <Avatar
@@ -656,7 +608,8 @@ function Staff() {
                             onClick={() => handleEditUser(supervisor)}
                             mr={24}
                           >
-                            <img src={edit} />
+                            <EditIcon />
+                            {/* <img src={edit} /> */}
                           </ActionIcon>
                           <ActionIcon
                             variant="subtle"
@@ -665,7 +618,8 @@ function Staff() {
                               handleRemoveUser(supervisor.supervisor_id, true)
                             }
                           >
-                            <img src={trash} />
+                            <DeleteIcon />
+                            {/* <img src={trash} /> */}
                           </ActionIcon>
                         </Group>
                       </Table.Td>
@@ -794,7 +748,8 @@ function Staff() {
                                           }
                                           mr={24}
                                         >
-                                          <img src={edit} />
+                                          <EditIcon />
+
                                         </ActionIcon>
                                         <ActionIcon
                                           variant="subtle"
@@ -806,7 +761,7 @@ function Staff() {
                                             )
                                           }
                                         >
-                                          <img src={trash} />
+                                          <DeleteIcon />
                                         </ActionIcon>
                                       </Group>
                                     </Table.Td>
@@ -822,10 +777,7 @@ function Staff() {
                 ))}
                 {groupedEmployees["unassigned"]?.map((employee) => (
                   <Table.Tr
-                    style={{
-                      borderRadius: "20px",
-                      border: "1px solid transparent",
-                    }}
+
                     key={employee.employee_id}
                   >
                     <Table.Td className={classes.tablebody} w="20%">
@@ -889,9 +841,6 @@ function Staff() {
                       <Text fz="sm">{employee.phone_number}</Text>
                     </Table.Td>
                     <Table.Td>
-                      <Text fz="sm">Unassigned</Text>
-                    </Table.Td>
-                    <Table.Td>
                       <Group gap={0} justify="flex-end">
                         <ActionIcon
                           variant="subtle"
@@ -899,7 +848,8 @@ function Staff() {
                           onClick={() => handleEditUser(employee, false)}
                           mr={24}
                         >
-                          <img src={edit} />
+                          <EditIcon />
+
                         </ActionIcon>
                         <ActionIcon
                           variant="subtle"
@@ -908,7 +858,8 @@ function Staff() {
                             handleRemoveUser(employee.employee_id, false)
                           }
                         >
-                          <img src={trash} />
+                          <DeleteIcon />
+
                         </ActionIcon>
                       </Group>
                     </Table.Td>
@@ -918,7 +869,6 @@ function Staff() {
             ) : (
               <Table.Tbody
                 style={{
-                  backgroundColor: "",
                   borderRadius: "20px",
                   border: "1px solid transparent",
                 }}
@@ -926,7 +876,6 @@ function Staff() {
                 {searchedEmployees?.map((employee) => (
                   <Table.Tr
                     style={{
-                      backgroundColor: "",
                       borderRadius: "20px",
                       border: "1px solid transparent",
                     }}
@@ -973,12 +922,6 @@ function Staff() {
                           {employee.status}
                         </span>
                       </Badge>
-                      {/* <Badge
-                     color={jobColors[employee.status]}
-                     variant="light"
-                   >
-                                   {employee.status}
-                   </Badge> */}
                     </Table.Td>
                     <Table.Td>
                       <Anchor component="button" size="sm">
@@ -999,7 +942,8 @@ function Staff() {
                           onClick={() => handleEditUser(employee, false)}
                           mr={24}
                         >
-                          <img src={edit} />
+                          <EditIcon />
+
                         </ActionIcon>
                         <ActionIcon
                           variant="subtle"
@@ -1008,7 +952,8 @@ function Staff() {
                             handleRemoveUser(employee.employee_id, false)
                           }
                         >
-                          <img src={trash} />
+                          <DeleteIcon />
+
                         </ActionIcon>
                       </Group>
                     </Table.Td>
@@ -1061,12 +1006,6 @@ function Staff() {
                           {supervisor.status}
                         </span>
                       </Badge>
-                      {/* <Badge
-                        color={jobColors[supervisor.status]}
-                        variant="light"
-                      >
-                                      {supervisor.status}
-                      </Badge> */}
                     </Table.Td>
                     <Table.Td>
                       <Anchor component="button" size="sm">
@@ -1087,7 +1026,7 @@ function Staff() {
                           onClick={() => handleEditUser(supervisor, false)}
                           mr={24}
                         >
-                          <img src={edit} />
+                          <EditIcon />
                         </ActionIcon>
                         <ActionIcon
                           variant="subtle"
@@ -1096,7 +1035,7 @@ function Staff() {
                             handleRemoveUser(supervisor.supervisor_id, false)
                           }
                         >
-                          <img src={trash} />
+                          <DeleteIcon />
                         </ActionIcon>
                       </Group>
                     </Table.Td>

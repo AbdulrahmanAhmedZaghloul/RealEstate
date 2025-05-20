@@ -17,6 +17,8 @@ import { BurgerButton } from "../buttons/burgerButton";
 import Notifications from "./Notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import { IconEye, IconEyeOff } from "@tabler/icons-react"; // أو أي مكتبة أيقونات مستخدمة
+import DeleteIcon from "../icons/DeleteIcon";
+import EditIcon from "../icons/edit";
 function SupervisorDetails() {
   const [supervisor, setSupervisor] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -200,10 +202,10 @@ function SupervisorDetails() {
       setLoading(false);
     }
   };
-const handleOpenChangePassword = () => {
-  closeEditModal();
-  openChangePasswordModal();
-};
+  const handleOpenChangePassword = () => {
+    closeEditModal();
+    openChangePasswordModal();
+  };
 
   const handleChangePassword = async () => {
     closeEditModal
@@ -212,7 +214,7 @@ const handleOpenChangePassword = () => {
     if (!passwordData.supervisor_id) errors.supervisor_id = "Invalid supervisor";
 
     setPasswordErrors(errors);
- 
+
     if (Object.keys(errors).length > 0) return;
 
     setLoading(true);
@@ -275,7 +277,7 @@ const handleOpenChangePassword = () => {
 
   return (
     <div
-  
+
       className={classes.container}
     >
       <div className={classes.header}>
@@ -307,7 +309,17 @@ const handleOpenChangePassword = () => {
             </p>
           </div>
         </div>
-        <svg
+        <span
+          style={{
+            cursor: "pointer",
+          }}
+     
+          onClick={openDeleteModal}
+          className={classes.deleteIcon}
+          >
+          <DeleteIcon />
+        </span>
+        {/* <svg
           width="48"
           height="48"
           viewBox="0 0 48 48"
@@ -330,7 +342,7 @@ const handleOpenChangePassword = () => {
             d="M19 33C18.45 33 17.9793 32.8043 17.588 32.413C17.1967 32.0217 17.0007 31.5507 17 31V18H16V16H21V15H27V16H32V18H31V31C31 31.55 30.8043 32.021 30.413 32.413C30.0217 32.805 29.5507 33.0007 29 33H19ZM29 18H19V31H29V18ZM21 29H23V20H21V29ZM25 29H27V20H25V29Z"
             fill="#666666"
           />
-        </svg>
+        </svg> */}
       </div>
 
       <div className={classes.personalInfo}>
@@ -341,14 +353,22 @@ const handleOpenChangePassword = () => {
           >
             {t.PersonalInfo}
           </h3>
-          <svg
+          <span style={{
+            cursor: "pointer",
+          }}
+            onClick={handleEditUser.bind(this, supervisor)}
+          >
+            <EditIcon />
+
+          </span>
+
+          {/* <svg
             width="48"
             height="48"
             viewBox="0 0 48 48"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             cursor={"pointer"}
-            onClick={handleEditUser.bind(this, supervisor)}
           >
             <rect
               x="0.75"
@@ -363,7 +383,7 @@ const handleOpenChangePassword = () => {
               d="M18.414 27.89L28.556 17.748L27.142 16.334L17 26.476V27.89H18.414ZM19.243 29.89H15V25.647L26.435 14.212C26.6225 14.0245 26.8768 13.9192 27.142 13.9192C27.4072 13.9192 27.6615 14.0245 27.849 14.212L30.678 17.041C30.8655 17.2285 30.9708 17.4828 30.9708 17.748C30.9708 18.0132 30.8655 18.2675 30.678 18.455L19.243 29.89ZM15 31.89H33V33.89H15V31.89Z"
               fill="#666666"
             />
-          </svg> 
+          </svg> */}
         </div>
         <Grid>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>

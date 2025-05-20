@@ -1,4 +1,3 @@
-// hooks/useAddProperty.js
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../../api/config';
 import { notifications } from '@mantine/notifications';
@@ -7,7 +6,6 @@ export const useEditUser = (userToken, closeModal) => {
     const queryClient = useQueryClient();
 
     const editUser = async ({ editUser }) => {
-
         const formData = new FormData();
         formData.append("name", editUser.name);
         formData.append("email", editUser.email);
@@ -16,19 +14,22 @@ export const useEditUser = (userToken, closeModal) => {
         formData.append("phone_number", editUser.phone_number);
         formData.append("address", editUser.address);
         formData.append("supervisor_id", editUser.supervisor_id);
+
         formData.append("_method", "put");
 
-        if (editUser.image) formData.append("picture", editUser.image);
-        const endpoint =
+        if (editUser.image instanceof File) {
+            formData.append("picture", editUser.image);
+        } const endpoint =
             editUser.id !== undefined
                 ? `/api/employees/${editUser.id}`
                 : `/api/supervisors/${editUser.supervisor_id}`;
-        await axiosInstance.post(endpoint, formData, {
+
+        await   axiosInstance.post(endpoint, formData, {
             headers: { Authorization: `Bearer ${userToken}` },
         });
 
         const isSupervisor = editUser.id === undefined;
-        return {isSupervisor};
+        return { isSupervisor };
     };
 
 

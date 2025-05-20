@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 import { useTranslation } from "../../context/LanguageContext";
 import EditIcon from "../../components/icons/edit";
-// import { useEditProfile } from "../../hooks/mutations/useEditProfile";
 import { useRef, useState } from "react";
 import { useEditProfile } from "../../hooks/mutations/useEditProfile";
 

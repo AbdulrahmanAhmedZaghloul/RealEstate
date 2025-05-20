@@ -33,16 +33,14 @@ align-items: center;
   border-radius: 15px;
   border: 1.5px solid var(--color-border);
   padding: 0 14px;
-  padding-left: 56px;
-  /* background-image: url("../assets/search.svg"); */
-  /* background-repeat: no-repeat; */
-  /* background-position: 24px center; */
+  padding-left: 56px; 
+  background-color: var(--color-7);
 }
 
 .filter {
   width: 48px;
   height: 48px;
-  background-color: transparent;
+  background-color: var(--color-7);
   border-radius: 15px;
   border: 1.5px solid var(--color-border);
   margin-left: 8px;

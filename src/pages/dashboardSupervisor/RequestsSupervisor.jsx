@@ -394,7 +394,7 @@ function RequestsSupervisor() {
                     <div
                       style={{
                         cursor: "pointer",
-x                      }}
+           }}
                       onClick={() => {
                         navigate(
                           `/dashboard-supervisor/Properties/${listing.id}`

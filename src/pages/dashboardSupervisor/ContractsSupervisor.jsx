@@ -66,6 +66,7 @@ function ContractsSupervisor() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
+
         const appListings = [];
         res.data.data.listings.map((listing) => {
           if (listing.status === "approved") {
@@ -85,14 +86,14 @@ function ContractsSupervisor() {
   const fetchContracts = () => {
     setLoading(true);
     axiosInstance
-      .get("/api/v1/contracts", {
+      .get("/api/contracts", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
 
       .then((res) => {
         console.log(res);
 
-        setContracts(res.data.contracts.data);
+        setContracts(res.data.data.contracts);
       })
       .catch((err) => {
         console.log(err);

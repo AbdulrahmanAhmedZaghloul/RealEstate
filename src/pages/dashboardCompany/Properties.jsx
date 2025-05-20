@@ -1,13 +1,7 @@
 //Dependency imports
 import { useEffect, useState } from "react";
 import {
-  Card,
-  Center,
-  Group,
-  Image,
-  Text,
-  Select,
-  Loader,
+  Card, Center, Group, Image, Text, Select, Loader,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
@@ -17,10 +11,6 @@ import { useMantineColorScheme } from "@mantine/core";
 import classes from "../../styles/realEstates.module.css";
 import { useAuth } from "../../context/authContext";
 
-//Image imports
-import Filter from "../../assets/dashboard/filter.svg";
-import addIcon from "../../assets/addIcon.svg";
-import downArrow from "../../assets/downArrow.svg";
 import { useTranslation } from "../../context/LanguageContext";
 
 //Component Imports
@@ -38,6 +28,7 @@ import Area from "../../components/icons/area";
 import AddIcon from "../../components/icons/addIcon";
 import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
+import Search from "../../components/icons/search";
 function Properties() {
   const { user } = useAuth();
 
@@ -202,12 +193,16 @@ function Properties() {
         </div>
 
         <div className={classes.controls}>
-          <input
-            className={classes.search}
-            placeholder={t.Search}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className={classes.divSearch}>
+            <input
+              className={classes.search}
+              placeholder={t.Search}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Search />
+          </div>
+
           <button
             variant="default"
             radius="md"
@@ -233,7 +228,6 @@ function Properties() {
                 input: {
                   width: "132px",
                   height: "48px",
-                  // backgroundColor: "white",
                   borderRadius: "15px",
                   border: "1px solid var(--color-border)",
                   padding: "14px 24px",
@@ -299,6 +293,7 @@ function Properties() {
                   </span>
 
                   <div className={classes.downPaymentBadge}>
+                    {/* {console.log(listing.down_payment)} */}
                     {Math.floor((listing.down_payment / listing.price) * 100)}%
                     {t.DownPayment}
                   </div>

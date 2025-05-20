@@ -1,4 +1,5 @@
-//Dependency imports
+
+//editStaffModal.jsx 
 import {
   Modal,
   Paper,
@@ -6,6 +7,7 @@ import {
   TextInput,
   Button,
   Select,
+  Avatar,
 } from "@mantine/core";
 import downArrow from "../../assets/downArrow.svg";
 
@@ -40,13 +42,31 @@ const EditStaffModal = ({
       }}
     >
       <div style={{ padding: "10px" }}>
+        {/* <FileInput
+          label="Profile Image"
+          accept="image/*"
+          value={editUser.image || undefined} // optional: ربط المدخل بالقيمة الحالية
+          onChange={(file) => setEditUser({ ...editUser, image: file })}
+          error={errors.image}
+          mb="md"
+        /> */}
         <FileInput
+          label="Profile Image"
+          accept="image/*"
+          onChange={(file) => setEditUser({ ...editUser, image: file })}
+          error={errors.image}
+          mb="md"
+        />
+        {/* {editUser.picture_url && (
+          <Avatar src={editUser.picture_url} size={60} radius={60} mb="md" />
+        )} */}
+        {/* <FileInput
           label="Profile Image"
           accept="image/*"
           onChange={handleFileChange}
           error={errors.image}
           mb="md"
-        />
+        /> */}
         <TextInput
           label="Name"
           placeholder="Full name"
@@ -119,10 +139,10 @@ const EditStaffModal = ({
             error={errors.supervisor_id}
           />
         )}
-        <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius= "md">
+        <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
           ChangePassword
         </Button>
-        <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={onEdit} radius= "md">
+        <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={onEdit} radius="md">
           Update user
         </Button>
       </div>

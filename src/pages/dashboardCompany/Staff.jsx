@@ -4,30 +4,30 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
-import axiosInstance, { apiUrl } from "../../api/config";
 import { useNavigate } from "react-router-dom";
+
 import { useAuth } from "../../context/authContext";
 import classes from "../../styles/realEstates.module.css";
-import down from "../../assets/down.svg";
-import right from "../../assets/right.svg";
-import edit from "../../assets/edit.svg";
-import trash from "../../assets/trash.svg";
-import downArrow from "../../assets/downArrow.svg";
-import addIcon from "../../assets/addIcon.svg";
-import AddStaffModal from "../../components/modals/addStaffModal";
-import EditStaffModal from "../../components/modals/editStaffModal";
 import Notifications from "../../components/company/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
-import { useMantineColorScheme } from "@mantine/core";
-import DeleteEmployeeModal from "../../components/modals/deleteEmployeeModal";
 import { useTranslation } from "../../context/LanguageContext";
+
+// model 
+import DeleteEmployeeModal from "../../components/modals/deleteEmployeeModal";
+import AddStaffModal from "../../components/modals/addStaffModal";
+import EditStaffModal from "../../components/modals/editStaffModal";
+
+// hooks  queries & mutations
 import { useEmployees } from "../../hooks/queries/useEmployees";
 import { useSupervisors } from "../../hooks/queries/useSupervisors";
 import { useEmployeePerformance } from "../../hooks/queries/useEmployeePerformance";
 import { useAddUser } from "../../hooks/mutations/useAddUser";
 import { useRemoveUser } from "../../hooks/mutations/useRemoveUser";
 import { useEditUser } from "../../hooks/mutations/useEditUser";
-import Dropdown from "../../components/icons/dropdown";
+
+
+// IconSvg
+// import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
 import AddIcon from "../../components/icons/addIcon";
 import Search from "../../components/icons/search";
@@ -48,12 +48,14 @@ function Staff() {
     isError: isEmployeesError,
     error: employeesError,
   } = useEmployees();
+
   const {
     data: supervisorsData,
     isLoading: supervisorsLoading,
     isError: isSupervisorsError,
     error: supervisorsError,
   } = useSupervisors();
+
   const {
     data: rankingData,
     isLoading: rankingLoading,
@@ -68,7 +70,7 @@ function Staff() {
   const { user } = useAuth();
   const [addModalOpened, { open: openAddModal, close: closeAddModal }] =
     useDisclosure(false);
-    
+
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] =
     useDisclosure(false);
 
@@ -81,7 +83,7 @@ function Staff() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState(null);
- 
+
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
@@ -136,6 +138,7 @@ function Staff() {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery]);
+
   const fetchEmployees = async () => {
     try {
       console.log(employeesData?.data?.employees);
@@ -237,22 +240,23 @@ function Staff() {
 
   // Add a new function to confirm and delete the user
 
-const confirmDeleteUser = () => {
-  if (!employeeToDelete) return;
+  const confirmDeleteUser = () => {
+    if (!employeeToDelete) return;
 
-  // تنفيذ الحذف باستخدام useRemoveUser hook
-  mutationRemoveUser.mutate({ employeeToDelete }, {
-    onSuccess: () => {
-      closeDeleteModal();
-      setEmployeeToDelete(null);
-    },
-  });
-};
+    // تنفيذ الحذف باستخدام useRemoveUser hook
+    mutationRemoveUser.mutate({ employeeToDelete }, {
+      onSuccess: () => {
+        closeDeleteModal();
+        setEmployeeToDelete(null);
+      },
+    });
+  };
 
   const mutationEditUser = useEditUser(user.token, closeEditModal);
   const isEditUserLoading = mutationEditUser.isPending;
 
   const handleEditUser = (user) => {
+    console.log(user);
     setEditUser({
       id: user.employee_id,
       name: user.name,
@@ -261,6 +265,9 @@ const confirmDeleteUser = () => {
       phone_number: user.phone_number,
       address: user.address,
       supervisor_id: user.supervisor_id,
+      
+      image: null, // ستتم ملؤها لاحقًا من المودال
+      picture_url: user.picture_url || null, // للعرض فقط
     });
     openEditModal();
   };
@@ -427,6 +434,7 @@ const confirmDeleteUser = () => {
                   fontSize: "14px",
                   fontWeight: "500",
                   cursor: "pointer",
+                  backgroundColor: "var(--color-7)",
                 },
                 dropdown: {
                   borderRadius: "15px", // Curved dropdown menu
@@ -459,6 +467,7 @@ const confirmDeleteUser = () => {
             </button>
           </div>
         </div>
+        
         <Table.ScrollContainer>
           <Table
             style={{
@@ -1117,6 +1126,8 @@ const confirmDeleteUser = () => {
         onDelete={confirmDeleteUser} // Call the new confirmDeleteUser function
         loading={isRemoveUserLoading}
       />
+
+
     </>
   );
 }

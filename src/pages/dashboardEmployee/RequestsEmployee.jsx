@@ -109,12 +109,12 @@ function RequestsEmployee() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
-        // console.log(res.data.data.listings.data);
+        // console.log(res.data.data.listings);
 
         // setListings(res.data.data.listings.data);
 
-        { console.log(res.data.data.listings.data) }
-        const pendingListings = res.data.data.listings.data.filter(
+        { console.log(res.data.data.listings) }
+        const pendingListings = res.data.data.listings.filter(
           (listing) => listing.status === "pending"
         );
         setListings(pendingListings);
@@ -378,13 +378,13 @@ function RequestsEmployee() {
           <Grid.Col span={12}>
             {console.log(listings)}
 
-            {listings.length === 0 && !loading ? (
+            {paginatedListings.length === 0 ? (
               <Center>
                 <Text>{t.Notransactions}</Text>
               </Center>
             ) : (
               <Group align="center" spacing="xl">
-                {listings?.map((listing) =>
+                {paginatedListings?.map((listing) =>
                   <Card
                     key={listing.id}
                     withBorder
@@ -404,7 +404,7 @@ function RequestsEmployee() {
                     >
                       <Card.Section radius="md">
                         <Image
-                          src={listing.company.company?.picture_url}
+                          src={listing.picture_url}
                           alt={listing.title}
                           h="233px"
                           radius="md"
@@ -485,7 +485,7 @@ function RequestsEmployee() {
                       </div>
                     </div>
 
-                    {listing.status === "pending" && (
+                    {/* {listing.status === "pending" && (
                       <Center>
                         <Group mt="md" display="flex">
                           <Button
@@ -508,7 +508,7 @@ function RequestsEmployee() {
                           </Button>
                         </Group>
                       </Center>
-                    )}
+                    )} */}
                   </Card>
                 )}
               </Group>
@@ -554,7 +554,7 @@ function RequestsEmployee() {
         </div>
       </Card>
 
-      <Modal
+      {/* <Modal
         opened={modalOpened}
         onClose={() => setModalOpened(false)}
         title="Reject Listing"
@@ -593,7 +593,7 @@ function RequestsEmployee() {
             Reject
           </Button>
         </Group>
-      </Modal>
+      </Modal> */}
       <FiltersModal
         opened={filterModalOpened}
         onClose={closeFilterModal}

@@ -366,6 +366,7 @@ function Profile() {
               value={formName}
               onChange={(e) => setFormName(e.target.value)}
             />
+            
             <TextInput
               label="Address"
               mt="md"
@@ -395,8 +396,6 @@ function Profile() {
               value={bio}
               onChange={(e) => setBio(e.target.value)}
             />
-            {console.log(bio)}
-
             <Button mt="xl" w="100%" variant="light" onClick={open}>
               Change Password
             </Button>
@@ -441,6 +440,7 @@ function Profile() {
                 {isChangingPassword ? "Saving..." : "Save"}
               </Button>
             </Modal>
+
           </Modal>
         </Card>
 

@@ -23,6 +23,7 @@ import { useAuth } from "../../context/authContext";
 import Accepted from "../../assets/status/Accepted.svg";
 import Rejected from "../../assets/status/Rejected.svg";
 import Pending from "../../assets/status/Pending.svg";
+import { useTranslation } from "../../context/LanguageContext";
 
 function PropertyDetails() {
   const { id } = useParams();
@@ -42,6 +43,7 @@ function PropertyDetails() {
 
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   const { colorScheme } = useMantineColorScheme();
+  const { t } = useTranslation();
 
    
 

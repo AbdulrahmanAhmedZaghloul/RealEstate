@@ -153,7 +153,7 @@ function StaffSupervisor() {
         },
       });
 
-      fetchSupervisors();
+      // fetchSupervisors();
       fetchEmployees();
 
       closeAddModal();

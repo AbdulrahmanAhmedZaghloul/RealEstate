@@ -80,17 +80,17 @@ function App() {
             <Route
               path="/verify-otp-create-account"
               element={
-                <ProtectedRoute allowedRoles={[]}>
+                // <ProtectedRoute allowedRoles={[]}>
                   <VerifyOTPCreateAccount />
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             />
             <Route
               path="/verify-otp-forgot-password"
               element={
-                <ProtectedRoute allowedRoles={[]}>
+                // <ProtectedRoute allowedRoles={[]}>
                   <VerifyOTPForgotPassword />
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             />
             <Route

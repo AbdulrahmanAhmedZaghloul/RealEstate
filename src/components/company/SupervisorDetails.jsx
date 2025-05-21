@@ -94,6 +94,7 @@ function SupervisorDetails() {
     password: "",
     supervisor_id: id,
   });
+  
   // const [passwordErrors, setPasswordErrors] = useState({});
   const handleFileChange = (file) => {
     setNewUser((prev) => ({ ...prev, image: file }));
@@ -202,6 +203,7 @@ function SupervisorDetails() {
       setLoading(false);
     }
   };
+  
   const handleOpenChangePassword = () => {
     closeEditModal();
     openChangePasswordModal();
@@ -244,6 +246,7 @@ function SupervisorDetails() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchSupervisor();
     fetchSupervisors();

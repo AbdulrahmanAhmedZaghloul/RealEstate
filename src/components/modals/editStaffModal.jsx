@@ -10,6 +10,7 @@ import {
   Avatar,
 } from "@mantine/core";
 import downArrow from "../../assets/downArrow.svg";
+import { useLocation } from "react-router-dom";
 
 //Local imports
 //-
@@ -24,8 +25,10 @@ const EditStaffModal = ({
   errors,
   loading,
   handleFileChange,
-  handleOpenChangePassword
+  handleOpenChangePassword,
+  currentPath
 }) => {
+
   return (
     <Modal
       opened={opened}
@@ -43,14 +46,7 @@ const EditStaffModal = ({
       }}
     >
       <div style={{ padding: "10px" }}>
-        {/* <FileInput
-          label="Profile Image"
-          accept="image/*"
-          value={editUser.image || undefined} // optional: ربط المدخل بالقيمة الحالية
-          onChange={(file) => setEditUser({ ...editUser, image: file })}
-          error={errors.image}
-          mb="md"
-        /> */}
+
         <FileInput
           label="Profile Image"
           accept="image/*"
@@ -58,16 +54,7 @@ const EditStaffModal = ({
           error={errors.image}
           mb="md"
         />
-        {/* {editUser.picture_url && (
-          <Avatar src={editUser.picture_url} size={60} radius={60} mb="md" />
-        )} */}
-        {/* <FileInput
-          label="Profile Image"
-          accept="image/*"
-          onChange={handleFileChange}
-          error={errors.image}
-          mb="md"
-        /> */}
+
         <TextInput
           label="Name"
           placeholder="Full name"
@@ -140,9 +127,17 @@ const EditStaffModal = ({
             error={errors.supervisor_id}
           />
         )}
-        <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
-          ChangePassword
-        </Button>
+        {
+          currentPath == "/team" ? <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
+            ChangePassword
+          </Button> : null
+
+        }
+
+        {/* {currentPath !== "/team" && (
+
+          
+        )} */}
         <Button
           fullWidth
           mt="xl"

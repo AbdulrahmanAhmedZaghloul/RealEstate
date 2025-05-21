@@ -61,7 +61,9 @@ function Contracts() {
   ] = useDisclosure(false);
   // Form validation using Mantine's useForm
   useEffect(() => {
-    setContracts(contractsData?.data?.contracts || []);
+    console.log(contractsData);
+    
+    setContracts(contractsData?.contracts.data || []);
 
     setApprovedListings(
       listingsData?.data?.listings?.filter(

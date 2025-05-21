@@ -1,10 +1,13 @@
 import {
   ActionIcon, Anchor, Avatar, Badge, Group, Table, Text, Collapse, Box, Center, Loader, Card, Select,
+  Modal,
+  TextInput,
+  Button,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/authContext";
 import classes from "../../styles/realEstates.module.css";
@@ -35,6 +38,7 @@ import EditIcon from "../../components/icons/edit";
 import DeleteIcon from "../../components/icons/DeleteIcon";
 import RightDown from "../../components/icons/RightDown";
 import DownStaff from "../../components/icons/DownStaff";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
 
 const jobColors = {
   supervisor: "orange",
@@ -42,6 +46,8 @@ const jobColors = {
 };
 
 function Staff() {
+  const location = useLocation();
+
   const {
     data: employeesData,
     isLoading: employeesLoading,
@@ -115,6 +121,11 @@ function Staff() {
     image: "",
   });
 
+
+  //delete modal data
+  // console.log(supervisor_id);
+
+
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [searchedEmployees, setSearchedEmployees] = useState([]);
@@ -133,6 +144,7 @@ function Staff() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+  const [changePasswordModal, { open: openChangePasswordModal, close: closeChangePasswordModal }] = useDisclosure(false);
 
   // Reset currentPage to 1 when the search query changes
   useEffect(() => {
@@ -350,6 +362,8 @@ function Staff() {
     setSearchedEmployees(sortedEmployees);
     setSearchedSupervisors([]); // Clear supervisors from search results
   };
+
+
 
   useEffect(() => {
     fetchEmployees();
@@ -1092,7 +1106,34 @@ function Staff() {
           </div>
         </Table.ScrollContainer>
       </Card>
-
+      {/* <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
+        <TextInput
+          label="New Password"
+          type={showPassword ? "text" : "password"}
+          value={passwordData.password}
+          maxLength={50}
+          onChange={(e) =>
+            setPasswordData({ ...passwordData, password: e.target.value })
+          }
+          rightSection={
+            <button
+              type="button"
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <IconEyeOff size={16} />
+              ) : (
+                <IconEye size={16} />
+              )}
+            </button>
+          }
+          error={passwordErrors.password}
+        />
+        <Button loading={loading} onClick={handleChangePassword} mt="md" fullWidth>
+          Change Password
+        </Button>
+      </Modal> */}
       <AddStaffModal
         opened={addModalOpened}
         onClose={closeAddModal}
@@ -1115,6 +1156,9 @@ function Staff() {
         setEditUser={setEditUser}
         errors={errors}
         handleFileChange={handleFileChange}
+        // handleOpenChangePassword={handleOpenChangePassword}
+        currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
+
       />
 
       <DeleteEmployeeModal

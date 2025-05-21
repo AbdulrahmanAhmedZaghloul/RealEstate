@@ -61,6 +61,8 @@ function EmployeeDetails() {
         message: "Employee deleted successfully!",
         color: "green",
       });
+      queryClient.invalidateQueries(['employees']);
+
       closeDeleteModal();
       // Redirect or refresh the page after deletion
       navigate("/dashboard/Team");
@@ -126,6 +128,7 @@ function EmployeeDetails() {
           Authorization: `Bearer ${user.token}`,
         },
       });
+      queryClient.invalidateQueries(['employees']);
 
       closeEditModal();
       notifications.show({

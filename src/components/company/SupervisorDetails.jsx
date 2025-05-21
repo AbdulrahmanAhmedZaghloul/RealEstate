@@ -19,6 +19,7 @@ import { useTranslation } from "../../context/LanguageContext";
 import { IconEye, IconEyeOff } from "@tabler/icons-react"; // أو أي مكتبة أيقونات مستخدمة
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/edit";
+import { useQueryClient } from "@tanstack/react-query";
 function SupervisorDetails() {
   const [supervisor, setSupervisor] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -37,6 +38,7 @@ function SupervisorDetails() {
     { open: openDeleteModal, close: closeDeleteModal },
   ] = useDisclosure(false);
   const [deleting, setDeleting] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleDeleteSupervisor = async () => {
     setDeleting(true);
@@ -49,6 +51,8 @@ function SupervisorDetails() {
         message: "Supervisor deleted successfully!",
         color: "green",
       });
+      queryClient.invalidateQueries(['supervisors']);
+
       closeDeleteModal();
       // Redirect or refresh the page after deletion
       navigate("/dashboard/Team");
@@ -121,6 +125,7 @@ function SupervisorDetails() {
           Authorization: `Bearer ${user.token}`,
         },
       });
+      queryClient.invalidateQueries(['supervisors']);
 
       closeEditModal();
       notifications.show({

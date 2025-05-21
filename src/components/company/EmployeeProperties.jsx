@@ -76,16 +76,33 @@ function EmployeeProperties({ id }) {
   const fetchListings = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get(`/api/listings/${id}`, {
+      const res = await axiosInstance.get(`/api/listings/cursor`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      console.log(res.data.data.listings);
+      // console.log(res.data.data.listings);
 
+      console.log(id)
+      // console.log(res.data.data.listings.filter(
+      //   (listing) =>
+      //     listing.status === "approved" && listing.employee_id === id
+      // ) )
       setListings(
         res.data.data.listings.filter(
-          (listing) => listing.status === "approved"
+          (listing) =>
+            listing.status === "approved" && Number(listing.employee_id) === Number(id)
+          
         )
       );
+
+      // setListings(
+      //   res.data.data.listings.filter(
+      //     (listing) => listing.status === "approved" && res.data.data.listings.map(
+      //       (listing) => listing.employee_id === id
+      //     ) 
+      //   )
+      // );
+
+      console.log(listings);
     } catch (err) {
       console.log(err.response);
     } finally {
@@ -93,19 +110,19 @@ function EmployeeProperties({ id }) {
     }
   };
 
-  const fetchEmployees = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosInstance.get("/api/employees", {
-        headers: { Authorization: `Bearer ${user.token}` },
-      });
-      setEmployees(res.data.data.employees);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+   const fetchEmployees = async () => {
+     setLoading(true);
+     try {
+       const res = await axiosInstance.get("/api/employees", {
+         headers: { Authorization: `Bearer ${user.token}` },
+       });
+       setEmployees(res.data.data.employees);
+     } catch (err) {
+       console.log(err);
+     } finally {
+       setLoading(false);
+     }
+   };
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -158,7 +175,7 @@ function EmployeeProperties({ id }) {
   };
 
   useEffect(() => {
-    fetchEmployees();
+    // fetchEmployees();
     fetchListings();
     fetchCategories();
   }, []);

@@ -322,7 +322,9 @@ function Properties() {
                     </div>
                   </div>
                   <div className={classes.listingEmployee}>
-                    {t.Employee}: {listing.employee?.name}
+                    {t.Employee}: {listing.company?.name}
+                    {console.log(listing.company?.name)}
+
                   </div>
                   <div className={classes.listingLocation}>
                     {listing.location}

@@ -265,7 +265,7 @@ function Staff() {
       phone_number: user.phone_number,
       address: user.address,
       supervisor_id: user.supervisor_id,
-      
+
       image: null, // ستتم ملؤها لاحقًا من المودال
       picture_url: user.picture_url || null, // للعرض فقط
     });
@@ -467,7 +467,7 @@ function Staff() {
             </button>
           </div>
         </div>
-        
+
         <Table.ScrollContainer>
           <Table
             style={{

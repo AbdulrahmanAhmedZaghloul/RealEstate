@@ -22,6 +22,7 @@ const EditStaffModal = ({
   editUser,
   setEditUser,
   errors,
+  loading,
   handleFileChange,
   handleOpenChangePassword
 }) => {
@@ -142,7 +143,18 @@ const EditStaffModal = ({
         <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
           ChangePassword
         </Button>
-        <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={onEdit} radius="md">
+        <Button
+          fullWidth
+          mt="xl"
+          bg={"#1e3a8a"}
+          onClick={onEdit}
+          loading={loading}
+          disabled={loading}
+
+          type="submit"
+          radius="md"
+        // radius="md"
+        >
           Update user
         </Button>
       </div>

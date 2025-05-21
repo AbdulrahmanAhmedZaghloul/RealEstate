@@ -1,22 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  Badge,
-  Button,
-  Card,
-  Center,
-  Grid,
-  Group,
-  Image,
-  Text,
-  Select,
-  Input,
-  Stack,
-  Modal,
-  TextInput,
-  NumberInput,
-  FileInput,
-  Textarea,
-  Loader,
+  Badge, Button, Card, Center, Grid, Group, Image, Text, Select, Input, Stack, Modal, TextInput, NumberInput, FileInput, Textarea, Loader,
 } from "@mantine/core";
 import { useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -59,6 +43,7 @@ function Transactions() {
     isError: isListingsError,
     error: listingsError,
   } = useProperties();
+
   const {
     data: categoriesData,
     isLoading: categoriesLoading,
@@ -377,11 +362,10 @@ function Transactions() {
                     navigate(`/dashboard/Properties/${listing.id}`);
                   }}
                 >
-                  {console.log(listing.employee.picture_url)}
-
+                  {console.log(listing)}
                   <Card.Section radius="md">
                     <Image
-                      src={listing.employee.picture_url}
+                      src={listing.picture_url}
                       alt={listing.title}
                       h="233px"
                       radius="md"
@@ -394,6 +378,7 @@ function Transactions() {
                       <span className="icon-saudi_riyal">&#xea; </span>{" "}
                       {parseFloat(listing.price)?.toLocaleString()}
                     </span>
+{console.log(listing.down_payment)}
 
                     <div className={classes.downPaymentBadge}>
                       {Math.floor((listing.down_payment / listing.price) * 100)}
@@ -425,7 +410,8 @@ function Transactions() {
                       </div>
                     </div>
                     <div className={classes.listingEmployee}>
-                      Employee: {listing.employee?.name}
+                      Employee: {listing.company?.name}
+                      {console.log(listing.company?.name)}
                     </div>
                     <div className={classes.listingLocation}>
                       {listing.location}

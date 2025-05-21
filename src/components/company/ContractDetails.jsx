@@ -171,7 +171,7 @@ function ContractDetails() {
   const handleDownloadDocument = () => {
     setLoading(true);
     axiosInstance
-      .get(`/api/contracts/${id}/download`, {
+      .get(`/api/v1/contracts/${id}/download`, {
         headers: { Authorization: `Bearer ${user.token}` },
         responseType: "blob",
       })

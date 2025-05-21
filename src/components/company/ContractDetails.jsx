@@ -1,23 +1,7 @@
 //Dependency imports
 import classes from "../../styles/contractDetails.module.css";
 import {
-  Card,
-  Button,
-  Center,
-  Stack,
-  Select,
-  Textarea,
-  TextInput,
-  NumberInput,
-  Modal,
-  Loader,
-  Group,
-  Grid,
-  GridCol,
-  Avatar,
-  Image,
-  useMantineColorScheme,
-  Text,
+  Card, Button, Center, Stack, Select, Textarea, TextInput, NumberInput, Modal, Loader, Group, Grid, GridCol, Avatar, Image, useMantineColorScheme, Text,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Updated import
@@ -32,6 +16,8 @@ import Contract from "../../assets/contract/contract.png";
 import edit from "../../assets/edit.svg";
 import trash from "../../assets/trash.svg";
 import { useTranslation } from "../../context/LanguageContext";
+import { useContracts } from "../../hooks/queries/useContracts";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 function ContractDetails() {
   const { id } = useParams();
   const [contract, setContract] = useState(null);
@@ -49,7 +35,7 @@ function ContractDetails() {
 
   const navigate = useNavigate();
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
-
+  const queryClient = useQueryClient();
   const { colorScheme } = useMantineColorScheme();
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
@@ -82,6 +68,7 @@ function ContractDetails() {
     },
     enableReinitialize: true,
   });
+
 
   useEffect(() => {
     fetchContract();
@@ -118,7 +105,7 @@ function ContractDetails() {
         setContract(res.data.contract);
         setShareLink(res.data.contract.share_url);
         console.log(res.data.contract.share_url);
-        
+
       })
       .catch((err) => {
         console.log(err);
@@ -147,6 +134,8 @@ function ContractDetails() {
         },
       })
       .then(() => {
+        // بعد النجاح
+        queryClient.invalidateQueries(['contracts']);
         fetchContract(); // Re-fetch the contract data
         closeEditModal();
         notifications.show({
@@ -211,6 +200,8 @@ function ContractDetails() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(() => {
+        // بعد النجاح
+        queryClient.invalidateQueries(['contracts']);
         notifications.show({
           title: "Contract Deleted", // Updated notification message
           message: "Contract has been deleted successfully.",

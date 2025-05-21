@@ -409,6 +409,7 @@ function EmployeeDetails() {
 
         </div>
         <Grid>
+          {console.log(employee)}
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
             <h2 style={{
             }}>{t.FullName}</h2>

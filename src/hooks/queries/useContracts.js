@@ -6,8 +6,7 @@ const fetchContracts = async (token) => {
     const { data } = await axiosInstance.get("/api/v1/contracts", {
         headers: { Authorization: `Bearer ${token}` },
     });
-     console.log(data.data);
-    return data;
+     return data;
 };
 
 export const useContracts = () => {

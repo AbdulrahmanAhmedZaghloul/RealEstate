@@ -114,7 +114,7 @@ function RequestsEmployee() {
         // setListings(res.data.data.listings.data);
 
         { console.log(res.data.data.listings) }
-        const pendingListings = res.data.data.listings.filter(
+        const pendingListings = res.data.data.listings.data.filter(
           (listing) => listing.status === "pending"
         );
         setListings(pendingListings);
@@ -398,7 +398,7 @@ function RequestsEmployee() {
                       }}
                       onClick={() => {
                         navigate(
-                          `/dashboard-supervisor/Properties/${listing.id}`
+                          `/dashboard-employee/Properties/${listing.id}`
                         );
                       }}
                     >

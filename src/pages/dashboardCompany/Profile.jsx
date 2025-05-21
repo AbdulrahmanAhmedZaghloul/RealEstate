@@ -192,7 +192,6 @@ function Profile() {
   const mutationEditProfile = useEditProfile(user.token, closeFormModal);
 
   const handleUpdateProfile = async () => {
-    setIsUpdatingProfile(true);
 
     const formData = new FormData();
     formData.append("company_name", formName);
@@ -202,8 +201,10 @@ function Profile() {
     if (imageFile) formData.append("picture", imageFile);
     console.log(bio);
 
-    mutationEditProfile.mutate(formData);
-    setIsUpdatingProfile(false);
+    // mutationEditProfile.mutate(formData);
+    mutationEditProfile.mutate(formData, {
+
+    });
   };
 
   // Render loading state
@@ -366,7 +367,7 @@ function Profile() {
               value={formName}
               onChange={(e) => setFormName(e.target.value)}
             />
-            
+
             <TextInput
               label="Address"
               mt="md"
@@ -403,9 +404,12 @@ function Profile() {
               w="100%"
               mt="md"
               onClick={handleUpdateProfile}
-              disabled={loading}
+
+              loading={mutationEditProfile.isLoading}
+              disabled={!hasChanges || mutationEditProfile.isPending}
             >
-              {isUpdatingProfile ? "Saving..." : "Save"}
+              {console.log(mutationEditProfile)              }
+              {mutationEditProfile.isPending ? "Saving..." : "Save"}
             </Button>
 
             <Modal
@@ -436,7 +440,11 @@ function Profile() {
                 mb="md"
               />
 
-              <Button onClick={changePassword} disabled={loading}>
+              <Button onClick={changePassword}
+
+                loading={loading}
+                disabled={loading}
+              >
                 {isChangingPassword ? "Saving..." : "Save"}
               </Button>
             </Modal>

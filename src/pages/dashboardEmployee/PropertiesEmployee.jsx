@@ -389,7 +389,8 @@ import search from "../../assets/search.svg";
 
 import AcceptedStatus from "../../assets/status/AcceptedStatus.svg";
 import RejectedStatus from "../../assets/status/RejectedStatus.svg";
-import addIcon from "../../assets/addIcon.svg";
+import PendingStatus from "../../assets/status/PendingStatus.svg";
+  import addIcon from "../../assets/addIcon.svg";
 import downArrow from "../../assets/downArrow.svg";
 import Notifications from "../../components/company/Notifications";
 import FiltersModal from "../../components/modals/filterPropertiesModal";
@@ -446,9 +447,9 @@ function PropertiesEmployee() {
       .then((res) => {
         console.log(res.data.data);
         
-        setListings(res.data?.data?.listings || []);
+        setListings(res.data?.data?.listings.data || []);
 
-        const pendingListings = res.data.data.listings.filter(
+        const pendingListings = res.data.data.listings.data.filter(
           (listing) => listing.status === "approved"
         );
         setListings(pendingListings);

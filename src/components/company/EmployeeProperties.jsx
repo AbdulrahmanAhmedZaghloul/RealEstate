@@ -22,6 +22,9 @@ import { useAuth } from "../../context/authContext";
 import downArrow from "../../assets/downArrow.svg";
 import FiltersModal from "../modals/filterPropertiesModal";
 import { useTranslation } from "../../context/LanguageContext";
+import Dropdown from "../icons/dropdown";
+import FilterIcon from "../icons/filterIcon";
+import Search from "../icons/search";
 
 function EmployeeProperties({ id }) {
   const [listings, setListings] = useState([]);
@@ -39,7 +42,7 @@ function EmployeeProperties({ id }) {
   const [loading, setLoading] = useState(false);
   const [filteredListings, setFilteredListings] = useState([]);
 
-  const { colorScheme } = useMantineColorScheme();
+  console.log(id)
 
 
   const { t } = useTranslation();
@@ -214,30 +217,35 @@ function EmployeeProperties({ id }) {
 
         </span>
         <div className={classes.controls}>
-          <input
-            style={{
-              backgroundColor: "",
-              border: "1px solid #B8C0CC",
-            }}
-            className={classes.search}
-            placeholder="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className={classes.divSearch}>
+            <input
+              style={{
+                border: "1px solid var(--color-border)",
+              }}
+              className={classes.search}
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Search />
+
+          </div>
+
           <button
             variant="default"
             radius="md"
             onClick={openFilterModal}
             className={classes.filter}
           >
-            <img src={Filter} />
+            <FilterIcon />
+            {/* <img src={Filter} /> */}
           </button>
           <div className={classes.addAndSort}>
             <Select
               placeholder="Sort by"
               value={filter}
               onChange={setFilter}
-              rightSection={<img src={downArrow} alt="arrow" />}
+              rightSection={<Dropdown />}
               data={[
                 { value: "newest", label: "Newest" },
                 { value: "oldest", label: "Oldest" },

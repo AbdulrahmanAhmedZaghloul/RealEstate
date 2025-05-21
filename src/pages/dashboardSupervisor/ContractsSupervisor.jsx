@@ -86,14 +86,14 @@ function ContractsSupervisor() {
   const fetchContracts = () => {
     setLoading(true);
     axiosInstance
-      .get("/api/contracts", {
+      .get("/api/v1/contracts", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
 
       .then((res) => {
-        console.log(res);
+        console.log(res.data.contracts.data);
 
-        setContracts(res.data.data.contracts);
+        setContracts(res.data.contracts.data);
       })
       .catch((err) => {
         console.log(err);
@@ -119,7 +119,7 @@ function ContractsSupervisor() {
 
     setLoading(true);
     axiosInstance
-      .post("/api/contracts", formData, {
+      .post("/api/v1/contracts", formData, {
         headers: {
           Authorization: `Bearer ${user.token}`,
           "Content-Type": "multipart/form-data",

@@ -31,6 +31,7 @@ import Contract from "../../assets/contract/contract.png";
 import edit from "../../assets/edit.svg";
 import trash from "../../assets/trash.svg";
 import { useTranslation } from "../../context/LanguageContext";
+import { useQueryClient } from "@tanstack/react-query";
 function ContractDetailsSupervisor() {
   const { id } = useParams();
   const [contract, setContract] = useState(null);
@@ -46,11 +47,12 @@ function ContractDetailsSupervisor() {
   const { colorScheme } = useMantineColorScheme();
   const { t } = useTranslation(); // 👈 استدعاء اللغة
 
-   
+
   const [opened, { open, close }] = useDisclosure(false);
   const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // تتبع الصورة المختارة
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
+  const queryClient = useQueryClient();
 
   const fetchContract = () => {
     setLoading(true);
@@ -59,7 +61,9 @@ function ContractDetailsSupervisor() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
-        setContract(res.data.data.contract);
+        console.log();
+
+        setContract(res.data.contract);
         setShareLink(res.data.data.contract.share_url);
       })
       .catch((err) => {
@@ -145,6 +149,8 @@ function ContractDetailsSupervisor() {
         },
       })
       .then(() => {
+        queryClient.invalidateQueries(['contracts']);
+
         fetchContract(); // Re-fetch the contract data
         closeEditModal();
         notifications.show({
@@ -209,12 +215,14 @@ function ContractDetailsSupervisor() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(() => {
+        queryClient.invalidateQueries(['contracts']);
+
         notifications.show({
           title: "Contract Deleted", // Updated notification message
           message: "Contract has been deleted successfully.",
           color: "green",
         });
-        navigate("/dashboard/contracts");
+        navigate("/dashboard-supervisor/Contracts");
       })
       .catch((err) => {
         console.log(err);
@@ -269,8 +277,8 @@ function ContractDetailsSupervisor() {
       <div className={classes.container}>
         <Card
           style={{
-            backgroundColor:   "var(--color-5)",
-             
+            backgroundColor: "var(--color-5)",
+
           }}
           shadow="sm"
           className={classes.card}
@@ -326,14 +334,14 @@ function ContractDetailsSupervisor() {
                     <Grid.Col span={isMobile ? 12 : 10}>
                       <div className={classes.priceContainer}>
                         <span
-                       
+
                           className={classes.price}
                         >
                           <span className="icon-saudi_riyal">&#xea; </span>{" "}
                           {parseFloat(contract.price).toLocaleString()}
                         </span>
                         <span
-                         
+
                           className={classes.downPayment}
                         >
                           {Math.floor(
@@ -344,7 +352,7 @@ function ContractDetailsSupervisor() {
                       </div>
 
                       <h3
-                       
+
                         className={classes.title}
                       >
                         {contract.title}
@@ -381,7 +389,7 @@ function ContractDetailsSupervisor() {
                             />
                           </svg>
                           <p
-                           
+
                             className={classes.location}
                           >
                             {contract.real_estate.location}
@@ -389,36 +397,36 @@ function ContractDetailsSupervisor() {
                         </div>
                         <div>
                           <p
-                            
+
                             className={classes.time}
                           >
                             {Math.floor(
                               (new Date() - new Date(contract.creation_date)) /
-                                (1000 * 60 * 60 * 24)
+                              (1000 * 60 * 60 * 24)
                             ) > 1
                               ? `${Math.floor(
-                                  (new Date() -
-                                    new Date(contract.creation_date)) /
-                                    (1000 * 60 * 60 * 24)
-                                )} days ago`
+                                (new Date() -
+                                  new Date(contract.creation_date)) /
+                                (1000 * 60 * 60 * 24)
+                              )} days ago`
                               : Math.floor(
-                                  (new Date() -
-                                    new Date(contract.creation_date)) /
-                                    (1000 * 60 * 60 * 24)
-                                ) === 1
-                              ? "Yesterday"
-                              : "Today"}
+                                (new Date() -
+                                  new Date(contract.creation_date)) /
+                                (1000 * 60 * 60 * 24)
+                              ) === 1
+                                ? "Yesterday"
+                                : "Today"}
                           </p>
                         </div>
                       </div>
                       <div className={classes.description}>
                         <h4
-                         
+
                         >
                           {t.Description}
                         </h4>
                         <p
-                          
+
                         >
                           {contract.description}
                         </p>
@@ -450,7 +458,7 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "12px",
 
-                           
+
                         }}
                       >
                         {contract.listed_by.name}
@@ -478,9 +486,9 @@ function ContractDetailsSupervisor() {
                 >
                   <h4
                     style={{
-                     }}
+                    }}
                   >
-                    
+
                     {t.Contract}
                   </h4>
                   <div className={classes.ContractImage}>
@@ -532,7 +540,7 @@ function ContractDetailsSupervisor() {
                       </div>
                       <div
                         style={{
-                           
+
                         }}
                         className={classes.documents}
                       >
@@ -553,9 +561,9 @@ function ContractDetailsSupervisor() {
                       style={{
                         // fontSize: isSmallScreen ? "20px" : "16px",
 
-                         }}
+                      }}
                     >
-                      
+
                       {t.ContractsInformation}
                     </h3>
                     <div>
@@ -574,17 +582,17 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationType}
                       >
-                        
+
                         {t.Contracttype}
                       </p>
                       <p
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
-                           
+
                         }}
                         className={classes.InformationSale}
                       >
@@ -597,18 +605,18 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationType}
                       >
-                        
+
                         {t.Releasedate}
                       </p>
                       <p
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationSale}
                       >
@@ -621,16 +629,16 @@ function ContractDetailsSupervisor() {
                     <GridCol span={4}>
                       <p
                         style={{
-                           
+
                         }}
                         className={classes.InformationType}
                       >
-                        
+
                         {t.DownPayment}
                       </p>
                       <p
                         style={{
-                           
+
                         }}
                         className={classes.InformationSale}
                       >
@@ -644,7 +652,7 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationType}
                       >
@@ -654,7 +662,7 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationSale}
                       >
@@ -667,7 +675,7 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationType}
                       >
@@ -677,7 +685,7 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationSale}
                       >
@@ -688,16 +696,16 @@ function ContractDetailsSupervisor() {
                     <GridCol span={4}>
                       <p
                         style={{
-                           
+
                         }}
                         className={classes.InformationType}
                       >
-                        
+
                         {t.Status}
                       </p>
                       <p
                         style={{
-                           
+
                         }}
                         className={classes.InformationSale}
                       >
@@ -710,18 +718,18 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationType}
                       >
-                        
+
                         {t.Creationdate}
                       </p>
                       <p
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationSale}
                       >
@@ -734,7 +742,7 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationType}
                       >
@@ -744,7 +752,7 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationSale}
                       >
@@ -757,7 +765,7 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationType}
                       >
@@ -767,7 +775,7 @@ function ContractDetailsSupervisor() {
                         style={{
                           // fontSize: isSmallScreen ? "16px" : "13px",
 
-                           
+
                         }}
                         className={classes.InformationSale}
                       >
@@ -781,7 +789,7 @@ function ContractDetailsSupervisor() {
                 <GridCol span={isMobile ? 12 : 10}>
                   <h4
                     style={{
-                     }}
+                    }}
                     className={classes.Location}
                   >
                     {t.Location}
@@ -817,7 +825,7 @@ function ContractDetailsSupervisor() {
                     </svg>
                     <span
                       style={{
-                         }}
+                      }}
                     >
                       {contract.real_estate.location}
                     </span>

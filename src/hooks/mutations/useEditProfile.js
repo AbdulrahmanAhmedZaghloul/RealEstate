@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../../api/config';
 import { notifications } from '@mantine/notifications';
 
-export const useEditProfile = (userToken, closeModal) => {
+export const useEditProfile = (userToken, closeModal, setLoading) => {
     const queryClient = useQueryClient();
 
     const editProfile = async (formData) => {
@@ -22,6 +22,7 @@ export const useEditProfile = (userToken, closeModal) => {
     return useMutation({
         mutationFn: editProfile,
         onSuccess: () => {
+ 
             queryClient.invalidateQueries({ queryKey: ['profile'] });
             closeModal?.();
             notifications.show({

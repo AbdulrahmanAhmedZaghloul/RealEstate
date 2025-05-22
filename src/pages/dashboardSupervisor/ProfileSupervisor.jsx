@@ -9,6 +9,7 @@ import { BurgerButton } from "../../components/buttons/burgerButton";
 import { Grid, useMantineColorScheme } from "@mantine/core";
 import { ThemeToggle } from "../../Settings/ThemeToggle";
 import { useTranslation } from "../../context/LanguageContext";
+import ContractsSupervisor from "./ContractsSupervisor";
 
 function ProfileSupervisor() {
   const [profile, setProfile] = useState({});
@@ -208,6 +209,7 @@ function ProfileSupervisor() {
           </Grid.Col>
         </Grid>
       </div>
+      <ContractsSupervisor/>
     </div>
   );
 }

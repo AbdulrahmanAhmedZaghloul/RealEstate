@@ -90,7 +90,7 @@ function EmployeeProperties({ id }) {
         res.data.data.listings.filter(
           (listing) =>
             listing.status === "approved" && Number(listing.employee_id) === Number(id)
-          
+
         )
       );
 
@@ -110,19 +110,19 @@ function EmployeeProperties({ id }) {
     }
   };
 
-   const fetchEmployees = async () => {
-     setLoading(true);
-     try {
-       const res = await axiosInstance.get("/api/employees", {
-         headers: { Authorization: `Bearer ${user.token}` },
-       });
-       setEmployees(res.data.data.employees);
-     } catch (err) {
-       console.log(err);
-     } finally {
-       setLoading(false);
-     }
-   };
+  const fetchEmployees = async () => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get("/api/employees", {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      setEmployees(res.data.data.employees);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchCategories = async () => {
     setLoading(true);

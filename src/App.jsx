@@ -1,7 +1,7 @@
 // Local dependencies imports
 import "@mantine/core/styles.css";
 import { Route, Routes } from "react-router-dom";
-import { AuthProvider } from "./context/authContext.jsx"; 
+import { AuthProvider } from "./context/authContext.jsx";
 import { SidebarProvider } from "./context/sidebarContext.jsx";
 // import { LanguageProvider } from "./context/LanguageContext.jsx";
 import Terms from "./pages/Terms.jsx";
@@ -73,7 +73,7 @@ function App() {
               path="/forgot-password"
               element={
                 // <ProtectedRoute allowedRoles={[]}>
-                  <ForgotPassword />
+                <ForgotPassword />
                 // </ProtectedRoute>
               }
             />
@@ -81,7 +81,7 @@ function App() {
               path="/verify-otp-create-account"
               element={
                 // <ProtectedRoute allowedRoles={[]}>
-                  <VerifyOTPCreateAccount />
+                <VerifyOTPCreateAccount />
                 // </ProtectedRoute>
               }
             />
@@ -89,16 +89,14 @@ function App() {
               path="/verify-otp-forgot-password"
               element={
                 // <ProtectedRoute allowedRoles={[]}>
-                  <VerifyOTPForgotPassword />
+                <VerifyOTPForgotPassword />
                 // </ProtectedRoute>
               }
             />
             <Route
               path="/ResetPassword"
               element={
-                <ProtectedRoute allowedRoles={[]}>
-                  <ResetPassword />
-                </ProtectedRoute>
+                <ResetPassword />
               }
             />
             {/* <Route path="*" element={<h1>404111</h1>} /> */}
@@ -171,7 +169,7 @@ function App() {
                 element={<PropertyDetailsEmployee />}
               />
             </Route>
-            
+
           </Routes>
         </SidebarProvider>
       </AuthProvider>

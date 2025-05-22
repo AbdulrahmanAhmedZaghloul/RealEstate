@@ -90,7 +90,7 @@ const AddPropertyModal = ({
     map[category.id] = category.name.toLowerCase(); // Map category.id to category.name
     return map;
   }, {});
-
+  const [locationError, setLocationError] = useState("");
   const [region, setRegion] = useState("");
   const [city, setCity] = useState("");
   const [district, setDistrict] = useState("");
@@ -119,11 +119,9 @@ const AddPropertyModal = ({
           const data = await response.json();
           const address = data.address;
 
-          const formattedLocation = `${
-            address.suburb || address.neighbourhood || ""
-          }, ${address.city || address.town || address.village || ""}, ${
-            address.state || ""
-          }, Saudi Arabia`;
+          const formattedLocation = `${address.suburb || address.neighbourhood || ""
+            }, ${address.city || address.town || address.village || ""}, ${address.state || ""
+            },`;
 
           form.setFieldValue("location", formattedLocation);
           setRegion(address.state || "");
@@ -333,8 +331,6 @@ const AddPropertyModal = ({
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Grid p={isMobile ? 15 : 30}>
           <Grid.Col span={isMobile ? 12 : 6}>
-            {" "}
-            {/* Upload Images */}
             <div>
               <Text
                 size="sm"
@@ -357,29 +353,29 @@ const AddPropertyModal = ({
                   style={
                     form.errors.images
                       ? {
-                          border: "1px dashed red",
-                          borderRadius: "8px",
-                          width: "60px",
-                          height: "60px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexDirection: "column",
-                          cursor: "pointer",
-                          position: "relative",
-                        }
+                        border: "1px dashed red",
+                        borderRadius: "8px",
+                        width: "60px",
+                        height: "60px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        cursor: "pointer",
+                        position: "relative",
+                      }
                       : {
-                          border: "1px dashed var(--color-4)",
-                          borderRadius: "8px",
-                          width: "60px",
-                          height: "60px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexDirection: "column",
-                          cursor: "pointer",
-                          position: "relative",
-                        }
+                        border: "1px dashed var(--color-4)",
+                        borderRadius: "8px",
+                        width: "60px",
+                        height: "60px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        cursor: "pointer",
+                        position: "relative",
+                      }
                   }
                   onClick={() =>
                     document.getElementById("image-upload").click()
@@ -480,9 +476,10 @@ const AddPropertyModal = ({
                 })}
               </div>
               <Text size="xs" color="red" mb={10} mt={-10}>
-              {form.values.images.map((image) => {
+                {form.values.images.map((image) => {
                   const exceedsSize = image.size > 2 * 1024 * 1024; // Check if the image exceeds the size limit
-                  return (exceedsSize ? "Image size should be less than 2MB" : form.errors.images)    })}          </Text>
+                  return (exceedsSize ? "Image size should be less than 2MB" : form.errors.images)
+                })}          </Text>
             </div>
             {/* Title */}
             <TextInput
@@ -602,9 +599,77 @@ const AddPropertyModal = ({
             />
           </Grid.Col>
           <Grid.Col span={6}>
-            {" "}
             {/* Location */}
             <Autocomplete
+              label="Location"
+              placeholder="Enter property location"
+              data={[
+                {
+                  value: "Get Current Location",
+                  label: "Get Current Location",
+                },
+                ...locationOptions,
+              ]}
+              value={searchValue}
+              onChange={(value) => {
+                setSearchValue(value);
+                setLocationError(""); // Clear previous error
+                form.setFieldValue("location", ""); // Don't update form yet
+              }}
+              onBlur={() => {
+                const isValidLocation =
+                  locationOptions.some((loc) => loc.value === searchValue) ||
+                  searchValue === "Get Current Location";
+
+                if (isValidLocation) {
+                  if (searchValue === "Get Current Location") {
+                    getCurrentLocation();
+                  } else {
+                    const selected = locationOptions.find(
+                      (loc) => loc.value === searchValue
+                    );
+                    if (selected) {
+                      setRegion(selected.region);
+                      setCity(selected.city);
+                      setDistrict(selected.district);
+                    }
+                    form.setFieldValue("location", searchValue);
+                    setLocationError("");
+                  }
+                } else {
+                  setSearchValue(""); // Reset input
+                  form.setFieldValue("location", "");
+                  setLocationError("Please select a valid location from the list");
+                  form.setFieldError("location", "Please select a valid location");
+                }
+              }}
+              error={locationError || form.errors.location}
+              renderOption={({ option }) => (
+                <Group>
+                  {option.label === "Get Current Location" && (
+                    <img
+                      src={currentLocation}
+                      alt="location"
+                      height={20}
+                      width={20}
+                      style={{ marginLeft: -5 }}
+                    />
+                  )}
+                  {option.label === "Get Current Location" ? (
+                    <span style={{ marginLeft: -10 }}>{option.label}</span>
+                  ) : (
+                    <span>{option.label}</span>
+                  )}
+                </Group>
+              )}
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
+              mb={24}
+              limit={15}
+            />
+            {/* <Autocomplete
               label="Location"
               placeholder="Enter property location"
               data={[
@@ -661,7 +726,7 @@ const AddPropertyModal = ({
               }}
               mb={24}
               limit={15}
-            />
+            /> */}
             {/* Property Category */}
             <Select
               label="Property Category"
@@ -692,7 +757,7 @@ const AddPropertyModal = ({
                   (subcategory) =>
                     subcategory.id !== undefined &&
                     subcategory.category_id ===
-                      parseInt(form.values.category_id)
+                    parseInt(form.values.category_id)
                 )
                 .map((subcategory) => ({
                   value: String(subcategory.id),

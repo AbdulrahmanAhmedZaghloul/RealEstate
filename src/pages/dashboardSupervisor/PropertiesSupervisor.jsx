@@ -70,7 +70,7 @@ function PropertiesSupervisor() {
   const fetchListings = async () => {
     setLoading(true);
     await axiosInstance
-      .get("/api/listings", {
+      .get("/api/listings/cursor", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -392,7 +392,7 @@ function PropertiesSupervisor() {
               >
                 <Card.Section radius="md">
                   <Image
-                    src={listing.employee.picture_url}
+                    src={listing.picture_url}
                     alt={listing.title}
                     h="233px"
                     radius="md"

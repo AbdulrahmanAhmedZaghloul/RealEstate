@@ -250,7 +250,6 @@ function ContractDetails() {
 
   return (
     <>
-      {console.log(contract)}
       <Card
 
         shadow="sm"
@@ -261,7 +260,20 @@ function ContractDetails() {
             {/* حاوية الصورة الرئيسية */}
             <div className={classes.ImageContainerBig}>
               {console.log(contract)}
-              {contract.real_estate.primary_image && (
+              {contract.real_estate.images?.[0] && (
+                <img
+                  key={contract.real_estate.images[0].id}
+                  src={contract.real_estate.images[0].url}
+                  alt={contract.real_estate.title}
+                  className={classes.mainImage}
+                  onClick={() => {
+                    setSelectedImageIndex(0); // لأنها تاني صورة في الـ array
+                    open1();
+                  }}
+                />
+              )}
+
+              {/* {contract.real_estate.images && (
                 <>
                   <img
                     src={contract.real_estate?.primary_image}
@@ -279,12 +291,11 @@ function ContractDetails() {
                     See {contract.real_estate.images.length} Photos
                   </p>
                 </>
-              )}
+              )} */}
             </div>
 
             {/* حاوية الصور الإضافية */}
             <div className={classes.widthImageContainer}>
-              {console.log(contract)}
               {contract.real_estate.images
                 ?.filter((_, index) => index > 0) // Skip first image (primary)
                 .slice(0, 2) // Take next 2 images

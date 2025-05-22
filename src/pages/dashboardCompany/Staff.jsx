@@ -30,13 +30,12 @@ import { useEditUser } from "../../hooks/mutations/useEditUser";
 
 
 // IconSvg
-// import Dropdown from "../../components/icons/dropdown";
+import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
 import AddIcon from "../../components/icons/addIcon";
 import Search from "../../components/icons/search";
 import EditIcon from "../../components/icons/edit";
-import DeleteIcon from "../../components/icons/DeleteIcon";
-import RightDown from "../../components/icons/RightDown";
+ import RightDown from "../../components/icons/RightDown";
 import DownStaff from "../../components/icons/DownStaff";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 
@@ -432,7 +431,7 @@ function Staff() {
               mr={10}
               onChange={handleFilterChange} // Call the sorting function here
               rightSection={
-                <FilterIcon />
+                <Dropdown />
               }
               data={[
                 { value: "Most seller", label: "Most seller" },
@@ -641,7 +640,7 @@ function Staff() {
                               handleRemoveUser(supervisor.supervisor_id, true)
                             }
                           >
-                            <DeleteIcon />
+                            {/* <DeleteIcon /> */}
                             {/* <img src={trash} /> */}
                           </ActionIcon>
                         </Group>
@@ -784,7 +783,7 @@ function Staff() {
                                             )
                                           }
                                         >
-                                          <DeleteIcon />
+                                          {/* <DeleteIcon /> */}
                                         </ActionIcon>
                                       </Group>
                                     </Table.Td>
@@ -881,7 +880,7 @@ function Staff() {
                             handleRemoveUser(employee.employee_id, false)
                           }
                         >
-                          <DeleteIcon />
+                          {/* <DeleteIcon /> */}
 
                         </ActionIcon>
                       </Group>
@@ -975,7 +974,7 @@ function Staff() {
                             handleRemoveUser(employee.employee_id, false)
                           }
                         >
-                          <DeleteIcon />
+                          {/* <DeleteIcon /> */}
 
                         </ActionIcon>
                       </Group>
@@ -1058,7 +1057,7 @@ function Staff() {
                             handleRemoveUser(supervisor.supervisor_id, false)
                           }
                         >
-                          <DeleteIcon />
+                          {/* <DeleteIcon /> */}
                         </ActionIcon>
                       </Group>
                     </Table.Td>

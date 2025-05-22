@@ -288,8 +288,10 @@ function Contracts() {
                   border: "1px solid var(--color-border)",
                 }}
               >
+                {console.log(contract)}
+                
                 <Image
-                  src={contract.document_url}
+                  src={contract.real_estate.image}
                   alt="Property"
                   className={classes.contractImage}
                 />

@@ -20,7 +20,7 @@ import Notifications from "./Notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import { IconEye, IconEyeOff } from "@tabler/icons-react"; // أو أي مكتبة أيقونات مستخدمة
 import EditIcon from "../icons/edit";
-import DeleteIcon from "../icons/DeleteIcon";
+// import DeleteIcon from "../icons/DeleteIcon";
 
 function EmployeeDetails() {
   const [employee, setEmployee] = useState(null);
@@ -394,7 +394,7 @@ function EmployeeDetails() {
           }}
           onClick={openDeleteModal}
           className={classes.deleteIcon}>
-          <DeleteIcon />
+          {/* <DeleteIcon /> */}
         </span>
 
       </div>

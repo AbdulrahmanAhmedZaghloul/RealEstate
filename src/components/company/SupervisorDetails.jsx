@@ -17,9 +17,10 @@ import { BurgerButton } from "../buttons/burgerButton";
 import Notifications from "./Notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import { IconEye, IconEyeOff } from "@tabler/icons-react"; // أو أي مكتبة أيقونات مستخدمة
-import DeleteIcon from "../icons/DeleteIcon";
+// import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/edit";
 import { useQueryClient } from "@tanstack/react-query";
+import Contracts from "../../pages/dashboardCompany/Contracts";
 function SupervisorDetails() {
   const [supervisor, setSupervisor] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -325,7 +326,7 @@ function SupervisorDetails() {
           onClick={openDeleteModal}
           className={classes.deleteIcon}
           >
-          <DeleteIcon />
+          {/* <DeleteIcon /> */}
         </span>
         {/* <svg
           width="48"
@@ -506,6 +507,7 @@ function SupervisorDetails() {
           </Grid.Col>
         </Grid>
       </div>
+      <Contracts/>
       <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
         <TextInput
           label="New Password"

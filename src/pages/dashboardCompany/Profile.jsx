@@ -196,7 +196,7 @@ function Profile() {
     const formData = new FormData();
     formData.append("company_name", formName);
     formData.append("phone_number", formPhone);
-    formData.append("address", formAddress);
+    formData.append("address", address);
     formData.append("bio", bio);
     if (imageFile) formData.append("picture", imageFile);
     console.log(bio);
@@ -390,6 +390,19 @@ function Profile() {
               value={formPhone}
               onChange={(e) => setFormPhone(e.target.value)}
             />
+            {
+              bio == "" ? (
+                <TextInput
+                  label="Bio"
+                  mt="md"
+                  resize="vertical"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                />
+              ) : (
+                ""
+              )
+            }
             <Textarea
               label="Bio"
               mt="md"

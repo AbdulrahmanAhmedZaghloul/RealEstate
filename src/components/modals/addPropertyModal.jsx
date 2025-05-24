@@ -103,6 +103,7 @@ const AddPropertyModal = ({
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [amenitiesLoading, setAmenitiesLoading] = useState(false);
   const { user } = useAuth();
+
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
       setError("Geolocation is not supported by your browser");
@@ -112,21 +113,24 @@ const AddPropertyModal = ({
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
+
         try {
           const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+            `https://nominatim.openstreetmap.org/reverse?lat= ${latitude}&lon=${longitude}&format=json`
           );
           const data = await response.json();
           const address = data.address;
 
-          const formattedLocation = `${address.suburb || address.neighbourhood || ""
-            }, ${address.city || address.town || address.village || ""}, ${address.state || ""
-            },`;
+          const formattedLocation = `${address.suburb || address.neighbourhood || ""}, ${address.city || address.town || address.village || ""}, ${address.state || ""}`;
 
+          // Update everything at once
+          setSearchValue(formattedLocation);
           form.setFieldValue("location", formattedLocation);
+
           setRegion(address.state || "");
           setCity(address.city || address.town || address.village || "");
           setDistrict(address.suburb || address.neighbourhood || "");
+
           setError("");
         } catch (err) {
           setError("Could not fetch location data");
@@ -137,6 +141,90 @@ const AddPropertyModal = ({
       }
     );
   };
+
+
+  // const getCurrentLocation = () => {
+  //   if (!navigator.geolocation) {
+  //     setError("Geolocation is not supported by your browser");
+  //     return;
+  //   }
+  //   navigator.geolocation.getCurrentPosition(
+  //     async (position) => {
+  //       const { latitude, longitude } = position.coords;
+  //       try {
+  //         const response = await fetch(
+  //           `https://nominatim.openstreetmap.org/reverse?lat= ${latitude}&lon=${longitude}&format=json`
+  //         );
+  //         const data = await response.json();
+  //         const address = data.address;
+
+  //         const formattedLocation = `${
+  //           address.suburb || address.neighbourhood || ""
+  //         }, ${address.city || address.town || address.village || ""}, ${
+  //           address.state || ""
+  //         }`;
+
+  //         // Update the search value to show actual location
+  //         setSearchValue(formattedLocation);
+
+  //         // Update form value with the real location
+  //         form.setFieldValue("location", formattedLocation);
+
+  //         // Update region, city, district
+  //         setRegion(address.state || "");
+  //         setCity(address.city || address.town || address.village || "");
+  //         setDistrict(address.suburb || address.neighbourhood || "");
+
+  //         setError("");
+  //       } catch (err) {
+  //         setError("Could not fetch location data");
+  //         setSearchValue("");
+  //         form.setFieldValue("location", "");
+  //       }
+  //     },
+  //     () => {
+  //       setError("Location access denied by user");
+  //       setSearchValue("");
+  //       form.setFieldValue("location", "");
+  //     }
+  //   );
+  // };
+
+
+  // const getCurrentLocation = () => {
+  //   if (!navigator.geolocation) {
+  //     setError("Geolocation is not supported by your browser");
+  //     return;
+  //   }
+
+  //   navigator.geolocation.getCurrentPosition(
+  //     async (position) => {
+  //       const { latitude, longitude } = position.coords;
+  //       try {
+  //         const response = await fetch(
+  //           `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+  //         );
+  //         const data = await response.json();
+  //         const address = data.address;
+
+  //         const formattedLocation = `${address.suburb || address.neighbourhood || ""
+  //           }, ${address.city || address.town || address.village || ""}, ${address.state || ""
+  //           },`;
+
+  //         form.setFieldValue("location", formattedLocation);
+  //         setRegion(address.state || "");
+  //         setCity(address.city || address.town || address.village || "");
+  //         setDistrict(address.suburb || address.neighbourhood || "");
+  //         setError("");
+  //       } catch (err) {
+  //         setError("Could not fetch location data");
+  //       }
+  //     },
+  //     () => {
+  //       setError("Location access denied by user");
+  //     }
+  //   );
+  // };
 
   const handleSubmit = (values) => {
     const selectedAmenities = [
@@ -605,7 +693,7 @@ const AddPropertyModal = ({
               placeholder="Enter property location"
               data={[
                 {
-                  value: "Get Current Location",
+                  value: "",
                   label: "Get Current Location",
                 },
                 ...locationOptions,
@@ -669,64 +757,7 @@ const AddPropertyModal = ({
               mb={24}
               limit={15}
             />
-            {/* <Autocomplete
-              label="Location"
-              placeholder="Enter property location"
-              data={[
-                {
-                  value: "Get Current Location",
-                  label: "Get Current Location",
-                },
-                ...locationOptions, // Dynamically updated filtered options
-              ]}
-              value={form.values.location}
-              // Bind the search value
-              onChange={(value) => {
-                setSearchValue(value); // Update the search value dynamically
-                if (value === "Get Current Location") {
-                  getCurrentLocation();
-                } else {
-                  const selected = locationOptions.find(
-                    (loc) => loc.value === value
-                  );
-                  if (selected) {
-                    setRegion(selected.region);
-                    setCity(selected.city);
-                    setDistrict(selected.district);
-                  } else {
-                    setRegion("");
-                    setCity("");
-                    setDistrict("");
-                  }
-                  form.setFieldValue("location", value);
-                }
-              }}
-              error={form.errors.location}
-              renderOption={({ option }) => (
-                <Group>
-                  {option.label === "Get Current Location" && (
-                    <img
-                      src={currentLocation}
-                      alt="location"
-                      height={20}
-                      width={20}
-                      style={{ marginLeft: -5 }}
-                    />
-                  )}
-                  {option.label === "Get Current Location" ? (
-                    <span style={{ marginLeft: -10 }}>{option.label}</span>
-                  ) : (
-                    <span>{option.label}</span>
-                  )}
-                </Group>
-              )}
-              styles={{
-                input: { width: 289, height: 48 },
-                wrapper: { width: 289 },
-              }}
-              mb={24}
-              limit={15}
-            /> */}
+
             {/* Property Category */}
             <Select
               label="Property Category"

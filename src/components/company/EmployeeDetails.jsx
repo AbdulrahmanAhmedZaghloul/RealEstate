@@ -616,6 +616,7 @@ function EmployeeDetails() {
           Change Password
         </Button>
       </Modal>
+      
       <EditStaffModal
         opened={editModalOpened}
         onClose={closeEditModal}
@@ -627,8 +628,8 @@ function EmployeeDetails() {
         errors={errors}
         handleFileChange={handleFileChange}
         handleOpenChangePassword={handleOpenChangePassword}
+       />
 
-      />
       <DeleteEmployeeModal
         opened={deleteModalOpened}
         onClose={closeDeleteModal}

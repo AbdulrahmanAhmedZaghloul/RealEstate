@@ -6,31 +6,35 @@
 }
 
 .RegisterContainer {
+  display: "flex";
+  align-items: "start";
+  justify-content: "center";
   padding: 2rem;
   margin: auto;
 }
 
-.Paperimg{
+.Paperimg {
   width: 18%;
-  margin-bottom:10px;
+  margin-bottom: 10px;
 }
 
-.PaperContainer{
+.PaperContainer {
   margin: auto;
 }
 
-.PaperButton{
+.PaperButton {
   background-color: var(--color-1);
 }
 
 .imageContainer {
-  margin-top: 40px;
+  /* margin-top: 40px; */
   background-color: var(--color-1);
   border-radius: 10px;
   padding: 2rem;
   padding-bottom: 5rem;
   position: relative;
   overflow: hidden;
+
 }
 
 .imageContainer p {
@@ -78,4 +82,32 @@
   bottom: 0;
   z-index: 1;
   width: 20%;
+}
+
+
+
+@media (max-width: 991px) {
+  .GridRegister {
+    /* width: 100%; */
+    margin: auto;
+  }
+
+  .hiddenFrom {
+    display: none
+  }
+
+  .imageContainer {
+    display: none
+  }
+
+  .PaperLogin {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 210%;
+  }
+
+  .Paperimg {
+    width: 80%;
+  }
 }

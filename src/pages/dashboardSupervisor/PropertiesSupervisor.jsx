@@ -1,19 +1,9 @@
 import { useEffect, useState } from "react";
-import {
-  Card,
-  Center,
-  Group,
-  Image,
-  Text,
-  Select,
-  Loader,
-  useMantineColorScheme,
-} from "@mantine/core";
+import {Card,Center,Group,Image,Text,Select,Loader,useMantineColorScheme} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../styles/realEstates.module.css";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/config";
-
 import FilterDark from "../../assets/dashboard/filter.svg";
 import FilterLight from "../../assets/Filter.png";
 import { useAuth } from "../../context/authContext";
@@ -90,6 +80,7 @@ function PropertiesSupervisor() {
         setLoading(false);
       });
   };
+  
   const fetchEmployees = async () => {
     setLoading(true);
     try {

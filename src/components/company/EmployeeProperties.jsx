@@ -79,13 +79,6 @@ function EmployeeProperties({ id }) {
       const res = await axiosInstance.get(`/api/listings/cursor`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      // console.log(res.data.data.listings);
-
-      console.log(id)
-      // console.log(res.data.data.listings.filter(
-      //   (listing) =>
-      //     listing.status === "approved" && listing.employee_id === id
-      // ) )
       setListings(
         res.data.data.listings.filter(
           (listing) =>
@@ -93,15 +86,6 @@ function EmployeeProperties({ id }) {
 
         )
       );
-
-      // setListings(
-      //   res.data.data.listings.filter(
-      //     (listing) => listing.status === "approved" && res.data.data.listings.map(
-      //       (listing) => listing.employee_id === id
-      //     ) 
-      //   )
-      // );
-
       console.log(listings);
     } catch (err) {
       console.log(err.response);
@@ -318,9 +302,10 @@ function EmployeeProperties({ id }) {
                   backgroundColor: "var(--color-5)",
                 }}
               >
+                {console.log(listing)}
                 <Card.Section radius="md">
                   <Image
-                    src={listing.primary_image?.image_url}
+                    src={listing?.picture_url}
                     alt={listing.title}
                     h="233px"
                     radius="md"

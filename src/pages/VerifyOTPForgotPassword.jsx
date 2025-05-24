@@ -16,6 +16,7 @@ import {
 import axiosInstance from "../api/config";
 import { notifications } from "@mantine/notifications";
 import classes from "../styles/forgotPass.module.css"; // استخدام نفس الـ CSS class
+import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
 
 const VerifyOTPForgotPassword = () => {
   const email = localStorage.getItem("user_email");
@@ -116,39 +117,49 @@ const VerifyOTPForgotPassword = () => {
       });
   };
   return (
-    <Container size={460} my={30}>
-      {loading && (
-        <>
-          <Center
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              zIndex: 2,
-            }}
-          >
-            <Loader size="xl" />
+    <>
+
+
+      <header style={{
+
+        padding: " 20px 10px",
+      }}>
+        <HeaderMegaMenu />
+
+      </header>
+      <Container size={460} my={30}>
+        {loading && (
+          <>
+            <Center
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: 2,
+              }}
+            >
+              <Loader size="xl" />
+            </Center>
+          </>
+        )}
+        <Paper className={classes.wrapper} withBorder shadow="md" p={30} radius="md" mt="xl">
+          <Title mb="50px" className={classes.title} ta="center">
+            OTP Verification
+          </Title>
+          <Center>
+            <PinInput
+              type="number"
+              inputType="tel"
+              inputMode="numeric"
+              length={4}
+              value={otp}
+              onChange={(value) => setOtp(value)}
+              onComplete={handleVerify}
+            />
+            {/* عرض الرسالة هنا */}
           </Center>
-        </>
-      )}
-      <Paper className={classes.wrapper} withBorder shadow="md" p={30} radius="md" mt="xl">
-        <Title mb="50px" className={classes.title} ta="center">
-          Please Enter OTP
-        </Title>
-        <Center>
-          <PinInput
-            type="number"
-            inputType="tel"
-            inputMode="numeric"
-            length={4}
-            value={otp}
-            onChange={(value) => setOtp(value)}
-            onComplete={handleVerify}
-          />
-          {/* عرض الرسالة هنا */}
-        </Center>
-        <Stack align="center" mt="20px">
+          {/* <Stack align="center" mt="20px">
           {timer !== 0 ? (
             <Text>{`Resend OTP in ${timer}`}</Text>
           ) : (
@@ -161,25 +172,46 @@ const VerifyOTPForgotPassword = () => {
               Resend OTP
             </Button>
           )}
-        </Stack>
-        <Group justify="center" mt="30px">
-          <Button
-            className={classes.control}
-            
-            onClick={handleVerify}
+        </Stack> */}
+          <Group justify="center" mt="30px" mb="30px">
+            <Button
+              className={classes.control}
+              onClick={handleVerify}
               disabled={loading || otp.length !== 4 || !/^\d{4}$/.test(otp)}
-
-            //    disabled={
-              //   loading || Object.values(errors).some((error) => error !== "")
-              // }
-           >
-            Verify OTP
+            >
+              Verify OTP
+            </Button>
+            <span align="center" mt="20px">
+              {timer !== 0 ? (
+                <Text>{`Resend OTP in ${timer}`}</Text>
+              ) : (
+                <Button
+                  className={classes.control}
+                  onClick={handleResendOTP}
+                  disabled={loading}
+                  variant="light"
+                >
+                  Resend OTP
+                </Button>
+              )}
+            </span>
+          </Group>
+          <Button
+            className={classes.Cancel}
+            onClick={() => navigate("/forgot-password")}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "0 auto",
+            }}
+          >
+            Cancel
           </Button>
-        </Group>
-      </Paper>
-    </Container>
+        </Paper>
+      </Container>
+    </>
+
   );
 };
 
 export default VerifyOTPForgotPassword;
- 

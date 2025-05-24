@@ -429,7 +429,7 @@ function PropertyDetails() {
                   ) : (
                     <Box className={classes.BoxImage}>
                       <div className={classes.divImage}>
-                        <Avatar className={classes.Avatar} src={listing.picture_url} alt="" />
+                        <Avatar className={classes.Avatar} src={listing.employee.picture_url} alt="" />
                         <span className={classes.spanImage}>
                           
                           {listing.employee?.name}

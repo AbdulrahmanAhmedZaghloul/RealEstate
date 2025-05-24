@@ -17,13 +17,25 @@
   }
 }
 
+.Cancel {
+  
+  background-color: transparent;
+  border: 1px solid var(--color-1);
+  color: var(--color-1);
+}
+
 @media (max-width: 991px) {
   .wrapper {
-    display: flex; /* Use flexbox */
-    flex-direction: column; /* Ensure content stacks vertically if needed */
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
-    margin: 0; /* Remove any margins */
+    display: flex;
+    /* Use flexbox */
+    flex-direction: column;
+    /* Ensure content stacks vertically if needed */
+    justify-content: center;
+    /* Center vertically */
+    align-items: center;
+    /* Center horizontally */
+    margin: 0;
+    /* Remove any margins */
     height: 50vh;
   }
 }

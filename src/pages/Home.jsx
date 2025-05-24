@@ -41,7 +41,7 @@ function Home() {
               <p>Track properties, analyze trends, and <br />
                 make smarter decisions with our intuitive <br />
                 real estate dashboard.</p>
-              <button className={classes.buttonText}>
+              <button onClick  className={classes.buttonText}>
                 Get started
               </button>
             </div>

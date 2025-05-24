@@ -26,9 +26,9 @@ const EditStaffModal = ({
   loading,
   handleFileChange,
   handleOpenChangePassword,
-  currentPath
-}) => {
 
+}) => {
+  const location = useLocation();
   return (
     <Modal
       opened={opened}
@@ -94,7 +94,7 @@ const EditStaffModal = ({
           mt="md"
           error={errors.phone_number}
         />
-        {editUser.position !== "supervisor" && (
+        {/* {editUser.position !== "supervisor" && (
           <Select
             label="Position"
             placeholder="Select type"
@@ -108,7 +108,7 @@ const EditStaffModal = ({
             ]}
             mt="md"
           />
-        )}
+        )} */}
 
         {editUser.position === "employee" && (
           <Select
@@ -127,17 +127,18 @@ const EditStaffModal = ({
             error={errors.supervisor_id}
           />
         )}
-        {
-          currentPath == "/team" ? <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
+        {console.log(location)}
+        {location.pathname === "/dashboard/Team" ?
+          // <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
+          //   ChangePassword
+          // </Button>
+          null  
+          :
+          <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
             ChangePassword
-          </Button> : null
-
+          </Button>
         }
 
-        {/* {currentPath !== "/team" && (
-
-          
-        )} */}
         <Button
           fullWidth
           mt="xl"

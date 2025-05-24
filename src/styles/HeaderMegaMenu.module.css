@@ -56,6 +56,7 @@
 /* Burger hidden by default */
 .burger {
   display: none;
+  
 }
 
 /* Drawer styles */
@@ -72,23 +73,46 @@
   font-size: 18px;
   line-height: 150%;
   letter-spacing: 0%;
-  color: var(--color-2);;
+  color: var(--color-2);
+  ;
 }
 
 .links .navLinks:hover {
-  color: #848485 !important;
+  color: #848485 ;
 }
 
 /* Responsive */
-@media (max-width: 991px) {
+@media (max-width: 990px) {
 
   .links,
   .authButtons {
     display: none;
   }
 
+  /* Desktop Links */
+  .linksMobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .linksMobile a {
+    color: var(--color-8);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+
+  }
+
+  .linksMobile a:hover {
+    color: #1c7ed6;
+  }
+
   .burger {
     display: block;
+    color: #fff !important;
   }
 
   .drawerLinks .navLinks {
@@ -97,7 +121,8 @@
     font-size: 18px;
     line-height: 150%;
     letter-spacing: 0%;
-    color: var(--color-2);;
+    color: var(--color-2);
+    ;
     list-style-type: none;
     text-decoration: none;
   }

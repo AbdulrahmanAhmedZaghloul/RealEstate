@@ -276,14 +276,7 @@ function SubscriptionPlans() {
                         }}
                       >
                         {plan.name}
-                      </Text>
-                      {/* {plan.name === "Professional" &&
-                      billingCycle === "monthly" ? (
-                        <Badge color="green">Best deal</Badge>
-                      ) : plan.name === "Enterprise Annual" &&
-                        billingCycle === "annually" ? (
-                        <Badge color="green">Best deal</Badge>
-                      ) : null} */}
+                      </Text> 
                     </Group>
                     <Text
                       size="xl"
@@ -300,19 +293,7 @@ function SubscriptionPlans() {
                         ? plan.price.monthly
                         : plan.price.annually}
                     </Text>
-                    {/* <Text
-                      size="sm"
-                      weight={500}
-                      style={{
-                        color:
-                          plan.name === "Professional" ||
-                          plan.name === "Enterprise Annual"
-                            ? "#fff"
-                            : "var(--color-2);",
-                      }}
-                    >
-                      This plan includes:
-                    </Text> */}
+                  
                     <ul style={{ paddingLeft: "0px", marginBottom: "20px" }}>
                       {plan.features.map((feature, index) => (
                         <li

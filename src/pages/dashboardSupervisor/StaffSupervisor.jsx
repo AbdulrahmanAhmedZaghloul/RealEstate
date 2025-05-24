@@ -75,6 +75,8 @@ function StaffSupervisor() {
       const response = await axiosInstance.get("api/employees", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
+      console.log(response.data.data.employees)
+
       setEmployees(response.data.data.employees);
       setSearchedEmployees(response.data.data.employees);
     } catch (error) {
@@ -210,32 +212,32 @@ function StaffSupervisor() {
     fetchEmployees(); // Refresh the employee list
   };
 
-  const handleDeleteEmployee = async (id) => {
-    try {
-      const response = await axiosInstance.delete(`api/employees/${id}`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+  // const handleDeleteEmployee = async (id) => {
+  //   try {
+  //     const response = await axiosInstance.delete(`api/employees/${id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${user.token}`,
+  //       },
+  //     });
 
-      if (response.data.status === "success") {
-        notifications.show({
-          title: "Deleted",
-          message: response.data.message || "Employee deleted successfully",
-          color: "green",
-        });
+  //     if (response.data.status === "success") {
+  //       notifications.show({
+  //         title: "Deleted",
+  //         message: response.data.message || "Employee deleted successfully",
+  //         color: "green",
+  //       });
 
-        // بعد الحذف نحدث قائمة الموظفين
-        fetchEmployees();
-      }
-    } catch (error) {
-      notifications.show({
-        title: "Error",
-        message: error.response?.data?.message || "Failed to delete employee",
-        color: "red",
-      });
-    }
-  };
+  //       // بعد الحذف نحدث قائمة الموظفين
+  //       fetchEmployees();
+  //     }
+  //   } catch (error) {
+  //     notifications.show({
+  //       title: "Error",
+  //       message: error.response?.data?.message || "Failed to delete employee",
+  //       color: "red",
+  //     });
+  //   }
+  // };
   const handleFilterChange = (value) => {
     setFilter(value);
 
@@ -514,7 +516,7 @@ function StaffSupervisor() {
                         // width: isSmallScreen ? "15px" : "11px",
                       }} src={edit} alt="Edit" />
                     </ActionIcon>
-                    <ActionIcon
+                    {/* <ActionIcon
                       onClick={() => handleDeleteEmployee(employee.employee_id)}
                       variant="subtle"
                       color="red"
@@ -522,7 +524,7 @@ function StaffSupervisor() {
                       <img style={{
                         // width: isSmallScreen ? "15px" : "11px",
                       }} src={trash} alt="Delete" />
-                    </ActionIcon>
+                    </ActionIcon> */}
                   </Group>
                 </Table.Td>
 

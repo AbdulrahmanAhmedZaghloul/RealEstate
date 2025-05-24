@@ -40,7 +40,7 @@ function StartAccount() {
           <p>
             Takes less than a minute to get <br /> started. Your tools are waiting.
           </p>
-          <button  onClick={() => navigate('/register')}>Next</button>
+          <button onClick={() => navigate('/register')}>Next</button>
         </div>
       </div>
     </div>

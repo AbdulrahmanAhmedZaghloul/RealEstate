@@ -43,7 +43,7 @@ function ProfileEmployee() {
       const response = await axiosInstance.get(`/api/employees`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-
+      console.log(response.data.data.employee)
       setEmployee(response.data.data.employee);
     } catch (error) {
       console.error(error);
@@ -185,8 +185,7 @@ function ProfileEmployee() {
       </div>
       <div className={classes.profile}>
         <div className={classes.profileImage}>
-          {console.log(employee)}
-          <img src={`${employee.picture_url}`} alt="Profile" />
+           <img src={`${employee.picture_url}`} alt="Profile" />
           <div className={classes.profileInfo}>
             <h2
               style={{

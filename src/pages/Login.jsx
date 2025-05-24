@@ -21,11 +21,11 @@ import { notifications } from "@mantine/notifications";
 import { useAuth } from "../context/authContext";
 import axiosInstance from "../api/config";
 import position1 from "../assets/header/pont.png";
-import logo from "../assets/header/logo-43.png";
-import image from "../assets/header/screenshot_landing.png";
+ import image from "../assets/header/screenshot_landing.png";
 import { validateField } from "../hooks/Validation/validation";
- 
-export default function Login () {
+import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
+
+export default function Login() {
   const navigate = useNavigate();
   const { user, login, isSubscribed } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -105,7 +105,7 @@ export default function Login () {
         })
         .catch((error) => {
           console.log(error);
-          
+
           notifications.show({
             // title: "Incorrect email or password.",
             message: `${error.response?.data?.message}`,
@@ -135,102 +135,111 @@ export default function Login () {
   }
 
   return (
-    <section className={classes.RegisterContainer}>
-      <Grid>
-        <GridCol span={6} className={classes.GridLogin}>
-          <img className={classes.Paperimg} src={logo} alt="logo" />
-          <Paper
-            className={classes.PaperLogin}
-            withBorder
-            shadow="md"
-            p={30}
-            mt={30}
-            radius="md"
-          >
-            <TextInput
-              label="Email"
-              placeholder="you@website.com"
-              required
-              value={credentials.email}
-              onChange={(e) => {
-                const email = e.target.value;
-                setCredentials({ ...credentials, email });
-                setErrors((prev) => ({
-                  ...prev,
-                  email: validateField("email", email),
-                }));
-              }}
-              maxLength={50}
-              error={errors.email}
-            />
+    <>
+      <header style={{
 
-            <PasswordInput
-              label="Password"
-              placeholder="Your password"
-              required
-              value={credentials.password}
-              onChange={(e) => {
-                const password = e.target.value;
-                setCredentials({ ...credentials, password });
-                setErrors((prev) => ({
-                  ...prev,
-                  password: validateField("password", password),
-                }));
-              }}
-              maxLength={50}
-              error={errors.password}
-              mt="md"
-            />
+        padding: " 20px",
+      }}>
+        <HeaderMegaMenu />
 
-            <Group justify="space-between" mt="lg">
-              <Checkbox
-                label="Remember me"
-                checked={credentials.remember}
-                onChange={(e) =>
-                  setCredentials({
-                    ...credentials,
-                    remember: e.target.checked,
-                  })
-                }
-              />
-              <Link to="/forgot-password">Forgot Password</Link>
-            </Group>
-
-            <Button
-              fullWidth
-              mt="xl"
-              onClick={handleLogin}
-              disabled={
-                loading || Object.values(errors).some((error) => error !== "")
-              }
-              bg="var(--color-1)"
+      </header>
+      <section className={classes.RegisterContainer}>
+        <Grid>
+          <GridCol span={6} className={classes.GridLogin}>
+            <Paper
+              className={classes.PaperLogin}
+              withBorder
+              shadow="md"
+              p={30}
+              mt={30}
+              radius="md"
             >
-              Login
-            </Button>
+              <TextInput
+                label="Email"
+                placeholder="you@website.com"
+                required
+                value={credentials.email}
+                onChange={(e) => {
+                  const email = e.target.value;
+                  setCredentials({ ...credentials, email });
+                  setErrors((prev) => ({
+                    ...prev,
+                    email: validateField("email", email),
+                  }));
+                }}
+                maxLength={50}
+                error={errors.email}
+              />
 
-            <Text c="dimmed" size="sm" ta="center" mt={15}>
-              Do not have an account yet?{" "}
-              <Link to="/register" style={{ textDecoration: "inherit" }}>
-                Register
-              </Link>
-            </Text>
-          </Paper>
-        </GridCol>
+              <PasswordInput
+                label="Password"
+                placeholder="Your password"
+                required
+                value={credentials.password}
+                onChange={(e) => {
+                  const password = e.target.value;
+                  setCredentials({ ...credentials, password });
+                  setErrors((prev) => ({
+                    ...prev,
+                    password: validateField("password", password),
+                  }));
+                }}
+                maxLength={50}
+                error={errors.password}
+                mt="md"
+              />
 
-        <GridCol span={6}>
-          <div className={classes.imageContainer}>
-            <div className={classes.position1}>
-              <img src={position1} alt="decorative" />
+              <Group justify="space-between" mt="lg">
+                <Checkbox
+                  label="Remember me"
+                  checked={credentials.remember}
+                  onChange={(e) =>
+                    setCredentials({
+                      ...credentials,
+                      remember: e.target.checked,
+                    })
+                  }
+                />
+                <Link to="/forgot-password">Forgot Password</Link>
+              </Group>
+
+              <Button
+                fullWidth
+                mt="xl"
+                onClick={handleLogin}
+                disabled={
+                  loading || Object.values(errors).some((error) => error !== "")
+                }
+                bg="var(--color-1)"
+              >
+                Login
+              </Button>
+
+              <Text c="dimmed" size="sm" ta="center" mt={15}>
+                Do not have an account yet? 
+                <Link to="/register"  >
+                  Register
+                </Link>
+              </Text>
+            </Paper>
+          </GridCol>
+
+          <GridCol span={6} >
+            <div className={classes.imageContainer}>
+              <div className={classes.position1}>
+                <img src={position1} alt="decorative" />
+              </div>
+              <div className={classes.position2}>
+                <img src={position1} alt="decorative" />
+              </div>
+              <h2>Sign in</h2>
+              <p>Say Hello to Stress-Free Property Management</p>
+              <img src={image} alt="preview" />
             </div>
-            <div className={classes.position2}>
-              <img src={position1} alt="decorative" />
-            </div>
-            <h2>Sign in</h2>
-            <p>Say Hello to Stress-Free Property Management</p>
-            <img src={image} alt="preview" />
-          </div>
-        </GridCol>
-      </Grid>
-    </section>
+          </GridCol>
+        </Grid>
+      </section>
+    </>
+
   );
 } 

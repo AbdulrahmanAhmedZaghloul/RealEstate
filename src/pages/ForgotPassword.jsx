@@ -15,13 +15,14 @@ import { useState } from "react";
 import axiosInstance from "../api/config";
 import classes from "../styles/forgotPass.module.css";
 import { validateField } from "../hooks/Validation/validation";
+import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
 
 export default function ForgotPassword() {
   const [account, setAccount] = useState({ email: "" });
   const [errors, setErrors] = useState({ email: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   const validateEmail = () => {
     const emailError = validateField("email", account.email);
     setErrors({ email: emailError });
@@ -60,6 +61,15 @@ export default function ForgotPassword() {
   };
 
   return (
+    <>
+    
+    <header style={{
+
+      padding: " 20px",
+    }}>
+      <HeaderMegaMenu />
+
+    </header>
     <Container size={460} my={30}>
       <Title className={classes.title} ta="center">
         Forgot your password?
@@ -104,6 +114,7 @@ export default function ForgotPassword() {
         </Group>
       </Paper>
     </Container>
+    </>
   );
 }
 

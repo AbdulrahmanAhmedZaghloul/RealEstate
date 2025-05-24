@@ -11,21 +11,21 @@
   margin: auto;
 }
 
-.Paperimg{
+.Paperimg {
   width: 18%;
-  margin-bottom:4rem;
+  margin-bottom: 4rem;
 }
 
-.PaperContainer{
+.PaperContainer {
   margin: auto;
 }
 
-.PaperButton{
+.PaperButton {
   background-color: var(--color-1);
 }
 
-.PaperLogin{
-  margin: auto; 
+.PaperLogin {
+  margin: auto;
   width: 448px;
 }
 
@@ -84,15 +84,20 @@
   z-index: 1;
   width: 20%;
 }
+
 @media (max-width: 991px) {
-  .imageContainer {display:none}
+  .imageContainer {
+    display: none
+  }
+
   .PaperLogin {
-    display:block;
+    display: block;
     margin-left: auto;
     margin-right: auto;
     width: 210%;
   }
-  .Paperimg{
+
+  .Paperimg {
     width: 80%;
   }
 }

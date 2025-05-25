@@ -35,9 +35,11 @@ import FilterIcon from "../../components/icons/filterIcon";
 import AddIcon from "../../components/icons/addIcon";
 import Search from "../../components/icons/search";
 import EditIcon from "../../components/icons/edit";
- import RightDown from "../../components/icons/RightDown";
+import RightDown from "../../components/icons/RightDown";
 import DownStaff from "../../components/icons/DownStaff";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
+import DeleteIcon from "../../components/icons/DeleteIcon";
 
 const jobColors = {
   supervisor: "orange",
@@ -257,6 +259,8 @@ function Staff() {
     // تنفيذ الحذف باستخدام useRemoveUser hook
     mutationRemoveUser.mutate({ employeeToDelete }, {
       onSuccess: () => {
+        <InvalidateQuery queryKey={["listings"]} />
+
         closeDeleteModal();
         setEmployeeToDelete(null);
       },
@@ -633,16 +637,15 @@ function Staff() {
                             <EditIcon />
                             {/* <img src={edit} /> */}
                           </ActionIcon>
-                          <ActionIcon
+                          {/* <ActionIcon
                             variant="subtle"
                             color="red"
                             onClick={() =>
                               handleRemoveUser(supervisor.supervisor_id, true)
                             }
                           >
-                            {/* <DeleteIcon /> */}
-                            {/* <img src={trash} /> */}
-                          </ActionIcon>
+                            <DeleteIcon /> 
+                           </ActionIcon> */}
                         </Group>
                       </Table.Td>
                     </Table.Tr>
@@ -773,7 +776,7 @@ function Staff() {
                                           <EditIcon />
 
                                         </ActionIcon>
-                                        <ActionIcon
+                                        {/* <ActionIcon
                                           variant="subtle"
                                           color="red"
                                           onClick={() =>
@@ -783,8 +786,8 @@ function Staff() {
                                             )
                                           }
                                         >
-                                          {/* <DeleteIcon /> */}
-                                        </ActionIcon>
+                                          <DeleteIcon />
+                                        </ActionIcon> */}
                                       </Group>
                                     </Table.Td>
                                   </Table.Tr>
@@ -873,16 +876,16 @@ function Staff() {
                           <EditIcon />
 
                         </ActionIcon>
-                        <ActionIcon
+                        {/* <ActionIcon
                           variant="subtle"
                           color="red"
                           onClick={() =>
                             handleRemoveUser(employee.employee_id, false)
                           }
                         >
-                          {/* <DeleteIcon /> */}
+                          <DeleteIcon />
 
-                        </ActionIcon>
+                        </ActionIcon> */}
                       </Group>
                     </Table.Td>
                   </Table.Tr>
@@ -967,16 +970,16 @@ function Staff() {
                           <EditIcon />
 
                         </ActionIcon>
-                        <ActionIcon
+                        {/* <ActionIcon
                           variant="subtle"
                           color="red"
                           onClick={() =>
                             handleRemoveUser(employee.employee_id, false)
                           }
                         >
-                          {/* <DeleteIcon /> */}
+                          <DeleteIcon />
 
-                        </ActionIcon>
+                        </ActionIcon> */}
                       </Group>
                     </Table.Td>
                   </Table.Tr>
@@ -1050,15 +1053,15 @@ function Staff() {
                         >
                           <EditIcon />
                         </ActionIcon>
-                        <ActionIcon
+                        {/* <ActionIcon
                           variant="subtle"
                           color="red"
                           onClick={() =>
                             handleRemoveUser(supervisor.supervisor_id, false)
                           }
                         >
-                          {/* <DeleteIcon /> */}
-                        </ActionIcon>
+                          <DeleteIcon />
+                        </ActionIcon> */}
                       </Group>
                     </Table.Td>
                   </Table.Tr>

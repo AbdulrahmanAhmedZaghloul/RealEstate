@@ -254,7 +254,9 @@ function Properties() {
               }}
 
             />
-            <button className={classes.add} onClick={open}>
+            <button style={{
+              cursor: "pointer",
+            }} className={classes.add} onClick={open}>
               <AddIcon /> {t.Add}
             </button>
           </div>

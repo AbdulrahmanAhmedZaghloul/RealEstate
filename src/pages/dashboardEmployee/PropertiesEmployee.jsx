@@ -70,7 +70,7 @@ function PropertiesEmployee() {
   const fetchListings = async () => {
     setLoading(true);
     await axiosInstance
-      .get("/api/listings/employee", {
+      .get("api/listings/employee", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -165,7 +165,7 @@ function PropertiesEmployee() {
     );
     setLoading(true);
     axiosInstance
-      .post("/api/listings", formData, {
+      .post("api/listings", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${user.token}`,

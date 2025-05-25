@@ -45,17 +45,19 @@ function PropertyDetailsSupervisor() {
   const { colorScheme } = useMantineColorScheme();
   const { t } = useTranslation(); // 👈 استدعاء اللغة
 
-   
+
   const fetchListing = async () => {
     setLoading(true);
     try {
-      const { data } = await axiosInstance.get(`/api/listings/employees/${id}`, {
+      const { data } = await axiosInstance.get(`api/listings/employee/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
+      console.log(data?.data.listing);
+
       setListing(data?.data.listing);
     } catch (err) {
       console.log(err);
-      
+
       notifications.show({
         title: "Error",
         message: err.response?.data?.message || "Failed to fetch listing",
@@ -185,43 +187,93 @@ function PropertyDetailsSupervisor() {
   return (
     <>
       <Card style={{
-        backgroundColor:   "var(--color-5)",
-         
+        backgroundColor: "var(--color-5)",
+
       }} radius="md" className={classes.card}>
         <Grid>
           <Grid.Col span={12} style={{ marginBottom: "1rem" }}>
             <div className={classes.imageContainer}>
               <>
-                {/* حاوية الصورة الرئيسية */}
-                <div className={classes.ImageContainerBig}>
+
+                 <div className={classes.ImageContainerBig}>
+                                {listing.images?.find((image) => image.is_primary)
+                                  ?.image_url && (
+                                    <>
+                                      <img
+                                        src={`${listing.images.find((image) => image.is_primary)
+                                            .image_url
+                                          }`}
+                                        alt={listing.title}
+                                        className={classes.mainImage}
+                                        onClick={() => {
+                                          setSelectedImageIndex(
+                                            listing.images.findIndex(
+                                              (image) => image.is_primary
+                                            )
+                                          );
+                                          open1();
+                                        }}
+                                      />
+                                      <p
+                                        style={{
+                                          color: "#23262A",
+                                        }}
+                                      >
+                                        See {listing.images.length} Photos
+                                      </p>
+                                    </>
+                                  )}
+                              </div>
+              
+                              {/* حاوية الصور الإضافية */}
+                              <div className={classes.widthImageContainer}>
+                                {listing.images
+                                  ?.filter((image) => !image.is_primary)
+                                  .slice(0, 2) // عرض أول صورتين فقط
+                                  .map((image, index) => (
+                                    <img
+                                      key={image.id}
+                                      src={`${image.image_url}`}
+                                      alt={listing.title}
+                                      className={classes.mainImage}
+                                      onClick={() => {
+                                        setSelectedImageIndex(
+                                          listing.images.findIndex(
+                                            (img) => img.id === image.id
+                                          )
+                                        );
+                                        open1();
+                                      }}
+                                    />
+                                  ))}
+                              </div>
+                 {/* <div className={classes.ImageContainerBig}>
                   {listing.images?.find((image) => image.is_primary)
                     ?.image_url && (
-                    <>
-                      <img
-                        src={`${apiUrl}storage/${
-                          listing.images.find((image) => image.is_primary)
-                            .image_url
-                        }`}
-                        alt={listing.title}
-                        className={classes.mainImage}
-                        onClick={() => {
-                          setSelectedImageIndex(
-                            listing.images.findIndex(
-                              (image) => image.is_primary
-                            )
-                          );
-                          open1();
-                        }}
-                      />
-                      <p  style={{
-                  color:   "var(--color-3)",
-                }} >See {listing.images.length} Photos</p>
-                    </>
-                  )}
+                      <>
+                        <img
+                          src={`${apiUrl}storage/${listing.images.find((image) => image.is_primary)
+                              .image_url
+                            }`}
+                          alt={listing.title}
+                          className={classes.mainImage}
+                          onClick={() => {
+                            setSelectedImageIndex(
+                              listing.images.findIndex(
+                                (image) => image.is_primary
+                              )
+                            );
+                            open1();
+                          }}
+                        />
+                        <p style={{
+                          color: "var(--color-3)",
+                        }} >See {listing.images.length} Photos</p>
+                      </>
+                    )}
                 </div>
 
-                {/* حاوية الصور الإضافية */}
-                <div className={classes.widthImageContainer}>
+                 <div className={classes.widthImageContainer}>
                   {listing.images
                     ?.filter((image) => !image.is_primary)
                     .slice(0, 2) // عرض أول صورتين فقط
@@ -241,7 +293,7 @@ function PropertyDetailsSupervisor() {
                         }}
                       />
                     ))}
-                </div>
+                </div> */}
               </>
             </div>
           </Grid.Col>
@@ -252,13 +304,13 @@ function PropertyDetailsSupervisor() {
                   <Grid.Col span={isMobile ? 12 : 10} className={classes.back}>
                     <div className={classes.text}>
                       <Text style={{
-                        color:   "var(--color-1)",
+                        color: "var(--color-1)",
                       }} className={classes.price}>
                         <span className="icon-saudi_riyal">&#xea; </span>{" "}
                         {parseFloat(listing.price)?.toLocaleString()}
                       </Text>
 
-                      <Text  className={classes.Down}>
+                      <Text className={classes.Down}>
 
                         {Math.floor(
                           (listing.down_payment / listing.price) * 100
@@ -289,7 +341,7 @@ function PropertyDetailsSupervisor() {
                   </Grid.Col>
                   <Grid.Col span={12}>
                     <Text style={{
-                       
+
                     }} className={classes.Fully}>{listing.title}</Text>
                   </Grid.Col>
                   <Grid.Col span={12}>
@@ -323,21 +375,21 @@ function PropertyDetailsSupervisor() {
                         span={isMobile ? 4 : 6}
                         className={classes.item}
                       >
-                        <Text   className={classes.ago}>
+                        <Text className={classes.ago}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
                             : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                         </Text>
                       </Grid.Col>
                     </Grid>
@@ -360,7 +412,7 @@ function PropertyDetailsSupervisor() {
                         </svg>
 
                         <span
-                           
+
                         >
                           {listing.category}
                         </span>
@@ -386,7 +438,7 @@ function PropertyDetailsSupervisor() {
                         </svg>
 
                         <span
-                           
+
                         >
                           3
                         </span>
@@ -408,7 +460,7 @@ function PropertyDetailsSupervisor() {
                         </svg>
 
                         <span
-                           
+
                         >
                           2
                         </span>
@@ -441,7 +493,7 @@ function PropertyDetailsSupervisor() {
                         </svg>
 
                         <span
-                           
+
                         >
                           {listing.area} sqm{" "}
                         </span>
@@ -458,24 +510,24 @@ function PropertyDetailsSupervisor() {
                       `/dashboard/employee/${listing.employee.employee_id}`
                     )
                   }
-                  
+
                 >
                   {isMobile ? (
                     ""
                   ) : (
-                    <Box  className={classes.BoxImage}>
+                    <Box className={classes.BoxImage}>
                       <div className={classes.divImage}>
                         <Avatar src={""} w={80} h={80} alt="" />
-                        <span  className={classes.spanImage}>
+                        <span className={classes.spanImage}>
                           {" "}
                           {listing.employee?.name}
                         </span>
                       </div>
 
                       <div className={classes.TextView}>
-                        <Text  style={{
-                        color:   "var(--color-1)",
-                      }} className={classes.View}>View</Text>
+                        <Text style={{
+                          color: "var(--color-1)",
+                        }} className={classes.View}>View</Text>
                       </div>
                     </Box>
                   )}
@@ -486,12 +538,12 @@ function PropertyDetailsSupervisor() {
         </Grid>
         <Stack gap="xs">
           <Text style={{
-             
+
           }} className={classes.Description} fw={600}>
-            {t.Description }:
+            {t.Description}:
           </Text>
           <Text style={{
-                       }} className={classes.listing}>
+          }} className={classes.listing}>
             {expanded ? listing.description : previewText}
             {words.length > 50 && (
               <p onClick={() => setExpanded(!expanded)} className={classes.See}>
@@ -526,7 +578,7 @@ function PropertyDetailsSupervisor() {
         {/* <Divider my="sm" /> */}
         <Stack gap="xs" style={{ marginTop: "20px" }}>
           <Text style={{
-             
+
           }} className={classes.Locationpom}>Location</Text>
           <span className={classes.svgSpan}>
             <div>
@@ -555,7 +607,7 @@ function PropertyDetailsSupervisor() {
 
               <span
                 style={{
-                                   }}
+                }}
               >
                 {listing.location}
               </span>

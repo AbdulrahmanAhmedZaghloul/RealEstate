@@ -1,6 +1,7 @@
 //Dependency imports
 import { useParams } from "react-router-dom";
-import {Card,Stack,Text,Button,Group,Grid,Center,Loader,Modal,Textarea,Box,Avatar,useMantineColorScheme,
+import {
+  Card, Stack, Text, Button, Group, Grid, Center, Loader, Modal, Textarea, Box, Avatar, useMantineColorScheme,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
@@ -12,6 +13,7 @@ import axiosInstance from "../../api/config";
 import classes from "../../styles/propertyDetails.module.css";
 import { useAuth } from "../../context/authContext";
 import { useTranslation } from "../../context/LanguageContext";
+import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
 
 function PropertyDetails() {
   const { id } = useParams();
@@ -37,9 +39,9 @@ function PropertyDetails() {
   const previewText =
     words.slice(0, 50).join(" ") + (words.length > 50 ? "..." : "");
 
-      console.log(user.token);
-      console.log(id);
-      
+  console.log(user.token);
+  console.log(id);
+
   const fetchListing = async () => {
     setLoading(true);
     try {
@@ -47,8 +49,10 @@ function PropertyDetails() {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       console.log(data?.data.listing);
-      
+
       setListing(data?.data.listing); // Ensure listing has a description
+      <InvalidateQuery queryKey={["listings"]} />
+
     } catch (err) {
       notifications.show({
         title: "Error",
@@ -56,12 +60,12 @@ function PropertyDetails() {
         color: "red",
       });
       console.log(err);
-      
+
     } finally {
       setLoading(false);
     }
   };
-  
+
   const handleShareProperty = () => {
     setLoading(true);
     axiosInstance
@@ -193,32 +197,31 @@ function PropertyDetails() {
                 <div className={classes.ImageContainerBig}>
                   {listing.images?.find((image) => image.is_primary)
                     ?.image_url && (
-                    <>
-                      <img
-                        src={`${
-                          listing.images.find((image) => image.is_primary)
-                            .image_url
-                        }`}
-                        alt={listing.title}
-                        className={classes.mainImage}
-                        onClick={() => {
-                          setSelectedImageIndex(
-                            listing.images.findIndex(
-                              (image) => image.is_primary
-                            )
-                          );
-                          open1();
-                        }}
-                      />
-                      <p
-                        style={{
-                          color: "#23262A",
-                        }}
-                      >
-                        See {listing.images.length} Photos
-                      </p>
-                    </>
-                  )}
+                      <>
+                        <img
+                          src={`${listing.images.find((image) => image.is_primary)
+                              .image_url
+                            }`}
+                          alt={listing.title}
+                          className={classes.mainImage}
+                          onClick={() => {
+                            setSelectedImageIndex(
+                              listing.images.findIndex(
+                                (image) => image.is_primary
+                              )
+                            );
+                            open1();
+                          }}
+                        />
+                        <p
+                          style={{
+                            color: "#23262A",
+                          }}
+                        >
+                          See {listing.images.length} Photos
+                        </p>
+                      </>
+                    )}
                 </div>
 
                 {/* حاوية الصور الإضافية */}
@@ -307,18 +310,18 @@ function PropertyDetails() {
                         <Text className={classes.ago}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
                             : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                         </Text>
                       </Grid.Col>
                     </Grid>
@@ -431,7 +434,7 @@ function PropertyDetails() {
                       <div className={classes.divImage}>
                         <Avatar className={classes.Avatar} src={listing.employee.picture_url} alt="" />
                         <span className={classes.spanImage}>
-                          
+
                           {listing.employee?.name}
                         </span>
                       </div>

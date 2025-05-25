@@ -1,55 +1,8 @@
-// // hooks/useAddProperty.js
-// import { useMutation, useQueryClient } from '@tanstack/react-query';
-// import axiosInstance from '../../api/config';
-// import { notifications } from '@mantine/notifications';
-
-// export const useRemoveUser = (userToken, closeModal) => {
-//     const queryClient = useQueryClient();
-
-//     const removeUser = async ({ employeeToDelete }) => {
-//         const { userId, isSupervisor } = employeeToDelete;
-//         console.log(userId);
-
-//         const endpoint = isSupervisor
-//             ? `/api/supervisors/${userId}`
-//             : `/api/employees/${userId}`;
-//         await axiosInstance.delete(endpoint, {
-//             headers: { Authorization: `Bearer ${userToken}` },
-//         });
-//         // data.isSupervisor ? queryClient.invalidateQueries({ queryKey: ['supervisors'] }) : queryClient.invalidateQueries({ queryKey: ['employees'] });
-
-//         return { isSupervisor };
-//     }
-
-
-//     return useMutation({
-//         mutationFn: removeUser,
-//         onSuccess: (data) => {
-//             console.log('User removed successfully:', data);
-
-//             data.isSupervisor ? queryClient.invalidateQueries({ queryKey: ['supervisors'] }) : queryClient.invalidateQueries({ queryKey: ['employees'] });
-//             closeModal?.();
-//             notifications.show({
-//                 title: 'User Removed',
-//                 message: 'User has been removed successfully.',
-//                 color: 'green',
-//             });
-//         },
-//         onError: (error) => {
-//             console.log(error);
-
-//             notifications.show({
-//                 title: 'Error',
-//                 message: error.response?.data?.message || 'Failed to remove user.',
-//                 color: 'red',
-//             });
-//             console.error(error);
-//         },
-//     });
-// };
+ 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../../api/config';
 import { notifications } from '@mantine/notifications';
+import InvalidateQuery from '../../InvalidateQuery/InvalidateQuery';
 
 export const useRemoveUser = (userToken, closeModal) => {
   const queryClient = useQueryClient();
@@ -74,6 +27,8 @@ export const useRemoveUser = (userToken, closeModal) => {
       // Update the cached data directly instead of invalidating
       if (isSupervisor) {
         queryClient.setQueryData(['supervisors'], (oldData) => {
+          // <InvalidateQuery queryKey={["listings"]} />
+
           return {
             ...oldData,
             data: {
@@ -86,6 +41,8 @@ export const useRemoveUser = (userToken, closeModal) => {
         });
       } else {
         queryClient.setQueryData(['employees'], (oldData) => {
+          // <InvalidateQuery queryKey={["listings"]} />
+
           return {
             ...oldData,
             data: {

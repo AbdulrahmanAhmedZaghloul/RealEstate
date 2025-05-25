@@ -24,6 +24,8 @@ import { useCategories } from "../../hooks/queries/useCategories";
 import { useQueryClient } from "@tanstack/react-query";
 import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
+import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
+import Search from "../../components/icons/search";
 
 const rejectionReasons = [
   {
@@ -74,10 +76,10 @@ function Transactions() {
     filterModalOpened,
     { open: openFilterModal, close: closeFilterModal },
   ] = useDisclosure(false);
-
+  const queryClient = useQueryClient();
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   // Form validation using Mantine's useForm
   const form = useForm({
@@ -129,10 +131,10 @@ function Transactions() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(searchedListings.length / itemsPerPage);
-  const paginatedListings = searchedListings.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // const paginatedListings = searchedListings.slice(
+  //   (currentPage - 1) * itemsPerPage,
+  //   currentPage * itemsPerPage
+  // );
 
   // Reset currentPage to 1 when the search query changes
   useEffect(() => {
@@ -192,11 +194,16 @@ function Transactions() {
         { headers: { Authorization: `Bearer ${user.token}` } }
       )
       .then(() => {
+        // <InvalidateQuery queryKey={["listings"]} />
+        // console.log("InvalidateQuery-updateStatus");
+
         notifications.show({
           title: "Success",
           message: "Listing status updated successfully",
           color: "green",
         });
+        // <InvalidateQuery queryKey={["listings"]} />
+
         queryClient.invalidateQueries({ queryKey: ["listings"] });
       })
       .catch((err) => {
@@ -221,6 +228,8 @@ function Transactions() {
   const handleReject = (id) => {
     setSelectedListingId(id);
     setModalOpened(true);
+    <InvalidateQuery queryKey={["listings"]} />
+
   };
 
   const handleRejectSubmit = () => {
@@ -234,16 +243,25 @@ function Transactions() {
     }
   };
 
-  const { colorScheme } = useMantineColorScheme();
 
   useEffect(() => {
     setListings(
-      listingsData?.data?.listings.filter(
-        (listing) => listing.status === "pending"
-      ) || []
+      listingsData?.data?.listings.filter((listing) => listing.status === "pending") || []
     );
     setCategories(categoriesData?.data?.categories || []);
   }, [listingsData, categoriesData]);
+
+  // useEffect(() => {
+  //   setListings(
+  //     listingsData?.data?.listings.filter(
+  //       (listing) => listing.status === "pending"
+  //     ) || []
+  //   );
+  //   setCategories(categoriesData?.data?.categories || []);
+  //   <InvalidateQuery queryKey={["listings"]} />
+  //   console.log("InvalidateQuery-useEffect");
+
+  // }, [listingsData, categoriesData]);
 
   if (isLoading) {
     return (
@@ -272,6 +290,9 @@ function Transactions() {
         </div>
 
         <div className={classes.controls}>
+          <div className={classes.divSearch}>
+            <Search />
+          </div>
           <input
             style={{
               border: "1px solid var(--color-border)",
@@ -341,13 +362,13 @@ function Transactions() {
           </div>
         </div>
 
-        {paginatedListings.length === 0 && !loading ? (
+        {listings.length === 0 && !loading ? (
           <Center>
             <Text>{t.Notransactions}</Text>
           </Center>
         ) : (
           <Group align="center" spacing="xl">
-            {paginatedListings.map((listing) => (
+            {listings.map((listing) => (
 
               <Card
                 key={listing.id}
@@ -378,7 +399,7 @@ function Transactions() {
                       <span className="icon-saudi_riyal">&#xea; </span>{" "}
                       {parseFloat(listing.price)?.toLocaleString()}
                     </span>
-{console.log(listing.down_payment)}
+                    {console.log(listing.down_payment)}
 
                     <div className={classes.downPaymentBadge}>
                       {Math.floor((listing.down_payment / listing.price) * 100)}
@@ -460,7 +481,7 @@ function Transactions() {
           </Group>
         )}
         {/*pagination */}
-        <div
+        {/* <div
           style={{
             display: "flex",
             justifyContent: "center",
@@ -494,7 +515,7 @@ function Transactions() {
               {currentPage + 1}
             </button>
           )}
-        </div>
+        </div> */}
       </Card>
 
       <Modal

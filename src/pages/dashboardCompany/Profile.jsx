@@ -114,47 +114,26 @@ function Profile() {
       setFormImage(imageUrl);
     }
   };
-
-  const validatePassword = () => {
-    if (!newPass.trim()) {
-      setPassErr("Password is required");
-      return false;
-    }
-    if (newPass.length < 8) {
-      setPassErr("Password must be at least 8 characters long");
-      return false;
-    }
-    if (!/[A-Z]/.test(newPass)) {
-      setPassErr("Password must contain at least one uppercase character");
-      return false;
-    }
-    if (!/[a-z]/.test(newPass)) {
-      setPassErr("Password must contain at least one lowercase character");
-      return false;
-    }
-    if (!/[0-9]/.test(newPass)) {
-      setPassErr("Password must contain at least one number");
-      return false;
-    }
-    if (!/[@#$!%*?&]/.test(newPass)) {
-      setPassErr(
-        "Password must contain at least one special character (@, #, $, !, %, *, ?, &)"
-      );
-      return false;
-    }
-    if (/\s/.test(newPass)) {
-      setPassErr("Password cannot contain spaces");
-      return false;
-    }
-    return true;
+  const validatePassword = (value) => {
+    if (!value.trim()) return "Password is required";
+    if (value.length < 8)
+      return "Password must be at least 8 characters long";
+    if (!/[a-z]/.test(value))
+      return "Password must contain at least one lowercase letter";
+    if (!/[0-9]/.test(value))
+      return "Password must contain at least one number";
+    if (/\s/.test(value)) return "Password cannot contain spaces";
+    return "";
   };
 
   const changePassword = async () => {
-    if (!validatePassword()) return;
+    const error = validatePassword(newPass);
+    setPassErr(error);
+
+    if (error) return;
 
     setIsChangingPassword(true);
     setLoading(true);
-
     try {
       await axiosInstance.post(
         "/api/company/profile/password",
@@ -169,7 +148,6 @@ function Profile() {
           },
         }
       );
-
       notifications.show({
         title: "Password changed successfully.",
         color: "green",
@@ -188,6 +166,79 @@ function Profile() {
       setLoading(false);
     }
   };
+  // const validatePassword = () => {
+  //   if (!newPass.trim()) {
+  //     setPassErr("Password is required");
+  //     return false;
+  //   }
+  //   if (newPass.length < 8) {
+  //     setPassErr("Password must be at least 8 characters long");
+  //     return false;
+  //   }
+  //   if (!/[A-Z]/.test(newPass)) {
+  //     setPassErr("Password must contain at least one uppercase character");
+  //     return false;
+  //   }
+  //   if (!/[a-z]/.test(newPass)) {
+  //     setPassErr("Password must contain at least one lowercase character");
+  //     return false;
+  //   }
+  //   if (!/[0-9]/.test(newPass)) {
+  //     setPassErr("Password must contain at least one number");
+  //     return false;
+  //   }
+  //   if (!/[@#$!%*?&]/.test(newPass)) {
+  //     setPassErr(
+  //       "Password must contain at least one special character (@, #, $, !, %, *, ?, &)"
+  //     );
+  //     return false;
+  //   }
+  //   if (/\s/.test(newPass)) {
+  //     setPassErr("Password cannot contain spaces");
+  //     return false;
+  //   }
+  //   return true;
+  // };
+
+  // const changePassword = async () => {
+  //   if (!validatePassword()) return;
+
+  //   setIsChangingPassword(true);
+  //   setLoading(true);
+
+  //   try {
+  //     await axiosInstance.post(
+  //       "/api/company/profile/password",
+  //       {
+  //         current_password: oldPass,
+  //         password: newPass,
+  //         password_confirmation: newPass,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${user.token}`,
+  //         },
+  //       }
+  //     );
+
+  //     notifications.show({
+  //       title: "Password changed successfully.",
+  //       color: "green",
+  //     });
+  //     setOldPass("");
+  //     setNewPass("");
+  //     close();
+  //   } catch (error) {
+  //     notifications.show({
+  //       title: "Failed to change password.",
+  //       message: error.response?.data?.message || "An error occurred.",
+  //       color: "red",
+  //     });
+  //   } finally {
+  //     setIsChangingPassword(false);
+  //     setLoading(false);
+  //   }
+  // };
 
   const mutationEditProfile = useEditProfile(user.token, closeFormModal);
 
@@ -421,7 +472,7 @@ function Profile() {
               loading={mutationEditProfile.isLoading}
               disabled={!hasChanges || mutationEditProfile.isPending}
             >
-              {console.log(mutationEditProfile)              }
+              {console.log(mutationEditProfile)}
               {mutationEditProfile.isPending ? "Saving..." : "Save"}
             </Button>
 
@@ -445,7 +496,8 @@ function Profile() {
                 value={newPass}
                 onChange={(e) => {
                   setNewPass(e.target.value);
-                  setPassErr("");
+                  const error = validatePassword(e.target.value);
+                  setPassErr(error);
                 }}
                 placeholder="Enter your new password"
                 w="100%"

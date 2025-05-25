@@ -91,10 +91,10 @@ const VerifyOTPForgotPassword = () => {
 
   const handleResendOTP = async () => {
     setLoading(true);
-    console.log(sessionStorage.getItem("email"));
+    console.log(localStorage.getItem("user_email"));
     await axiosInstance
       .post("/api/web/resend-otp", {
-        email: sessionStorage.getItem("email"),
+        email: localStorage.getItem("user_email"),
         type: "register",
       })
       .then(() => {

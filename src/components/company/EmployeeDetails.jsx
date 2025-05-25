@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { Button, Center, Grid, Loader, Modal, TextInput, useMantineColorScheme } from "@mantine/core";
+import { Button, Center, Grid, Loader, Modal, TextInput, useMantineColorScheme ,Text} from "@mantine/core";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
@@ -20,11 +20,14 @@ import Notifications from "./Notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import { IconEye, IconEyeOff } from "@tabler/icons-react"; // أو أي مكتبة أيقونات مستخدمة
 import EditIcon from "../icons/edit";
+import { useQueryClient } from "@tanstack/react-query";
+import { validateField } from "../../hooks/Validation/validation";
 // import DeleteIcon from "../icons/DeleteIcon";
 
 function EmployeeDetails() {
   const [employee, setEmployee] = useState(null);
   const [employeeListings, setEmployeeListings] = useState([]);
+  const queryClient = useQueryClient();
 
   const [kpiData, setKpiData] = useState({});
 
@@ -91,6 +94,22 @@ function EmployeeDetails() {
     address: "",
     supervisor_id: null,
   });
+  const handleOpenEditModal = () => {
+    if (employee) {
+      setEditUser({
+        id: employee.id,
+        name: employee.name,
+        email: employee.email,
+        position: employee.position,
+        phone_number: employee.phone_number,
+        address: employee.address,
+        supervisor_id: employee.supervisor_id,
+      });
+    }
+    openEditModal();
+  };
+
+
   const [errors, setErrors] = useState({
     name: "",
     email: "",
@@ -107,6 +126,7 @@ function EmployeeDetails() {
   const handleFileChange = (file) => {
     setNewUser((prev) => ({ ...prev, image: file }));
   };
+
   const handleUpdateUser = async () => {
     if (!validateForm(editUser, true)) return;
     const formData = new FormData();
@@ -148,12 +168,15 @@ function EmployeeDetails() {
       setLoading(false);
     }
   };
+
   const fetchSupervisors = async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/api/supervisors", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
+      console.log(response);
+
       setSupervisors(response.data.data.supervisors);
     } catch (error) {
       console.error("Error fetching supervisors:", error);
@@ -166,12 +189,15 @@ function EmployeeDetails() {
       setLoading(false);
     }
   };
+
   const fetchEmployee = async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`/api/employees/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
+
+      // console.log(response.employee);
 
       setEmployee(response.data.data.employee);
     } catch (error) {
@@ -191,6 +217,8 @@ function EmployeeDetails() {
       const filteredListings = response.data.data.listings.filter(
         (listing) => listing.employee_id === parseInt(id)
       );
+      console.log(filteredListings);
+
       setEmployeeListings(filteredListings);
     } catch (error) {
       console.error(error);
@@ -239,7 +267,19 @@ function EmployeeDetails() {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    if (editModalOpened && employee) {
+      setEditUser({
+        id: employee.id,
+        name: employee.name || "",
+        email: employee.email || "",
+        position: employee.position || "",
+        phone_number: employee.phone_number || "",
+        address: employee.address || "",
+        supervisor_id: employee.supervisor_id || null,
+      });
+    }
+  }, [editModalOpened, employee]);
   const handleOpenChangePassword = () => {
     closeEditModal();
     openChangePasswordModal();
@@ -292,16 +332,7 @@ function EmployeeDetails() {
   }, []);
 
   const performanceData = [
-    {
-      label: "Total Rental",
-      value: kpiData?.performance_metrics?.rentals?.total_amount,
-    },
-    {
-      label: "Avg Rental",
-      value:
-        kpiData?.performance_metrics?.rentals?.total_amount /
-        kpiData?.performance_metrics?.rentals?.count,
-    },
+
     {
       label: "Total Selling",
       value: kpiData?.performance_metrics?.sales?.total_amount,
@@ -312,14 +343,27 @@ function EmployeeDetails() {
         kpiData?.performance_metrics?.sales?.total_amount /
         kpiData?.performance_metrics?.sales?.count,
     },
+
+
     {
-      label: "Total Contract",
+      label: "Total Rental",
+      value: kpiData?.performance_metrics?.rentals?.total_amount,
+    },
+    {
+      label: "Avg Rental",
+      value:
+        kpiData?.performance_metrics?.rentals?.total_amount /
+        kpiData?.performance_metrics?.rentals?.count,
+    },
+
+    {
+      label: "Total Booking",
       value:
         kpiData?.performance_metrics?.rentals?.total_amount +
         kpiData?.performance_metrics?.sales?.total_amount,
     },
     {
-      label: "Avg Contract",
+      label: "Avg Booking",
       value:
         (kpiData?.performance_metrics?.rentals?.total_amount +
           kpiData?.performance_metrics?.sales?.total_amount) /
@@ -508,7 +552,7 @@ function EmployeeDetails() {
         }} className={classes.card}>
 
           <div style={{
-          }} className={classes.cardTitle}>{t.Contracts}</div>
+          }} className={classes.cardTitle}>{t.Booking}</div>
           <div style={{
           }} className={classes.cardCount}>
             {kpiData?.performance_metrics?.contracts.length}
@@ -588,35 +632,43 @@ function EmployeeDetails() {
         </div>
       </div>
 
-      <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
-        <TextInput
-          label="New Password"
-          type={showPassword ? "text" : "password"}
-          value={passwordData.password}
-          maxLength={50}
-          onChange={(e) =>
-            setPasswordData({ ...passwordData, password: e.target.value })
-          }
-          rightSection={
-            <button
-              type="button"
-              style={{ background: "none", border: "none", cursor: "pointer" }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <IconEyeOff size={16} />
-              ) : (
-                <IconEye size={16} />
-              )}
-            </button>
-          }
-          error={passwordErrors.password}
-        />
-        <Button loading={loading} onClick={handleChangePassword} mt="md" fullWidth>
-          Change Password
-        </Button>
-      </Modal>
-      
+<Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
+  <TextInput
+    label="New Password"
+    type={showPassword ? "text" : "password"}
+    value={passwordData.password}
+    maxLength={50}
+    onChange={(e) => {
+      const newPassword = e.target.value;
+      setPasswordData({ ...passwordData, password: newPassword });
+
+      const error = validateField("password", newPassword);
+      setPasswordErrors((prev) => ({ ...prev, password: error }));
+    }}
+    rightSection={
+      <button
+        type="button"
+        style={{ background: "none", border: "none", cursor: "pointer" }}
+        onClick={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+      </button>
+    }
+    error={passwordErrors.password}
+  />
+
+  {passwordErrors.password && (
+    <Text size="sm" color="red" mt={5}>
+      {passwordErrors.password}
+    </Text>
+  )}
+
+  <Button loading={loading} onClick={handleChangePassword} mt="md" fullWidth>
+    Change Password
+  </Button>
+</Modal>
+     
+
       <EditStaffModal
         opened={editModalOpened}
         onClose={closeEditModal}
@@ -628,7 +680,7 @@ function EmployeeDetails() {
         errors={errors}
         handleFileChange={handleFileChange}
         handleOpenChangePassword={handleOpenChangePassword}
-       />
+      />
 
       <DeleteEmployeeModal
         opened={deleteModalOpened}

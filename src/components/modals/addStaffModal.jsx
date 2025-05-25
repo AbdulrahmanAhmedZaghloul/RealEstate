@@ -11,6 +11,7 @@ import {
 
 //Local Imports
 import downArrow from "../../assets/downArrow.svg";
+import { validateField } from "../../hooks/Validation/validation";
 // import classes from "../../styles/modals.module.css";
 
 const AddStaffModal = ({
@@ -22,6 +23,7 @@ const AddStaffModal = ({
   newUser,
   setNewUser,
   errors,
+  setErrors,
   handleFileChange,
 }) => {
 
@@ -31,7 +33,7 @@ const AddStaffModal = ({
       onClose={onClose}
       title="Add User"
       centered
-      size= "xl"
+      size="xl"
       radius="lg"
       styles={{
         title: {
@@ -84,6 +86,23 @@ const AddStaffModal = ({
           placeholder="Password"
           value={newUser.password}
           onChange={(e) => {
+            const newPassword = e.target.value;
+            setNewUser({ ...newUser, password: newPassword });
+
+            const error = validateField("password", newPassword);
+            setErrors((prev) => ({ ...prev, password: error }));
+          }}
+          required
+          error={errors.password}
+          styles={{ input: { height: 48 } }}
+          mb={24}
+        />
+        {/* 
+        <PasswordInput
+          label="Password"
+          placeholder="Password"
+          value={newUser.password}
+          onChange={(e) => {
             setNewUser({ ...newUser, password: e.target.value });
             if (errors.password) errors.password = "";
           }}
@@ -92,7 +111,7 @@ const AddStaffModal = ({
           styles={{ input: { height: 48 } }}
           mb={24}
         />
-
+  */}
         <TextInput
           label="Address"
           placeholder="Address"
@@ -164,7 +183,19 @@ const AddStaffModal = ({
           fullWidth
           disabled={loading}
           loading={loading}
-          onClick={() => onAdd(newUser.position === "supervisor")}
+          onClick={() => {
+            // التحقق من كلمة المرور فقط إذا كان المستخدم ليس سوبرفيسور (أو في أي حالة)
+            const passwordError = validateField("password", newUser.password);
+
+            if (passwordError) {
+              errors.password = passwordError;
+              setErrors({ ...errors });
+              return;
+            }
+
+            // لا يوجد أخطاء، نفذ الإضافة
+            onAdd(newUser.position === "supervisor");
+          }}
           style={{
             backgroundColor: "var(--color-3)",
             color: "white",
@@ -174,6 +205,20 @@ const AddStaffModal = ({
         >
           {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
         </Button>
+        {/* <Button
+          fullWidth
+          disabled={loading}
+          loading={loading}
+          onClick={() => onAdd(newUser.position === "supervisor")}
+          style={{
+            backgroundColor: "var(--color-3)",
+            color: "white",
+            height: 48,
+            borderRadius: 8,
+          }}
+        >
+          {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
+        </Button> */}
       </div>
     </Modal>
   );

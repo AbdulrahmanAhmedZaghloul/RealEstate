@@ -142,90 +142,6 @@ const AddPropertyModal = ({
     );
   };
 
-
-  // const getCurrentLocation = () => {
-  //   if (!navigator.geolocation) {
-  //     setError("Geolocation is not supported by your browser");
-  //     return;
-  //   }
-  //   navigator.geolocation.getCurrentPosition(
-  //     async (position) => {
-  //       const { latitude, longitude } = position.coords;
-  //       try {
-  //         const response = await fetch(
-  //           `https://nominatim.openstreetmap.org/reverse?lat= ${latitude}&lon=${longitude}&format=json`
-  //         );
-  //         const data = await response.json();
-  //         const address = data.address;
-
-  //         const formattedLocation = `${
-  //           address.suburb || address.neighbourhood || ""
-  //         }, ${address.city || address.town || address.village || ""}, ${
-  //           address.state || ""
-  //         }`;
-
-  //         // Update the search value to show actual location
-  //         setSearchValue(formattedLocation);
-
-  //         // Update form value with the real location
-  //         form.setFieldValue("location", formattedLocation);
-
-  //         // Update region, city, district
-  //         setRegion(address.state || "");
-  //         setCity(address.city || address.town || address.village || "");
-  //         setDistrict(address.suburb || address.neighbourhood || "");
-
-  //         setError("");
-  //       } catch (err) {
-  //         setError("Could not fetch location data");
-  //         setSearchValue("");
-  //         form.setFieldValue("location", "");
-  //       }
-  //     },
-  //     () => {
-  //       setError("Location access denied by user");
-  //       setSearchValue("");
-  //       form.setFieldValue("location", "");
-  //     }
-  //   );
-  // };
-
-
-  // const getCurrentLocation = () => {
-  //   if (!navigator.geolocation) {
-  //     setError("Geolocation is not supported by your browser");
-  //     return;
-  //   }
-
-  //   navigator.geolocation.getCurrentPosition(
-  //     async (position) => {
-  //       const { latitude, longitude } = position.coords;
-  //       try {
-  //         const response = await fetch(
-  //           `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-  //         );
-  //         const data = await response.json();
-  //         const address = data.address;
-
-  //         const formattedLocation = `${address.suburb || address.neighbourhood || ""
-  //           }, ${address.city || address.town || address.village || ""}, ${address.state || ""
-  //           },`;
-
-  //         form.setFieldValue("location", formattedLocation);
-  //         setRegion(address.state || "");
-  //         setCity(address.city || address.town || address.village || "");
-  //         setDistrict(address.suburb || address.neighbourhood || "");
-  //         setError("");
-  //       } catch (err) {
-  //         setError("Could not fetch location data");
-  //       }
-  //     },
-  //     () => {
-  //       setError("Location access denied by user");
-  //     }
-  //   );
-  // };
-
   const handleSubmit = (values) => {
     const selectedAmenities = [
       ...values.amenities.residential.filter((amenity) => amenity.selected),
@@ -575,7 +491,7 @@ const AddPropertyModal = ({
               placeholder="Enter property title"
               {...form.getInputProps("title")}
               error={form.errors.title}
-              maxLength={50}
+              maxLength={80}
               styles={{
                 input: { width: 289, height: 48 },
                 wrapper: { width: 289 },
@@ -608,7 +524,7 @@ const AddPropertyModal = ({
                 wrapper: { width: 289 },
               }}
               mb={24}
-              maxLength={6}
+              maxLength={1000}
             />
             {/* Price */}{" "}
             <NumberInput
@@ -623,24 +539,82 @@ const AddPropertyModal = ({
                 wrapper: { width: 289 },
               }}
               mb={24}
-              maxLength={10}
+              maxLength={16}
             />
             {/* Down Payment */}
-            <NumberInput
-              label="Down Payment"
+            {/* <NumberInput
+              label="Down Payment %"
               placeholder="Enter down payment"
-              min={0}
-              {...form.getInputProps("down_payment")}
+              min={1}
+              max={3}
+              value={form.values.down_payment}
+              onChange={(value) => {
+                // تحويل القيمة إلى رقم
+                const newValue = Number(value);
+                // لو القيمة أكبر من 100، هنستخدم 100
+                const finalValue = newValue > 100 ? 100 : newValue;
+                form.setFieldValue("down_payment", finalValue);
+              }}
               error={form.errors.down_payment}
               hideControls
+              suffix="%"
+              formatter={(value) => {
+                // حذف أي نص مش أرقام
+                const numericValue = value.replace(/[^0-9]/g, '');
+                // لو الرقم أكبر من 100، رجعه لـ 100
+                return numericValue > 100 ? '100' : numericValue;
+              }}
+              parser={(value) => value.replace(/[^0-9]/g, '')}
               styles={{
                 input: { width: 289, height: 48 },
                 wrapper: { width: 289 },
               }}
               mb={24}
-              maxLength={10}
-            />
+            /> */}
+
+
             {/* Rooms */}
+            <NumberInput
+              label="Down Payment %"
+              placeholder="Enter down payment"
+              min={1}
+              mix={100}
+              value={form.values.down_payment}
+              onChange={(value) => {
+                // إذا كانت القيمة null أو NaN، نعتبرها 0
+                const newValue = Number(value);
+                if (isNaN(newValue)) return;
+
+                // لو الرقم أكبر من 100، اجعله 100
+                const finalValue = Math.min(100, newValue);
+                form.setFieldValue("down_payment", finalValue);
+              }}
+              error={form.errors.down_payment}
+              hideControls
+              suffix="%"
+
+              parser={(value) => {
+                // تحويل القيمة إلى رقم فقط بدون أي رموز
+                const parsed = value.replace(/[^0-9]/g, '');
+                return parsed === '' ? '' : parseInt(parsed, 10);
+              }}
+              formatter={(value) => {
+                // حذف كل شيء غير الأرقام
+                const numericValue = value.replace(/[^0-9]/g, '');
+
+                // لو الرقم أكبر من 100، نرجع 100
+                if (numericValue === '') return '';
+                const num = parseInt(numericValue, 10);
+                if (num >= 100) return '100';
+
+                return numericValue;
+              }}
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
+              mb={24}
+            />
             <NumberInput
               label="Rooms"
               placeholder="Enter number of rooms"
@@ -653,7 +627,7 @@ const AddPropertyModal = ({
                 wrapper: { width: 289 },
               }}
               mb={24}
-              maxLength={6}
+              maxLength={2}
             />
             {/* Bathrooms */}
             <NumberInput
@@ -668,7 +642,7 @@ const AddPropertyModal = ({
                 wrapper: { width: 289 },
               }}
               mb={24}
-              maxLength={6}
+              maxLength={2}
             />
             {/* Floors */}
             <NumberInput

@@ -200,7 +200,7 @@ function PropertyDetails() {
                       <>
                         <img
                           src={`${listing.images.find((image) => image.is_primary)
-                              .image_url
+                            .image_url
                             }`}
                           alt={listing.title}
                           className={classes.mainImage}
@@ -266,9 +266,10 @@ function PropertyDetails() {
                       </Text>
 
                       <Text className={classes.Down}>
-                        {Math.floor(
-                          (listing.down_payment / listing.price) * 100
-                        )}
+
+                        {console.log(listing.down_payment)}
+
+                        {listing.down_payment}
                         % {t.DownPayment}
                       </Text>
                     </div>

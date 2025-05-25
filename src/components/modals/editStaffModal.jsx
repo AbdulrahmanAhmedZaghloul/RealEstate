@@ -57,7 +57,7 @@ const EditStaffModal = ({
 
         <TextInput
           label="Name"
-          placeholder="Full name"
+          placeholder="Full Name"
           value={editUser.name}
           onChange={(e) => setEditUser({ ...editUser, name: e.target.value })}
           required
@@ -94,22 +94,7 @@ const EditStaffModal = ({
           mt="md"
           error={errors.phone_number}
         />
-        {/* {editUser.position !== "supervisor" && (
-          <Select
-            label="Position"
-            placeholder="Select type"
-            rightSection={<img src={downArrow} />}
-            value={editUser.position}
-            onChange={(value) => setEditUser({ ...editUser, position: value })}
-            data={[
-              editUser === "supervisor"
-                ? { value: "supervisor", label: "Supervisor" }
-                : { value: "employee", label: "Employee" },
-            ]}
-            mt="md"
-          />
-        )} */}
-
+  
         {editUser.position === "employee" && (
           <Select
             label="Supervisor"
@@ -127,11 +112,7 @@ const EditStaffModal = ({
             error={errors.supervisor_id}
           />
         )}
-        {console.log(location)}
-        {location.pathname === "/dashboard/Team" ?
-          // <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
-          //   ChangePassword
-          // </Button>
+         {location.pathname === "/dashboard/Team" ?
           null  
           :
           <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">

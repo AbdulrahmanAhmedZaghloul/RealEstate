@@ -1145,6 +1145,7 @@ function Staff() {
         newUser={newUser}
         setNewUser={setNewUser}
         errors={errors}
+        setErrors={setErrors}
         handleFileChange={handleFileChange}
       />
 

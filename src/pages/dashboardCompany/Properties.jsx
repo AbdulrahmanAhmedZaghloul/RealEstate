@@ -295,9 +295,8 @@ function Properties() {
                   </span>
 
                   <div className={classes.downPaymentBadge}>
-                    {console.log((listing.down_payment / listing.price) * 100)}
-                    {Math.floor((listing.down_payment / listing.price) * 100)}%
-                    {t.DownPayment}
+                     {listing.down_payment} %
+                     {t.DownPayment}
                   </div>
                 </div>
 

@@ -183,7 +183,6 @@ function Transactions() {
   }, [listings]);
 
   const updateStatus = async (id, newStatus, reason) => {
-    lo
     setLoading(true);
     await axiosInstance
       .post(

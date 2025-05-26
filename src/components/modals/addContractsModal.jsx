@@ -25,6 +25,7 @@ const AddContractsModal = ({
   approvedListings,
   loading,
 }) => {
+
   const form = useForm({
     initialValues: {
       listing_id: null,
@@ -55,143 +56,194 @@ const AddContractsModal = ({
         value ? null : "Contract document is required",
       customer_name: (value) =>
         value.trim() ? null : "Customer name is required",
+      // customer_phone: (value) =>
+      //   value.trim() ? null : "Customer phone is required",
       customer_phone: (value) =>
-        value.trim() ? null : "Customer phone is required",
-      effective_date: (value, values) =>
-        values.contract_type !== "sale" && !value
-          ? "Effective date is required"
-          : null,
-      expiration_date: (value, values) =>
-        values.contract_type !== "sale" && !value
-          ? "Expiration date is required"
-          : null,
-      release_date: (value, values) =>
-        values.contract_type !== "sale" && !value
-          ? "Release date is required"
-          : null,
-    },
-  });
-  const handleSubmit = (values) => {
-    onAdd(values);
-  };
-  const isMobile = useMediaQuery(`(max-width: ${("991px")})`);
-  return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      title="Add Contract"
-      size="xl"
-      radius="lg"
-      styles={{
-        title: {
-          fontSize: 20,
-          fontWeight: 600,
-          color: "var(--color-3)",
-        },
-      }}
+        value && validateSaudiPhoneNumber(value)
+          ? null
+          : "Please enter a valid Saudi phone number starting with 5.",
+    
+    effective_date: (value, values) =>
+      values.contract_type !== "sale" && !value
+        ? "Effective date is required"
+        : null,
+    expiration_date: (value, values) =>
+      values.contract_type !== "sale" && !value
+        ? "Expiration date is required"
+        : null,
+    release_date: (value, values) =>
+      values.contract_type !== "sale" && !value
+        ? "Release date is required"
+        : null,
+  },
+  })
+function validateSaudiPhoneNumber(phoneNumber) {
+  const regex = /^5(?:0|1|3|5|6|7|8|9)\d{7}$/; // يجب أن يبدأ بـ 5x ثم 7 أرقام
+  return regex.test(phoneNumber);
+}
+const handleSubmit = (values) => {
+  onAdd(values);
+};
+
+const isMobile = useMediaQuery(`(max-width: ${("991px")})`);
+return (
+  <Modal
+    opened={opened}
+    onClose={onClose}
+    title="Add Contract"
+    size="xl"
+    radius="lg"
+    styles={{
+      title: {
+        fontSize: 20,
+        fontWeight: 600,
+        color: "var(--color-3)",
+      },
+    }}
+  >
+    <form
+      onSubmit={form.onSubmit(handleSubmit)}
+      style={{ padding: isMobile ? "12px" : "10px 28px" }}
     >
-      <form
-        onSubmit={form.onSubmit(handleSubmit)}
-        style={{ padding: isMobile? "12px" : "10px 28px"}}
-      >
-        <Grid>
-          <Grid.Col span={isMobile ? 12 : 6}>
-            {/* Upload Document */}
-            <FileInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24}
-              label="Upload Document"
-              placeholder="Upload the contract document"
-              error={form.errors.contract_document}
-              {...form.getInputProps("contract_document")}
-            />
-            {/* Property listing*/}
-            <Select
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24}
-              rightSection={<img src={downArrow} />}
-              label="Property listing"
-              placeholder="Pick value"
-              data={approvedListings.map((listing) => ({
-                label: listing.title,
-                value: String(listing.id),
-              }))}
-              error={form.errors.listing_id}
-              {...form.getInputProps("listing_id")}
-            />
-            {/* Title */}
-            <TextInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24}
-              label="Title"
-              placeholder="Enter the title of the contract"
-              error={form.errors.title}
-              {...form.getInputProps("title")}
-              maxLength={50}
-            />
-            {/* Description */}
-            <Textarea
-              styles={{ input: { width: 289, height: 155 }, wrapper: { width: 289 } }}
-              mb={24}
-              label="Description"
-              placeholder="Enter the description of the contract"
-              error={form.errors.description}
-              {...form.getInputProps("description")}
-              maxLength={500}
-            />
+      <Grid>
+        <Grid.Col span={isMobile ? 12 : 6}>
+          {/* Upload Document */}
+          <FileInput
+            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+            mb={24}
+            label="Upload Document"
+            placeholder="Upload the contract document"
+            error={form.errors.contract_document}
+            {...form.getInputProps("contract_document")}
+          />
+          {/* Property listing*/}
+          <Select
+            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+            mb={24}
+            rightSection={<img src={downArrow} />}
+            label="Property listing"
+            placeholder="Pick value"
+            data={approvedListings.map((listing) => ({
+              label: listing.title,
+              value: String(listing.id),
+            }))}
+            error={form.errors.listing_id}
+            {...form.getInputProps("listing_id")}
+          />
+          {/* Title */}
+          <TextInput
+            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+            mb={24}
+            label="Title"
+            placeholder="Enter the title of the contract"
+            error={form.errors.title}
+            {...form.getInputProps("title")}
+            maxLength={50}
+          />
+          {/* Description */}
+          <Textarea
+            styles={{ input: { width: 289, height: 155 }, wrapper: { width: 289 } }}
+            mb={24}
+            label="Description"
+            placeholder="Enter the description of the contract"
+            error={form.errors.description}
+            {...form.getInputProps("description")}
+            maxLength={500}
+          />
 
-            {/* Price */}
-            <NumberInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24}
-              label="Price"
-              placeholder="Enter the price of the contract"
-              error={form.errors.price}
-              hideControls
-              {...form.getInputProps("price")}
-              maxLength={10}
-            />
-            {/* Down Payment */}
-            <NumberInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              label="Down Payment"
-              placeholder="Enter the down payment of the contract"
-              hideControls
-              error={form.errors.down_payment}
-              {...form.getInputProps("down_payment")}
-              maxLength={10}
-            />
-          </Grid.Col>
+          {/* Price */}
+          <NumberInput
+            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+            mb={24}
+            label="Price"
+            placeholder="Enter the price of the contract"
+            error={form.errors.price}
+            hideControls
+            {...form.getInputProps("price")}
+            maxLength={10}
+          />
+          {/* Down Payment */}
+          <NumberInput
+            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+            label="Down Payment"
+            placeholder="Enter the down payment of the contract"
+            hideControls
+            error={form.errors.down_payment}
+            {...form.getInputProps("down_payment")}
+            maxLength={10}
+          />
+        </Grid.Col>
 
-          <Grid.Col span={6}>
-         
-            {/* Contract Type */}
-            <Select
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24}
-              rightSection={<img src={downArrow} />}
-              label="Contract Type"
-              placeholder="Select Contract Type"
-              error={form.errors.contract_type}
-              data={[
-                { label: "Sale", value: "sale" },
-                { label: "Rental", value: "rental" },
-                { label: "Booking", value: "booking" },
-              ]}
-              {...form.getInputProps("contract_type")}
-            />
-            {/* Customer Name */}
-            <TextInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24}
-              label="Customer Name"
-              placeholder="Enter the name of the customer"
-              error={form.errors.customer_name}
-              {...form.getInputProps("customer_name")}
-              maxLength={50}
-            />
-            {/* Customer Phone */}
-            <TextInput
+        <Grid.Col span={6}>
+
+          {/* Contract Type */}
+          <Select
+            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+            mb={24}
+            rightSection={<img src={downArrow} />}
+            label="Contract Type"
+            placeholder="Select Contract Type"
+            error={form.errors.contract_type}
+            data={[
+              { label: "Sale", value: "sale" },
+              { label: "Rental", value: "rental" },
+              { label: "Booking", value: "booking" },
+            ]}
+            {...form.getInputProps("contract_type")}
+          />
+          {/* Customer Name */}
+          <TextInput
+            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+            mb={24}
+            label="Customer Name"
+            placeholder="Enter the name of the customer"
+            error={form.errors.customer_name}
+            {...form.getInputProps("customer_name")}
+            maxLength={50}
+          />
+          {/* Customer Phone */}
+          {/* Customer Phone with Saudi Code & Formatting */}
+          <TextInput
+            label="Customer Phone"
+            placeholder="512 345 678"
+            value={`${form.values.customer_phone ? "+966" : ""}${form.values.customer_phone}`}
+            onChange={(e) => {
+              let input = e.target.value;
+
+              // إزالة كل شيء غير أرقام
+              const digitsOnly = input.replace(/\D/g, "");
+
+              // نتأكد من أن ما بعد 966 هو 9 أرقام على الأكثر
+              if (digitsOnly.length > 12) return;
+
+              // نحتفظ بالرقم بدون +966 في الـ state
+              if (digitsOnly.startsWith("966")) {
+                const numberWithoutCode = digitsOnly.slice(3);
+                form.setFieldValue("customer_phone", numberWithoutCode);
+              } else {
+                form.setFieldValue("customer_phone", digitsOnly);
+              }
+            }}
+            onFocus={() => {
+              // إذا لم يكن هناك رقم، نضع +966 تلقائيًا عند التركيز
+              if (!form.values.customer_phone) {
+                form.setFieldValue("customer_phone", "");
+              }
+            }}
+            leftSection={
+              <img
+                src="https://flagcdn.com/w20/sa.png "
+                alt="Saudi Arabia"
+                width={20}
+                height={20}
+              />
+            }
+            leftSectionPointerEvents="none"
+            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+            error={form.errors.customer_phone}
+            mb={24}
+          />
+          {/* <TextInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               mb={24}
               label="Customer Phone"
@@ -200,61 +252,61 @@ const AddContractsModal = ({
               error={form.errors.customer_phone}
               {...form.getInputProps("customer_phone")}
               maxLength={20}
-            />
-            {/* Release Date */}
+            /> */}
+          {/* Release Date */}
+          <TextInput
+            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+            mb={24}
+            label="Release Date"
+            placeholder="Enter the release date of the contract"
+            type="date"
+            error={form.errors.release_date}
+            {...form.getInputProps("release_date")}
+          />
+          {/* Effective Date */}
+          {form.values.contract_type !== "sale" && (
             <TextInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               mb={24}
-              label="Release Date"
-              placeholder="Enter the release date of the contract"
+              label="Effective Date"
+              placeholder="Enter the effective date of the contract"
               type="date"
-              error={form.errors.release_date}
-              {...form.getInputProps("release_date")}
+              error={form.errors.effective_date}
+              {...form.getInputProps("effective_date")}
             />
-            {/* Effective Date */}
-            {form.values.contract_type !== "sale" && (
-              <TextInput
-                styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-                mb={24}
-                label="Effective Date"
-                placeholder="Enter the effective date of the contract"
-                type="date"
-                error={form.errors.effective_date}
-                {...form.getInputProps("effective_date")}
-              />
-            )}
-            {/* Expiration Date */}
-            {form.values.contract_type !== "sale" && (
-              <TextInput
-                styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-                label="Expiration Date"
-                placeholder="Enter the expiration date of the contract"
-                type="date"
-                error={form.errors.expiration_date}
-                {...form.getInputProps("expiration_date")}
-              />
-            )}
-          </Grid.Col>
+          )}
+          {/* Expiration Date */}
+          {form.values.contract_type !== "sale" && (
+            <TextInput
+              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+              label="Expiration Date"
+              placeholder="Enter the expiration date of the contract"
+              type="date"
+              error={form.errors.expiration_date}
+              {...form.getInputProps("expiration_date")}
+            />
+          )}
+        </Grid.Col>
 
-          <Grid.Col span={12}>
-            <Divider size="xs" mb={16} mt={16} />
-            <Center>
-              <Button
-                type="submit"
-                variant="light"
-                radius="md"
-                disabled={loading}
-                loading={loading}
-                className={classes.addButton}
-              >
-                Add Contract
-              </Button>
-            </Center>
-          </Grid.Col>
-        </Grid>
-      </form>
-    </Modal>
-  );
+        <Grid.Col span={12}>
+          <Divider size="xs" mb={16} mt={16} />
+          <Center>
+            <Button
+              type="submit"
+              variant="light"
+              radius="md"
+              disabled={loading}
+              loading={loading}
+              className={classes.addButton}
+            >
+              Add Contract
+            </Button>
+          </Center>
+        </Grid.Col>
+      </Grid>
+    </form>
+  </Modal>
+);
 };
 
 export default AddContractsModal;

@@ -59,7 +59,12 @@ function ContractDetails() {
       description: (value) => (value ? null : "Description is required"),
       price: (value) => (value ? null : "Price is required"),
       customer_name: (value) => (value ? null : "Customer name is required"),
-      customer_phone: (value) => (value ? null : "Customer phone is required"),
+      customer_phone: (value) =>
+    value && validateSaudiPhoneNumber(value)
+      ? null
+      : "Please enter a valid Saudi phone number starting with 5.",
+
+      // customer_phone: (value) => (value ? null : "Customer phone is required"),
       creation_date: (value) => (value ? null : "Creation date is required"),
       effective_date: (value) => (value ? null : "Effective date is required"),
       expiration_date: (value) =>
@@ -114,7 +119,10 @@ function ContractDetails() {
         setLoading(false);
       });
   };
-
+function validateSaudiPhoneNumber(phoneNumber) {
+  const regex = /^5(?:0|1|3|5|6|7|8|9)\d{7}$/; // يجب أن يبدأ بـ 5x ثم 7 أرقام
+  return regex.test(phoneNumber);
+}
   const handleEditContract = (values) => {
     const formData = new FormData();
     Object.keys(values).forEach((key) => {
@@ -892,10 +900,46 @@ function ContractDetails() {
               label="Customer Name"
               {...form.getInputProps("customer_name")}
             />
-            <TextInput
+       <TextInput
+  label="Customer Phone"
+  value={`${form.values.customer_phone ? "+966" : ""}${form.values.customer_phone}`}
+  onChange={(e) => {
+    let input = e.target.value;
+
+    // إزالة كل شيء غير أرقام
+    const digitsOnly = input.replace(/\D/g, "");
+
+    // نتأكد من أن ما بعد 966 هو 9 أرقام على الأكثر
+    if (digitsOnly.length > 12) return;
+
+    // نحتفظ بالرقم بدون +966 في الـ state
+    if (digitsOnly.startsWith("966")) {
+      const numberWithoutCode = digitsOnly.slice(3);
+      form.setFieldValue("customer_phone", numberWithoutCode);
+    } else {
+      form.setFieldValue("customer_phone", digitsOnly);
+    }
+  }}
+  onFocus={() => {
+    // إذا لم يكن هناك رقم، نضع +966 تلقائيًا عند التركيز
+    if (!form.values.customer_phone) {
+      form.setFieldValue("customer_phone", "");
+    }
+  }}
+  leftSection={
+    <img
+      src="https://flagcdn.com/w20/sa.png "
+      alt="Saudi Arabia"
+      width={20}
+      height={20}
+    />
+  }
+  leftSectionPointerEvents="none"
+/>
+            {/* <TextInput
               label="Customer Phone"
               {...form.getInputProps("customer_phone")}
-            />
+            /> */}
             <TextInput
               label="Creation Date"
               type="date"

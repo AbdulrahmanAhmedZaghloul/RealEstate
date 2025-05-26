@@ -10,6 +10,7 @@ import {
   Center,
   Grid,
   GridCol,
+  Select,
 } from "@mantine/core";
 import classes from "../styles/register.module.css";
 
@@ -45,7 +46,10 @@ export default function Register() {
           password: account.password,
           password_confirmation: account.confirmPassword,
           address: account.address,
+          role: account.role, // <-- new field
         });
+      
+
         sessionStorage.setItem("email", account.email.toLowerCase());
         notifications.show({
           title: "Account created successfully.",
@@ -56,6 +60,7 @@ export default function Register() {
           state: { pass: account.password },
         });
       } catch (error) {
+        console.log(error);
         notifications.show({
           title: "Registration failed.",
           message: error.response?.data?.errors?.email || "Unknown error",
@@ -132,7 +137,6 @@ export default function Register() {
                 placeholder="Enter your address"
                 value={account.address}
                 onChange={(e) => handleInputChange("address", e.target.value)}
-
                 required
                 maxLength={50}
                 error={errors.address}
@@ -143,22 +147,21 @@ export default function Register() {
                 placeholder="you@website.com"
                 value={account.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-
                 required
                 maxLength={50}
                 error={errors.email}
                 mt="md"
               />
-              <TextInput
-                label="Confirm Email"
-                placeholder="Re-enter your email"
-                value={account.confirmEmail}
-                onChange={(e) => handleInputChange("confirmEmail", e.target.value)}
-
-
-                required
-                maxLength={50}
-                error={errors.confirmEmail}
+              <Select
+                label="Select Role"
+                placeholder="Choose your role"
+                data={[
+                  { value: "company", label: "Company" },
+                  { value: "marketer", label: "Marketer" },
+                ]}
+                value={account.role}
+                onChange={(value) => handleInputChange("role", value)}
+                // error={errors.role}
                 mt="md"
               />
 
@@ -167,7 +170,6 @@ export default function Register() {
                 placeholder="Your company password"
                 value={account.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
-
                 required
                 maxLength={50}
                 error={errors.password}
@@ -178,8 +180,6 @@ export default function Register() {
                 placeholder="Re-enter your password"
                 value={account.confirmPassword}
                 onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-
-
                 required
                 maxLength={50}
                 error={errors.confirmPassword}
@@ -207,9 +207,9 @@ export default function Register() {
                   to="/login"
                   style={{ textDecoration: "inherit", color: "inherit" }}
                 >
-                  <Anchor size="sm" color="var(--color-1)">
-                    Login
-                  </Anchor>
+                  {/* <Anchor size="sm" c="var(--color-1)"> */}
+                  Login
+                  {/* </Anchor> */}
                 </Link>
               </Text>
             </Paper>

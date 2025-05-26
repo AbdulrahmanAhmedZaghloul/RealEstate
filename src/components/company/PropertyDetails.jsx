@@ -420,6 +420,7 @@ function PropertyDetails() {
                 </Grid>
               </Grid.Col>
               <Grid.Col span={isMobile ? 12 : 5}>
+              
                 <Box
                   className={classes.colImage}
                   onClick={() =>
@@ -453,6 +454,40 @@ function PropertyDetails() {
                     </Box>
                   )}
                 </Box>
+                  <Group  className={classes.shareGroup} position="apart" mt={"lg"}>
+                  {listing.status === "pending" ? (
+                    <>
+                      <Button variant="filled" color="red" uppercase onClick={open2}>
+                        Reject Listing
+                      </Button>
+                      <Button
+                        variant="filled"
+                        color="green"
+                        uppercase
+                        onClick={() => handleUpdateListing("approved", "")}
+                      >
+                        Approve Listing
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button color="red" uppercase onClick={open}>
+                        Delete Property
+                      </Button>
+                      <Button color="green" uppercase onClick={handleShareProperty}>
+                        Share Property
+                      </Button>
+                    </>
+                  )}
+                </Group>
+                {shareLink && (
+                  <div className={classes.shareLink}>
+                    <h4>Share Link</h4>
+                    <a href={shareLink} target="_blank" rel="noopener noreferrer">
+                      {shareLink}
+                    </a>
+                  </div>
+                )}
               </Grid.Col>
             </Grid>
           </Grid.Col>
@@ -470,6 +505,7 @@ function PropertyDetails() {
             )}
           </Text>
         </Stack>
+
         {isMobile ? (
           <Box
             className={classes.BoxImage}
@@ -541,40 +577,7 @@ function PropertyDetails() {
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </Stack>
-        <Group position="apart" mt={"lg"}>
-          {listing.status === "pending" ? (
-            <>
-              <Button variant="filled" color="red" uppercase onClick={open2}>
-                Reject Listing
-              </Button>
-              <Button
-                variant="filled"
-                color="green"
-                uppercase
-                onClick={() => handleUpdateListing("approved", "")}
-              >
-                Approve Listing
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button color="red" uppercase onClick={open}>
-                Delete Property
-              </Button>
-              <Button color="green" uppercase onClick={handleShareProperty}>
-                Share Property
-              </Button>
-            </>
-          )}
-        </Group>
-        {shareLink && (
-          <div className={classes.shareLink}>
-            <h4>Share Link</h4>
-            <a href={shareLink} target="_blank" rel="noopener noreferrer">
-              {shareLink}
-            </a>
-          </div>
-        )}
+
       </Card>
 
       <Modal

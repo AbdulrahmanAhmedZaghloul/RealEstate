@@ -11,6 +11,7 @@ import {
 } from "@mantine/core";
 import downArrow from "../../assets/downArrow.svg";
 import { useLocation } from "react-router-dom";
+import { notifications } from "@mantine/notifications";
 
 //Local imports
 //-
@@ -29,6 +30,10 @@ const EditStaffModal = ({
 
 }) => {
   const location = useLocation();
+  function validateSaudiPhoneNumber(phoneNumber) {
+  const regex = /^5(?:0|1|3|5|6|7|8|9)\d{7}$/; // يجب أن يبدأ بـ 5x ثم 7 أرقام
+  return regex.test(phoneNumber);
+}
   return (
     <Modal
       opened={opened}
@@ -83,7 +88,51 @@ const EditStaffModal = ({
           error={errors.address}
           mt="md"
         />
-        <TextInput
+
+<TextInput
+  label="Phone Number"
+  placeholder="512 345 678"
+  value={`${editUser.phone_number ? "+966" : ""}${editUser.phone_number}`}
+  onChange={(e) => {
+    let input = e.target.value;
+
+    // إزالة كل شيء غير أرقام
+    const digitsOnly = input.replace(/\D/g, "");
+
+    // نتأكد من أن ما بعد 966 هو 9 أرقام على الأكثر
+    if (digitsOnly.length > 12) return;
+
+    // نحتفظ بالرقم بدون +966 في الـ state
+    if (digitsOnly.startsWith("966")) {
+      const numberWithoutCode = digitsOnly.slice(3);
+      setEditUser({ ...editUser, phone_number: numberWithoutCode });
+    } else {
+      setEditUser({ ...editUser, phone_number: digitsOnly });
+    }
+
+    if (errors.phone_number) errors.phone_number = "";
+  }}
+  onFocus={() => {
+    // إذا لم يكن هناك رقم، نضع +966 تلقائيًا عند التركيز
+    if (!editUser.phone_number) {
+      setEditUser({ ...editUser, phone_number: "" });
+    }
+  }}
+  leftSection={
+    <img
+      src="https://flagcdn.com/w20/sa.png "
+      alt="Saudi Arabia"
+      width={20}
+      height={20}
+    />
+  }
+  leftSectionPointerEvents="none"
+  styles={{ input: { height: 48 } }}
+  error={errors.phone_number}
+  mt="md"
+/>
+
+        {/* <TextInput
           label="Phone Number"
           placeholder="Phone number"
           value={editUser.phone_number}
@@ -93,8 +142,8 @@ const EditStaffModal = ({
           required
           mt="md"
           error={errors.phone_number}
-        />
-  
+        /> */}
+
         {editUser.position === "employee" && (
           <Select
             label="Supervisor"
@@ -112,8 +161,8 @@ const EditStaffModal = ({
             error={errors.supervisor_id}
           />
         )}
-         {location.pathname === "/dashboard/Team" ?
-          null  
+        {location.pathname === "/dashboard/Team" ?
+          null
           :
           <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
             ChangePassword
@@ -124,10 +173,20 @@ const EditStaffModal = ({
           fullWidth
           mt="xl"
           bg={"#1e3a8a"}
-          onClick={onEdit}
+          // onClick={onEdit}
           loading={loading}
           disabled={loading}
-
+          onClick={() => {
+            if (!validateSaudiPhoneNumber(editUser.phone_number)) {
+              notifications.show({
+                title: "Invalid phone number",
+                message: "Please enter a valid Saudi phone number starting with 5.",
+                color: "red",
+              });
+              return;
+            }
+            onEdit(); // تنفيذ تعديل المستخدم
+          }}
           type="submit"
           radius="md"
         // radius="md"

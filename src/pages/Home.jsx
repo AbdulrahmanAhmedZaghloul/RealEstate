@@ -41,7 +41,11 @@ function Home() {
               <p>Track properties, analyze trends, and <br />
                 make smarter decisions with our intuitive <br />
                 real estate dashboard.</p>
-              <button onClick  className={classes.buttonText}>
+              <button style={{
+                cursor:"pointer",
+              }} onClick={
+                ()=> navigate('/StartAccount')
+              }  className={classes.buttonText}>
                 Get started
               </button>
             </div>

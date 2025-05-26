@@ -39,7 +39,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
     // Handle OTP verification logic here
     setLoading(true);
     await axiosInstance
-      .post("/api/web/verify-registration", {
+      .post("api/web/verify-registration", {
         email: sessionStorage.getItem("email"),
         otp: OTP,
       })

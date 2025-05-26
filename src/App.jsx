@@ -49,6 +49,8 @@ import PropertiesEmployee from "./pages/dashboardEmployee/PropertiesEmployee.jsx
 import RequestsEmployee from "./pages/dashboardEmployee/RequestsEmployee.jsx";
 import PropertyDetailsEmployee from "./components/employee/PropertyDetailsEmployee.jsx";
 import { LanguageProvider } from "./context/LanguageContext.jsx";
+import MatterOrCompany from "./pages/MatterOrCompany.jsx";
+import DashboardMarketerLayout from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
 
 function App() {
   return (
@@ -58,6 +60,7 @@ function App() {
           <Routes>
             {/* Public Routes */}
             <Route path="/MakePayment" element={<MakePayment />} />
+            {/* <Route path="/MatterOrCompany" element={<MatterOrCompany />} /> */}
             <Route path="/choosePlan" element={<ChoosePlan />} />
             <Route path="/StartAccount" element={<StartAccount />} />
 
@@ -102,6 +105,7 @@ function App() {
             {/* <Route path="*" element={<h1>404111</h1>} /> */}
             <Route path="/subscription-plans" element={<SubscriptionPlans />} />
 
+
             {/* Company Manager Routes */}
             <Route
               path="/dashboard"
@@ -124,6 +128,29 @@ function App() {
               <Route path="Contracts/:id" element={<ContractDetails />} />
             </Route>
 
+            {/* Company Manager Routes */}
+            <Route
+              path="/dashboard-Marketer"
+              element={
+                <ProtectedRoute allowedRoles={["Marketer"]}>
+                  <DashboardMarketerLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Profile />} />
+              <Route path="Team" element={<Staff />} />
+              <Route path="Contracts" element={<Contracts />} />
+              <Route path="Analytics" element={<Analytics />} />
+              <Route path="Categories" element={<Categories />} />
+              <Route path="Transactions" element={<Transactions />} />
+              <Route path="employee/:id" element={<EmployeeDetails />} />
+              <Route path="supervisor/:id" element={<SupervisorDetails />} />
+              <Route path="Properties/:id" element={<PropertyDetails />} />
+              <Route path="Properties" element={<Properties />} />
+              <Route path="Contracts/:id" element={<ContractDetails />} />
+            </Route>
+
+            
             {/* Supervisor Routes */}
             <Route
               path="/dashboard-supervisor"
@@ -176,7 +203,7 @@ function App() {
     </LanguageProvider>
 
     //
-  );
+  )
 }
 
 export default App;

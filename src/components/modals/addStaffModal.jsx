@@ -26,7 +26,10 @@ const AddStaffModal = ({
   setErrors,
   handleFileChange,
 }) => {
-
+function validateSaudiPhoneNumber(phoneNumber) {
+  const regex = /^5(?:0|1|3|5|6|7|8|9)\d{7}$/; // يجب أن يبدأ بـ 5x ثم 7 أرقام
+  return regex.test(phoneNumber);
+}
   return (
     <Modal
       opened={opened}
@@ -97,21 +100,7 @@ const AddStaffModal = ({
           styles={{ input: { height: 48 } }}
           mb={24}
         />
-        {/* 
-        <PasswordInput
-          label="Password"
-          placeholder="Password"
-          value={newUser.password}
-          onChange={(e) => {
-            setNewUser({ ...newUser, password: e.target.value });
-            if (errors.password) errors.password = "";
-          }}
-          required
-          error={errors.password}
-          styles={{ input: { height: 48 } }}
-          mb={24}
-        />
-  */}
+      
         <TextInput
           label="Address"
           placeholder="Address"
@@ -125,8 +114,49 @@ const AddStaffModal = ({
           styles={{ input: { height: 48 } }}
           mb={24}
         />
+<TextInput
+  label="Phone Number"
+  placeholder="512 345 678"
+  value={`${newUser.phone_number ? "+966" : ""}${newUser.phone_number}`}
+  onChange={(e) => {
+    let input = e.target.value;
 
-        <NumberInput
+    // إزالة كل شيء غير أرقام
+    const digitsOnly = input.replace(/\D/g, "");
+
+    // نتأكد من أن ما بعد 966 هو 9 أرقام على الأكثر
+    if (digitsOnly.length > 12) return;
+
+    // نحتفظ بالرقم بدون +966 في الـ state
+    if (digitsOnly.startsWith("966")) {
+      const numberWithoutCode = digitsOnly.slice(3);
+      setNewUser({ ...newUser, phone_number: numberWithoutCode });
+    } else {
+      setNewUser({ ...newUser, phone_number: digitsOnly });
+    }
+
+    if (errors.phone_number) setErrors({ ...errors, phone_number: "" });
+  }}
+  onFocus={() => {
+    // إذا لم يكن هناك رقم، نضع +966 تلقائيًا عند التركيز
+    if (!newUser.phone_number) {
+      setNewUser({ ...newUser, phone_number: "" });
+    }
+  }}
+  leftSection={
+    <img
+      src="https://flagcdn.com/w20/sa.png "
+      alt="Saudi Arabia"
+      width={20}
+      height={20}
+    />
+  }
+  leftSectionPointerEvents="none"
+  styles={{ input: { height: 48 } }}
+  error={errors.phone_number}
+  mb={24}
+/>
+        {/* <NumberInput
           label="Phone Number"
           hideControls
           placeholder="Phone number"
@@ -139,7 +169,7 @@ const AddStaffModal = ({
           error={errors.phone_number}
           styles={{ input: { height: 48 } }}
           mb={24}
-        />
+        /> */}
 
         <Select
           label="Position"
@@ -179,7 +209,33 @@ const AddStaffModal = ({
             rightSection={<img src={downArrow} />}
           />
         )}
-        <Button
+       <Button
+  fullWidth
+  disabled={loading}
+  loading={loading}
+  onClick={() => {
+    const passwordError = validateField("password", newUser.password);
+    if (passwordError) {
+      errors.password = passwordError;
+      setErrors({ ...errors });
+      return;
+    }
+
+    // التحقق من صحة رقم الهاتف
+    if (!validateSaudiPhoneNumber(newUser.phone_number)) {
+      setErrors({
+        ...errors,
+        phone_number: "Please enter a valid Saudi phone number starting with 5.",
+      });
+      return;
+    }
+
+    onAdd(newUser.position === "supervisor");
+  }}
+>
+  {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
+</Button>
+        {/* <Button
           fullWidth
           disabled={loading}
           loading={loading}
@@ -204,21 +260,8 @@ const AddStaffModal = ({
           }}
         >
           {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
-        </Button>
-        {/* <Button
-          fullWidth
-          disabled={loading}
-          loading={loading}
-          onClick={() => onAdd(newUser.position === "supervisor")}
-          style={{
-            backgroundColor: "var(--color-3)",
-            color: "white",
-            height: 48,
-            borderRadius: 8,
-          }}
-        >
-          {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
         </Button> */}
+      
       </div>
     </Modal>
   );

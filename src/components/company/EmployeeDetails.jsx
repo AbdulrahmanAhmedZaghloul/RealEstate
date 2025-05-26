@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { Button, Center, Grid, Loader, Modal, TextInput, useMantineColorScheme ,Text} from "@mantine/core";
+import { Button, Center, Grid, Loader, Modal, TextInput, useMantineColorScheme, Text } from "@mantine/core";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
@@ -42,8 +42,10 @@ function EmployeeDetails() {
 
   const [passwordData, setPasswordData] = useState({
     password: "",
-    supervisor_id: id,
+    employee_id: id,
   });
+  console.log(id);
+
   const [showPassword, setShowPassword] = useState(false);
 
   //delete modal data
@@ -94,6 +96,7 @@ function EmployeeDetails() {
     address: "",
     supervisor_id: null,
   });
+
   const handleOpenEditModal = () => {
     if (employee) {
       setEditUser({
@@ -267,6 +270,7 @@ function EmployeeDetails() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     if (editModalOpened && employee) {
       setEditUser({
@@ -285,11 +289,15 @@ function EmployeeDetails() {
     openChangePasswordModal();
   };
 
+  // let supervisor_id = ;
+  console.log(employee);
+
+
   const handleChangePassword = async () => {
     closeEditModal
     const errors = {};
     if (!passwordData.password) errors.password = "Password is required";
-    if (!passwordData.supervisor_id) errors.supervisor_id = "Invalid supervisor";
+    if (!passwordData.employee_id) errors.employee_id = "Invalid supervisor";
 
     setPasswordErrors(errors);
 
@@ -297,16 +305,21 @@ function EmployeeDetails() {
 
     setLoading(true);
     try {
-      await axiosInstance.put(`/api/employees/change-password/${id}`,
+     const  res =  await axiosInstance.post(`/api/employees/change-password/${id}?_method=PUT`,
         passwordData, {
         headers: {
+          "Content-Type": "multipart/form-data",
+
           Authorization: `Bearer ${user.token}`,
         },
       });
+      console.log(res);
+      
+      console.log(passwordData);
 
       notifications.show({
         title: t.Success,
-        message: "Password changed successfully!",
+        message: t.Success,
         color: "green",
       });
 
@@ -322,6 +335,7 @@ function EmployeeDetails() {
       setLoading(false);
     }
   };
+  
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -632,42 +646,42 @@ function EmployeeDetails() {
         </div>
       </div>
 
-<Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
-  <TextInput
-    label="New Password"
-    type={showPassword ? "text" : "password"}
-    value={passwordData.password}
-    maxLength={50}
-    onChange={(e) => {
-      const newPassword = e.target.value;
-      setPasswordData({ ...passwordData, password: newPassword });
+      <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
+        <TextInput
+          label="New Password"
+          type={showPassword ? "text" : "password"}
+          value={passwordData.password}
+          maxLength={50}
+          onChange={(e) => {
+            const newPassword = e.target.value;
+            setPasswordData({ ...passwordData, password: newPassword });
 
-      const error = validateField("password", newPassword);
-      setPasswordErrors((prev) => ({ ...prev, password: error }));
-    }}
-    rightSection={
-      <button
-        type="button"
-        style={{ background: "none", border: "none", cursor: "pointer" }}
-        onClick={() => setShowPassword(!showPassword)}
-      >
-        {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
-      </button>
-    }
-    error={passwordErrors.password}
-  />
+            const error = validateField("password", newPassword);
+            setPasswordErrors((prev) => ({ ...prev, password: error }));
+          }}
+          rightSection={
+            <button
+              type="button"
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+            </button>
+          }
+          error={passwordErrors.password}
+        />
 
-  {passwordErrors.password && (
-    <Text size="sm" color="red" mt={5}>
-      {passwordErrors.password}
-    </Text>
-  )}
+        {passwordErrors.password && (
+          <Text size="sm" color="red" mt={5}>
+            {passwordErrors.password}
+          </Text>
+        )}
 
-  <Button loading={loading} onClick={handleChangePassword} mt="md" fullWidth>
-    Change Password
-  </Button>
-</Modal>
-     
+        <Button loading={loading} onClick={handleChangePassword} mt="md" fullWidth>
+          Change Password
+        </Button>
+      </Modal>
+
 
       <EditStaffModal
         opened={editModalOpened}

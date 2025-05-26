@@ -280,22 +280,12 @@ function Properties() {
                 }}
               >
                 <Card.Section radius="md">
-                  <div className={classes.listingImage}>
-                    <Image
-                      src={`${listing.picture_url}`}
-                      alt={listing.title}
-                      h="233px"
-                      radius="md"
-                    />
-                    {/* <p className={classes.listingfor}> */}
-
-                      <p className={classes.listingfor}>
-                        {listing.selling_status === 1 ? "For Sale" : "Not For Sale"}
-                      </p>
-                    {/* </p> */}
-
-                  </div>
-
+                  <Image
+                    src={`${listing.picture_url}`}
+                    alt={listing.title}
+                    h="233px"
+                    radius="md"
+                  />
                 </Card.Section>
 
                 <div style={{ marginTop: "16px", display: "flex", flexWrap: "wrap", }}>
@@ -303,14 +293,10 @@ function Properties() {
                     <span className="icon-saudi_riyal">&#xea; </span>{" "}
                     {parseFloat(listing.price)?.toLocaleString()}
                   </span>
-                  {/* <span className={classes.listingPrice}>
-                    <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                    {listing.selling_status}
-                  </span> */}
 
                   <div className={classes.downPaymentBadge}>
-                    {listing.down_payment} %
-                    {t.DownPayment}
+                     {listing.down_payment} %
+                     {t.DownPayment}
                   </div>
                 </div>
 
@@ -359,9 +345,6 @@ function Properties() {
                       ) === 1
                         ? "Yesterday"
                         : "Today"}
-                  </div>
-                  <div className={classes.listingDate}>
-                    {listing.listing_type}
                   </div>
                 </div>
               </Card>

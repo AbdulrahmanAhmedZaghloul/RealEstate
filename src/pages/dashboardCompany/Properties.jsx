@@ -290,7 +290,7 @@ function Properties() {
                     {/* <p className={classes.listingfor}> */}
 
                       <p className={classes.listingfor}>
-                        {listing.selling_status === 1 ? "For Sale" : "Not For Sale"}
+                        {listing.selling_status === 1 ? "Not For Sale"  : "For Sale" }
                       </p>
                     {/* </p> */}
 
@@ -303,10 +303,6 @@ function Properties() {
                     <span className="icon-saudi_riyal">&#xea; </span>{" "}
                     {parseFloat(listing.price)?.toLocaleString()}
                   </span>
-                  {/* <span className={classes.listingPrice}>
-                    <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                    {listing.selling_status}
-                  </span> */}
 
                   <div className={classes.downPaymentBadge}>
                     {listing.down_payment} %
@@ -338,8 +334,7 @@ function Properties() {
                   </div>
                   <div className={classes.listingEmployee}>
                     {t.Employee}: {listing.company?.name}
-                    {console.log(listing.company?.name)}
-
+ 
                   </div>
                   <div className={classes.listingLocation}>
                     {listing.location}
@@ -361,7 +356,10 @@ function Properties() {
                         : "Today"}
                   </div>
                   <div className={classes.listingDate}>
-                    {listing.listing_type}
+                  <span style={{
+                    fontWeight: "bold",
+                    marginRight: "5px",
+                  }}>Type ::</span>   {listing.listing_type}
                   </div>
                 </div>
               </Card>

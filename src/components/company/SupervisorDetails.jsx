@@ -99,7 +99,7 @@ function SupervisorDetails() {
     password: "",
     supervisor_id: id,
   });
-  
+
   // const [passwordErrors, setPasswordErrors] = useState({});
   const handleFileChange = (file) => {
     setNewUser((prev) => ({ ...prev, image: file }));
@@ -209,100 +209,63 @@ function SupervisorDetails() {
       setLoading(false);
     }
   };
-  
+
   const handleOpenChangePassword = () => {
     closeEditModal();
     openChangePasswordModal();
   };
-const validatePassword = (password) => {
-  if (!password.trim()) return "Password is required";
-  if (password.length < 8)
-    return "Password must be at least 8 characters long";
-  if (!/[a-z]/.test(password))
-    return "Password must contain at least one lowercase letter";
-  if (!/[0-9]/.test(password))
-    return "Password must contain at least one number";
-  if (/\s/.test(password)) return "Password cannot contain spaces";
-  return "";
-};
+  const validatePassword = (password) => {
+    if (!password.trim()) return "Password is required";
+    if (password.length < 8)
+      return "Password must be at least 8 characters long";
+    if (!/[a-z]/.test(password))
+      return "Password must contain at least one lowercase letter";
+    if (!/[0-9]/.test(password))
+      return "Password must contain at least one number";
+    if (/\s/.test(password)) return "Password cannot contain spaces";
+    return "";
+  };
   const handleChangePassword = async () => {
-  const newPassword = passwordData.password;
-  const passwordError = validatePassword(newPassword);
+    const newPassword = passwordData.password;
+    const passwordError = validatePassword(newPassword);
 
-  const errors = {};
-  if (passwordError) {
-    errors.password = passwordError;
-  }
+    const errors = {};
+    if (passwordError) {
+      errors.password = passwordError;
+    }
 
-  if (!passwordData.supervisor_id) {
-    errors.supervisor_id = "Invalid supervisor";
-  }
+    if (!passwordData.supervisor_id) {
+      errors.supervisor_id = "Invalid supervisor";
+    }
 
-  setPasswordErrors(errors);
+    setPasswordErrors(errors);
 
-  if (Object.keys(errors).length > 0) return;
+    if (Object.keys(errors).length > 0) return;
 
-  setLoading(true);
-  try {
-    await axiosInstance.put(`/api/supervisors/change-password/${id}`, passwordData, {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    });
-    notifications.show({
-      title: t.Success,
-      message: "Password changed successfully!",
-      color: "green",
-    });
-    closeChangePasswordModal();
-  } catch (error) {
-    console.error("Error changing password:", error);
-    notifications.show({
-      title: "Error",
-      message: error.response?.data?.message || "Failed to change password",
-      color: "red",
-    });
-  } finally {
-    setLoading(false);
-  }
-};
-  // const handleChangePassword = async () => {
-  //   closeEditModal
-  //   const errors = {};
-  //   if (!passwordData.password) errors.password = "Password is required";
-  //   if (!passwordData.supervisor_id) errors.supervisor_id = "Invalid supervisor";
-
-  //   setPasswordErrors(errors);
-
-  //   if (Object.keys(errors).length > 0) return;
-
-  //   setLoading(true);
-  //   try {
-  //     await axiosInstance.put(`/api/supervisors/change-password/${id}`,
-  //       passwordData, {
-  //       headers: {
-  //         Authorization: `Bearer ${user.token}`,
-  //       },
-  //     });
-
-  //     notifications.show({
-  //       title: t.Success,
-  //       message: "Password changed successfully!",
-  //       color: "green",
-  //     });
-
-  //     closeChangePasswordModal();
-  //   } catch (error) {
-  //     console.error("Error changing password:", error);
-  //     notifications.show({
-  //       title: "Error",
-  //       message: error.response?.data?.message || "Failed to change password",
-  //       color: "red",
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+    setLoading(true);
+    try {
+      await axiosInstance.put(`/api/supervisors/change-password/${id}`, passwordData, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      notifications.show({
+        title: t.Success,
+        message: "Password changed successfully!",
+        color: "green",
+      });
+      closeChangePasswordModal();
+    } catch (error) {
+      console.error("Error changing password:", error);
+      notifications.show({
+        title: "Error",
+        message: error.response?.data?.message || "Failed to change password",
+        color: "red",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchSupervisor();
@@ -373,10 +336,10 @@ const validatePassword = (password) => {
           style={{
             cursor: "pointer",
           }}
-     
+
           onClick={openDeleteModal}
           className={classes.deleteIcon}
-          >
+        >
           {/* <DeleteIcon /> */}
         </span>
       </div>
@@ -511,31 +474,31 @@ const validatePassword = (password) => {
           </Grid.Col>
         </Grid>
       </div>
-      <Contracts/>
+      <Contracts />
       <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
-     
-     <TextInput
-  label="New Password"
-  type={showPassword ? "text" : "password"}
-  value={passwordData.password}
-  maxLength={50}
-  onChange={(e) => {
-    const newPassword = e.target.value;
-    setPasswordData({ ...passwordData, password: newPassword });
-    const error = validatePassword(newPassword);
-    setPasswordErrors((prev) => ({ ...prev, password: error }));
-  }}
-  rightSection={
-    <button
-      type="button"
-      style={{ background: "none", border: "none", cursor: "pointer" }}
-      onClick={() => setShowPassword(!showPassword)}
-    >
-      {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
-    </button>
-  }
-  error={passwordErrors.password}
-/>
+
+        <TextInput
+          label="New Password"
+          type={showPassword ? "text" : "password"}
+          value={passwordData.password}
+          maxLength={50}
+          onChange={(e) => {
+            const newPassword = e.target.value;
+            setPasswordData({ ...passwordData, password: newPassword });
+            const error = validatePassword(newPassword);
+            setPasswordErrors((prev) => ({ ...prev, password: error }));
+          }}
+          rightSection={
+            <button
+              type="button"
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+            </button>
+          }
+          error={passwordErrors.password}
+        />
         {/* <TextInput
           label="New Password"
           type={showPassword ? "text" : "password"}

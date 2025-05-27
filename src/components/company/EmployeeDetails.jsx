@@ -309,7 +309,6 @@ function EmployeeDetails() {
         passwordData, {
         headers: {
           "Content-Type": "multipart/form-data",
-
           Authorization: `Bearer ${user.token}`,
         },
       });

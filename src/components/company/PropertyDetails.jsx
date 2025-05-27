@@ -193,7 +193,6 @@ function PropertyDetails() {
             <div className={classes.imageContainer}>
               <>
                 {/* حاوية الصورة الرئيسية */}
-                {console.log(listing)}
                 <div className={classes.ImageContainerBig}>
                   {listing.images?.find((image) => image.is_primary)
                     ?.image_url && (
@@ -267,7 +266,7 @@ function PropertyDetails() {
 
                       <Text className={classes.Down}>
 
-                        {console.log(listing.down_payment)}
+                        {console.log(listing)}
 
                         {listing.down_payment}
                         % {t.DownPayment}
@@ -366,7 +365,7 @@ function PropertyDetails() {
                           />
                         </svg>
 
-                        <span>3</span>
+                        <span>{listing.rooms}</span>
                       </div>
                     </span>
                     <span className={classes.svgSpan}>
@@ -384,7 +383,7 @@ function PropertyDetails() {
                           />
                         </svg>
 
-                        <span>2</span>
+                        <span>{listing.bathrooms}</span>
                       </div>
                     </span>
                     <span className={classes.svgSpan}>
@@ -417,10 +416,29 @@ function PropertyDetails() {
                       </div>
                     </span>
                   </Grid.Col>
+                  <Grid.Col span={12} className={classes.svgCol}>
+                    <span className={classes.svgSpan}>
+                      <div>
+                    
+                        <span>type :</span>
+                        <span>{listing.listing_type}</span>
+                      </div>
+                    </span>
+                    <span className={classes.svgSpan}>
+                      <div>
+                        
+
+                        <span>  
+                        {listing.selling_status === 1 ? "Not For Sale"  : "For Sale" }
+                     </span>
+                      </div>
+                    </span>
+                 
+                  </Grid.Col>
                 </Grid>
               </Grid.Col>
               <Grid.Col span={isMobile ? 12 : 5}>
-              
+
                 <Box
                   className={classes.colImage}
                   onClick={() =>
@@ -454,7 +472,7 @@ function PropertyDetails() {
                     </Box>
                   )}
                 </Box>
-                  <Group  className={classes.shareGroup} position="apart" mt={"lg"}>
+                <Group className={classes.shareGroup} position="apart" mt={"lg"}>
                   {listing.status === "pending" ? (
                     <>
                       <Button variant="filled" color="red" uppercase onClick={open2}>
@@ -471,9 +489,11 @@ function PropertyDetails() {
                     </>
                   ) : (
                     <>
-                      <Button color="red" uppercase onClick={open}>
-                        Delete Property
-                      </Button>
+                      {listing.selling_status === 0 && (
+                        <Button color="red" uppercase onClick={open}>
+                          Delete Property
+                        </Button>
+                      )}
                       <Button color="green" uppercase onClick={handleShareProperty}>
                         Share Property
                       </Button>
@@ -559,7 +579,6 @@ function PropertyDetails() {
                 />
               </svg>
               <span style={{}}>{listing.location}</span>
-              {console.log(listing)}
             </div>
           </span>
 

@@ -62,7 +62,7 @@ function Contracts() {
   // Form validation using Mantine's useForm
   useEffect(() => {
     console.log(contractsData);
-    
+
     setContracts(contractsData?.contracts.data || []);
 
     setApprovedListings(
@@ -289,7 +289,7 @@ function Contracts() {
                 }}
               >
                 {console.log(contract)}
-                
+
                 <Image
                   src={contract.real_estate.image}
                   alt="Property"
@@ -310,14 +310,12 @@ function Contracts() {
                       </span>
                     </div>
                     <span className={classes.contractDownPayment}>
-                      {Math.floor(
-                        (contract.down_payment / contract.price) * 100
-                      )}
+                      {contract.down_payment}
                       % {t.DownPayment}
                     </span>
                   </div>
 
-                  <div className={classes.contractTitle}>{contract.title}</div>
+                  <div className={classes.contractTitle}>{contract.real_estate.title}</div>
                   <div className={classes.contractInfo}>
                     <Rooms />
                     <span>

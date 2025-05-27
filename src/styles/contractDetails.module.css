@@ -30,6 +30,36 @@
   justify-content: start;
   align-items: start;
 }
+.svgCol {
+  display: flex;
+}
+
+.svgSpan div {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+
+}
+
+.svgSpan svg {
+  color: var(--color-4);
+}
+
+.svgSpan {
+  margin-top: 5px;
+  ;
+}
+
+.svgSpan span {
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-4);
+  margin-left: 10px;
+}
 
 /* 2image */
 

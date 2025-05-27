@@ -31,9 +31,10 @@ const EditStaffModal = ({
 }) => {
   const location = useLocation();
   function validateSaudiPhoneNumber(phoneNumber) {
-  const regex = /^5(?:0|1|3|5|6|7|8|9)\d{7}$/; // يجب أن يبدأ بـ 5x ثم 7 أرقام
-  return regex.test(phoneNumber);
-}
+    const cleaned = phoneNumber.replace(/\s+/g, ""); // نزيل المسافات
+    const regex = /^\+966\s?5(?:0|1|3|5|6|7|8|9)\d{7}$/; // يجب أن يبدأ بـ +9665...
+    return regex.test(cleaned);
+  }
   return (
     <Modal
       opened={opened}
@@ -78,60 +79,67 @@ const EditStaffModal = ({
           error={errors.email}
         />
         <TextInput
-          label="Address"
-          placeholder="Address"
-          value={editUser.address}
-          onChange={(e) =>
-            setEditUser({ ...editUser, address: e.target.value })
+          label="Phone Number"
+          placeholder="512 345 678"
+          value={`${editUser.phone_number || ""}`}
+          onChange={(e) => {
+            let input = e.target.value;
+
+            // إزالة كل شيء غير أرقام
+            const digitsOnly = input.replace(/\D/g, "");
+
+            // التأكد من أن القيمة تحتوي على رمز السعودية
+            if (!digitsOnly.startsWith("966") && digitsOnly.length >= 3) {
+              const cleaned = "+966" + digitsOnly.slice(3, 12);
+              setEditUser({ ...editUser, phone_number: cleaned });
+              return;
+            }
+
+            // إذا كان أقل من 3 أرقام، نبدأ فقط بـ +966
+            if (digitsOnly.length < 3) {
+              setEditUser({ ...editUser, phone_number: "+966" });
+              return;
+            }
+
+            // تنسيق الرقم بمسافات
+            let formattedNumber = "+966";
+
+            const phoneDigits = digitsOnly.slice(3); // نأخذ الأرقام بعد +966
+
+            if (phoneDigits.length > 0) {
+              formattedNumber += " " + phoneDigits.slice(0, 3);
+            }
+            if (phoneDigits.length > 3) {
+              formattedNumber += " " + phoneDigits.slice(3, 6);
+            }
+            if (phoneDigits.length > 6) {
+              formattedNumber += " " + phoneDigits.slice(6, 9);
+            }
+
+            setEditUser({
+              ...editUser,
+              phone_number: formattedNumber,
+            });
+          }}
+          onFocus={() => {
+            // عند التركيز، نتأكد من وجود +966
+            if (!editUser.phone_number || !editUser.phone_number.startsWith("+966")) {
+              setEditUser({ ...editUser, phone_number: "+966" });
+            }
+          }}
+          leftSection={
+            <img
+              src="https://flagcdn.com/w20/sa.png "
+              alt="Saudi Arabia"
+              width={20}
+              height={20}
+            />
           }
-          required
-          error={errors.address}
+          leftSectionPointerEvents="none"
+          styles={{ input: { height: 48 } }}
+          error={errors.phone_number}
           mt="md"
         />
-
-<TextInput
-  label="Phone Number"
-  placeholder="512 345 678"
-  value={`${editUser.phone_number ? "+966" : ""}${editUser.phone_number}`}
-  onChange={(e) => {
-    let input = e.target.value;
-
-    // إزالة كل شيء غير أرقام
-    const digitsOnly = input.replace(/\D/g, "");
-
-    // نتأكد من أن ما بعد 966 هو 9 أرقام على الأكثر
-    if (digitsOnly.length > 12) return;
-
-    // نحتفظ بالرقم بدون +966 في الـ state
-    if (digitsOnly.startsWith("966")) {
-      const numberWithoutCode = digitsOnly.slice(3);
-      setEditUser({ ...editUser, phone_number: numberWithoutCode });
-    } else {
-      setEditUser({ ...editUser, phone_number: digitsOnly });
-    }
-
-    if (errors.phone_number) errors.phone_number = "";
-  }}
-  onFocus={() => {
-    // إذا لم يكن هناك رقم، نضع +966 تلقائيًا عند التركيز
-    if (!editUser.phone_number) {
-      setEditUser({ ...editUser, phone_number: "" });
-    }
-  }}
-  leftSection={
-    <img
-      src="https://flagcdn.com/w20/sa.png "
-      alt="Saudi Arabia"
-      width={20}
-      height={20}
-    />
-  }
-  leftSectionPointerEvents="none"
-  styles={{ input: { height: 48 } }}
-  error={errors.phone_number}
-  mt="md"
-/>
-
         {/* <TextInput
           label="Phone Number"
           placeholder="Phone number"
@@ -168,28 +176,23 @@ const EditStaffModal = ({
             ChangePassword
           </Button>
         }
-
         <Button
           fullWidth
           mt="xl"
           bg={"#1e3a8a"}
-          // onClick={onEdit}
-          loading={loading}
-          disabled={loading}
           onClick={() => {
             if (!validateSaudiPhoneNumber(editUser.phone_number)) {
               notifications.show({
                 title: "Invalid phone number",
-                message: "Please enter a valid Saudi phone number starting with 5.",
+                message: "Please enter a valid Saudi phone number starting with +966.",
                 color: "red",
               });
               return;
             }
             onEdit(); // تنفيذ تعديل المستخدم
           }}
-          type="submit"
-          radius="md"
-        // radius="md"
+          loading={loading}
+          disabled={loading}
         >
           Update user
         </Button>

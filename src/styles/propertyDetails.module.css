@@ -57,6 +57,7 @@
   align-items: center;
 }
 
+
 .price {
   color: var(--color-1);
   font-family: Poppins;
@@ -190,7 +191,31 @@
   margin-top: 10px;
 }
 
-.shareGroup{
+
+
+.NotSale {
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 400;
+  padding: 0% 15px;
+  border-radius: 20px 20px;
+  color: var(--color-7) !important;
+ 
+  background-color: rgb(255, 0, 51);
+}
+
+.forSale { 
+   color: var(--color-7) !important;
+
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 400;
+  padding: 0% 15px;
+  border-radius: 20px 20px;
+  background-color: rgb(15, 235, 106);
+}
+
+.shareGroup {
   /* background-color: aqua; */
   display: flex;
   justify-content: center;
@@ -210,23 +235,24 @@
   align-items: center;
   margin: auto;
   width: 95%;
-   margin-bottom: 10px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
 
 }
 
- .Avatar{
+.Avatar {
   width: 30%;
   height: 30%;
   border-radius: 50%;
- }
+}
+
 .spanImage {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  max-width: 70%; 
+  max-width: 70%;
   font-weight: 600;
   font-size: 16px;
   align-items: center;

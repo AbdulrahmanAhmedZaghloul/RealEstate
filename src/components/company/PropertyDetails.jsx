@@ -419,21 +419,21 @@ function PropertyDetails() {
                   <Grid.Col span={12} className={classes.svgCol}>
                     <span className={classes.svgSpan}>
                       <div>
-                    
+
                         <span>type :</span>
                         <span>{listing.listing_type}</span>
                       </div>
                     </span>
                     <span className={classes.svgSpan}>
                       <div>
-                        
 
-                        <span>  
-                        {listing.selling_status === 1 ? "Not For Sale"  : "For Sale" }
-                     </span>
+
+                        <span>
+                          {listing.selling_status === 1 ? <span className={classes.NotSale }> Not For Sale </span>  : <span className={classes.forSale }>For Sale</span> }
+                        </span>
                       </div>
                     </span>
-                 
+
                   </Grid.Col>
                 </Grid>
               </Grid.Col>

@@ -303,8 +303,7 @@ function Profile() {
                     <Text truncate="end">
                       {formatSaudiPhoneNumberForDisplay(phone)}
                     </Text>
-                    {/* <Text truncate="end"> {phone}</Text> */}
-                  </div>
+                   </div>
 
                 </GridCol>
               ) : (

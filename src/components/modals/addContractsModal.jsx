@@ -31,8 +31,8 @@ const AddContractsModal = ({
       listing_id: null,
       title: "", // title of the contract
       description: "", // description of the contract
-      price: 0,
-      down_payment: 0,
+      price: 1,
+      down_payment: 1,
       contract_type: "", // sale or rent, etc.
       contract_document: "",
       customer_name: "",
@@ -50,7 +50,9 @@ const AddContractsModal = ({
       description: (value) => (value.trim() ? null : "Description is required"),
       price: (value) => (value > 0 ? null : "Price must be greater than 0"),
       down_payment: (value) =>
-        value >= 0 ? null : "Down payment must be 0 or greater",
+        value === null || value === "" || value < 0 || value > 100
+          ? "Down payment must be between 0 and 100%"
+          : null,
       contract_type: (value) => (value ? null : "Contract type is required"),
       contract_document: (value) =>
         value ? null : "Contract document is required",
@@ -139,6 +141,7 @@ const AddContractsModal = ({
               placeholder="Enter the title of the contract"
               error={form.errors.title}
               {...form.getInputProps("title")}
+              minLength={5}
               maxLength={50}
             />
             {/* Description */}
@@ -149,7 +152,8 @@ const AddContractsModal = ({
               placeholder="Enter the description of the contract"
               error={form.errors.description}
               {...form.getInputProps("description")}
-              maxLength={500}
+              minLength={5}
+              maxLength={200}
             />
 
             {/* Price */}
@@ -161,7 +165,7 @@ const AddContractsModal = ({
               error={form.errors.price}
               hideControls
               {...form.getInputProps("price")}
-              maxLength={10}
+              maxLength={24}
             />
             {/* Down Payment */}
             <NumberInput
@@ -169,10 +173,27 @@ const AddContractsModal = ({
               label="Down Payment"
               placeholder="Enter the down payment of the contract"
               hideControls
-              error={form.errors.down_payment}
-              {...form.getInputProps("down_payment")}
-              maxLength={10}
+              error={
+                form.values.down_payment < 0 || form.values.down_payment > 100
+                  ? "Down payment must be between 0 and 100%"
+                  : form.errors.down_payment
+              }
+              value={form.values.down_payment}
+              onChange={(value) => {
+                // التأكد من أن القيمة بين 0 و 100
+                if (value !== "" && (value < 0 || value > 100)) {
+                  form.setFieldError("down_payment", "Must be between 0 and 100%");
+                } else {
+                  form.setFieldValue("down_payment", value);
+                  if (form.errors.down_payment) {
+                    form.setFieldError("down_payment", "");
+                  }
+                }
+              }}
+              maxLength={4}
+              suffix="%"
             />
+
           </Grid.Col>
 
           <Grid.Col span={6}>
@@ -203,7 +224,6 @@ const AddContractsModal = ({
               maxLength={50}
             />
             {/* Customer Phone */}
-            {/* Customer Phone with Saudi Code & Formatting */}
 
             {/* Customer Phone with Saudi Code & Formatting */}
             <TextInput
@@ -266,56 +286,8 @@ const AddContractsModal = ({
               mb={24}
             />
 
-            {/* <TextInput
-            label="Customer Phone"
-            placeholder="512 345 678"
-            value={`${form.values.customer_phone ? "+966" : ""}${form.values.customer_phone}`}
-            onChange={(e) => {
-              let input = e.target.value;
 
-              // إزالة كل شيء غير أرقام
-              const digitsOnly = input.replace(/\D/g, "");
 
-              // نتأكد من أن ما بعد 966 هو 9 أرقام على الأكثر
-              if (digitsOnly.length > 12) return;
-
-              // نحتفظ بالرقم بدون +966 في الـ state
-              if (digitsOnly.startsWith("966")) {
-                const numberWithoutCode = digitsOnly.slice(3);
-                form.setFieldValue("customer_phone", numberWithoutCode);
-              } else {
-                form.setFieldValue("customer_phone", digitsOnly);
-              }
-            }}
-            onFocus={() => {
-              // إذا لم يكن هناك رقم، نضع +966 تلقائيًا عند التركيز
-              if (!form.values.customer_phone) {
-                form.setFieldValue("customer_phone", "");
-              }
-            }}
-            leftSection={
-              <img
-                src="https://flagcdn.com/w20/sa.png "
-                alt="Saudi Arabia"
-                width={20}
-                height={20}
-              />
-            }
-            leftSectionPointerEvents="none"
-            styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-            error={form.errors.customer_phone}
-            mb={24}
-          /> */}
-            {/* <TextInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24}
-              label="Customer Phone"
-              placeholder="Enter the phone number of the customer"
-              type="number"
-              error={form.errors.customer_phone}
-              {...form.getInputProps("customer_phone")}
-              maxLength={20}
-            /> */}
             {/* Release Date */}
             <TextInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
@@ -358,12 +330,21 @@ const AddContractsModal = ({
                 type="submit"
                 variant="light"
                 radius="md"
-                disabled={loading}
+                disabled={Object.keys(form.errors).length > 0 || loading}
                 loading={loading}
                 className={classes.addButton}
+                styles={(theme, params) => ({
+                  root: {
+                    ...(params.disabled && {
+                      opacity: 0.5,
+                      cursor: 'not-allowed',
+                    }),
+                  },
+                })}
               >
                 Add Contract
               </Button>
+
             </Center>
           </Grid.Col>
         </Grid>

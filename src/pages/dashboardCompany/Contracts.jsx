@@ -60,14 +60,15 @@ function Contracts() {
     { open: openFilterModal, close: closeFilterModal },
   ] = useDisclosure(false);
   // Form validation using Mantine's useForm
+      console.log(contractsData);
+
   useEffect(() => {
-    console.log(contractsData);
 
     setContracts(contractsData?.contracts.data || []);
 
     setApprovedListings(
       listingsData?.data?.listings?.filter(
-        (listing) => listing.status === "approved"
+        (listing) => listing.status === "approved" && listing.selling_status === 0
       ) || []
     );
   }, [contractsData, listingsData]);

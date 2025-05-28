@@ -267,8 +267,8 @@ function Properties() {
               rightSection={<Dropdown />}
               data={[
                 { value: "all", label: "All" },
-                { value: "for_sale", label: "Sale" },
-                { value: "not_for_sale", label: "Not Sale" },
+                { value: "for_sale", label: "Sold" },
+                { value: "not_for_sale", label: "Not Sold" },
               ]}
     styles={{
                 input: {
@@ -334,7 +334,7 @@ function Properties() {
                     {/* <p className={classes.listingfor}> */}
 
                     <p className={classes.listingfor}>
-                      {listing.selling_status === 1 ? "Not  active" : listing.listing_type}
+                      {listing.selling_status === 1 ? "Sold" : listing.listing_type}
                     </p>
                     {/* </p> */}
 

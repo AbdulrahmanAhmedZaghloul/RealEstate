@@ -16,9 +16,172 @@ import { useTranslation } from "../../context/LanguageContext";
 import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
 
 function PropertyDetails() {
+  // const { id } = useParams();
+  // const navigate = useNavigate();
+  // const [listing, setListing] = useState(null); //the requested listing
+  // const [loading, setLoading] = useState(true);
+  // const { user } = useAuth();
+  // const [rejectionReason, setRejectionReason] = useState("");
+  // const [shareLink, setShareLink] = useState("");
+  // const CHARACTER_LIMIT = 200;
+  // const [opened, { open, close }] = useDisclosure(false);
+  // const [opened2, { open: open2, close: close2 }] = useDisclosure(false);
+  // const [expanded, setExpanded] = useState(false);
+  // const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
+  // const [selectedImageIndex, setSelectedImageIndex] = useState(0); // تتبع الصورة المختارة
+
+  // const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
+
+  // const { colorScheme } = useMantineColorScheme();
+  // const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+
+  // const words = listing?.description?.split(" ") || [];
+  // const previewText =
+  //   words.slice(0, 50).join(" ") + (words.length > 50 ? "..." : "");
+
+  // console.log(user.token);
+  // console.log(id);
+
+  // const fetchListing = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const { data } = await axiosInstance.get(`/api/listings/employee/${id}`, {
+  //       headers: { Authorization: `Bearer ${user.token}` },
+  //     });
+  //     console.log(data?.data.listing);
+
+  //     setListing(data?.data.listing); // Ensure listing has a description
+  //     <InvalidateQuery queryKey={["listings"]} />
+
+  //   } catch (err) {
+  //     notifications.show({
+  //       title: "Error",
+  //       message: err.response?.data?.message || "Failed to fetch listing",
+  //       color: "red",
+  //     });
+  //     console.log(err);
+
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const handleShareProperty = () => {
+  //   setLoading(true);
+  //   axiosInstance
+  //     .post(
+  //       `/api/listings/${id}/share`,
+  //       {},
+  //       {
+  //         headers: { Authorization: `Bearer ${user.token}` },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       setShareLink(response.data.data.share_url);
+  //       notifications.show({
+  //         title: "Share Link Generated",
+  //         message: "Contract share link has been generated successfully.",
+  //         color: "green",
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       notifications.show({
+  //         title: "Share Failed",
+  //         message: "Failed to generate the contract share link.",
+  //         color: "red",
+  //       });
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // };
+
+  // const handleDeleteProperty = async () => {
+  //   setLoading(true);
+  //   try {
+  //     await axiosInstance.delete(`/api/listings/${id}`, {
+  //       headers: { Authorization: `Bearer ${user.token}` },
+  //     });
+  //     navigate("/dashboard/properties");
+  //     notifications.show({
+  //       title: "Success",
+  //       message: "Property deleted successfully!",
+  //       color: "green",
+  //     });
+  //   } catch (err) {
+  //     notifications.show({
+  //       title: "Error",
+  //       message: err.response?.data?.message || "Failed to delete property",
+  //       color: "red",
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const handleUpdateListing = async (newStatus, reason) => {
+  //   setLoading(true);
+  //   try {
+  //     await axiosInstance.post(
+  //       `/api/listings/${id}/status`,
+  //       {
+  //         status: newStatus,
+  //         rejection_reason: reason,
+  //       },
+  //       { headers: { Authorization: `Bearer ${user.token}` } }
+  //     );
+  //     fetchListing();
+  //     notifications.show({
+  //       title: "Success",
+  //       message: "Listing status updated successfully",
+  //       color: "green",
+  //     });
+  //   } catch (err) {
+  //     notifications.show({
+  //       title: "Error",
+  //       message:
+  //         err.response?.data?.message || "Failed to update listing status",
+  //       color: "red",
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchListing();
+  // }, []);
+
+  // if (loading) {
+  //   return (
+  //     <>
+  //       <Center
+  //         style={{
+  //           position: "absolute",
+  //           top: "50%",
+  //           left: "50%",
+  //           transform: "translate(-50%, -50%)",
+  //           zIndex: 2,
+  //         }}
+  //       >
+  //         <Loader size="xl" />
+  //       </Center>
+  //     </>
+  //   );
+  // }
+
+  // if (!listing) {
+  //   return (
+  //     <Center>
+  //       <span>Listing does not exist.</span>
+  //     </Center>
+  //   );
+  // }
+
   const { id } = useParams();
   const navigate = useNavigate();
-  const [listing, setListing] = useState(null); //the requested listing
+  const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const [rejectionReason, setRejectionReason] = useState("");
@@ -28,19 +191,18 @@ function PropertyDetails() {
   const [opened2, { open: open2, close: close2 }] = useDisclosure(false);
   const [expanded, setExpanded] = useState(false);
   const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0); // تتبع الصورة المختارة
-
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
-
   const { colorScheme } = useMantineColorScheme();
-  const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+  const { t } = useTranslation();
+
+  // Edit Modal States
+  const [editModalOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
+  const [editData, setEditData] = useState({});
 
   const words = listing?.description?.split(" ") || [];
   const previewText =
     words.slice(0, 50).join(" ") + (words.length > 50 ? "..." : "");
-
-  console.log(user.token);
-  console.log(id);
 
   const fetchListing = async () => {
     setLoading(true);
@@ -48,53 +210,65 @@ function PropertyDetails() {
       const { data } = await axiosInstance.get(`/api/listings/employee/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      console.log(data?.data.listing);
-
-      setListing(data?.data.listing); // Ensure listing has a description
-      <InvalidateQuery queryKey={["listings"]} />
-
+      setListing(data?.data.listing);
     } catch (err) {
       notifications.show({
         title: "Error",
         message: err.response?.data?.message || "Failed to fetch listing",
         color: "red",
       });
-      console.log(err);
-
     } finally {
       setLoading(false);
     }
   };
 
-  const handleShareProperty = () => {
+  const handleUpdateProperty = async () => {
     setLoading(true);
-    axiosInstance
-      .post(
-        `/api/listings/${id}/share`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }
-      )
-      .then((response) => {
-        setShareLink(response.data.data.share_url);
-        notifications.show({
-          title: "Share Link Generated",
-          message: "Contract share link has been generated successfully.",
-          color: "green",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        notifications.show({
-          title: "Share Failed",
-          message: "Failed to generate the contract share link.",
-          color: "red",
-        });
-      })
-      .finally(() => {
-        setLoading(false);
+    try {
+      const response = await axiosInstance.put(`/api/listings/${id}`, editData, {
+        headers: { Authorization: `Bearer ${user.token}` },
       });
+
+      notifications.show({
+        title: "Success",
+        message: "Listing updated successfully!",
+        color: "green",
+      });
+
+      fetchListing(); // Refresh data
+      closeEdit();
+    } catch (err) {
+      notifications.show({
+        title: "Error",
+        message: err.response?.data?.message || "Failed to update listing",
+        color: "red",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleShareProperty = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post(`/api/listings/${id}/share`, {}, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      setShareLink(response.data.data.share_url);
+      notifications.show({
+        title: "Success",
+        message: "Share link generated!",
+        color: "green",
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Error",
+        message: "Failed to generate share link",
+        color: "red",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteProperty = async () => {
@@ -112,7 +286,7 @@ function PropertyDetails() {
     } catch (err) {
       notifications.show({
         title: "Error",
-        message: err.response?.data?.message || "Failed to delete property",
+        message: "Failed to delete property",
         color: "red",
       });
     } finally {
@@ -125,10 +299,7 @@ function PropertyDetails() {
     try {
       await axiosInstance.post(
         `/api/listings/${id}/status`,
-        {
-          status: newStatus,
-          rejection_reason: reason,
-        },
+        { status: newStatus, rejection_reason: reason },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
       fetchListing();
@@ -140,8 +311,7 @@ function PropertyDetails() {
     } catch (err) {
       notifications.show({
         title: "Error",
-        message:
-          err.response?.data?.message || "Failed to update listing status",
+        message: "Failed to update listing status",
         color: "red",
       });
     } finally {
@@ -153,31 +323,35 @@ function PropertyDetails() {
     fetchListing();
   }, []);
 
+  // Initialize editData when modal opens
+  useEffect(() => {
+    if (listing && editModalOpened) {
+      setEditData({
+        title: listing.title,
+        description: listing.description,
+        category: listing.category,
+        rooms: listing.rooms,
+        bathrooms: listing.bathrooms,
+        area: listing.area,
+        down_payment: listing.down_payment,
+        price: listing.price,
+      });
+    }
+  }, [editModalOpened, listing]);
+
   if (loading) {
     return (
-      <>
-        <Center
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            zIndex: 2,
-          }}
-        >
-          <Loader size="xl" />
-        </Center>
-      </>
+      <Center style={{ height: "80vh" }}>
+        <Loader size="xl" />
+      </Center>
     );
   }
 
   if (!listing) {
-    return (
-      <Center>
-        <span>Listing does not exist.</span>
-      </Center>
-    );
+    return <Center>Listing not found</Center>;
   }
+
+
 
   return (
     <>
@@ -444,7 +618,7 @@ function PropertyDetails() {
                   </Text>
                   <Text style={{}} className={classes.listing}>
                     {/* <p className={classes.listingfor}> */}
-                    {listing.selling_status === 1 ? "Not  active" : listing.listing_type}
+                    {listing.selling_status === 1 ? "Sold" : listing.listing_type}
                     {/* </p> */}
                   </Text>
                 </Stack>
@@ -511,6 +685,9 @@ function PropertyDetails() {
                       </Button>
                     </>
                   )}
+                  <Button onClick={openEdit} color="blue" ml="md">
+                    Edit Property
+                  </Button>
                 </Group>
                 {shareLink && (
                   <div className={classes.shareLink}>
@@ -744,6 +921,125 @@ function PropertyDetails() {
           </Button>
         </Group>
       </Modal>
+
+  <Modal
+        opened={editModalOpened}
+        onClose={closeEdit}
+        title="Edit Property Details"
+        centered
+        overlayProps={{
+          blur: 3,
+          opacity: 0.55,
+        }}
+      >
+        <Stack gap="md">
+          <Textarea
+            label="Description"
+            value={editData.description}
+            onChange={(e) =>
+              setEditData((prev) => ({ ...prev, description: e.target.value }))
+            }
+            autosize
+            minRows={3}
+          />
+
+          <Text size="sm">Title</Text>
+          <input
+            className={classes.input}
+            value={editData.title}
+            onChange={(e) =>
+              setEditData((prev) => ({ ...prev, title: e.target.value }))
+            }
+          />
+
+          <Text size="sm">Category</Text>
+          <input
+            className={classes.input}
+            value={editData.category}
+            onChange={(e) =>
+              setEditData((prev) => ({ ...prev, category: e.target.value }))
+            }
+          />
+
+          <Text size="sm">Rooms</Text>
+          <input
+            type="number"
+            className={classes.input}
+            value={editData.rooms}
+            onChange={(e) =>
+              setEditData((prev) => ({
+                ...prev,
+                rooms: parseInt(e.target.value),
+              }))
+            }
+          />
+
+          <Text size="sm">Bathrooms</Text>
+          <input
+            type="number"
+            className={classes.input}
+            value={editData.bathrooms}
+            onChange={(e) =>
+              setEditData((prev) => ({
+                ...prev,
+                bathrooms: parseInt(e.target.value),
+              }))
+            }
+          />
+
+          <Text size="sm">Area (sqm)</Text>
+          <input
+            type="number"
+            className={classes.input}
+            value={editData.area}
+            onChange={(e) =>
+              setEditData((prev) => ({
+                ...prev,
+                area: parseInt(e.target.value),
+              }))
+            }
+          />
+
+          <Text size="sm">Down Payment (%)</Text>
+          <input
+            type="number"
+            className={classes.input}
+            value={editData.down_payment}
+            onChange={(e) =>
+              setEditData((prev) => ({
+                ...prev,
+                down_payment: parseInt(e.target.value),
+              }))
+            }
+          />
+
+          <Text size="sm">Price</Text>
+          <input
+            type="number"
+            className={classes.input}
+            value={editData.price}
+            onChange={(e) =>
+              setEditData((prev) => ({
+                ...prev,
+                price: parseFloat(e.target.value),
+              }))
+            }
+          />
+
+          <Group position="right" mt="md">
+            <Button variant="outline" onClick={closeEdit}>
+              Cancel
+            </Button>
+            <Button color="green" onClick={handleUpdateProperty} loading={loading}>
+              Save Changes
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+
+
+
+
     </>
   );
 }

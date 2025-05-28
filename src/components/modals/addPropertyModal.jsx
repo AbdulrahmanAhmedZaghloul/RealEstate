@@ -160,7 +160,7 @@ const AddPropertyModal = ({
     onAddProperty(submissionData);
     console.log(values);
     console.log(submissionData);
-    
+
   };
 
   const addCustomAmenity = (type) => {
@@ -494,7 +494,7 @@ const AddPropertyModal = ({
               placeholder="Enter property title"
               {...form.getInputProps("title")}
               error={form.errors.title}
-              maxLength={80}
+              maxLength={30}
               styles={{
                 input: { width: 289, height: 48 },
                 wrapper: { width: 289 },
@@ -527,9 +527,9 @@ const AddPropertyModal = ({
                 wrapper: { width: 289 },
               }}
               mb={24}
-              maxLength={1000}
+              maxLength={20}
             />
-            {/* Price */} 
+            {/* Price */}
             <NumberInput
               label="Price"
               placeholder="Enter property price"
@@ -547,45 +547,32 @@ const AddPropertyModal = ({
             {/* Down Payment */}
 
 
-             <NumberInput
+            <NumberInput
+              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+
               label="Down Payment %"
               placeholder="Enter down payment"
-              min={1}
-              mix={100}
+              label="Down Payment"
+              hideControls
+              error={
+                form.values.down_payment < 0 || form.values.down_payment > 100
+                  ? "Down payment must be between 0 and 100%"
+                  : form.errors.down_payment
+              }
               value={form.values.down_payment}
               onChange={(value) => {
-                // إذا كانت القيمة null أو NaN، نعتبرها 0
-                const newValue = Number(value);
-                if (isNaN(newValue)) return;
-
-                // لو الرقم أكبر من 100، اجعله 100
-                const finalValue = Math.min(100, newValue);
-                form.setFieldValue("down_payment", finalValue);
+                // التأكد من أن القيمة بين 0 و 100
+                if (value !== "" && (value < 0 || value > 100)) {
+                  form.setFieldError("down_payment", "Must be between 0 and 100%");
+                } else {
+                  form.setFieldValue("down_payment", value);
+                  if (form.errors.down_payment) {
+                    form.setFieldError("down_payment", "");
+                  }
+                }
               }}
-              error={form.errors.down_payment}
-              hideControls
+              maxLength={4}
               suffix="%"
-
-              parser={(value) => {
-                // تحويل القيمة إلى رقم فقط بدون أي رموز
-                const parsed = value.replace(/[^0-9]/g, '');
-                return parsed === '' ? '' : parseInt(parsed, 10);
-              }}
-              formatter={(value) => {
-                // حذف كل شيء غير الأرقام
-                const numericValue = value.replace(/[^0-9]/g, '');
-
-                // لو الرقم أكبر من 100، نرجع 100
-                if (numericValue === '') return '';
-                const num = parseInt(numericValue, 10);
-                if (num >= 100) return '100';
-
-                return numericValue;
-              }}
-              styles={{
-                input: { width: 289, height: 48 },
-                wrapper: { width: 289 },
-              }}
               mb={24}
             />
             <NumberInput
@@ -621,7 +608,7 @@ const AddPropertyModal = ({
             <NumberInput
               label="Floors"
               placeholder="Enter number of floors"
-              min={0}
+              min={1}
               {...form.getInputProps("floors")}
               error={form.errors.floors}
               hideControls
@@ -630,7 +617,7 @@ const AddPropertyModal = ({
                 wrapper: { width: 289 },
               }}
               mb={24}
-              maxLength={5}
+              maxLength={3}
             />
           </Grid.Col>
           <Grid.Col span={6}>

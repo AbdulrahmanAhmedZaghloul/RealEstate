@@ -79,11 +79,12 @@ const AddContractsModal = ({
           : null,
     },
   })
-  function validateSaudiPhoneNumber(phoneNumber) {
-    const cleaned = phoneNumber.replace(/\D/g, ""); // نزيل كل ما ليس رقمًا
-    const regex = /^9665(?:0|1|3|5|6|7|8|9)\d{7}$/; // يجب أن يبدأ بـ 9665...
-    return regex.test(cleaned);
-  }
+function validateSaudiPhoneNumber(phoneNumber) {
+  const cleaned = phoneNumber.replace(/\D/g, "");
+  const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
+  return regex.test(cleaned);
+}
+
   const handleSubmit = (values) => {
     onAdd(values);
   };

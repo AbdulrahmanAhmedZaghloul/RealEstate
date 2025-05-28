@@ -26,11 +26,11 @@ const AddStaffModal = ({
   setErrors,
   handleFileChange,
 }) => {
-function validateSaudiPhoneNumber(phoneNumber) {
-  const cleaned = phoneNumber.replace(/\D/g, "");
-  const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
-  return regex.test(cleaned);
-}
+  function validateSaudiPhoneNumber(phoneNumber) {
+    const cleaned = phoneNumber.replace(/\D/g, "");
+    const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
+    return regex.test(cleaned);
+  }
 
   return (
     <Modal
@@ -102,7 +102,7 @@ function validateSaudiPhoneNumber(phoneNumber) {
           styles={{ input: { height: 48 } }}
           mb={24}
         />
-      
+
         <TextInput
           label="Address"
           placeholder="Address"
@@ -116,48 +116,50 @@ function validateSaudiPhoneNumber(phoneNumber) {
           styles={{ input: { height: 48 } }}
           mb={24}
         />
-<TextInput
-  label="Phone Number"
-  placeholder="512 345 678"
-  value={`${newUser.phone_number ? "+966" : ""}${newUser.phone_number}`}
-  onChange={(e) => {
-    let input = e.target.value;
+        <TextInput
+          label="Phone Number"
+          placeholder="512 345 678"
+          value={
+            newUser.phone_number.startsWith("966")
+              ? `+${newUser.phone_number}`
+              : `+966${newUser.phone_number}`
+          }
+          onChange={(e) => {
+            let input = e.target.value;
 
-    // إزالة كل شيء غير أرقام
-    const digitsOnly = input.replace(/\D/g, "");
+            // إزالة جميع الرموز غير الأرقام
+            const digitsOnly = input.replace(/\D/g, "");
 
-    // نتأكد من أن ما بعد 966 هو 9 أرقام على الأكثر
-    if (digitsOnly.length > 12) return;
+            // التأكد من أننا نحتفظ بالكود 966 في البداية
+            let fullNumber = digitsOnly;
+            if (!fullNumber.startsWith("966")) {
+              fullNumber = "966" + digitsOnly;
+            }
 
-    // نحتفظ بالرقم بدون +966 في الـ state
-    if (digitsOnly.startsWith("966")) {
-      const numberWithoutCode = digitsOnly.slice(3);
-      setNewUser({ ...newUser, phone_number: numberWithoutCode });
-    } else {
-      setNewUser({ ...newUser, phone_number: digitsOnly });
-    }
+            // لو تعدى الطول المسموح به (12 رقم) ما نكملش
+            if (fullNumber.length > 12) return;
 
-    if (errors.phone_number) setErrors({ ...errors, phone_number: "" });
-  }}
-  onFocus={() => {
-    // إذا لم يكن هناك رقم، نضع +966 تلقائيًا عند التركيز
-    if (!newUser.phone_number) {
-      setNewUser({ ...newUser, phone_number: "" });
-    }
-  }}
-  leftSection={
-    <img
-      src="https://flagcdn.com/w20/sa.png "
-      alt="Saudi Arabia"
-      width={20}
-      height={20}
-    />
-  }
-  leftSectionPointerEvents="none"
-  styles={{ input: { height: 48 } }}
-  error={errors.phone_number}
-  mb={24}
-/>
+            setNewUser({ ...newUser, phone_number: fullNumber });
+
+            // إزالة خطأ الرقم إن وجد
+            if (errors.phone_number) {
+              setErrors({ ...errors, phone_number: "" });
+            }
+          }}
+          leftSection={
+            <img
+              src="https://flagcdn.com/w20/sa.png"
+              alt="Saudi Arabia"
+              width={20}
+              height={20}
+            />
+          }
+          leftSectionPointerEvents="none"
+          styles={{ input: { height: 48 } }}
+          error={errors.phone_number}
+          mb={24}
+        />
+
         {/* <NumberInput
           label="Phone Number"
           hideControls
@@ -211,32 +213,32 @@ function validateSaudiPhoneNumber(phoneNumber) {
             rightSection={<img src={downArrow} />}
           />
         )}
-       <Button
-  fullWidth
-  disabled={loading}
-  loading={loading}
-  onClick={() => {
-    const passwordError = validateField("password", newUser.password);
-    if (passwordError) {
-      errors.password = passwordError;
-      setErrors({ ...errors });
-      return;
-    }
+        <Button
+          fullWidth
+          disabled={loading}
+          loading={loading}
+          onClick={() => {
+            const passwordError = validateField("password", newUser.password);
+            if (passwordError) {
+              errors.password = passwordError;
+              setErrors({ ...errors });
+              return;
+            }
 
-    // التحقق من صحة رقم الهاتف
-    if (!validateSaudiPhoneNumber(newUser.phone_number)) {
-      setErrors({
-        ...errors,
-        phone_number: "Please enter a valid Saudi phone number starting with 5.",
-      });
-      return;
-    }
+            // التحقق من صحة رقم الهاتف
+            if (!validateSaudiPhoneNumber(newUser.phone_number)) {
+              setErrors({
+                ...errors,
+                phone_number: "Please enter a valid Saudi phone number starting with 5.",
+              });
+              return;
+            }
 
-    onAdd(newUser.position === "supervisor");
-  }}
->
-  {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
-</Button>
+            onAdd(newUser.position === "supervisor");
+          }}
+        >
+          {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
+        </Button>
         {/* <Button
           fullWidth
           disabled={loading}
@@ -263,7 +265,7 @@ function validateSaudiPhoneNumber(phoneNumber) {
         >
           {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
         </Button> */}
-      
+
       </div>
     </Modal>
   );

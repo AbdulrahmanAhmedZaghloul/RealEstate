@@ -18,6 +18,7 @@ import trash from "../../assets/trash.svg";
 import { useTranslation } from "../../context/LanguageContext";
 import { useContracts } from "../../hooks/queries/useContracts";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import EditContractModal from "../modals/EditContractModal";
 function ContractDetails() {
   const { id } = useParams();
   const [contract, setContract] = useState(null);
@@ -132,56 +133,56 @@ function ContractDetails() {
       });
   };
 
-  const handleEditContract = (values) => {
+  // const handleEditContract = (values) => {
 
-    if (!validateSaudiPhoneNumber(values.customer_phone)) {
-      notifications.show({
-        title: "Invalid phone number",
-        message: "Please enter a valid Saudi phone number starting with +966.",
-        color: "red",
-      });
-      return;
-    }
-    const formData = new FormData();
-    Object.keys(values).forEach((key) => {
-      if (key === "price" || key === "down_payment") {
-        formData.append(key, parseFloat(values[key]));
-      } else if (key !== "listing_id") {
-        formData.append("_method", "put");
-        formData.append(key, values[key]);
-      }
-    });
-    setLoading(true);
-    axiosInstance
-      .post(`/api/v1/contracts/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-      .then(() => {
-        // بعد النجاح
-        queryClient.invalidateQueries(['contracts']);
-        fetchContract(); // Re-fetch the contract data
-        closeEditModal();
-        notifications.show({
-          title: "Contract Updated",
-          message: "Contract has been updated successfully.",
-          color: "green",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        notifications.show({
-          title: "Error",
-          message: "Failed to update contract",
-          color: "red",
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+  //   if (!validateSaudiPhoneNumber(values.customer_phone)) {
+  //     notifications.show({
+  //       title: "Invalid phone number",
+  //       message: "Please enter a valid Saudi phone number starting with +966.",
+  //       color: "red",
+  //     });
+  //     return;
+  //   }
+  //   const formData = new FormData();
+  //   Object.keys(values).forEach((key) => {
+  //     if (key === "price" || key === "down_payment") {
+  //       formData.append(key, parseFloat(values[key]));
+  //     } else if (key !== "listing_id") {
+  //       formData.append("_method", "put");
+  //       formData.append(key, values[key]);
+  //     }
+  //   });
+  //   setLoading(true);
+  //   axiosInstance
+  //     .post(`/api/v1/contracts/${id}`, formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         Authorization: `Bearer ${user.token}`,
+  //       },
+  //     })
+  //     .then(() => {
+  //       // بعد النجاح
+  //       queryClient.invalidateQueries(['contracts']);
+  //       fetchContract(); // Re-fetch the contract data
+  //       closeEditModal();
+  //       notifications.show({
+  //         title: "Contract Updated",
+  //         message: "Contract has been updated successfully.",
+  //         color: "green",
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       notifications.show({
+  //         title: "Error",
+  //         message: "Failed to update contract",
+  //         color: "red",
+  //       });
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // };
 
   const handleDownloadDocument = () => {
     setLoading(true);
@@ -942,7 +943,14 @@ function ContractDetails() {
       </Modal>
 
       {/* Edit Contract Modal */}
-      <Modal
+      {/* Edit Contract Modal */}
+      <EditContractModal
+        opened={editModalOpened}
+        onClose={closeEditModal}
+        contract={contract}
+        onEditSuccess={fetchContract}
+      />
+      {/* <Modal
         opened={editModalOpened}
         onClose={closeEditModal}
         title="Edit Contract"
@@ -966,11 +974,7 @@ function ContractDetails() {
               {...form.getInputProps("description")}
             />
             <NumberInput label="Price" maxLength={20} min={1} {...form.getInputProps("price")} />
-            {/* <NumberInput
-              label="Down Payment"
-              {...form.getInputProps("down_payment")}
-            />
-             */}
+        
             <NumberInput
               // styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               label="Down Payment"
@@ -1013,8 +1017,7 @@ function ContractDetails() {
 
               {...form.getInputProps("customer_name")}
             />
-            {/* Customer Phone with Saudi Code & Formatting */}
-            <TextInput
+             <TextInput
               label="Customer Phone"
               placeholder="512 345 678"
               value={form.values.customer_phone}
@@ -1092,12 +1095,12 @@ function ContractDetails() {
               {...form.getInputProps("release_date")}
             />
 
-            <Button   type="submit" fullWidth mt="xl" bg={"#1e3a8a"} radius="md">
+            <Button disabled={loading} type="submit" fullWidth mt="xl" bg={"#1e3a8a"} radius="md">
               Save
             </Button>
           </Stack>
         </form>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

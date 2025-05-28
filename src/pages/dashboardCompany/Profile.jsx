@@ -170,8 +170,9 @@ function Profile() {
   const mutationEditProfile = useEditProfile(user.token, closeFormModal);
 
   function validateSaudiPhoneNumber(phoneNumber) {
-    const regex = /^\+966\s?5(?:0|1|3|5|6|7|8|9)\s?\d{3}\s?\d{3,4}$/;
-    return regex.test(phoneNumber);
+    const cleaned = phoneNumber.replace(/\D/g, "");
+    const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
+    return regex.test(cleaned);
   }
 
 
@@ -303,7 +304,7 @@ function Profile() {
                     <Text truncate="end">
                       {formatSaudiPhoneNumberForDisplay(phone)}
                     </Text>
-                   </div>
+                  </div>
 
                 </GridCol>
               ) : (

@@ -416,26 +416,38 @@ function PropertyDetails() {
                       </div>
                     </span>
                   </Grid.Col>
-                  <Grid.Col span={12} className={classes.svgCol}>
-                    <span className={classes.svgSpan}>
-                      <div>
-
-                        <span>type :</span>
-                        <span>{listing.listing_type}</span>
-                      </div>
-                    </span>
-                    <span className={classes.svgSpan}>
-                      <div>
 
 
-                        <span>
-                          {listing.selling_status === 1 ? <span className={classes.NotSale }> Not For Sale </span>  : <span className={classes.forSale }>For Sale</span> }
-                        </span>
-                      </div>
-                    </span>
-
-                  </Grid.Col>
                 </Grid>
+
+                <Stack gap="xs">
+                  <Text style={{}} className={classes.Description} fw={600}>
+                    {t.Description}
+                  </Text>
+                  <Text style={{}} className={classes.listing}>
+                    {expanded ? listing.description : previewText}
+                    {words.length > 50 && (
+                      <p onClick={() => setExpanded(!expanded)} className={classes.See}>
+                        {expanded ? "See Less" : "See More"}
+                      </p>
+                    )}
+                  </Text>
+                </Stack>
+                <Stack style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "start",
+                  flexDirection: "column"
+                }}>
+                  <Text style={{}} className={classes.Description} fw={600}>
+                    {t.Status}
+                  </Text>
+                  <Text style={{}} className={classes.listing}>
+                    {/* <p className={classes.listingfor}> */}
+                    {listing.selling_status === 1 ? "Not  active" : listing.listing_type}
+                    {/* </p> */}
+                  </Text>
+                </Stack>
               </Grid.Col>
               <Grid.Col span={isMobile ? 12 : 5}>
 
@@ -509,22 +521,10 @@ function PropertyDetails() {
                   </div>
                 )}
               </Grid.Col>
+
             </Grid>
           </Grid.Col>
         </Grid>
-        <Stack gap="xs">
-          <Text style={{}} className={classes.Description} fw={600}>
-            {t.Description}:
-          </Text>
-          <Text style={{}} className={classes.listing}>
-            {expanded ? listing.description : previewText}
-            {words.length > 50 && (
-              <p onClick={() => setExpanded(!expanded)} className={classes.See}>
-                {expanded ? "See Less" : "See More"}
-              </p>
-            )}
-          </Text>
-        </Stack>
 
         {isMobile ? (
           <Box
@@ -537,7 +537,6 @@ function PropertyDetails() {
             <div className={classes.divImage}>
               <Avatar src={""} w={80} h={80} alt="" />
               <span className={classes.spanImage}>
-                {" "}
                 {listing.employee?.name}
               </span>
             </div>

@@ -14,7 +14,7 @@ function UpdateContractModal({ opened, onClose, onUpdate, initialData }) {
   });
   
 function validateSaudiPhoneNumber(phoneNumber) {
-  const regex = /^5(?:0|1|3|5|6|7|8|9)\d{7}$/; // يجب أن يبدأ بـ 5x ثم 7 أرقام
+    const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
   return regex.test(phoneNumber);
 }
 

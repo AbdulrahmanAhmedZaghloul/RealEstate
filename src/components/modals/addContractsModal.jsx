@@ -58,8 +58,6 @@ const AddContractsModal = ({
         value ? null : "Contract document is required",
       customer_name: (value) =>
         value.trim() ? null : "Customer name is required",
-      // customer_phone: (value) =>
-      //   value.trim() ? null : "Customer phone is required",
       customer_phone: (value) =>
         value && validateSaudiPhoneNumber(value)
           ? null
@@ -79,11 +77,11 @@ const AddContractsModal = ({
           : null,
     },
   })
-function validateSaudiPhoneNumber(phoneNumber) {
-  const cleaned = phoneNumber.replace(/\D/g, "");
-  const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
-  return regex.test(cleaned);
-}
+  function validateSaudiPhoneNumber(phoneNumber) {
+    const cleaned = phoneNumber.replace(/\D/g, "");
+    const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
+    return regex.test(cleaned);
+  }
 
   const handleSubmit = (values) => {
     onAdd(values);
@@ -120,6 +118,8 @@ function validateSaudiPhoneNumber(phoneNumber) {
               error={form.errors.contract_document}
               {...form.getInputProps("contract_document")}
             />
+            {/* {console.log(contract_document)} */}
+            
             {/* Property listing*/}
             <Select
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
@@ -166,7 +166,7 @@ function validateSaudiPhoneNumber(phoneNumber) {
               error={form.errors.price}
               hideControls
               {...form.getInputProps("price")}
-              maxLength={24}
+              maxLength={19}
             />
             {/* Down Payment */}
             <NumberInput

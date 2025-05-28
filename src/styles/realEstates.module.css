@@ -118,6 +118,33 @@
   text-align: center;
 }
 
+.svgSpan div {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+
+}
+
+.svgSpan svg {
+  color: var(--color-4);
+}
+
+.svgSpan {
+  margin-top: 5px;
+  ;
+}
+
+.svgSpan span {
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-4);
+  margin-left: 10px;
+}
+
 .spanStatus {
   color: #409261;
   /* width: 30px !important  ; */
@@ -174,6 +201,7 @@ justify-content: center; */
   font-weight: 400;
   padding: 0% 15px;
   border-radius: 20px 20px;
+  box-shadow: 1px 2px 3px #ebe9e9;
 }
 
 .card Image {

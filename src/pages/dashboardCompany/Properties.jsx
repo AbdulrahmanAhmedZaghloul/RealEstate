@@ -267,8 +267,8 @@ function Properties() {
               rightSection={<Dropdown />}
               data={[
                 { value: "all", label: "All" },
-                { value: "for_sale", label: "For Sale" },
-                { value: "not_for_sale", label: "Not For Sale" },
+                { value: "for_sale", label: "Sale" },
+                { value: "not_for_sale", label: "Not Sale" },
               ]}
     styles={{
                 input: {
@@ -334,7 +334,7 @@ function Properties() {
                     {/* <p className={classes.listingfor}> */}
 
                     <p className={classes.listingfor}>
-                      {listing.selling_status === 1 ? "Not For Sale" : "For Sale"}
+                      {listing.selling_status === 1 ? "Not  active" : listing.listing_type}
                     </p>
                     {/* </p> */}
 
@@ -399,12 +399,12 @@ function Properties() {
                         ? "Yesterday"
                         : "Today"}
                   </div>
-                  <div className={classes.listingDate}>
+                  {/* <div className={classes.listingDate}>
                     <span style={{
                       fontWeight: "bold",
                       marginRight: "5px",
                     }}>Type ::</span>   {listing.listing_type}
-                  </div>
+                  </div> */}
                 </div>
               </Card>
             ))}

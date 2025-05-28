@@ -31,10 +31,11 @@ const EditStaffModal = ({
 }) => {
   const location = useLocation();
   function validateSaudiPhoneNumber(phoneNumber) {
-    const cleaned = phoneNumber.replace(/\s+/g, ""); // نزيل المسافات
-    const regex = /^\+966\s?5(?:0|1|3|5|6|7|8|9)\d{7}$/; // يجب أن يبدأ بـ +9665...
+    const cleaned = phoneNumber.replace(/\D/g, "");
+    const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
+
   return (
     <Modal
       opened={opened}

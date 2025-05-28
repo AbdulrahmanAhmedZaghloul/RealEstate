@@ -1,5 +1,17 @@
+// import React from 'react'
+
+// function PageShareContract() {
+//   return (
+//     <div>PageShareContract</div>
+//   )
+// }
+
+// export default PageShareContract
+
+
+
 //Dependency imports
-import classes from "../../styles/contractDetails.module.css";
+import classes from "../../src/styles/contractDetails.module.css";
 import {
   Card, Button, Center, Stack, Select, Textarea, TextInput, NumberInput, Modal, Loader, Group, Grid, GridCol, Avatar, Image, useMantineColorScheme, Text,
 } from "@mantine/core";
@@ -10,15 +22,15 @@ import { notifications } from "@mantine/notifications";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 // Local imports
-import axiosInstance, { apiUrl } from "../../api/config";
-import { useAuth } from "../../context/authContext";
-import Contract from "../../assets/contract/contract.png";
-import edit from "../../assets/edit.svg";
-import trash from "../../assets/trash.svg";
-import { useTranslation } from "../../context/LanguageContext";
-import { useContracts } from "../../hooks/queries/useContracts";
+import axiosInstance, { apiUrl } from "../../src/api/config";
+import { useAuth } from "../../src/context/authContext";
+import Contract from "../../src/assets/contract/contract.png";
+import edit from "../../src/assets/edit.svg";
+import trash from "../../src/assets/trash.svg";
+import { useTranslation } from "../../src/context/LanguageContext";
+import { useContracts } from "../../src/hooks/queries/useContracts";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
-function ContractDetails() {
+function PageShareContract() {
   const { id } = useParams();
   const [contract, setContract] = useState(null);
   const [shareLink, setShareLink] = useState("");
@@ -57,21 +69,13 @@ function ContractDetails() {
     validate: {
       title: (value) => (value ? null : "Title is required"),
       description: (value) => (value ? null : "Description is required"),
-      price: (value) => (value ? 0 : "Price is required"),
+      price: (value) => (value ? null : "Price is required"),
       customer_name: (value) => (value ? null : "Customer name is required"),
-      customer_phone: (value) => {
-        const cleaned = value.replace(/\s+/g, "").replace(/\D/g, ""); // نزيل المسافات والأحرف
-        if (!cleaned.startsWith("9665") || cleaned.length !== 12) {
-          return "Please enter a valid Saudi phone number starting with +966.";
-        }
-        return validateSaudiPhoneNumber(cleaned)
+      customer_phone: (value) =>
+        value && validateSaudiPhoneNumber(value)
           ? null
-          : "Please enter a valid Saudi phone number starting with +966.";
-      },
-      down_payment: (value) =>
-        value === null || value === "" || value < 0 || value > 100
-          ? "Down payment must be between 0 and 100%"
-          : null,
+          : "Please enter a valid Saudi phone number starting with 5.",
+
       // customer_phone: (value) => (value ? null : "Customer phone is required"),
       creation_date: (value) => (value ? null : "Creation date is required"),
       effective_date: (value) => (value ? null : "Effective date is required"),
@@ -435,7 +439,7 @@ function ContractDetails() {
                           </svg>
 
                           <span>{contract.real_estate.bathrooms}</span>
-                        </div>
+                         </div>
                       </span>
                       <span className={classes.svgSpan}>
                         <div>
@@ -610,7 +614,7 @@ function ContractDetails() {
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Contracttype}</p>
                     <p className={classes.InformationSale}>
-                      {contract.contract_type}
+                      {contract.contract_type}{" "}
                     </p>
                   </GridCol>
 
@@ -650,37 +654,28 @@ function ContractDetails() {
                     <p className={classes.InformationSale}>{contract.status}</p>
                   </GridCol>
 
-                  {contract.contract_type === "sale" ? null :
+                  <GridCol span={4}>
+                    <p className={classes.InformationType}>{t.Creationdate}</p>
+                    <p className={classes.InformationSale}>
+                      {new Date(contract.expiration_date).toLocaleString()}
+                    </p>
+                  </GridCol>
 
-                    <>
-                      <GridCol span={4}>
-                        <p className={classes.InformationType}>{t.Creationdate}</p>
-                        <p className={classes.InformationSale}>
-                          {new Date(contract.expiration_date).toLocaleString()}
-                        </p>
-                      </GridCol>
+                  <GridCol span={4}>
+                    <p className={classes.InformationType}>{t.Effectivedate}</p>
+                    <p className={classes.InformationSale}>
+                      {new Date(contract.effective_date).toLocaleString()}
+                    </p>
+                  </GridCol>
 
-                      <GridCol span={4}>
-                        <p className={classes.InformationType}>{t.Effectivedate}</p>
-                        <p className={classes.InformationSale}>
-                          {new Date(contract.effective_date).toLocaleString()}
-                        </p>
-                      </GridCol>
-
-                      <GridCol span={4}>
-                        <p className={classes.InformationType}>
-                          {t.Expirationdate}
-                        </p>
-                        <p className={classes.InformationSale}>
-                          {new Date(contract.expiration_date).toLocaleString()}
-                        </p>
-                      </GridCol>
-                    </>
-                  }
-
-
-
-
+                  <GridCol span={4}>
+                    <p className={classes.InformationType}>
+                      {t.Expirationdate}
+                    </p>
+                    <p className={classes.InformationSale}>
+                      {new Date(contract.expiration_date).toLocaleString()}
+                    </p>
+                  </GridCol>
                 </Grid>
               </GridCol>
             </Grid>
@@ -899,7 +894,7 @@ function ContractDetails() {
 
           <div style={{ marginTop: "20px" }}>
             {console.log(shareLink)}
-
+            
             <h4>Share on Social Media:  </h4>
             <a href="">{shareLink}</a>
             <Group spacing="sm">
@@ -959,47 +954,17 @@ function ContractDetails() {
       >
         <form onSubmit={form.onSubmit(handleEditContract)}>
           <Stack>
-            <TextInput label="Title" maxLength={40} {...form.getInputProps("title")} />
+            <TextInput label="Title" {...form.getInputProps("title")} />
             <Textarea
               label="Description"
-              maxLength={250}
               {...form.getInputProps("description")}
             />
-            <NumberInput label="Price" maxLength={20} min={1} {...form.getInputProps("price")} />
-            {/* <NumberInput
-              label="Down Payment"
-              {...form.getInputProps("down_payment")}
-            />
-             */}
+            <NumberInput label="Price" {...form.getInputProps("price")} />
             <NumberInput
-              // styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               label="Down Payment"
-              placeholder="Enter the down payment of the contract"
-              hideControls
               {...form.getInputProps("down_payment")}
-
-              error={
-                form.values.down_payment < 0 || form.values.down_payment > 100
-                  ? "Down payment must be between 0 and 100%"
-                  : form.errors.down_payment
-              }
-              value={form.values.down_payment}
-              onChange={(value) => {
-                // التأكد من أن القيمة بين 0 و 100
-                if (value !== "" && (value < 0 || value > 100)) {
-                  form.setFieldError("down_payment", "Must be between 0 and 100%");
-                } else {
-                  form.setFieldValue("down_payment", value);
-                  if (form.errors.down_payment) {
-                    form.setFieldError("down_payment", "");
-                  }
-                }
-              }}
-              maxLength={4}
-              suffix="%"
             />
             <Select
-
               label="Contract Type"
               data={[
                 { value: "sale", label: "Sale" },
@@ -1009,8 +974,6 @@ function ContractDetails() {
             />
             <TextInput
               label="Customer Name"
-              maxLength={30}
-
               {...form.getInputProps("customer_name")}
             />
             {/* Customer Phone with Saudi Code & Formatting */}
@@ -1070,7 +1033,10 @@ function ContractDetails() {
               }
               leftSectionPointerEvents="none"
             />
-
+            {/* <TextInput
+              label="Customer Phone"
+              {...form.getInputProps("customer_phone")}
+            /> */}
             <TextInput
               label="Creation Date"
               type="date"
@@ -1092,7 +1058,7 @@ function ContractDetails() {
               {...form.getInputProps("release_date")}
             />
 
-            <Button   type="submit" fullWidth mt="xl" bg={"#1e3a8a"} radius="md">
+            <Button type="submit" fullWidth mt="xl" bg={"#1e3a8a"} radius="md">
               Save
             </Button>
           </Stack>
@@ -1102,4 +1068,4 @@ function ContractDetails() {
   );
 }
 
-export default ContractDetails;
+export default PageShareContract;

@@ -158,6 +158,9 @@ const AddPropertyModal = ({
     };
 
     onAddProperty(submissionData);
+    console.log(values);
+    console.log(submissionData);
+    
   };
 
   const addCustomAmenity = (type) => {
@@ -526,7 +529,7 @@ const AddPropertyModal = ({
               mb={24}
               maxLength={1000}
             />
-            {/* Price */}{" "}
+            {/* Price */} 
             <NumberInput
               label="Price"
               placeholder="Enter property price"
@@ -542,39 +545,9 @@ const AddPropertyModal = ({
               maxLength={16}
             />
             {/* Down Payment */}
-            {/* <NumberInput
-              label="Down Payment %"
-              placeholder="Enter down payment"
-              min={1}
-              max={3}
-              value={form.values.down_payment}
-              onChange={(value) => {
-                // تحويل القيمة إلى رقم
-                const newValue = Number(value);
-                // لو القيمة أكبر من 100، هنستخدم 100
-                const finalValue = newValue > 100 ? 100 : newValue;
-                form.setFieldValue("down_payment", finalValue);
-              }}
-              error={form.errors.down_payment}
-              hideControls
-              suffix="%"
-              formatter={(value) => {
-                // حذف أي نص مش أرقام
-                const numericValue = value.replace(/[^0-9]/g, '');
-                // لو الرقم أكبر من 100، رجعه لـ 100
-                return numericValue > 100 ? '100' : numericValue;
-              }}
-              parser={(value) => value.replace(/[^0-9]/g, '')}
-              styles={{
-                input: { width: 289, height: 48 },
-                wrapper: { width: 289 },
-              }}
-              mb={24}
-            /> */}
 
 
-            {/* Rooms */}
-            <NumberInput
+             <NumberInput
               label="Down Payment %"
               placeholder="Enter down payment"
               min={1}

@@ -71,6 +71,12 @@
 .text {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.UpdataShare svg {
+  margin: 5px;
 }
 
 .Down {
@@ -200,12 +206,12 @@
   padding: 0% 15px;
   border-radius: 20px 20px;
   color: var(--color-7) !important;
- 
+
   background-color: rgb(255, 0, 51);
 }
 
-.forSale { 
-   color: var(--color-7) !important;
+.forSale {
+  color: var(--color-7) !important;
 
   font-size: 12px;
   line-height: 20px;

@@ -31,8 +31,8 @@ const AddContractsModal = ({
       listing_id: null,
       title: "", // title of the contract
       description: "", // description of the contract
-      price: 1,
-      down_payment: 1,
+      price: null,
+      down_payment: null,
       contract_type: "", // sale or rent, etc.
       contract_document: "",
       customer_name: "",
@@ -49,10 +49,15 @@ const AddContractsModal = ({
       title: (value) => (value.trim() ? null : "Title is required"),
       description: (value) => (value.trim() ? null : "Description is required"),
       price: (value) => (value > 0 ? null : "Price must be greater than 0"),
-      down_payment: (value) =>
-        value === null || value === "" || value < 0 || value > 100
-          ? "Down payment must be between 0 and 100%"
-          : null,
+      down_payment: (value) => {
+        if (value === null || value === "" || isNaN(value)) {
+          return "Down payment must be a number";
+        }
+        if (value < 0 || value > 100) {
+          return "Down payment must be between 0 and 100%";
+        }
+        return null;
+      },
       contract_type: (value) => (value ? null : "Contract type is required"),
       contract_document: (value) =>
         value ? null : "Contract document is required",
@@ -119,7 +124,7 @@ const AddContractsModal = ({
               {...form.getInputProps("contract_document")}
             />
             {/* {console.log(contract_document)} */}
-            
+
             {/* Property listing*/}
             <Select
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
@@ -169,11 +174,16 @@ const AddContractsModal = ({
               maxLength={19}
             />
             {/* Down Payment */}
+
+
             <NumberInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               label="Down Payment"
-              placeholder="Enter the down payment of the contract"
+              placeholder="Enter the down payment (e.g., 25.5%)"
               hideControls
+              decimalSeparator="." // استخدم الفاصلة العشرية الصحيحة
+              precision={2} // دقتين عشريتين إذا أردت
+              step={0.1} // يسمح بالكسور مثل 0.1 أو 0.5
               error={
                 form.values.down_payment < 0 || form.values.down_payment > 100
                   ? "Down payment must be between 0 and 100%"
@@ -181,7 +191,6 @@ const AddContractsModal = ({
               }
               value={form.values.down_payment}
               onChange={(value) => {
-                // التأكد من أن القيمة بين 0 و 100
                 if (value !== "" && (value < 0 || value > 100)) {
                   form.setFieldError("down_payment", "Must be between 0 and 100%");
                 } else {
@@ -191,9 +200,11 @@ const AddContractsModal = ({
                   }
                 }
               }}
-              maxLength={4}
               suffix="%"
+              // maxLength={4}
             />
+
+
 
           </Grid.Col>
 

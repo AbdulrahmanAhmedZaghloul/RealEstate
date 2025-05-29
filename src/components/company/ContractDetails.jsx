@@ -19,6 +19,11 @@ import { useTranslation } from "../../context/LanguageContext";
 import { useContracts } from "../../hooks/queries/useContracts";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import EditContractModal from "../modals/EditContractModal";
+import CategoryIcon from "../icons/CategoryIcon";
+import FloorsIcon from "../icons/FloorsIcon";
+import Area from "../icons/area";
+import BathsIcon from "../icons/BathsIcon";
+import BedsIcon from "../icons/BedsIcon";
 function ContractDetails() {
   const { id } = useParams();
   const [contract, setContract] = useState(null);
@@ -333,19 +338,19 @@ function ContractDetails() {
                       <Text
                         className={classes.price}
                       >
-                        <span className="icon-saudi_riyal">&#xea; </span>{" "}
+                        <span className="icon-saudi_riyal">&#xea; </span> 
                         {parseFloat(contract.price).toLocaleString()}
                       </Text>
 
                       <Text
                         className={classes.Down}
                       >
-                        {contract.down_payment}
+                         {parseFloat(contract.down_payment).toLocaleString()}
                         % {t.DownPayment}
                       </Text>
                     </div>
 
-                    <h3 className={classes.title}>{contract.title}</h3>
+                    <h3 className={classes.title}>{contract.real_estate.title}</h3>
 
                     <div className={classes.flexLocation}>
                       <div className={classes.svgLocation}>
@@ -399,6 +404,37 @@ function ContractDetails() {
 
                     <Grid.Col span={12} className={classes.svgCol}>
                       <span className={classes.svgSpan}>
+                        <div>
+                          <BedsIcon />
+                          <span>{contract.real_estate.rooms} Beds</span>
+                        </div>
+                      </span>
+                      <span className={classes.svgSpan}>
+                        <div>
+                          <BathsIcon />
+                          <span>{contract.real_estate.bathrooms} Baths</span>
+                        </div>
+                      </span>
+                      <span className={classes.svgSpan}>
+                        <div>
+                          <Area />
+
+                          <span>{contract.real_estate.area} sqm</span>
+                        </div>
+                      </span>
+                      <span className={classes.svgSpan}>
+                        <div>
+                          <FloorsIcon />
+                          <span>{contract.real_estate.floors}</span>
+                        </div>
+                      </span>
+                      <span className={classes.svgSpan}>
+                        <div>
+                          <CategoryIcon />
+                          <span>{contract.real_estate.category}</span>
+                        </div>
+                      </span>
+                      {/* <span className={classes.svgSpan}>
                         <div>
                           <svg
                             width="24"
@@ -484,7 +520,7 @@ function ContractDetails() {
 
                           <span>{contract.real_estate.area} sqm</span>
                         </div>
-                      </span>
+                      </span> */}
                     </Grid.Col>
                     <div className={classes.description}>
                       <h4>{t.Description}</h4>
@@ -587,6 +623,9 @@ function ContractDetails() {
                 </div>
               </Grid.Col>
             </Grid>
+            <h3 className={classes.ContractsTitle}>{contract.title}</h3>
+            <h4 className={classes.ContractsDescription}>{t.ContractDescription}</h4>
+            <p className={classes.ContractsDescriptionTag}>{contract.description}</p>
 
             <Grid className={classes.ContractsInformation}>
               <GridCol
@@ -610,6 +649,7 @@ function ContractDetails() {
                 <Grid>
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Contracttype}</p>
+                    <h4>{t.description}</h4>
                     <p className={classes.InformationSale}>
                       {contract.contract_type}
                     </p>
@@ -627,8 +667,7 @@ function ContractDetails() {
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.DownPayment}</p>
                     <p className={classes.InformationSale}>
-                      <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                      {parseFloat(contract.down_payment).toLocaleString()}{" "}
+                      {parseFloat(contract.down_payment).toLocaleString()}{"%"}
                     </p>
                   </GridCol>
 
@@ -678,9 +717,6 @@ function ContractDetails() {
                       </GridCol>
                     </>
                   }
-
-
-
 
                 </Grid>
               </GridCol>
@@ -943,164 +979,12 @@ function ContractDetails() {
       </Modal>
 
       {/* Edit Contract Modal */}
-      {/* Edit Contract Modal */}
       <EditContractModal
         opened={editModalOpened}
         onClose={closeEditModal}
         contract={contract}
         onEditSuccess={fetchContract}
       />
-      {/* <Modal
-        opened={editModalOpened}
-        onClose={closeEditModal}
-        title="Edit Contract"
-        size="xl"
-        radius="lg"
-        styles={{
-          title: {
-            fontSize: 20,
-            fontWeight: 600,
-            color: "var(--color-3)",
-          },
-        }}
-        centered
-      >
-        <form onSubmit={form.onSubmit(handleEditContract)}>
-          <Stack>
-            <TextInput label="Title" maxLength={40} {...form.getInputProps("title")} />
-            <Textarea
-              label="Description"
-              maxLength={250}
-              {...form.getInputProps("description")}
-            />
-            <NumberInput label="Price" maxLength={20} min={1} {...form.getInputProps("price")} />
-        
-            <NumberInput
-              // styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              label="Down Payment"
-              placeholder="Enter the down payment of the contract"
-              hideControls
-              {...form.getInputProps("down_payment")}
-
-              error={
-                form.values.down_payment < 0 || form.values.down_payment > 100
-                  ? "Down payment must be between 0 and 100%"
-                  : form.errors.down_payment
-              }
-              value={form.values.down_payment}
-              onChange={(value) => {
-                // التأكد من أن القيمة بين 0 و 100
-                if (value !== "" && (value < 0 || value > 100)) {
-                  form.setFieldError("down_payment", "Must be between 0 and 100%");
-                } else {
-                  form.setFieldValue("down_payment", value);
-                  if (form.errors.down_payment) {
-                    form.setFieldError("down_payment", "");
-                  }
-                }
-              }}
-              maxLength={4}
-              suffix="%"
-            />
-            <Select
-
-              label="Contract Type"
-              data={[
-                { value: "sale", label: "Sale" },
-                { value: "rent", label: "Rent" },
-              ]}
-              {...form.getInputProps("contract_type")}
-            />
-            <TextInput
-              label="Customer Name"
-              maxLength={30}
-
-              {...form.getInputProps("customer_name")}
-            />
-             <TextInput
-              label="Customer Phone"
-              placeholder="512 345 678"
-              value={form.values.customer_phone}
-              onChange={(e) => {
-                let input = e.target.value;
-
-                // إزالة كل شيء غير أرقام
-                const digitsOnly = input.replace(/\D/g, "");
-
-                // التأكد من أن القيمة تحتوي على رمز السعودية
-                if (!digitsOnly.startsWith("966") && digitsOnly.length >= 3) {
-                  const cleaned = "+966" + digitsOnly.slice(3, 12);
-                  form.setFieldValue("customer_phone", cleaned);
-                  return;
-                }
-
-                // إذا كان أقل من 3 أرقام، نبدأ فقط بـ +966
-                if (digitsOnly.length < 3) {
-                  form.setFieldValue("customer_phone", "+966");
-                  return;
-                }
-
-                // تنسيق الرقم بمسافات
-                let formattedNumber = "+966";
-
-                const phoneDigits = digitsOnly.slice(3); // نأخذ الأرقام بعد +966
-
-                if (phoneDigits.length > 0) {
-                  formattedNumber += " " + phoneDigits.slice(0, 3);
-                }
-                if (phoneDigits.length > 3) {
-                  formattedNumber += " " + phoneDigits.slice(3, 6);
-                }
-                if (phoneDigits.length > 6) {
-                  formattedNumber += " " + phoneDigits.slice(6, 9);
-                }
-
-                form.setFieldValue("customer_phone", formattedNumber);
-              }}
-              onFocus={() => {
-                // عند التركيز، نتأكد من وجود +966
-                if (!form.values.customer_phone || !form.values.customer_phone.startsWith("+966")) {
-                  form.setFieldValue("customer_phone", "+966");
-                }
-              }}
-              leftSection={
-                <img
-                  src="https://flagcdn.com/w20/sa.png "
-                  alt="Saudi Arabia"
-                  width={20}
-                  height={20}
-                />
-              }
-              leftSectionPointerEvents="none"
-            />
-
-            <TextInput
-              label="Creation Date"
-              type="date"
-              {...form.getInputProps("creation_date")}
-            />
-            <TextInput
-              label="Effective Date"
-              type="date"
-              {...form.getInputProps("effective_date")}
-            />
-            <TextInput
-              label="Expiration Date"
-              type="date"
-              {...form.getInputProps("expiration_date")}
-            />
-            <TextInput
-              label="Release Date"
-              type="date"
-              {...form.getInputProps("release_date")}
-            />
-
-            <Button disabled={loading} type="submit" fullWidth mt="xl" bg={"#1e3a8a"} radius="md">
-              Save
-            </Button>
-          </Stack>
-        </form>
-      </Modal> */}
     </>
   );
 }

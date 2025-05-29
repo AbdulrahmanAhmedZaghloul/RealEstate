@@ -78,6 +78,15 @@ const AddPropertyModal = ({
         }
         return null;
       },
+      down_payment: (value) => {
+        if (value === null || value === "" || isNaN(value)) {
+          return "Down payment must be a number";
+        }
+        if (value < 0 || value > 100) {
+          return "Down payment must be between 0 and 100%";
+        }
+        return null;
+      },
       employee_id: (value) =>
         user.role === "employee" ? null : value ? null : "Employee is required",
       category_id: (value) => (value ? null : "Property category is required"),
@@ -549,10 +558,12 @@ const AddPropertyModal = ({
 
             <NumberInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-
-              label="Down Payment %"
-              placeholder="Enter down payment"
+              label="Down Payment"
+              placeholder="Enter the down payment (e.g., 25.5%)"
               hideControls
+              decimalSeparator="." // استخدم الفاصلة العشرية الصحيحة
+              precision={2} // دقتين عشريتين إذا أردت
+              step={0.1} // يسمح بالكسور مثل 0.1 أو 0.5
               error={
                 form.values.down_payment < 0 || form.values.down_payment > 100
                   ? "Down payment must be between 0 and 100%"
@@ -560,7 +571,6 @@ const AddPropertyModal = ({
               }
               value={form.values.down_payment}
               onChange={(value) => {
-                // التأكد من أن القيمة بين 0 و 100
                 if (value !== "" && (value < 0 || value > 100)) {
                   form.setFieldError("down_payment", "Must be between 0 and 100%");
                 } else {
@@ -570,10 +580,12 @@ const AddPropertyModal = ({
                   }
                 }
               }}
-              maxLength={4}
               suffix="%"
-              mb={24}
+            // maxLength={4}
             />
+ 
+
+
             <NumberInput
               label="Rooms"
               placeholder="Enter number of rooms"

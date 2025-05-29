@@ -349,7 +349,7 @@ function Properties() {
                   </span>
 
                   <div className={classes.downPaymentBadge}>
-                    {listing.down_payment} %
+                    {parseFloat(listing.down_payment).toLocaleString()} %
                     {t.DownPayment}
                   </div>
                 </div>
@@ -399,12 +399,7 @@ function Properties() {
                         ? "Yesterday"
                         : "Today"}
                   </div>
-                  {/* <div className={classes.listingDate}>
-                    <span style={{
-                      fontWeight: "bold",
-                      marginRight: "5px",
-                    }}>Type ::</span>   {listing.listing_type}
-                  </div> */}
+             
                 </div>
               </Card>
             ))}

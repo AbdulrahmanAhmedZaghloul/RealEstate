@@ -30,6 +30,7 @@
   justify-content: start;
   align-items: start;
 }
+
 .svgCol {
   display: flex;
 }
@@ -147,12 +148,29 @@
   margin-left: 90px;
 }
 
-/* .imageStar {
-  border-radius: 1rem;
-  width: 100%;
-  height: 50% !important;
- }
-  */
+.ContractsTitle {
+  font-weight: 500;
+  color: var(--color-2);
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.ContractsDescription {
+  margin-bottom: 0;
+  font-weight: 600;
+  color: var(--color-2);
+  font-size: 24px;
+  line-height: 20px;
+}
+
+.ContractsDescriptionTag {
+  margin-bottom: 0;
+  font-weight: 400;
+  color: var(--color-2);
+  font-size: 16px;
+  line-height: 30px;
+}
+
 .positionStar {
   position: relative;
   width: 100%;
@@ -167,35 +185,6 @@
   right: 15%;
   font-size: 13px;
 }
-
-/* .imageStarSpan img {
-  width: 100%;
-  height: 34.5%;
-  object-fit: cover;
-  border-radius: 0.5rem; 
-}*/
-
-/* .positionGridCol {
-  margin: 0;
-  background-color: var(--color-2);
-  width: 70%;
-}
-
-.imageStarSpan {
-  width: 30%;
-  padding: 10px;
-}
-
-.positionGrid {
-  width: 100%;
-  margin: 0;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background-color: yellow;
-} */
 
 .mainImage {
   width: 100%;

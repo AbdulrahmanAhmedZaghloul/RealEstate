@@ -17,6 +17,7 @@
   "Name": "Name",
   "Status": "Status",
   "Description": "Description",
+  "ContractDescription": "Contract Description",
   "DownPayment": "Down Payment",
   "Customer": "Customer",
   "Contracts": "Contracts",

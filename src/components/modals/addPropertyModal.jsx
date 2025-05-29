@@ -552,7 +552,6 @@ const AddPropertyModal = ({
 
               label="Down Payment %"
               placeholder="Enter down payment"
-              label="Down Payment"
               hideControls
               error={
                 form.values.down_payment < 0 || form.values.down_payment > 100

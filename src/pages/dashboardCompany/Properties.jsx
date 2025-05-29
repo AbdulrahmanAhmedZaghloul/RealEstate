@@ -349,7 +349,7 @@ function Properties() {
                   </span>
 
                   <div className={classes.downPaymentBadge}>
-                    {parseFloat(listing.down_payment).toLocaleString()} %
+                    {listing.down_payment} %
                     {t.DownPayment}
                   </div>
                 </div>

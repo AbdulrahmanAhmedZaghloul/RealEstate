@@ -39,12 +39,12 @@ const AddPropertyModal = ({
     initialValues: {
       title: "",
       description: "",
-      price: 0,
-      down_payment: 0,
-      area: 0,
-      rooms: 0,
-      bathrooms: 0,
-      floors: 0,
+      price: null,
+      down_payment: null,
+      area: null,
+      rooms: null,
+      bathrooms: null,
+      floors: null,
       location: "",
       images: [],
       employee_id: null,
@@ -581,7 +581,7 @@ const AddPropertyModal = ({
                 }
               }}
               suffix="%"
-            // maxLength={4}
+            maxLength={6}
             />
  
 

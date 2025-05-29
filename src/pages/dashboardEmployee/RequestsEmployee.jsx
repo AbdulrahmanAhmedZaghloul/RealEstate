@@ -105,7 +105,7 @@ function RequestsEmployee() {
   const fetchListings = async () => {
     setLoading(true);
     await axiosInstance
-      .get("/api/listings/employee", {
+      .get("api/listings/employee", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -113,8 +113,8 @@ function RequestsEmployee() {
 
         // setListings(res.data.data.listings.data);
 
-        { console.log(res.data.data.listings) }
-        const pendingListings = res.data.data.listings.data.filter(
+        console.log(res)
+        const pendingListings = res.data.data.listings.listings.filter(
           (listing) => listing.status === "pending"
         );
         setListings(pendingListings);
@@ -376,15 +376,15 @@ function RequestsEmployee() {
           </div>
 
           <Grid.Col span={12}>
-            {console.log(listings)}
+            {/* {console.log(listings)} */}
 
-            {paginatedListings.length === 0 ? (
+            {listings.length === 0 ? (
               <Center>
                 <Text>{t.Notransactions}</Text>
               </Center>
             ) : (
               <Group align="center" spacing="xl">
-                {paginatedListings?.map((listing) =>
+                {listings?.map((listing) =>
                   <Card
                     key={listing.id}
                     withBorder

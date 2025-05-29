@@ -273,7 +273,7 @@ function PropertyDetails() {
                         {parseFloat(listing.price)?.toLocaleString()}
                       </Text>
                       <Text className={classes.Down}>
-                        {parseFloat(listing.down_payment).toLocaleString()}
+                        { listing.down_payment }
                         % {t.DownPayment}
                       </Text>
                       <div className={classes.UpdataShare}>

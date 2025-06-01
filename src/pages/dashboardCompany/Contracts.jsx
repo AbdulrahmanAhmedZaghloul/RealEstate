@@ -82,7 +82,14 @@ function Contracts() {
 
   const mutation = useAddContract(user.token, close);
   const handleAddContract = (values) => {
-    mutation.mutate(values);
+    try {
+        mutation.mutateAsync(values); // 👈 mutateAsync يقدر يترقبه
+      form.reset(); // لو جاي من نفس المودال
+    } catch (error) {
+      console.log(error);
+      
+      // تم التعامل مع الأخطاء داخل onError بالفعل
+    }
   };
 
   const filterForm = useForm({

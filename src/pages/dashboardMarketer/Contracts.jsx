@@ -24,6 +24,10 @@ import Search from "../../components/icons/search";
 import FilterIcon from "../../components/icons/filterIcon";
 import Dropdown from "../../components/icons/dropdown";
 import AddIcon from "../../components/icons/addIcon";
+import FloorsIcon from "../../components/icons/FloorsIcon";
+import CategoryIcon from "../../components/icons/CategoryIcon";
+import BathsIcon from "../../components/icons/BathsIcon";
+import BedsIcon from "../../components/icons/BedsIcon";
 function Contracts() {
 
   const {
@@ -54,20 +58,22 @@ function Contracts() {
   const { user } = useAuth();
   const [filteredContracts, setFilteredContracts] = useState([]);
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+  const [saleFilter, setSaleFilter] = useState("all"); // all / for_sale / not_for_sale
 
   const [
     filterModalOpened,
     { open: openFilterModal, close: closeFilterModal },
   ] = useDisclosure(false);
   // Form validation using Mantine's useForm
+  console.log(contractsData);
+
   useEffect(() => {
-    console.log(contractsData);
-    
+
     setContracts(contractsData?.contracts.data || []);
 
     setApprovedListings(
       listingsData?.data?.listings?.filter(
-        (listing) => listing.status === "approved"
+        (listing) => listing.status === "approved" && listing.selling_status === 0
       ) || []
     );
   }, [contractsData, listingsData]);
@@ -118,7 +124,12 @@ function Contracts() {
   const searchedContracts = filteredContracts
     .filter((contract) =>
       contract.title.toLowerCase().includes(search.toLowerCase())
-    )
+    ).filter((contract) => {
+      if (saleFilter === "sale") return contract.contract_type === "sale";
+      if (saleFilter === "rental") return contract.contract_type === "rental";
+      if (saleFilter === "booking") return contract.contract_type === "booking";
+      return true; // all
+    })
     .sort((a, b) => {
       if (filter === "newest") {
         return new Date(b.creation_date) - new Date(a.creation_date);
@@ -204,6 +215,7 @@ function Contracts() {
           >
             <FilterIcon />
           </button>
+
           <div className={classes.addAndSort}>
             <Select
               mr={10}
@@ -249,6 +261,51 @@ function Contracts() {
                 },
               }}
             />
+
+
+            {/* New Sale Status Filter Select */}
+            <Select
+              mr={10}
+              placeholder="For Sale"
+              value={saleFilter}
+              onChange={setSaleFilter}
+              rightSection={<Dropdown />}
+              data={[
+                { value: "all", label: "All" },
+                { value: "sale", label: "sale" },
+                { value: "rental", label: "rental" },
+                { value: "booking", label: "booking" },
+              ]}
+              styles={{
+                input: {
+                  width: "132px",
+                  height: "48px",
+                  borderRadius: "15px",
+                  border: "1px solid var(--color-border)",
+                  padding: "14px 24px",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  backgroundColor: "var(--color-7)",
+                },
+
+                dropdown: {
+                  borderRadius: "15px", // Curved dropdown menu
+                  border: "1.5px solid var(--color-border)",
+                  backgroundColor: "var(--color-7)",
+                },
+                wrapper: {
+                  width: "132px",
+                },
+                item: {
+                  color: "var(--color-4)", // Dropdown option text color
+                  "&[data-selected]": {
+                    color: "white", // Selected option text color
+                  },
+                },
+              }} />
+
+
             <button
               className={classes.add}
               onClick={open}
@@ -289,12 +346,21 @@ function Contracts() {
                 }}
               >
                 {console.log(contract)}
-                
-                <Image
-                  src={contract.real_estate.image}
-                  alt="Property"
-                  className={classes.contractImage}
-                />
+                <div className={classes.contractImage}>
+                  <div className={classes.listingImage}>
+                    <Image
+                      src={contract.real_estate.image}
+                      alt="Property"
+                      className={classes.contractImage}
+                    />
+                    <p className={classes.listingfor}>
+                      {contract.contract_type}
+                    </p>
+
+                  </div>
+                </div>
+
+
                 <div className={classes.contractDetails}>
                   <div
                     style={{
@@ -310,34 +376,41 @@ function Contracts() {
                       </span>
                     </div>
                     <span className={classes.contractDownPayment}>
-                      {Math.floor(
-                        (contract.down_payment / contract.price) * 100
-                      )}
+                      {contract.down_payment}
                       % {t.DownPayment}
                     </span>
                   </div>
 
-                  <div className={classes.contractTitle}>{contract.title}</div>
+                  <div className={classes.contractTitle}>{contract.real_estate.title}</div>
                   <div className={classes.contractInfo}>
-                    <Rooms />
-                    <span>
-                      {contract.real_estate.rooms
-                        ? contract.real_estate.rooms
-                        : "-"}
+
+                    <span className={classes.svgSpan}>
+                      <div>
+                        <BedsIcon />
+                        <span>{contract.real_estate.rooms} Beds</span>
+                      </div>
                     </span>
-                    <Bathrooms />
-                    <span>
-                      {contract.real_estate.bathrooms
-                        ? contract.real_estate.bathrooms
-                        : "-"}
+                    <span className={classes.svgSpan}>
+                      <div>
+                        <BathsIcon />
+                        <span>{contract.real_estate.bathrooms} Baths</span>
+                      </div>
                     </span>
-                    <Area />
-                    <span>
-                      {contract.real_estate.area
-                        ? contract.real_estate.area
-                        : "-"}
-                      sqm
+                    <span className={classes.svgSpan}>
+                      <div>
+                        <Area />
+
+                        <span>{contract.real_estate.area} sqm</span>
+                      </div>
                     </span>
+
+                    <span className={classes.svgSpan}>
+                      <div>
+                        <CategoryIcon />
+                        <span>{contract.real_estate.category}</span>
+                      </div>
+                    </span>
+
                   </div>
                   <div className={classes.contractEmployee}>
                     <span>

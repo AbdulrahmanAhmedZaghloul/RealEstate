@@ -1,16 +1,5 @@
-import {
-  Anchor,
-  Button,
-  Group,
-  Paper,
-  PasswordInput,
-  Text,
-  TextInput,
-  Loader,
-  Center,
-  Grid,
-  GridCol,
-  Select,
+// Register.jsx
+import {Anchor,Button,Group,Paper,PasswordInput,Text,TextInput,Loader,Center,Grid,GridCol,Select,
 } from "@mantine/core";
 import classes from "../styles/register.module.css";
 
@@ -120,7 +109,7 @@ export default function Register() {
               withBorder
               shadow="md"
               p={30}
-              w={448}
+              // w={448}
               radius="md"
             >
               <TextInput

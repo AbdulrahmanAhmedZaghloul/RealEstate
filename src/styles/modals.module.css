@@ -15,7 +15,7 @@
   color: #1e3a8a; /* Darker text color on hover */
 }
 
-.addButton {
+/* .addButton {
   background-color: var(--color-3); 
   color: white;
   font-size: 12px;
@@ -24,7 +24,19 @@
   height: 48px;
   border-radius: 8px;
  
+} */
+
+/* styles.css */
+.addButton {
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
+
+.addButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .doneButton{
 
   background-color: var(--color-3);

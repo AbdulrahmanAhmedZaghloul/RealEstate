@@ -54,7 +54,7 @@ function Properties() {
   const isLoading = listingsLoading || employeesLoading || categoriesLoading;
   const isError = isListingsError || isEmployeesError || isCategoriesError;
   const error = listingsError || employeesError || categoriesError;
-
+  const [saleFilter, setSaleFilter] = useState("all"); // all / for_sale / not_for_sale
   const [listings, setListings] = useState([]); //Property listings state
   const [employees, setEmployees] = useState([]); //Employees state
   const [categories, setCategories] = useState([]); //Categories state
@@ -75,7 +75,11 @@ function Properties() {
   const searchedListings = filteredListings
     .filter((listing) =>
       listing.title.toLowerCase().includes(search.toLowerCase())
-    )
+    ).filter((listing) => {
+      if (saleFilter === "for_sale") return listing.selling_status === 0;
+      if (saleFilter === "not_for_sale") return listing.selling_status === 1;
+      return true; // all
+    })
     .sort((a, b) => {
       if (filter === "newest")
         return new Date(b.created_at) - new Date(a.created_at);
@@ -254,6 +258,46 @@ function Properties() {
               }}
 
             />
+            {/* New Sale Status Filter Select */}
+            <Select
+              mr={10}
+              placeholder="For Sale"
+              value={saleFilter}
+              onChange={setSaleFilter}
+              rightSection={<Dropdown />}
+              data={[
+                { value: "all", label: "All" },
+                { value: "for_sale", label: "Sold" },
+                { value: "not_for_sale", label: "Not Sold" },
+              ]}
+              styles={{
+                input: {
+                  width: "132px",
+                  height: "48px",
+                  borderRadius: "15px",
+                  border: "1px solid var(--color-border)",
+                  padding: "14px 24px",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  backgroundColor: "var(--color-7)",
+                },
+
+                dropdown: {
+                  borderRadius: "15px", // Curved dropdown menu
+                  border: "1.5px solid var(--color-border)",
+                  backgroundColor: "var(--color-7)",
+                },
+                wrapper: {
+                  width: "132px",
+                },
+                item: {
+                  color: "var(--color-4)", // Dropdown option text color
+                  "&[data-selected]": {
+                    color: "white", // Selected option text color
+                  },
+                },
+              }} />
             <button style={{
               cursor: "pointer",
             }} className={classes.add} onClick={open}>
@@ -280,12 +324,22 @@ function Properties() {
                 }}
               >
                 <Card.Section radius="md">
-                  <Image
-                    src={`${listing.picture_url}`}
-                    alt={listing.title}
-                    h="233px"
-                    radius="md"
-                  />
+                  <div className={classes.listingImage}>
+                    <Image
+                      src={`${listing.picture_url}`}
+                      alt={listing.title}
+                      h="233px"
+                      radius="md"
+                    />
+                    {/* <p className={classes.listingfor}> */}
+
+                    <p className={classes.listingfor}>
+                      {listing.selling_status === 1 ? "Sold" : listing.listing_type}
+                    </p>
+                    {/* </p> */}
+
+                  </div>
+
                 </Card.Section>
 
                 <div style={{ marginTop: "16px", display: "flex", flexWrap: "wrap", }}>
@@ -295,8 +349,8 @@ function Properties() {
                   </span>
 
                   <div className={classes.downPaymentBadge}>
-                     {listing.down_payment} %
-                     {t.DownPayment}
+                    {listing.down_payment} %
+                    {t.DownPayment}
                   </div>
                 </div>
 
@@ -323,9 +377,7 @@ function Properties() {
                     </div>
                   </div>
                   <div className={classes.listingEmployee}>
-                    {t.Employee}: {listing.company?.name}
-                    {console.log(listing.company?.name)}
-
+                    {t.Employee}: {listing.employee?.name}
                   </div>
                   <div className={classes.listingLocation}>
                     {listing.location}
@@ -346,6 +398,7 @@ function Properties() {
                         ? "Yesterday"
                         : "Today"}
                   </div>
+
                 </div>
               </Card>
             ))}

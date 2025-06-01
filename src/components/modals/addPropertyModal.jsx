@@ -66,15 +66,28 @@ const AddPropertyModal = ({
       bathrooms: (value) =>
         value > 0 ? null : "Bathrooms must be greater than 0",
       location: (value) => (value.trim() ? null : "Location is required"),
+      // images: (value) => {
+      //   if (value.length < 3) {
+      //     return "At least three images are required";
+      //   }
+      //   const invalidImage = value.find(
+      //     (image) => image.size > 2 * 1024 * 1024
+      //   );
+      //   if (invalidImage) {
+      //     return "Image must be less than 2 MB";
+      //   }
+      //   return null;
+      // },
       images: (value) => {
         if (value.length < 3) {
-          return "At least three images are required";
+          return "Please upload at least 3 images";
         }
-        const invalidImage = value.find(
-          (image) => image.size > 2 * 1024 * 1024
-        );
-        if (invalidImage) {
-          return "Image must be less than 2 MB";
+        if (value.length > 8) {
+          return "You cannot upload more than 8 images";
+        }
+        const oversizedImage = value.find(image => image.size > 20 * 1024 * 1024); // 20 MB
+        if (oversizedImage) {
+          return "Each image must be less than 20 MB";
         }
         return null;
       },
@@ -403,23 +416,46 @@ const AddPropertyModal = ({
                     accept="image/*"
                     style={{ display: "none" }}
                     multiple
+                    // onChange={(e) => {
+                    //   const files = Array.from(e.target.files);
+                    //   const existingFiles = form.values.images.map((image) =>
+                    //     image.name ? image.name : image
+                    //   );
+
+                    //   const newFiles = files.filter(
+                    //     (file) => !existingFiles.includes(file.name)
+                    //   );
+
+                    //   const updatedImages = [
+                    //     ...form.values.images,
+                    //     ...newFiles,
+                    //   ];
+                    //   form.setFieldValue("images", updatedImages);
+
+                    //   // Reset the input value to allow re-uploading the same file
+                    //   e.target.value = null;
+                    // }}
                     onChange={(e) => {
-                      const files = Array.from(e.target.files);
+                      let files = Array.from(e.target.files);
                       const existingFiles = form.values.images.map((image) =>
                         image.name ? image.name : image
                       );
 
-                      const newFiles = files.filter(
-                        (file) => !existingFiles.includes(file.name)
-                      );
+                      // Filter duplicates
+                      files = files.filter(file => !existingFiles.includes(file.name));
 
-                      const updatedImages = [
-                        ...form.values.images,
-                        ...newFiles,
-                      ];
+                      // Check max limit
+                      const totalImages = form.values.images.length + files.length;
+                      if (totalImages > 8) {
+                        form.setFieldError("images", "You cannot upload more than 8 images");
+                        e.target.value = null;
+                        return;
+                      }
+
+                      // Add valid files
+                      const updatedImages = [...form.values.images, ...files];
                       form.setFieldValue("images", updatedImages);
-
-                      // Reset the input value to allow re-uploading the same file
+                      form.clearFieldError("images"); // Clear error if within limit
                       e.target.value = null;
                     }}
                   />
@@ -491,11 +527,18 @@ const AddPropertyModal = ({
                   );
                 })}
               </div>
-              <Text size="xs" color="red" mb={10} mt={-10}>
+
+              {form.errors.images && (
+                <Text size="xs" color="red" mb={10} mt={-10}>
+                  {form.errors.images}
+                </Text>
+              )}
+
+              {/* <Text size="xs" color="red" mb={10} mt={-10}>
                 {form.values.images.map((image) => {
                   const exceedsSize = image.size > 2 * 1024 * 1024; // Check if the image exceeds the size limit
                   return (exceedsSize ? "Image size should be less than 2MB" : form.errors.images)
-                })}          </Text>
+                })}          </Text> */}
             </div>
             {/* Title */}
             <TextInput
@@ -581,9 +624,9 @@ const AddPropertyModal = ({
                 }
               }}
               suffix="%"
-            maxLength={6}
+              maxLength={6}
             />
- 
+
 
 
             <NumberInput

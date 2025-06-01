@@ -267,10 +267,10 @@ function Properties() {
               rightSection={<Dropdown />}
               data={[
                 { value: "all", label: "All" },
-                { value: "for_sale", label: "Sold" },
-                { value: "not_for_sale", label: "Not Sold" },
+                { value: "for_sale", label: "Sale" },
+                { value: "not_for_sale", label: "Not Sale" },
               ]}
-    styles={{
+              styles={{
                 input: {
                   width: "132px",
                   height: "48px",
@@ -297,7 +297,7 @@ function Properties() {
                     color: "white", // Selected option text color
                   },
                 },
-              }}            />
+              }} />
             <button style={{
               cursor: "pointer",
             }} className={classes.add} onClick={open}>
@@ -334,7 +334,7 @@ function Properties() {
                     {/* <p className={classes.listingfor}> */}
 
                     <p className={classes.listingfor}>
-                      {listing.selling_status === 1 ? "Sold" : listing.listing_type}
+                      {listing.selling_status === 1 ? "s" : listing.listing_type}
                     </p>
                     {/* </p> */}
 
@@ -399,7 +399,12 @@ function Properties() {
                         ? "Yesterday"
                         : "Today"}
                   </div>
-             
+                  {/* <div className={classes.listingDate}>
+                    <span style={{
+                      fontWeight: "bold",
+                      marginRight: "5px",
+                    }}>Type ::</span>   {listing.listing_type}
+                  </div> */}
                 </div>
               </Card>
             ))}

@@ -36,6 +36,7 @@ export const useAddContract = (userToken, closeModal) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contracts'] });
       closeModal?.();
+      // form.reset()
       notifications.show({
         title: 'Contract Added',
         message: 'Contract has been added successfully.',

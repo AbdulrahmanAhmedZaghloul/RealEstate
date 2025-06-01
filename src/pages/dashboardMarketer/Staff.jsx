@@ -637,7 +637,7 @@ function Staff() {
                             <EditIcon />
                             {/* <img src={edit} /> */}
                           </ActionIcon>
-                          {/* <ActionIcon
+                           <ActionIcon
                             variant="subtle"
                             color="red"
                             onClick={() =>
@@ -645,7 +645,7 @@ function Staff() {
                             }
                           >
                             <DeleteIcon /> 
-                           </ActionIcon> */}
+                           </ActionIcon>  
                         </Group>
                       </Table.Td>
                     </Table.Tr>
@@ -776,7 +776,7 @@ function Staff() {
                                           <EditIcon />
 
                                         </ActionIcon>
-                                        {/* <ActionIcon
+                                        <ActionIcon
                                           variant="subtle"
                                           color="red"
                                           onClick={() =>
@@ -787,7 +787,7 @@ function Staff() {
                                           }
                                         >
                                           <DeleteIcon />
-                                        </ActionIcon> */}
+                                        </ActionIcon>
                                       </Group>
                                     </Table.Td>
                                   </Table.Tr>
@@ -876,7 +876,7 @@ function Staff() {
                           <EditIcon />
 
                         </ActionIcon>
-                        {/* <ActionIcon
+                        <ActionIcon
                           variant="subtle"
                           color="red"
                           onClick={() =>
@@ -885,7 +885,7 @@ function Staff() {
                         >
                           <DeleteIcon />
 
-                        </ActionIcon> */}
+                        </ActionIcon>
                       </Group>
                     </Table.Td>
                   </Table.Tr>
@@ -970,7 +970,7 @@ function Staff() {
                           <EditIcon />
 
                         </ActionIcon>
-                        {/* <ActionIcon
+                        <ActionIcon
                           variant="subtle"
                           color="red"
                           onClick={() =>
@@ -979,7 +979,7 @@ function Staff() {
                         >
                           <DeleteIcon />
 
-                        </ActionIcon> */}
+                        </ActionIcon>
                       </Group>
                     </Table.Td>
                   </Table.Tr>
@@ -1053,7 +1053,7 @@ function Staff() {
                         >
                           <EditIcon />
                         </ActionIcon>
-                        {/* <ActionIcon
+                        <ActionIcon
                           variant="subtle"
                           color="red"
                           onClick={() =>
@@ -1061,7 +1061,7 @@ function Staff() {
                           }
                         >
                           <DeleteIcon />
-                        </ActionIcon> */}
+                        </ActionIcon>
                       </Group>
                     </Table.Td>
                   </Table.Tr>
@@ -1107,35 +1107,8 @@ function Staff() {
             )}
           </div>
         </Table.ScrollContainer>
-      </Card>
-      {/* <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
-        <TextInput
-          label="New Password"
-          type={showPassword ? "text" : "password"}
-          value={passwordData.password}
-          maxLength={50}
-          onChange={(e) =>
-            setPasswordData({ ...passwordData, password: e.target.value })
-          }
-          rightSection={
-            <button
-              type="button"
-              style={{ background: "none", border: "none", cursor: "pointer" }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <IconEyeOff size={16} />
-              ) : (
-                <IconEye size={16} />
-              )}
-            </button>
-          }
-          error={passwordErrors.password}
-        />
-        <Button loading={loading} onClick={handleChangePassword} mt="md" fullWidth>
-          Change Password
-        </Button>
-      </Modal> */}
+      </Card> 
+
       <AddStaffModal
         opened={addModalOpened}
         onClose={closeAddModal}
@@ -1159,9 +1132,7 @@ function Staff() {
         setEditUser={setEditUser}
         errors={errors}
         handleFileChange={handleFileChange}
-        // handleOpenChangePassword={handleOpenChangePassword}
-        currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
-
+         currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
       />
 
       <DeleteEmployeeModal
@@ -1173,8 +1144,6 @@ function Staff() {
         onDelete={confirmDeleteUser} // Call the new confirmDeleteUser function
         loading={isRemoveUserLoading}
       />
-
-
     </>
   );
 }

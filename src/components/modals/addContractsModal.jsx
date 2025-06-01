@@ -10,6 +10,7 @@ import {
   Button,
   Center,
   Divider,
+  rem,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useMediaQuery } from '@mantine/hooks';
@@ -17,13 +18,15 @@ import { useMediaQuery } from '@mantine/hooks';
 //Local imports
 import downArrow from "../../assets/downArrow.svg";
 import classes from "../../styles/modals.module.css";
+import { useEffect, useState } from "react";
+import { IconCamera, IconCameraAi } from "@tabler/icons-react";
+import CameraUpload from "../CameraUpload";
 
 const AddContractsModal = ({
   opened,
   onClose,
   onAdd,
   approvedListings,
-  loading,
 }) => {
 
   const form = useForm({
@@ -87,11 +90,18 @@ const AddContractsModal = ({
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
+  const [loading, setLoading] = useState(false);
+  function handleSubmit(values) {
+    setLoading(true); // تفعيل اللودينج
+    onAdd(values)
+  }
 
-  const handleSubmit = (values) => {
-    onAdd(values);
-  };
-
+  useEffect(() => {
+    if (opened) {
+      form.reset();      // 👈 Reset form fields
+      setLoading(false); // 👈 Reset loading state
+    }
+  }, [opened]);
   const isMobile = useMediaQuery(`(max-width: ${("991px")})`);
   return (
     <Modal
@@ -115,15 +125,17 @@ const AddContractsModal = ({
         <Grid>
           <Grid.Col span={isMobile ? 12 : 6}>
             {/* Upload Document */}
-            <FileInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24}
-              label="Upload Document"
-              placeholder="Upload the contract document"
-              error={form.errors.contract_document}
-              {...form.getInputProps("contract_document")}
+
+            <CameraUpload
+
+              onChange={(file) => form.setFieldValue("contract_document", file)}
             />
-            {/* {console.log(contract_document)} */}
+            {form.errors.contract_document && (
+              <Text color="red" size="sm">
+                {form.errors.contract_document}
+              </Text>
+            )}
+
 
             {/* Property listing*/}
             <Select
@@ -173,35 +185,37 @@ const AddContractsModal = ({
               {...form.getInputProps("price")}
               maxLength={19}
             />
-            {/* Down Payment */}
-
-
             <NumberInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               label="Down Payment"
               placeholder="Enter the down payment (e.g., 25.5%)"
               hideControls
-              decimalSeparator="." // استخدم الفاصلة العشرية الصحيحة
-              precision={2} // دقتين عشريتين إذا أردت
-              step={0.1} // يسمح بالكسور مثل 0.1 أو 0.5
+              min={1}
+              max={100}
+              decimalSeparator="."
+              precision={2}
+              step={0.1}
+              clampBehavior="strict" // 👈 يجبر القيمة على البقاء ضمن min/max
               error={
-                form.values.down_payment < 0 || form.values.down_payment > 100
+                form.values.down_payment !== null && (form.values.down_payment < 0 || form.values.down_payment > 100)
                   ? "Down payment must be between 0 and 100%"
                   : form.errors.down_payment
               }
               value={form.values.down_payment}
               onChange={(value) => {
-                if (value !== "" && (value < 0 || value > 100)) {
-                  form.setFieldError("down_payment", "Must be between 0 and 100%");
+                const numericValue = Number(value);
+                if (numericValue < 0) {
+                  form.setFieldValue("down_payment", 0);
+                } else if (numericValue > 100) {
+                  form.setFieldValue("down_payment", 100);
                 } else {
-                  form.setFieldValue("down_payment", value);
-                  if (form.errors.down_payment) {
-                    form.setFieldError("down_payment", "");
-                  }
+                  form.setFieldValue("down_payment", numericValue);
+                }
+                if (form.errors.down_payment) {
+                  form.setFieldError("down_payment", "");
                 }
               }}
               suffix="%"
-              // maxLength={4}
             />
 
 
@@ -278,8 +292,13 @@ const AddContractsModal = ({
 
                 form.setFieldValue("customer_phone", formattedNumber);
               }}
+              // onFocus={() => {
+              //   // عند التركيز، نتأكد من وجود +966
+              //   if (!form.values.customer_phone || !form.values.customer_phone.startsWith("+966")) {
+              //     form.setFieldValue("customer_phone", "+966");
+              //   }
+              // }}
               onFocus={() => {
-                // عند التركيز، نتأكد من وجود +966
                 if (!form.values.customer_phone || !form.values.customer_phone.startsWith("+966")) {
                   form.setFieldValue("customer_phone", "+966");
                 }
@@ -297,8 +316,6 @@ const AddContractsModal = ({
               error={form.errors.customer_phone}
               mb={24}
             />
-
-
 
             {/* Release Date */}
             <TextInput
@@ -338,21 +355,15 @@ const AddContractsModal = ({
           <Grid.Col span={12}>
             <Divider size="xs" mb={16} mt={16} />
             <Center>
+
               <Button
                 type="submit"
                 variant="light"
                 radius="md"
-                disabled={Object.keys(form.errors).length > 0 || loading}
+                disabled={form.isValid() === false || loading} // <-- التعديل هنا
                 loading={loading}
                 className={classes.addButton}
-                styles={(theme, params) => ({
-                  root: {
-                    ...(params.disabled && {
-                      opacity: 0.5,
-                      cursor: 'not-allowed',
-                    }),
-                  },
-                })}
+
               >
                 Add Contract
               </Button>

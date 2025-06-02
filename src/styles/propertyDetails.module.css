@@ -159,6 +159,19 @@
   margin: auto;
 }
 
+.Amenities {
+  margin-top: 20px;
+  width: 40%;
+  gap: 10px;
+  font-family: Poppins;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 30px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: var(--color-2);
+}
+
 .svgCol {
   display: flex;
 }

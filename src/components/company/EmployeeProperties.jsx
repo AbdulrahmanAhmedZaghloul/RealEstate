@@ -302,8 +302,7 @@ function EmployeeProperties({ id }) {
                   backgroundColor: "var(--color-5)",
                 }}
               >
-                {console.log(listing)}
-                <Card.Section radius="md">
+                 <Card.Section radius="md">
                   <Image
                     src={listing?.picture_url}
                     alt={listing.title}
@@ -328,7 +327,7 @@ function EmployeeProperties({ id }) {
                     }}
                     className={classes.downPaymentBadge}
                   >
-                    {Math.floor((listing.down_payment / listing.price) * 100)}%
+                    {listing.down_payment}%
                     {t.Downpayment}
                   </div>
                 </div>

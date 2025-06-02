@@ -1,7 +1,7 @@
 //Dependency imports
 import { useParams } from "react-router-dom";
 import {
-  Card, Stack, Text, Button, Group, Grid, Center, Loader, Modal, Textarea, Box, Avatar, useMantineColorScheme,
+  Card, Stack, Text, Button, Group, Grid  ,Center, Loader, Modal, Textarea, Box, Avatar, useMantineColorScheme,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
@@ -273,7 +273,7 @@ function PropertyDetails() {
                         {parseFloat(listing.price)?.toLocaleString()}
                       </Text>
                       <Text className={classes.Down}>
-                        { listing.down_payment }
+                        {listing.down_payment}
                         % {t.DownPayment}
                       </Text>
                       <div className={classes.UpdataShare}>
@@ -505,6 +505,44 @@ function PropertyDetails() {
         ) : (
           ""
         )}
+        <Text style={{}} className={classes.Description} fw={600}>
+          {t.Amenities}
+        </Text>
+        <Text className={classes.Amenities}>
+          <Grid>
+            {/* العمود الأول */}
+            <Grid.Col span={6}>
+              {listing.amenities
+                .filter((_, index) => index % 2 === 0)
+                .map((amenity) => (
+                  <div key={amenity.category_id}>
+                    <Text>{amenity.name}</Text>
+                  </div>
+                ))}
+            </Grid.Col>
+
+            {/* العمود الثاني */}
+            <Grid.Col span={6}>
+              {listing.amenities
+                .filter((_, index) => index % 2 === 1)
+                .map((amenity) => (
+                  <div key={amenity.category_id}>
+                    <Text>{amenity.name}</Text>
+                  </div>
+                ))}
+            </Grid.Col>
+          </Grid>
+        </Text>
+        {/* <Text style={{}} className={classes.Amenities}>
+              {listing.amenities.map((Amenities) => (
+                <div  key={Amenities.category_id}>
+                  <Text style={{}} >
+                    {Amenities.name}
+                  </Text>
+                </div>
+              ))}
+            </Text> */}
+
         {/* <Divider my="sm" /> */}
         <Stack gap="xs" style={{ marginTop: "20px" }}>
           <Text style={{}} className={classes.Locationpom}>

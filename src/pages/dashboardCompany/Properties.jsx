@@ -1,4 +1,6 @@
-//Dependency imports
+
+
+//Properties
 import { useEffect, useState } from "react";
 import {
   Card, Center, Group, Image, Text, Select, Loader,
@@ -31,7 +33,7 @@ import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
 function Properties() {
   const { user } = useAuth();
-
+ 
   const {
     data: listingsData,
     isLoading: listingsLoading,
@@ -89,20 +91,7 @@ function Properties() {
       if (filter === "lowest") return a.price - b.price;
       return 0;
     });
-
-  //pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(searchedListings.length / itemsPerPage);
-  const paginatedListings = searchedListings.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  // Reset currentPage to 1 when the search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
+ 
 
   const handleAddProperty = (values) => {
     mutation.mutate(values);
@@ -144,6 +133,7 @@ function Properties() {
 
     setFilteredListings(filtered);
   };
+  
   const { colorScheme } = useMantineColorScheme();
 
   useEffect(() => {
@@ -306,13 +296,13 @@ function Properties() {
           </div>
         </div>
 
-        {paginatedListings.length === 0 && !isLoading ? (
+        {searchedListings.length === 0 && !isLoading ? (
           <Center>
             <Text>No listings found.</Text>
           </Center>
         ) : (
           <Group align="center" spacing="xl">
-            {paginatedListings.map((listing) => (
+            {searchedListings.map((listing) => (
               <Card
                 key={listing.id}
                 className={classes.card}
@@ -377,7 +367,7 @@ function Properties() {
                     </div>
                   </div>
                   <div className={classes.listingEmployee}>
-                    {t.Employee}: {listing.company?.name}
+                    {t.Employee}: {listing.employee?.name}
 
                   </div>
                   <div className={classes.listingLocation}>
@@ -398,48 +388,12 @@ function Properties() {
                       ) === 1
                         ? "Yesterday"
                         : "Today"}
-                  </div>
-                  {/* <div className={classes.listingDate}>
-                    <span style={{
-                      fontWeight: "bold",
-                      marginRight: "5px",
-                    }}>Type ::</span>   {listing.listing_type}
-                  </div> */}
+                  </div> 
                 </div>
               </Card>
             ))}
           </Group>
         )}
-
-        {/*pagination */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "18px",
-            marginTop: "10px",
-          }}
-        >
-          {currentPage > 1 && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              {currentPage - 1}
-            </button>
-          )}
-
-          <button className={classes.currentPagenow}>{currentPage}</button>
-
-          {currentPage < totalPages && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              {currentPage + 1}
-            </button>
-          )}
-        </div>
       </Card>
 
       <AddPropertyModal

@@ -1,7 +1,7 @@
 // VerifyOTPCreateAccount.jsx
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {Container,Paper,Title,Center,PinInput,Group,Button,Text,Stack,Loader,} from "@mantine/core";
+import { Container, Paper, Title, Center, PinInput, Group, Button, Text, Stack, Loader, } from "@mantine/core";
 import classes from "../styles/forgotPass.module.css";
 import axiosInstance from "../api/config";
 import { notifications } from "@mantine/notifications";
@@ -13,7 +13,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth(); // Access the login function from AuthContext
   const location = useLocation();
-const { user } = useAuth();
+  const { user } = useAuth();
   const [OTP, setOTP] = useState("");
   useEffect(() => {
     if (timer > 0) {
@@ -32,6 +32,8 @@ const { user } = useAuth();
       .post("api/web/verify-registration", {
         email: sessionStorage.getItem("email"),
         otp: OTP,
+        type: "reset_password",
+
       })
       .then(async () => {
         await axiosInstance
@@ -101,15 +103,15 @@ const { user } = useAuth();
         setLoading(false);
       });
   };
-useEffect(() => {
-  if (user) {
-    if (user.role === "company") {
-      navigate("/dashboard", { replace: true });
-    } else if (user.role === "marketer") {
-      navigate("/dashboard-Marketer", { replace: true });
+  useEffect(() => {
+    if (user) {
+      if (user.role === "company") {
+        navigate("/dashboard", { replace: true });
+      } else if (user.role === "marketer") {
+        navigate("/dashboard-Marketer", { replace: true });
+      }
     }
-  }
-}, [user, navigate]);
+  }, [user, navigate]);
   return (
     <Container size={460} my={30}>
       {loading && (

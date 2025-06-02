@@ -324,7 +324,7 @@ function Properties() {
                     {/* <p className={classes.listingfor}> */}
 
                     <p className={classes.listingfor}>
-                      {listing.selling_status === 1 ? "s" : listing.listing_type}
+                      {listing.selling_status === 1 ? "sold" : listing.listing_type}
                     </p>
                     {/* </p> */}
 

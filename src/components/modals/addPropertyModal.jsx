@@ -35,6 +35,7 @@ const AddPropertyModal = ({
   onAddProperty,
   loading = false,
 }) => {
+  const [selectedCategoryType, setSelectedCategoryType] = useState("");
   const form = useForm({
     initialValues: {
       title: "",
@@ -61,23 +62,41 @@ const AddPropertyModal = ({
       description: (value) => (value.trim() ? null : "Description is required"),
       price: (value) => (value > 0 ? null : "Price must be greater than 0"),
       area: (value) => (value > 0 ? null : "Area must be greater than 0"),
-      rooms: (value) => (value > 0 ? null : "Rooms must be greater than 0"),
-      floors: (value) => (value ? null : "Number of floors is required"),
-      bathrooms: (value) =>
-        value > 0 ? null : "Bathrooms must be greater than 0",
       location: (value) => (value.trim() ? null : "Location is required"),
-      // images: (value) => {
-      //   if (value.length < 3) {
-      //     return "At least three images are required";
-      //   }
-      //   const invalidImage = value.find(
-      //     (image) => image.size > 2 * 1024 * 1024
-      //   );
-      //   if (invalidImage) {
-      //     return "Image must be less than 2 MB";
-      //   }
-      //   return null;
-      // },
+
+      rooms: (value) => {
+        const categoryId = form.values.category_id;
+        const category = categories.find(cat => cat.id === parseInt(categoryId));
+        const categoryName = category?.name.toLowerCase();
+
+        if (categoryName === "residential") {
+          return value > 0 ? null : "Rooms must be greater than 0";
+        }
+        return null;
+      },
+
+      bathrooms: (value) => {
+        const categoryId = form.values.category_id;
+        const category = categories.find(cat => cat.id === parseInt(categoryId));
+        const categoryName = category?.name.toLowerCase();
+
+        if (categoryName === "residential") {
+          return value > 0 ? null : "Bathrooms must be greater than 0";
+        }
+        return null;
+      },
+
+      floors: (value) => {
+        const categoryId = form.values.category_id;
+        const category = categories.find(cat => cat.id === parseInt(categoryId));
+        const categoryName = category?.name.toLowerCase();
+
+        if (categoryName === "residential") {
+          return value > 0 ? null : "Floors must be greater than 0";
+        }
+        return null;
+      },
+
       images: (value) => {
         if (value.length < 3) {
           return "Please upload at least 3 images";
@@ -91,6 +110,7 @@ const AddPropertyModal = ({
         }
         return null;
       },
+
       down_payment: (value) => {
         if (value === null || value === "" || isNaN(value)) {
           return "Down payment must be a number";
@@ -100,12 +120,16 @@ const AddPropertyModal = ({
         }
         return null;
       },
+
       employee_id: (value) =>
         user.role === "employee" ? null : value ? null : "Employee is required",
+
       category_id: (value) => (value ? null : "Property category is required"),
+
       subcategory_id: (value) => (value ? null : "Property type is required"),
+
       listing_type: (value) => (value ? null : "Property type is required"),
-    },
+    }
   });
 
   const categoryMap = categories.reduce((map, category) => {
@@ -227,7 +251,13 @@ const AddPropertyModal = ({
   // Handle category change and fetch amenities
   const handleCategoryChange = async (categoryId) => {
     form.setFieldValue("category_id", categoryId);
+const selectedCategory = categories.find(
+  (cat) => cat.id === parseInt(categoryId)
+);
 
+if (selectedCategory) {
+  setSelectedCategoryType(selectedCategory.name.toLowerCase());
+}
     try {
       // Fetch all amenities
       const allAmenities = await fetchAmenities();
@@ -250,6 +280,11 @@ const AddPropertyModal = ({
           categoryMap[categoryId] === "residential" ? formattedAmenities : [],
         commercial:
           categoryMap[categoryId] === "commercial" ? formattedAmenities : [],
+        commercial:
+          selectedCategory.name.toLowerCase() === "commercial" ||
+            selectedCategory.name.toLowerCase() === "land"
+            ? formattedAmenities
+            : [],
       });
     } catch (error) {
       console.error(
@@ -534,11 +569,6 @@ const AddPropertyModal = ({
                 </Text>
               )}
 
-              {/* <Text size="xs" color="red" mb={10} mt={-10}>
-                {form.values.images.map((image) => {
-                  const exceedsSize = image.size > 2 * 1024 * 1024; // Check if the image exceeds the size limit
-                  return (exceedsSize ? "Image size should be less than 2MB" : form.errors.images)
-                })}          </Text> */}
             </div>
             {/* Title */}
             <TextInput
@@ -626,53 +656,66 @@ const AddPropertyModal = ({
               suffix="%"
               maxLength={6}
             />
+            {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
+              <NumberInput
+                label="Rooms"
+                placeholder="Enter number of rooms"
+                min={0}
+                {...form.getInputProps("rooms")}
+                error={form.errors.rooms}
+                hideControls
+                disabled={
+                  selectedCategoryType === "commercial" ||
+                  selectedCategoryType === "land"
+                }
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
+                }}
+                mb={24}
+                maxLength={2}
+              />
+            )}
 
-
-
-            <NumberInput
-              label="Rooms"
-              placeholder="Enter number of rooms"
-              min={0}
-              {...form.getInputProps("rooms")}
-              error={form.errors.rooms}
-              hideControls
-              styles={{
-                input: { width: 289, height: 48 },
-                wrapper: { width: 289 },
-              }}
-              mb={24}
-              maxLength={2}
-            />
             {/* Bathrooms */}
-            <NumberInput
-              label="Bathrooms"
-              placeholder="Enter number of bathrooms"
-              min={0}
-              {...form.getInputProps("bathrooms")}
-              error={form.errors.bathrooms}
-              hideControls
-              styles={{
-                input: { width: 289, height: 48 },
-                wrapper: { width: 289 },
-              }}
-              mb={24}
-              maxLength={2}
-            />
+            {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
+              <NumberInput
+                disabled={
+                  selectedCategoryType === "commercial" ||
+                  selectedCategoryType === "land"
+                }
+                label="Bathrooms"
+                placeholder="Enter number of bathrooms"
+                min={0}
+                {...form.getInputProps("bathrooms")}
+                error={form.errors.bathrooms}
+                hideControls
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
+                }}
+                mb={24}
+                maxLength={2}
+              />
+            )}
+
             {/* Floors */}
-            <NumberInput
-              label="Floors"
-              placeholder="Enter number of floors"
-              min={1}
-              {...form.getInputProps("floors")}
-              error={form.errors.floors}
-              hideControls
-              styles={{
-                input: { width: 289, height: 48 },
-                wrapper: { width: 289 },
-              }}
-              mb={24}
-              maxLength={3}
-            />
+            {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
+              <NumberInput
+                label="Floors"
+                placeholder="Enter number of floors"
+                min={1}
+                {...form.getInputProps("floors")}
+                error={form.errors.floors}
+                hideControls
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
+                }}
+                mb={24}
+                maxLength={3}
+              />
+            )}
           </Grid.Col>
           <Grid.Col span={6}>
             {/* Location */}

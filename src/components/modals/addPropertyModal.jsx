@@ -935,6 +935,7 @@ const AddPropertyModal = React.memo(({
                 />
               </Text>
               {amenitiesLoading && <Loader color="grey" size="sm" />}
+
               {categoryMap[form.values.category_id] === "residential" &&
                 form.values.amenities.residential.map((amenity, index) => (
                   <div
@@ -1021,6 +1022,93 @@ const AddPropertyModal = React.memo(({
                 ))}
 
               {categoryMap[form.values.category_id] === "commercial" &&
+                form.values.amenities.commercial.map((amenity, index) => (
+                  <>
+                    <div
+                      key={index}
+                      style={{
+                        position: "relative",
+                        display: "inline-block",
+                        marginRight: "8px",
+                        marginBottom: "11px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          backgroundColor: amenity.selected ? "#F4F7FE" : "",
+                          cursor: "pointer",
+                          padding: "5px 10px",
+                          borderRadius: "54px",
+                          border: "1px solid #ccc",
+                          display: "inline-block",
+                          position: "relative",
+                          fontSize: 12,
+                        }}
+                        className={classes.amenitiesBadge}
+                        onClick={() => {
+                          const updatedAmenities =
+                            form.values.amenities.commercial.map((item, i) =>
+                              i === index
+                                ? { ...item, selected: !item.selected }
+                                : item
+                            );
+                          form.setFieldValue(
+                            "amenities.commercial",
+                            updatedAmenities
+                          );
+                        }}
+                      >
+                        {amenity.isCustom ? (
+                          <TextInput
+                            styles={{
+                              input: {
+                                fontSize: "inherit",
+                                fontWeight: "inherit",
+                                paddingBottom: 15,
+                                border: "none",
+                                background: "transparent",
+                                color: "inherit",
+                              },
+                            }}
+                            value={amenity.name}
+                            onChange={(e) => {
+                              const updatedAmenities =
+                                form.values.amenities.commercial.map(
+                                  (item, i) =>
+                                    i === index
+                                      ? { ...item, name: e.target.value }
+                                      : item
+                                );
+                              form.setFieldValue(
+                                "amenities.commercial",
+                                updatedAmenities
+                              );
+                            }}
+                            onBlur={() => {
+                              if (!amenity.name.trim()) {
+                                const updatedAmenities =
+                                  form.values.amenities.commercial.filter(
+                                    (item, i) => i !== index
+                                  );
+                                form.setFieldValue(
+                                  "amenities.commercial",
+                                  updatedAmenities
+                                );
+                              } else {
+                                handleAmenityBlur(amenity, index, "commercial");
+                              }
+                            }}
+                            placeholder="Enter amenity name"
+                            style={{ width: "100px", height: "20px" }}
+                          />
+                        ) : (
+                          amenity.name.replace(/_/g, " ")
+                        )}
+                      </span>
+                    </div>
+                  </>
+                ))}
+              {categoryMap[form.values.category_id] === "land" &&
                 form.values.amenities.commercial.map((amenity, index) => (
                   <>
                     <div

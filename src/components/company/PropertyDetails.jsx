@@ -1,7 +1,7 @@
 //Dependency imports
 import { useParams } from "react-router-dom";
 import {
-  Card, Stack, Text, Button, Group, Grid  ,Center, Loader, Modal, Textarea, Box, Avatar, useMantineColorScheme,
+  Card, Stack, Text, Button, Group, Grid, Center, Loader, Modal, Textarea, Box, Avatar, useMantineColorScheme,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
@@ -22,6 +22,7 @@ import FloorsIcon from "../icons/FloorsIcon";
 import CategoryIcon from "../icons/CategoryIcon";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/edit";
+  import { useQueryClient } from '@tanstack/react-query';
 
 function PropertyDetails() {
   const { id } = useParams();
@@ -41,6 +42,9 @@ function PropertyDetails() {
   const { colorScheme } = useMantineColorScheme();
   const { t } = useTranslation();
 
+
+  // داخل أي كومبوننت
+  const queryClient = useQueryClient();
   // Edit Modal States
   const [editModalOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   const [editData, setEditData] = useState({});
@@ -74,7 +78,7 @@ function PropertyDetails() {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       notifications.show({ title: "Success", message: "Listing updated successfully!", color: "green" });
-      fetchListing(); // إعادة جلب البيانات
+      queryClient.invalidateQueries(['listings']);
       closeEdit();
     } catch (err) {
       notifications.show({ title: "Error", message: "Failed to update property", color: "red" });
@@ -112,6 +116,8 @@ function PropertyDetails() {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       navigate("/dashboard/properties");
+      queryClient.invalidateQueries(['listings']);
+
       notifications.show({
         title: "Success",
         message: "Property deleted successfully!",
@@ -136,7 +142,7 @@ function PropertyDetails() {
         { status: newStatus, rejection_reason: reason },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
-      fetchListing();
+      queryClient.invalidateQueries(['listings']);
       notifications.show({
         title: "Success",
         message: "Listing status updated successfully",
@@ -173,6 +179,26 @@ function PropertyDetails() {
     }
   }, [editModalOpened, listing]);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (!opened1) return; // لا نفذ إلا إذا كان المودال مفتوحًا
+
+      if (event.key === "ArrowLeft") {
+        setSelectedImageIndex((prevIndex) =>
+          (prevIndex - 1 + listing.images.length) % listing.images.length
+        );
+      } else if (event.key === "ArrowRight") {
+        setSelectedImageIndex((prevIndex) =>
+          (prevIndex + 1) % listing.images.length
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [opened1, listing?.images]);
   if (loading) {
     return (
       <Center style={{ height: "80vh" }}>
@@ -206,6 +232,9 @@ function PropertyDetails() {
                     ?.image_url && (
                       <>
                         <img
+                          style={{
+                            cursor: "pointer"
+                          }}
                           src={`${listing.images.find((image) => image.is_primary)
                             .image_url
                             }`}
@@ -221,8 +250,17 @@ function PropertyDetails() {
                           }}
                         />
                         <p
+                          onClick={() => {
+                            setSelectedImageIndex(
+                              listing.images.findIndex(
+                                (image) => image.is_primary
+                              )
+                            );
+                            open1();
+                          }}
                           style={{
                             color: "#23262A",
+                            cursor: "pointer"
                           }}
                         >
                           See {listing.images.length} Photos
@@ -238,6 +276,10 @@ function PropertyDetails() {
                     .slice(0, 2) // عرض أول صورتين فقط
                     .map((image, index) => (
                       <img
+
+                        style={{
+                          cursor: "pointer"
+                        }}
                         key={image.id}
                         src={`${image.image_url}`}
                         alt={listing.title}
@@ -361,16 +403,19 @@ function PropertyDetails() {
                   <Grid.Col span={12} className={classes.svgCol}>
 
                     <span className={classes.svgSpan}>
-                      <div>
+                      {listing.rooms === 0 ? null : <div>
                         <BedsIcon />
                         <span>{listing.rooms} Beds</span>
                       </div>
+                      }
+
                     </span>
                     <span className={classes.svgSpan}>
-                      <div>
+                      {listing.bathrooms === 0 ? null : <div>
                         <BathsIcon />
                         <span>{listing.bathrooms} Baths</span>
-                      </div>
+                      </div>}
+
                     </span>
                     <span className={classes.svgSpan}>
                       <div>
@@ -380,15 +425,16 @@ function PropertyDetails() {
                       </div>
                     </span>
                     <span className={classes.svgSpan}>
-                      <div>
+                      {listing.floors === 0 ? null : <div>
                         <FloorsIcon />
                         <span>{listing.floors}</span>
-                      </div>
+                      </div>}
+
                     </span>
                     <span className={classes.svgSpan}>
                       <div>
                         <CategoryIcon />
-                        <span>{listing.category}</span>
+                        <span>{listing.category} / </span>
                       </div>
                     </span>
                   </Grid.Col>

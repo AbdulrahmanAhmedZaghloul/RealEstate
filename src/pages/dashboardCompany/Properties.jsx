@@ -14,6 +14,7 @@ import classes from "../../styles/realEstates.module.css";
 import { useAuth } from "../../context/authContext";
 
 import { useTranslation } from "../../context/LanguageContext";
+import { useQueryClient } from '@tanstack/react-query';
 
 //Component Imports
 import Notifications from "../../components/company/Notifications";
@@ -31,9 +32,11 @@ import AddIcon from "../../components/icons/addIcon";
 import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
+import CategoryIcon from "../../components/icons/CategoryIcon";
 function Properties() {
   const { user } = useAuth();
- 
+  const [isSticky, setIsSticky] = useState(false);
+
   const {
     data: listingsData,
     isLoading: listingsLoading,
@@ -91,9 +94,14 @@ function Properties() {
       if (filter === "lowest") return a.price - b.price;
       return 0;
     });
- 
+
+  const queryClient = useQueryClient();
 
   const handleAddProperty = (values) => {
+
+    // داخل أي كومبوننت
+    queryClient.invalidateQueries(['listings']);
+
     mutation.mutate(values);
   };
 
@@ -133,7 +141,7 @@ function Properties() {
 
     setFilteredListings(filtered);
   };
-  
+
   const { colorScheme } = useMantineColorScheme();
 
   useEffect(() => {
@@ -142,6 +150,7 @@ function Properties() {
         (listing) => listing.status === "approved"
       ) || []
     );
+
     setEmployees(employeesData?.data?.employees || []);
     setCategories(categoriesData?.data?.categories || []);
     setSubcategories(
@@ -150,9 +159,23 @@ function Properties() {
         .flat() || []
     );
   }, [listingsData, employeesData, categoriesData]);
+
   useEffect(() => {
     setFilteredListings(listings);
   }, [listings]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= 200) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const mutation = useAddProperty(user.token, categories, close);
   const isAddPropertyLoading = mutation.isPending;
@@ -179,129 +202,134 @@ function Properties() {
   }
   return (
     <>
-      <Card className={classes.mainContainer} radius="lg">
-        <div>
-          <BurgerButton />
-          <span className={classes.title}>{t.Properties}</span>
-          <Notifications />
-        </div>
-
-        <div className={classes.controls}>
-          <div className={classes.divSearch}>
-            <input
-              className={classes.search}
-              placeholder={t.Search}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <Search />
+      <Card  className={classes.mainContainer} radius="lg">
+          <div>
+            <BurgerButton />
+            <span className={classes.title}>{t.Properties}</span>
+            <Notifications />
           </div>
+        <header className={`${classes.header} ${isSticky ? classes.sticky : ""}`}>
+        
 
-          <button
-            variant="default"
-            radius="md"
-            onClick={openFilterModal}
-            className={classes.filter}
-          >
-            <FilterIcon />
-          </button>
-          <div className={classes.addAndSort}>
-            <Select
-              mr={10}
-              placeholder={t.Sortby}
-              value={filter}
-              onChange={setFilter}
-              rightSection={<Dropdown />}
-              data={[
-                { value: "newest", label: "Newest" },
-                { value: "oldest", label: "Oldest" },
-                { value: "highest", label: "Highest price" },
-                { value: "lowest", label: "Lowest price" },
-              ]}
-              styles={{
-                input: {
-                  width: "132px",
-                  height: "48px",
-                  borderRadius: "15px",
-                  border: "1px solid var(--color-border)",
-                  padding: "14px 24px",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  cursor: "pointer",
-                  backgroundColor: "var(--color-7)",
-                },
+          <div className={classes.controls}>
+            <div className={classes.divSearch}>
+              <input
+                className={classes.search}
+                placeholder={t.Search}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Search />
+            </div>
 
-                dropdown: {
-                  borderRadius: "15px", // Curved dropdown menu
-                  border: "1.5px solid var(--color-border)",
-                  backgroundColor: "var(--color-7)",
-                },
-                wrapper: {
-                  width: "132px",
-                },
-                item: {
-                  color: "var(--color-4)", // Dropdown option text color
-                  "&[data-selected]": {
-                    color: "white", // Selected option text color
-                  },
-                },
-              }}
-
-            />
-            {/* New Sale Status Filter Select */}
-            <Select
-              mr={10}
-              placeholder="For Sale"
-              value={saleFilter}
-              onChange={setSaleFilter}
-              rightSection={<Dropdown />}
-              data={[
-                { value: "all", label: "All" },
-                { value: "for_sale", label: "Sale" },
-                { value: "not_for_sale", label: "Not Sale" },
-              ]}
-              styles={{
-                input: {
-                  width: "132px",
-                  height: "48px",
-                  borderRadius: "15px",
-                  border: "1px solid var(--color-border)",
-                  padding: "14px 24px",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  cursor: "pointer",
-                  backgroundColor: "var(--color-7)",
-                },
-
-                dropdown: {
-                  borderRadius: "15px", // Curved dropdown menu
-                  border: "1.5px solid var(--color-border)",
-                  backgroundColor: "var(--color-7)",
-                },
-                wrapper: {
-                  width: "132px",
-                },
-                item: {
-                  color: "var(--color-4)", // Dropdown option text color
-                  "&[data-selected]": {
-                    color: "white", // Selected option text color
-                  },
-                },
-              }} />
-            <button style={{
-              cursor: "pointer",
-            }} className={classes.add} onClick={open}>
-              <AddIcon /> {t.Add}
+            <button
+              variant="default"
+              radius="md"
+              onClick={openFilterModal}
+              className={classes.filter}
+            >
+              <FilterIcon />
             </button>
+            <div className={classes.addAndSort}>
+              <Select
+                mr={10}
+                placeholder={t.Sortby}
+                value={filter}
+                onChange={setFilter}
+                rightSection={<Dropdown />}
+                data={[
+                  { value: "newest", label: "Newest" },
+                  { value: "oldest", label: "Oldest" },
+                  { value: "highest", label: "Highest price" },
+                  { value: "lowest", label: "Lowest price" },
+                ]}
+                styles={{
+                  input: {
+                    width: "132px",
+                    height: "48px",
+                    borderRadius: "15px",
+                    border: "1px solid var(--color-border)",
+                    padding: "14px 24px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    backgroundColor: "var(--color-7)",
+                  },
+
+                  dropdown: {
+                    borderRadius: "15px", // Curved dropdown menu
+                    border: "1.5px solid var(--color-border)",
+                    backgroundColor: "var(--color-7)",
+                  },
+                  wrapper: {
+                    width: "132px",
+                  },
+                  item: {
+                    color: "var(--color-4)", // Dropdown option text color
+                    "&[data-selected]": {
+                      color: "white", // Selected option text color
+                    },
+                  },
+                }}
+
+              />
+              {/* New Sale Status Filter Select */}
+              <Select
+                mr={10}
+                placeholder="For Sale"
+                value={saleFilter}
+                onChange={setSaleFilter}
+                rightSection={<Dropdown />}
+                data={[
+                  { value: "all", label: "All" },
+                  { value: "for_sale", label: "Sale" },
+                  { value: "not_for_sale", label: "Not Sale" },
+                ]}
+                styles={{
+                  input: {
+                    width: "132px",
+                    height: "48px",
+                    borderRadius: "15px",
+                    border: "1px solid var(--color-border)",
+                    padding: "14px 24px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    backgroundColor: "var(--color-7)",
+                  },
+
+                  dropdown: {
+                    borderRadius: "15px", // Curved dropdown menu
+                    border: "1.5px solid var(--color-border)",
+                    backgroundColor: "var(--color-7)",
+                  },
+                  wrapper: {
+                    width: "132px",
+                  },
+                  item: {
+                    color: "var(--color-4)", // Dropdown option text color
+                    "&[data-selected]": {
+                      color: "white", // Selected option text color
+                    },
+                  },
+                }} />
+              <button style={{
+                cursor: "pointer",
+              }} className={classes.add} onClick={open}>
+                <AddIcon /> {t.Add}
+              </button>
+            </div>
           </div>
-        </div>
+        </header>
+
+
 
         {searchedListings.length === 0 && !isLoading ? (
           <Center>
             <Text>No listings found.</Text>
           </Center>
         ) : (
-          <Group align="center" spacing="xl">
+          <Group className={classes.sty} align="center" spacing="xl">
             {searchedListings.map((listing) => (
               <Card
                 key={listing.id}
@@ -321,12 +349,18 @@ function Properties() {
                       h="233px"
                       radius="md"
                     />
-                    {/* <p className={classes.listingfor}> */}
 
                     <p className={classes.listingfor}>
-                      {listing.selling_status === 1 ? "sold" : listing.listing_type}
+                      {listing.selling_status === 1
+                        ? "Sold"
+                        : listing.listing_type === "buy"
+                          ? "For Sale"
+                          : listing.listing_type === "rent"
+                            ? "For Rent"
+                            : listing.listing_type === "booking"
+                              ? "For Booking"
+                              : listing.listing_type}
                     </p>
-                    {/* </p> */}
 
                   </div>
 
@@ -348,16 +382,25 @@ function Properties() {
                   <div className={classes.listingTitle}>{listing.title}</div>
                   <div className={classes.listingUtilities}>
                     <div className={classes.listingUtility}>
-                      <div className={classes.utilityImage}>
-                        <Rooms />
-                      </div>
-                      {listing.rooms}
+                      {listing.rooms === 0 ? null :
+                        <>
+                          <div className={classes.utilityImage}>
+                            <Rooms />
+                          </div>
+                          {listing.rooms}
+                        </>
+
+                      }
+
                     </div>
                     <div className={classes.listingUtility}>
-                      <div className={classes.utilityImage}>
-                        <Bathrooms />
-                      </div>
-                      {listing.bathrooms}
+                      {listing.bathrooms === 0 ? null : <>
+                        <div className={classes.utilityImage}>
+                          <Bathrooms />
+                        </div>
+                        {listing.bathrooms}
+                      </>}
+
                     </div>
                     <div className={classes.listingUtility}>
                       <div className={classes.utilityImage}>
@@ -366,9 +409,12 @@ function Properties() {
                       {listing.area} sqm
                     </div>
                   </div>
+
+                  <div className={classes.listingEmployee}>
+                    {t.Category}: {listing.category}
+                  </div>
                   <div className={classes.listingEmployee}>
                     {t.Employee}: {listing.employee?.name}
-
                   </div>
                   <div className={classes.listingLocation}>
                     {listing.location}
@@ -388,7 +434,7 @@ function Properties() {
                       ) === 1
                         ? "Yesterday"
                         : "Today"}
-                  </div> 
+                  </div>
                 </div>
               </Card>
             ))}

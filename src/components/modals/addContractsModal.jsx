@@ -2,6 +2,7 @@
 import {
   Modal,
   Grid,
+  Text,
   TextInput,
   Textarea,
   NumberInput,
@@ -125,7 +126,13 @@ const AddContractsModal = ({
         <Grid>
           <Grid.Col span={isMobile ? 12 : 6}>
             {/* Upload Document */}
-
+            <Text
+              size="sm"
+              weight={500}
+              style={{ fontSize: 14, fontWeight: 500, marginBottom: 7 }}
+            >
+              Upload Images
+            </Text>
             <CameraUpload
 
               onChange={(file) => form.setFieldValue("contract_document", file)}

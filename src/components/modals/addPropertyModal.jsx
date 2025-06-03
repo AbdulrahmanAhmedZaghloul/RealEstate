@@ -17,6 +17,7 @@ import {
 import { useForm } from "@mantine/form";
 import { useState, useEffect } from "react";
 import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
+import React from "react";
 
 //Local imports
 import currentLocation from "../../assets/currentLocation.svg";
@@ -26,7 +27,7 @@ import downArrow from "../../assets/downArrow.svg";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 
-const AddPropertyModal = ({
+const AddPropertyModal = React.memo(({
   opened,
   onClose,
   categories = [],
@@ -54,7 +55,8 @@ const AddPropertyModal = ({
       listing_type: "",
       amenities: {
         residential: [],
-        commercial: [],
+        commercial: [], 
+        land: [],
       },
     },
     validate: {
@@ -120,7 +122,6 @@ const AddPropertyModal = ({
         }
         return null;
       },
-
       employee_id: (value) =>
         user.role === "employee" ? null : value ? null : "Employee is required",
 
@@ -251,13 +252,13 @@ const AddPropertyModal = ({
   // Handle category change and fetch amenities
   const handleCategoryChange = async (categoryId) => {
     form.setFieldValue("category_id", categoryId);
-const selectedCategory = categories.find(
-  (cat) => cat.id === parseInt(categoryId)
-);
+    const selectedCategory = categories.find(
+      (cat) => cat.id === parseInt(categoryId)
+    );
 
-if (selectedCategory) {
-  setSelectedCategoryType(selectedCategory.name.toLowerCase());
-}
+    if (selectedCategory) {
+      setSelectedCategoryType(selectedCategory.name.toLowerCase());
+    }
     try {
       // Fetch all amenities
       const allAmenities = await fetchAmenities();
@@ -634,6 +635,40 @@ if (selectedCategory) {
               label="Down Payment"
               placeholder="Enter the down payment (e.g., 25.5%)"
               hideControls
+              min={1}
+              max={100}
+              maxLength={7}
+              decimalSeparator="."
+              precision={2}
+              step={0.1}
+              clampBehavior="strict" // 👈 يجبر القيمة على البقاء ضمن min/max
+              error={
+                form.values.down_payment !== null && (form.values.down_payment < 0 || form.values.down_payment > 100)
+                  ? "Down payment must be between 0 and 100%"
+                  : form.errors.down_payment
+              }
+              value={form.values.down_payment}
+              onChange={(value) => {
+                const numericValue = Number(value);
+                if (numericValue < 0) {
+                  form.setFieldValue("down_payment", 0);
+                } else if (numericValue > 100) {
+                  form.setFieldValue("down_payment", 100);
+                } else {
+                  form.setFieldValue("down_payment", numericValue);
+                }
+                if (form.errors.down_payment) {
+                  form.setFieldError("down_payment", "");
+                }
+              }}
+              suffix="%"
+            />
+
+            {/* <NumberInput
+              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+              label="Down Payment"
+              placeholder="Enter the down payment (e.g., 25.5%)"
+              hideControls
               decimalSeparator="." // استخدم الفاصلة العشرية الصحيحة
               precision={2} // دقتين عشريتين إذا أردت
               step={0.1} // يسمح بالكسور مثل 0.1 أو 0.5
@@ -655,7 +690,7 @@ if (selectedCategory) {
               }}
               suffix="%"
               maxLength={6}
-            />
+            /> */}
             {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
               <NumberInput
                 label="Rooms"
@@ -1090,6 +1125,6 @@ if (selectedCategory) {
       </form>
     </Modal>
   );
-};
+});
 
 export default AddPropertyModal;

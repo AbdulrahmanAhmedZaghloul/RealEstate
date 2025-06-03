@@ -18,6 +18,7 @@
   "Status": "Status",
   "Description": "Description",
   "Amenities": "Amenities",
+  "Category": "Category",
   "ContractDescription": "Contract Description",
   "DownPayment": "Down Payment",
   "Customer": "Customer",
@@ -75,5 +76,4 @@
   "RejectListing": "Reject Listing",
   "AcceptListing": "Accept Listing",
   "Notifications": "Notifications"
-
 }

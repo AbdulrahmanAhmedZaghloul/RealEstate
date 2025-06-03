@@ -83,11 +83,11 @@ function Contracts() {
   const mutation = useAddContract(user.token, close);
   const handleAddContract = (values) => {
     try {
-        mutation.mutateAsync(values); // 👈 mutateAsync يقدر يترقبه
+      mutation.mutateAsync(values); // 👈 mutateAsync يقدر يترقبه
       form.reset(); // لو جاي من نفس المودال
     } catch (error) {
       console.log(error);
-      
+
       // تم التعامل مع الأخطاء داخل onError بالفعل
     }
   };
@@ -390,19 +390,20 @@ function Contracts() {
 
                   <div className={classes.contractTitle}>{contract.real_estate.title}</div>
                   <div className={classes.contractInfo}>
-
-                    <span className={classes.svgSpan}>
+                    {contract.real_estate.rooms === 0 ? null :  <span className={classes.svgSpan}>
                       <div>
                         <BedsIcon />
                         <span>{contract.real_estate.rooms} Beds</span>
                       </div>
-                    </span>
-                    <span className={classes.svgSpan}>
+                    </span>}
+                  
+                    {contract.real_estate.bathrooms === 0 ? null : <span className={classes.svgSpan}>
                       <div>
                         <BathsIcon />
                         <span>{contract.real_estate.bathrooms} Baths</span>
                       </div>
-                    </span>
+                    </span>}
+
                     <span className={classes.svgSpan}>
                       <div>
                         <Area />
@@ -414,7 +415,7 @@ function Contracts() {
                     <span className={classes.svgSpan}>
                       <div>
                         <CategoryIcon />
-                        <span>{contract.real_estate.category}</span>
+                        <span>{contract.real_estate.category} / {contract.real_estate.type}</span>
                       </div>
                     </span>
 

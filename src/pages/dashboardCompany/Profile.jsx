@@ -37,7 +37,7 @@ function Profile() {
   const [formAddress, setFormAddress] = useState("");
   const [formImage, setFormImage] = useState("");
   const [formBio, setFormBio] = useState("");
-
+  const [imageModalOpen, { open: openImageModal, close: closeImageModal }] = useDisclosure(false);
   // Refs and hooks
   const fileInputRef = useRef(null);
   const [opened, { open, close }] = useDisclosure(false);
@@ -198,11 +198,8 @@ function Profile() {
     formData.append("bio", bio);
     if (imageFile) formData.append("picture", imageFile);
     mutationEditProfile.mutate(formData);
-
-
-
-
   };
+
   const formatSaudiPhoneNumberForDisplay = (phoneNumber) => {
     if (!phoneNumber) return "";
 
@@ -260,8 +257,10 @@ function Profile() {
                   src={image}
                   size={100}
                   name="company"
-                  radius={"50%"}
+                  radius="50%"
                   color="initials"
+                  style={{ cursor: "pointer" }}
+                  onClick={openImageModal}
                 />
                 <input
                   type="file"
@@ -324,6 +323,31 @@ function Profile() {
               )}
             </Grid>
           </div>
+
+          <Modal
+            opened={imageModalOpen}
+            onClose={closeImageModal}
+            centered
+            padding="lg"
+            radius="md"
+            title="View Image"
+          >
+            <Center>
+              <img
+                src={image}
+                alt=" enlarged avatar"
+                style={{
+                  width: "100%",
+                  height: "40vh",
+                  borderRadius: "8px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                  objectFit: "fill"
+                }}
+              />
+            </Center>
+          </Modal>
+
+
           <Modal opened={formModalOpened} onClose={closeFormModal} centered radius="lg" className={classes.Modal}>
             <div className={classes.ModalAvatar}>
               <div style={{ position: "relative", width: "fit-content" }}>

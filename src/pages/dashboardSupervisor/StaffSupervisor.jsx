@@ -424,18 +424,12 @@ function StaffSupervisor() {
                 backgroundColor: "#f0f0f1",
 
               }}  >
-                <Table.Th style={{
-                }}>{t.Name}</Table.Th>
-                <Table.Th style={{
-                }}>{t.Position}</Table.Th>
-                <Table.Th style={{
-                }}>{t.Email}</Table.Th>
-                <Table.Th style={{
-                }}>{t.Phone}</Table.Th>
-                <Table.Th style={{
-                }}>{t.Supervisor}</Table.Th>
-                <Table.Th style={{
-                }} />
+                <Table.Th >{t.Name}</Table.Th>
+                <Table.Th >{t.Position}</Table.Th>
+                <Table.Th >{t.Email}</Table.Th>
+                <Table.Th >{t.Phone}</Table.Th>
+                <Table.Th >{t.Supervisor}</Table.Th>
+                <Table.Th  />
               </Table.Tr>
             </Table.Thead>
             {paginatedEmployees?.map((employee) => (
@@ -444,7 +438,6 @@ function StaffSupervisor() {
                 borderBottomRightRadius: "none",
                 borderTopLeftRadius: "10px",
                 borderTopRightRadius: "10px",
-
               }} key={employee.employee_id}>
                 <Table.Td>
                   <Group
@@ -470,17 +463,13 @@ function StaffSupervisor() {
                 </Table.Td>
 
                 <Table.Td >
-                  <Badge style={{
-                    // fontSize: isSmallScreen ? "15px" : "11px",
-                  }} color={jobColors[employee.position]} variant="light">
+                  <Badge color={jobColors[employee.position]} variant="light">
                     {employee.position}
                   </Badge>
                 </Table.Td>
 
                 <Table.Td >
-                  <Anchor style={{
-                    // fontSize: isSmallScreen ? "15px" : "11px",
-                  }} component="button" size="sm">
+                  <Anchor  component="button" size="sm">
                     {employee.email}
                   </Anchor>
                 </Table.Td>
@@ -513,18 +502,14 @@ function StaffSupervisor() {
                         openEditModal(); // فتح نافذة التعديل
                       }}
                     >
-                      <img style={{
-                        // width: isSmallScreen ? "15px" : "11px",
-                      }} src={edit} alt="Edit" />
+                      <img  src={edit} alt="Edit" />
                     </ActionIcon>
                       <ActionIcon
                       onClick={() => handleDeleteEmployee(employee.employee_id)}
                       variant="subtle"
                       color="red"
                     >
-                      <img style={{
-                        // width: isSmallScreen ? "15px" : "11px",
-                      }} src={trash} alt="Delete" />
+                      <img src={trash} alt="Delete" />
                     </ActionIcon>  
                   </Group>
                 </Table.Td>
@@ -571,6 +556,7 @@ function StaffSupervisor() {
           </div>
         </Table.ScrollContainer>
       </Card>
+      
       <AddStaffModal
         opened={addModalOpened}
         onClose={closeAddModal}
@@ -588,6 +574,7 @@ function StaffSupervisor() {
         employee={editingEmployee}
         onUpdateSuccess={handleUpdateSuccess}
       />
+
     </>
   );
 }

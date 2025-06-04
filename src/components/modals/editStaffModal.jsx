@@ -141,17 +141,7 @@ const EditStaffModal = ({
           error={errors.phone_number}
           mt="md"
         />
-        {/* <TextInput
-          label="Phone Number"
-          placeholder="Phone number"
-          value={editUser.phone_number}
-          onChange={(e) =>
-            setEditUser({ ...editUser, phone_number: e.target.value })
-          }
-          required
-          mt="md"
-          error={errors.phone_number}
-        /> */}
+      
 
         {editUser.position === "employee" && (
           <Select

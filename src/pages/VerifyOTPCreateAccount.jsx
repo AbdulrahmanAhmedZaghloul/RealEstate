@@ -118,6 +118,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
     
   //   }
   // }, [user, navigate]);
+  
   return (
     <Container size={460} my={30}>
       {loading && (

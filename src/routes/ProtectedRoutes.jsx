@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
       company: "/dashboard",
       supervisor: "/dashboard-supervisor",
       employee: "/dashboard-employee",
-      Marketer: "/dashboard-Marketer",
+      // Marketer: "/dashboard-Marketer",
     };
 
     const targetPath = roleToDashboardPath[user.role] || "/dashboard";

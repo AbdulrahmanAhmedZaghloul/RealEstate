@@ -691,6 +691,7 @@ const AddPropertyModal = React.memo(({
               suffix="%"
               maxLength={6}
             /> */}
+
             {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
               <NumberInput
                 label="Rooms"
@@ -751,6 +752,7 @@ const AddPropertyModal = React.memo(({
                 maxLength={3}
               />
             )}
+            
           </Grid.Col>
           <Grid.Col span={6}>
             {/* Location */}
@@ -889,6 +891,7 @@ const AddPropertyModal = React.memo(({
             />
 
             {/* Assign Employee */}
+            
             {user.role === "employee" ? (
               <></>
             ) : (
@@ -911,6 +914,7 @@ const AddPropertyModal = React.memo(({
                 mb={24}
               />
             )}
+
             {/* Amenties */}
             <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 24 }}>
               <Text

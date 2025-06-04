@@ -208,21 +208,21 @@ function RequestsEmployee() {
     );
   };
 
-  const handleReject = (id) => {
-    setSelectedListingId(id);
-    setModalOpened(true);
-  };
-  // cursor
-  const handleRejectSubmit = () => {
-    if (selectedListingId) {
-      const reason =
-        rejectionReason === "Other" ? otherReason : rejectionReason;
-      updateStatus(selectedListingId, "rejected", reason);
-      setModalOpened(false);
-      setRejectionReason("");
-      setOtherReason("");
-    }
-  };
+  // const handleReject = (id) => {
+  //   setSelectedListingId(id);
+  //   setModalOpened(true);
+  // };
+  // // cursor
+  // const handleRejectSubmit = () => {
+  //   if (selectedListingId) {
+  //     const reason =
+  //       rejectionReason === "Other" ? otherReason : rejectionReason;
+  //     updateStatus(selectedListingId, "rejected", reason);
+  //     setModalOpened(false);
+  //     setRejectionReason("");
+  //     setOtherReason("");
+  //   }
+  // };
 
   const fetchCategories = async () => {
     setLoading(true);

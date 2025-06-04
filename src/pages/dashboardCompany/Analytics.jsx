@@ -86,8 +86,8 @@ function Analytics() {
   const [trendsOverTime, setTrendsOverTime] = useState([]);
   const [priceAdjustments, setPriceAdjustments] = useState([]);
   const { colorScheme } = useMantineColorScheme();
-   
-    const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+
+  const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
   const fetchCompanyKPIs = async () => {
     try {
@@ -349,7 +349,7 @@ function Analytics() {
         <BurgerButton />
         <span
           style={{
-            color:   "var(--color-3)",
+            color: "var(--color-3)",
           }}
           className={classes.title}
         >
@@ -360,27 +360,27 @@ function Analytics() {
       <div className={classes.summary}>
         <div
           style={{
-                          
+
           }}
           className={classes.card}
         >
           <div
             style={{
-                           }}
+            }}
             className={classes.cardTitle}
           >
             {t.Selling}
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardCount}
           >
             {data?.contracts?.total_sales}
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardRevenue}
           >
             <span className="icon-saudi_riyal">&#xea; </span>
@@ -389,27 +389,27 @@ function Analytics() {
         </div>
         <div
           style={{
-                          
+
           }}
           className={classes.card}
         >
           <div
             style={{
-                           }}
+            }}
             className={classes.cardTitle}
           >
             {t.Renting}
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardCount}
           >
             {data?.contracts?.total_rentals}
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardRevenue}
           >
             <span className="icon-saudi_riyal">&#xea; </span>
@@ -418,28 +418,28 @@ function Analytics() {
         </div>
         <div
           style={{
-                          
+
             marginRight: "0px",
           }}
           className={classes.card}
         >
           <div
             style={{
-                           }}
+            }}
             className={classes.cardTitle}
           >
             {t.Booking}
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardCount}
           >
             {data?.contracts?.total_bookings}
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardRevenue}
           >
             <span className="icon-saudi_riyal">&#xea; </span>
@@ -452,13 +452,13 @@ function Analytics() {
         {/* Income Chart */}
         <div
           style={{
-                          
+
           }}
           className={classes.chart}
         >
           <span
             style={{
-                           }}
+            }}
             className={classes.chartTitle}
           >
             {t.Income}
@@ -490,13 +490,13 @@ function Analytics() {
         {/* Revenue Chart */}
         <div
           style={{
-                          
+
           }}
           className={classes.chart}
         >
           <span
             style={{
-                           }}
+            }}
             className={classes.chartTitle}
           >
             {t.Revenue}
@@ -529,13 +529,13 @@ function Analytics() {
       {/* Newly Listed Properties */}
       <div
         style={{
-                      
+
         }}
         className={classes.chart}
       >
         <span
           style={{
-                       }}
+          }}
           className={classes.chartTitle}
         >
           {t.NewlyListedProperties}
@@ -546,9 +546,9 @@ function Analytics() {
           className={classes.dropdown}
           style={{
             maxWidth: "130px",
-            color:   "var(--color-3)",
+            color: "var(--color-3)",
           }}
-          // style={{  }}
+        // style={{  }}
         >
           {subcategories.map((subcategory) => (
             <option key={subcategory} value={subcategory}>
@@ -652,20 +652,20 @@ function Analytics() {
       <div className={classes.summary}>
         <div
           style={{
-                          
+
           }}
           className={classes.card}
         >
           <div
             style={{
-                           }}
+            }}
             className={classes.cardTitle}
           >
             Closed Deals
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardCount}
           >
             {data?.contracts?.total_sales +
@@ -674,7 +674,7 @@ function Analytics() {
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardRevenue}
           >
             <span className="icon-saudi_riyal">&#xea; </span>
@@ -683,27 +683,27 @@ function Analytics() {
         </div>
         <div
           style={{
-                          
+
           }}
           className={classes.card}
         >
           <div
             style={{
-                           }}
+            }}
             className={classes.cardTitle}
           >
             Total Properties
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardCount}
           >
             {data?.contracts?.total_rentals}
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardRevenue}
           >
             <span className="icon-saudi_riyal">&#xea; </span>
@@ -712,28 +712,28 @@ function Analytics() {
         </div>
         <div
           style={{
-                          
+
             marginRight: "0px",
           }}
           className={classes.card}
         >
           <div
             style={{
-                           }}
+            }}
             className={classes.cardTitle}
           >
             Marketplace Properties
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardCount}
           >
             {data?.contracts?.total_bookings}
           </div>
           <div
             style={{
-                           }}
+            }}
             className={classes.cardRevenue}
           >
             <span className="icon-saudi_riyal">&#xea; </span>
@@ -746,13 +746,13 @@ function Analytics() {
         {/* Time on Market Chart */}
         <div
           style={{
-                          
+
           }}
           className={classes.chart}
         >
           <span
             style={{
-                           }}
+            }}
             className={classes.chartTitle}
           >
             {t.TimeonMarket}
@@ -777,16 +777,16 @@ function Analytics() {
         {/* Category Performance */}
         <div
           style={{
-                          
+
           }}
           className={classes.chart}
         >
           <span
             style={{
-                           }}
+            }}
             className={classes.chartTitle}
           >
-           {t.CategoryPerformance}
+            {t.CategoryPerformance}
           </span>
           <br /> <br />
           <ResponsiveContainer width="100%" height={300}>
@@ -820,13 +820,13 @@ function Analytics() {
       {/* Price Adjustments */}
       <div
         style={{
-                      
+
         }}
         className={classes.chart}
       >
         <span
           style={{
-                       }}
+          }}
           className={classes.chartTitle}
         >
           {t.PriceAdjustments}
@@ -866,13 +866,13 @@ function Analytics() {
       {/* Trends over time  */}
       <div
         style={{
-                      
+
         }}
         className={classes.chart}
       >
         <span
           style={{
-                       }}
+          }}
           className={classes.chartTitle}
         >
           {t.TrendsOverTime}

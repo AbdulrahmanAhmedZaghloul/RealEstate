@@ -92,7 +92,7 @@
   border-radius: 20px;
 }
 
-.iconend svg {
+.iconend   {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,6 +100,7 @@
   margin: auto;
   margin-top: 5px;
   cursor: pointer;
+  gap: 10px;
 }
 
 .thumbnail {

@@ -1,18 +1,4 @@
-import {
-  Anchor,
-  Button,
-  Checkbox,
-  Container,
-  Group,
-  Paper,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-  Loader,
-  Center,
-  GridCol,
-  Grid,
+import {Anchor,Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title,Loader,Center,GridCol,Grid,
 } from "@mantine/core";
 import classes from "../styles/login.module.css";
 import { useEffect, useState } from "react";
@@ -21,7 +7,7 @@ import { notifications } from "@mantine/notifications";
 import { useAuth } from "../context/authContext";
 import axiosInstance from "../api/config";
 import position1 from "../assets/header/pont.png";
- import image from "../assets/header/screenshot_landing.png";
+import image from "../assets/header/screenshot_landing.png";
 import { validateField } from "../hooks/Validation/validation";
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
 
@@ -50,9 +36,18 @@ export default function Login() {
         } else {
           navigate("/subscription-plans", { replace: true });
         }
-      } else if (user && user.role === "supervisor") {
+      }
+      if (user && user.role === "marketer") {
+        if (isSubscribed) {
+          navigate("/dashboard-Marketer", { replace: true });
+        } else {
+          navigate("/subscription-plans", { replace: true });
+        }
+      }
+      else if (user && user.role === "supervisor") {
         navigate("/dashboard-supervisor", { replace: true });
-      } else if (user && user.role === "employee") {
+      }
+      else if (user && user.role === "employee") {
         navigate("/dashboard-employee", { replace: true });
       }
       setLoading(false);
@@ -83,6 +78,7 @@ export default function Login() {
         .then((response) => {
           const token = response.data.data.token;
           const role = response.data.data.user.role;
+          console.log(response.data.data.user.role);
 
           if (token) {
             login(token, role, credentials.remember);
@@ -216,7 +212,7 @@ export default function Login() {
               </Button>
 
               <Text c="dimmed" size="sm" ta="center" mt={15}>
-                Do not have an account yet? 
+                Do not have an account yet?
                 <Link to="/register"  >
                   Register
                 </Link>

@@ -202,14 +202,14 @@ function Properties() {
   }
   return (
     <>
-      <Card  className={classes.mainContainer} radius="lg">
-          <div>
-            <BurgerButton />
-            <span className={classes.title}>{t.Properties}</span>
-            <Notifications />
-          </div>
+      <Card className={classes.mainContainer} radius="lg">
+        <div>
+          <BurgerButton />
+          <span className={classes.title}>{t.Properties}</span>
+          <Notifications />
+        </div>
         <header className={`${classes.header} ${isSticky ? classes.sticky : ""}`}>
-        
+
 
           <div className={classes.controls}>
             <div className={classes.divSearch}>

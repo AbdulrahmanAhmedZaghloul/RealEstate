@@ -38,8 +38,7 @@ export default function DashboardSupervisorLayout() {
             ? "0px 4px 15px rgba(0, 0, 0, 0.2)" // Shadow effect when sidebar is open
             : "none", // No shadow when sidebar is closed
           transition: "box-shadow 0.3s ease-in-out", // Smooth transition for shadow
-          backgroundColor: "var(--color-5)",
-
+          backgroundColor: "var(--color-6)",
         }}
 
       >

@@ -59,16 +59,18 @@ function EmployeeDetailsSupervisor() {
   const fetchEmployeeListings = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/api/listings`, {
+      const response = await axiosInstance.get(`/api/listings/cursor`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
+       
+      console.log(response);
 
       const filteredListings = response.data.data.listings.filter(
         (listing) => listing.employee_id === parseInt(id)
       );
       setEmployeeListings(filteredListings);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -212,14 +214,11 @@ function EmployeeDetailsSupervisor() {
         <div className={classes.profileImage}>
           <img src={`${employee.picture_url}`} alt="Profile" />
           <div className={classes.profileInfo}>
-            <h2 
+            <h2
             >
-              {employee.name}{" "}
+              {employee.name}
             </h2>
-            <p
-              style={{
-                // fontSize: isSmallScreen ? "20px" : "16px",
-              }}
+            <p 
             >
               {employee.email}
             </p>
@@ -229,10 +228,7 @@ function EmployeeDetailsSupervisor() {
 
       <div className={classes.personalInfo}>
         <div>
-          <h3
-            style={{
-              // fontSize: isSmallScreen ? "20px" : "16px",
-            }}
+          <h3 
           >
             {t.PersonalInfo}
           </h3>
@@ -245,12 +241,11 @@ function EmployeeDetailsSupervisor() {
             >
               {t.FullName}
             </h2>
-            {/* <br /> */}
-            <h3
+             <h3
               style={{
               }}
             >
-              
+
               {employee.name}
             </h3>
           </Grid.Col>
@@ -268,34 +263,25 @@ function EmployeeDetailsSupervisor() {
               {employee.position}
             </h3>
           </Grid.Col>
-        
+
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
+            <h2 
             >
               {t.Supervisor}
             </h2>
-            <h3
-              style={{
-              }}
+            <h3 
             >
               {employee.supervisor.name}
             </h3>
           </Grid.Col>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
+            <h2 
             >
               {t.Phone}
             </h2>
-            <h3
-              style={{
-              }}
+            <h3 
             >
-              {" "}
-              {employee.phone_number}{" "}
+               {employee.phone_number} 
             </h3>
           </Grid.Col>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
@@ -313,23 +299,17 @@ function EmployeeDetailsSupervisor() {
             </h3>
           </Grid.Col>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
+            <h2 
             >
               {t.address}
             </h2>
-            <h3
-              style={{
-              }}
+            <h3 
             >
               {employee.address}
             </h3>
           </Grid.Col>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
+            <h2 
             >
               {t.Status}
             </h2>
@@ -340,23 +320,17 @@ function EmployeeDetailsSupervisor() {
 
       <div className={classes.summary}>
         <div className={classes.card}>
-          <div
-            style={{
-            }}
+          <div 
             className={classes.cardTitle}
           >
             {t.Selling}
           </div>
-          <div
-            style={{
-            }}
+          <div 
             className={classes.cardCount}
           >
             {kpiData?.performance_metrics?.sales?.count}
           </div>
-          <div
-            style={{
-            }}
+          <div 
             className={classes.cardRevenue}
           >
             <span className="icon-saudi_riyal">&#xea; </span>
@@ -459,7 +433,7 @@ function EmployeeDetailsSupervisor() {
         </ResponsiveContainer>
       </div>
 
-      
+
     </div>
   );
 }

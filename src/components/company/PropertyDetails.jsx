@@ -199,6 +199,7 @@ function PropertyDetails() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [opened1, listing?.images]);
+  
   if (loading) {
     return (
       <Center style={{ height: "80vh" }}>
@@ -210,8 +211,6 @@ function PropertyDetails() {
   if (!listing) {
     return <Center>Listing not found</Center>;
   }
-
-
 
   return (
     <>

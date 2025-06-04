@@ -255,7 +255,6 @@ function SubscriptionPlans() {
                           : "transparent",
                       padding: "40px",
                       borderRadius: "20px",
-                     
                       width: "320px",
                       border:
                         plan.name === "Professional" ||

@@ -33,6 +33,10 @@ import Search from "../../components/icons/search";
 import FilterIcon from "../../components/icons/filterIcon";
 import Dropdown from "../../components/icons/dropdown";
 import AddIcon from "../../components/icons/addIcon";
+import BathsIcon from "../../components/icons/BathsIcon";
+import Area from "../../components/icons/area";
+import CategoryIcon from "../../components/icons/CategoryIcon";
+import BedsIcon from "../../components/icons/BedsIcon";
 
 function ContractsSupervisor() {
   const [contracts, setContracts] = useState([]);
@@ -62,7 +66,7 @@ function ContractsSupervisor() {
   const fetchApprovedListings = () => {
     setLoading(true);
     axiosInstance
-      .get("/api/listings", {
+      .get("api/listings/cursor", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -408,35 +412,45 @@ function ContractsSupervisor() {
                       }}
                       className={classes.contractDownPayment}
                     >
-                      {Math.floor(
-                        (contract.down_payment / contract.price) * 100
-                      )}
+                      {contract.down_payment}
                       % {t.DownPayment}
                     </span>
                   </div>
 
                   <div className={classes.contractTitle}>{contract.title}</div>
+
                   <div className={classes.contractInfo}>
-                    <img src={rooms} height="24px" width="24px" />
-                    <span>
-                      {contract.real_estate.rooms
-                        ? contract.real_estate.rooms
-                        : "-"}
+                    {contract.real_estate.rooms === 0 ? null : <span className={classes.svgSpan}>
+                      <div>
+                        <BedsIcon />
+                        <span>{contract.real_estate.rooms} Beds</span>
+                      </div>
+                    </span>}
+
+                    {contract.real_estate.bathrooms === 0 ? null : <span className={classes.svgSpan}>
+                      <div>
+                        <BathsIcon />
+                        <span>{contract.real_estate.bathrooms} Baths</span>
+                      </div>
+                    </span>}
+
+                    <span className={classes.svgSpan}>
+                      <div>
+                        <Area />
+
+                        <span>{contract.real_estate.area} sqm</span>
+                      </div>
                     </span>
-                    <img src={bathrooms} height="24px" width="24px" />
-                    <span>
-                      {contract.real_estate.bathrooms
-                        ? contract.real_estate.bathrooms
-                        : "-"}
+
+                    <span className={classes.svgSpan}>
+                      <div>
+                        <CategoryIcon />
+                        <span>{contract.real_estate.category} / {contract.real_estate.type}</span>
+                      </div>
                     </span>
-                    <img src={area} height="24px" width="24px" />
-                    <span>
-                      {contract.real_estate.area
-                        ? contract.real_estate.area
-                        : "-"}{" "}
-                      sqm
-                    </span>
+
                   </div>
+
                   <div className={classes.contractEmployee}>
                     <span>{t.Customer} : {contract.customer_name}</span>
                   </div>

@@ -229,11 +229,7 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
                     {form.values.contract_type === "sale" ? (
                         // عرض فقط Release Date في حالة البيع
                         <>
-                            {/* <TextInput
-              label="Creation Date"
-              type="date"
-              {...form.getInputProps("creation_date")}
-            /> */}
+                     
                             <TextInput
                                 type="date"
                                 label="Release Date"

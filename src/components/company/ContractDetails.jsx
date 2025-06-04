@@ -291,8 +291,7 @@ function ContractDetails() {
           <>
             {/* حاوية الصورة الرئيسية */}
             <div className={classes.ImageContainerBig}>
-              {console.log(contract)}
-              {contract.real_estate.images?.[0] && (
+               {contract.real_estate.images?.[0] && (
                 <img
                   key={contract.real_estate.images[0].id}
                   src={contract.real_estate.images[0].url}

@@ -52,7 +52,7 @@ import RequestsEmployee from "./pages/dashboardEmployee/RequestsEmployee.jsx";
 import PropertyDetailsEmployee from "./components/employee/PropertyDetailsEmployee.jsx";
 import { LanguageProvider } from "./context/LanguageContext.jsx";
 import MatterOrCompany from "./pages/MatterOrCompany.jsx";
-import DashboardMarketerLayout from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
+// import DashboardMarketerLayout from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
 
 function App() {
   return (
@@ -129,29 +129,6 @@ function App() {
               <Route path="Properties" element={<Properties />} />
               <Route path="Contracts/:id" element={<ContractDetails />} />
             </Route>
-
-            {/* Marketer Manager Routes */}
-            <Route
-              path="/dashboard-Marketer"
-              element={
-                <ProtectedRoute allowedRoles={["Marketer"]}>
-                  <DashboardMarketerLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Profile />} />
-              <Route path="Team" element={<Staff />} />
-              <Route path="Contracts" element={<Contracts />} />
-              <Route path="Analytics" element={<Analytics />} />
-              <Route path="Categories" element={<Categories />} />
-              <Route path="Transactions" element={<Transactions />} />
-              <Route path="employee/:id" element={<EmployeeDetails />} />
-              <Route path="supervisor/:id" element={<SupervisorDetails />} />
-              <Route path="Properties/:id" element={<PropertyDetails />} />
-              <Route path="Properties" element={<Properties />} />
-              <Route path="Contracts/:id" element={<ContractDetails />} />
-            </Route>
-
             
             {/* Supervisor Routes */}
             <Route

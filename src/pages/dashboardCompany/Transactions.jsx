@@ -26,6 +26,7 @@ import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
 import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
 import Search from "../../components/icons/search";
+import { usePropertiesContracts } from "../../hooks/queries/usePropertiesContracts";
 
 const rejectionReasons = [
   {
@@ -44,7 +45,7 @@ function Transactions() {
     isLoading: listingsLoading,
     isError: isListingsError,
     error: listingsError,
-  } = useProperties();
+  } = usePropertiesContracts();
 
   const {
     data: categoriesData,

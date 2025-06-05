@@ -20,7 +20,6 @@ import { useMediaQuery } from '@mantine/hooks';
 import downArrow from "../../assets/downArrow.svg";
 import classes from "../../styles/modals.module.css";
 import { useEffect, useState } from "react";
-import { IconCamera, IconCameraAi } from "@tabler/icons-react";
 import CameraUpload from "../CameraUpload";
 
 const AddContractsModal = ({

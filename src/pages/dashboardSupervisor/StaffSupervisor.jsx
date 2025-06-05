@@ -10,12 +10,10 @@ import { useAuth } from "../../context/authContext";
 import classes from "../../styles/realEstates.module.css";
 import edit from "../../assets/edit.svg";
 import trash from "../../assets/trash.svg";
-import addIcon from "../../assets/addIcon.svg";
 import AddStaffModal from "../../components/modals/addStaffModal";
 import UpdataStaffModal from "./../../components/modals/editStaffModal_Supervisor";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import Notifications from "../../components/company/Notifications";
-import downArrow from "../../assets/downArrow.svg";
 import { useTranslation } from "../../context/LanguageContext";
 import Search from "../../components/icons/search";
 import Dropdown from "../../components/icons/dropdown";
@@ -429,7 +427,7 @@ function StaffSupervisor() {
                 <Table.Th >{t.Email}</Table.Th>
                 <Table.Th >{t.Phone}</Table.Th>
                 <Table.Th >{t.Supervisor}</Table.Th>
-                <Table.Th  />
+                <Table.Th />
               </Table.Tr>
             </Table.Thead>
             {paginatedEmployees?.map((employee) => (
@@ -469,7 +467,7 @@ function StaffSupervisor() {
                 </Table.Td>
 
                 <Table.Td >
-                  <Anchor  component="button" size="sm">
+                  <Anchor component="button" size="sm">
                     {employee.email}
                   </Anchor>
                 </Table.Td>
@@ -502,15 +500,15 @@ function StaffSupervisor() {
                         openEditModal(); // فتح نافذة التعديل
                       }}
                     >
-                      <img  src={edit} alt="Edit" />
+                      <img src={edit} alt="Edit" />
                     </ActionIcon>
-                      <ActionIcon
+                    <ActionIcon
                       onClick={() => handleDeleteEmployee(employee.employee_id)}
                       variant="subtle"
                       color="red"
                     >
                       <img src={trash} alt="Delete" />
-                    </ActionIcon>  
+                    </ActionIcon>
                   </Group>
                 </Table.Td>
 
@@ -556,7 +554,7 @@ function StaffSupervisor() {
           </div>
         </Table.ScrollContainer>
       </Card>
-      
+
       <AddStaffModal
         opened={addModalOpened}
         onClose={closeAddModal}

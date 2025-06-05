@@ -28,6 +28,7 @@ import FloorsIcon from "../../components/icons/FloorsIcon";
 import CategoryIcon from "../../components/icons/CategoryIcon";
 import BathsIcon from "../../components/icons/BathsIcon";
 import BedsIcon from "../../components/icons/BedsIcon";
+import { usePropertiesContracts } from "../../hooks/queries/usePropertiesContracts";
 function Contracts() {
 
   const {
@@ -35,7 +36,7 @@ function Contracts() {
     isLoading: listingsLoading,
     isError: isListingsError,
     error: listingsError,
-  } = useProperties();
+  } = usePropertiesContracts();
 
   const {
     data: contractsData,
@@ -150,19 +151,6 @@ function Contracts() {
       }
     });
 
-  //pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(searchedContracts.length / itemsPerPage);
-  const paginatedContracts = searchedContracts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  // Reset currentPage to 1 when the search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
 
   useEffect(() => {
     setFilteredContracts(contracts);
@@ -336,12 +324,12 @@ function Contracts() {
         </div>
 
         <div className={classes.contractList}>
-          {paginatedContracts.length === 0 && !loading ? (
+          {searchedContracts.length === 0 && !loading ? (
             <Center>
               <Text> {t.Nocontracts} </Text>
             </Center>
           ) : (
-            paginatedContracts.map((contract) => (
+            searchedContracts.map((contract) => (
               <div
                 key={contract.id}
                 className={classes.contractCard}
@@ -390,13 +378,13 @@ function Contracts() {
 
                   <div className={classes.contractTitle}>{contract.real_estate.title}</div>
                   <div className={classes.contractInfo}>
-                    {contract.real_estate.rooms === 0 ? null :  <span className={classes.svgSpan}>
+                    {contract.real_estate.rooms === 0 ? null : <span className={classes.svgSpan}>
                       <div>
                         <BedsIcon />
                         <span>{contract.real_estate.rooms} Beds</span>
                       </div>
                     </span>}
-                  
+
                     {contract.real_estate.bathrooms === 0 ? null : <span className={classes.svgSpan}>
                       <div>
                         <BathsIcon />
@@ -450,42 +438,6 @@ function Contracts() {
           )}
         </div>
 
-        {/*pagination */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "18px",
-            marginTop: "10px",
-          }}
-        >
-          {currentPage > 1 && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              {currentPage - 1}
-            </button>
-          )}
-
-          <button
-            style={{
-              backgroundColor: "var(--color-5)",
-            }}
-            className={classes.currentPagenow}
-          >
-            {currentPage}
-          </button>
-
-          {currentPage < totalPages && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              {currentPage + 1}
-            </button>
-          )}
-        </div>
       </Card>
 
       <AddContractsModal

@@ -138,19 +138,19 @@ function Staff() {
 
   const navigate = useNavigate();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(supervisors.length / itemsPerPage);
-  const paginatedSupervisors = supervisors.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const itemsPerPage = 10;
+  // const totalPages = Math.ceil(supervisors.length / itemsPerPage);
+  // const paginatedSupervisors = supervisors.slice(
+  //   (currentPage - 1) * itemsPerPage,
+  //   currentPage * itemsPerPage
+  // );
   const [changePasswordModal, { open: openChangePasswordModal, close: closeChangePasswordModal }] = useDisclosure(false);
 
   // Reset currentPage to 1 when the search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
+  // useEffect(() => {
+  //   setCurrentPage(1);
+  // }, [searchQuery]);
 
   const fetchEmployees = async () => {
     try {
@@ -520,7 +520,7 @@ function Staff() {
                   border: "1px solid var(--color-border)",
                 }}
               >
-                {paginatedSupervisors.map((supervisor) => (
+                {supervisors.map((supervisor) => (
                   <React.Fragment key={supervisor.supervisor_id}>
                     <Table.Tr
                       key={supervisor.supervisor_id}
@@ -1070,42 +1070,6 @@ function Staff() {
             )}
           </Table>
 
-          {/*pagination */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "18px",
-              marginTop: "20px",
-            }}
-          >
-            {currentPage > 1 && (
-              <button
-                className={classes.currentPage}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                {currentPage - 1}
-              </button>
-            )}
-
-            <button
-              style={{
-                backgroundColor: "var(--color-5)",
-              }}
-              className={classes.currentPagenow}
-            >
-              {currentPage}
-            </button>
-
-            {currentPage < totalPages && (
-              <button
-                className={classes.currentPage}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                {currentPage + 1}
-              </button>
-            )}
-          </div>
         </Table.ScrollContainer>
       </Card> 
 

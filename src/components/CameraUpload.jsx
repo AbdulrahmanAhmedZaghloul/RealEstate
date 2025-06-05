@@ -28,7 +28,7 @@ export default function CameraUpload({ onChange }) {
             <button
                 variant="subtle"
                 onClick={() => fileInputRef.current?.click()}
-                style={{ margin: "20px 0px" ,border:"none" ,backgroundColor:"transparent" }}
+                style={{ margin: "20px 0px", border: "none", backgroundColor: "transparent" }}
             >
                 <IconCamera size={40} color="gray" />
             </button>
@@ -44,7 +44,7 @@ export default function CameraUpload({ onChange }) {
                     input: {
                         display: 'none', // جعله غير مرئي تمامًا
                     },
-            
+
                 }}
             />
             {preview && (

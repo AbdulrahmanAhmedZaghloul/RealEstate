@@ -12,20 +12,16 @@ import {
   Modal,
   Textarea,
   Loader,
-  useMantineColorScheme,
-} from "@mantine/core";
+ } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import classes from "../../styles/realEstates.module.css";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
-import { notifications } from "@mantine/notifications";
-import FilterDark from "../../assets/dashboard/filter.svg";
-import FilterLight from "../../assets/Filter.png";
+import { notifications } from "@mantine/notifications"; 
 import FiltersModal from "../../components/modals/filterPropertiesModal";
-import downArrow from "../../assets/downArrow.svg";
-import area from "../../assets/area.svg";
+ import area from "../../assets/area.svg";
 import rooms from "../../assets/rooms.svg";
 import bathrooms from "../../assets/bathrooms.svg";
 import AcceptedStatus from "../../assets/status/AcceptedStatus.svg";
@@ -36,6 +32,8 @@ import { BurgerButton } from "../../components/buttons/burgerButton";
 import { useTranslation } from "../../context/LanguageContext";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
+import { useProperties } from "../../hooks/queries/useProperties";
+import { useInView } from "react-intersection-observer";
 const rejectionReasons = [
   {
     value: "Completion of Contract Terms",
@@ -70,6 +68,7 @@ function RequestsSupervisor() {
   ] = useDisclosure(false);
 
 
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties();
 
   const { t } = useTranslation(); // 👈 استدعاء اللغة
 
@@ -86,11 +85,25 @@ function RequestsSupervisor() {
       level: "",
     },
   });
+  const allListings = data?.pages.flatMap(page =>
+    page.data.listings.filter(listing => listing.status === "pending")
+  ) || [];
+  const [ref, inView] = useInView();
 
-  const searchedListings = filteredListings
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  // Form validation using Mantine's useForm
+  const searchedListings = allListings
     .filter((listing) =>
       listing.title.toLowerCase().includes(search.toLowerCase())
-    )
+    ).filter((listing) => {
+      if (saleFilter === "for_sale") return listing.selling_status === 0;
+      if (saleFilter === "not_for_sale") return listing.selling_status === 1;
+      return true; // all
+    })
     .sort((a, b) => {
       if (filter === "newest")
         return new Date(b.created_at) - new Date(a.created_at);
@@ -101,28 +114,29 @@ function RequestsSupervisor() {
       return 0;
     });
 
-  const fetchListings = async () => {
-    setLoading(true);
-    await axiosInstance
-      .get("/api/listings/cursor", {
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
-      .then((res) => {
-        { console.log(res.data.data.listings.length) }
-        const pendingListings = res.data.data.listings.filter(
-          (listing) => listing.status === "pending"
-        );
-            setListings(pendingListings);
 
-        // setListings(res.data.data.listings);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+  // const fetchListings = async () => {
+  //   setLoading(true);
+  //   await axiosInstance
+  //     .get("/api/listings/cursor", {
+  //       headers: { Authorization: `Bearer ${user.token}` },
+  //     })
+  //     .then((res) => {
+  //       { console.log(res.data.data.listings.length) }
+  //       const pendingListings = res.data.data.listings.filter(
+  //         (listing) => listing.status === "pending"
+  //       );
+  //       setListings(pendingListings);
+
+  //       // setListings(res.data.data.listings);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response);
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // };
 
   const handleFilterProperties = (filters) => {
     const filtered = listings.filter((listing) => {
@@ -244,23 +258,11 @@ function RequestsSupervisor() {
   };
 
   useEffect(() => {
-    fetchListings();
+    // fetchListings();
     fetchCategories();
   }, []);
 
-  //pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(searchedListings.length / itemsPerPage);
-  const paginatedListings = searchedListings.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
 
-  // Reset currentPage to 1 when the search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
 
   if (loading) {
     return (
@@ -377,182 +379,151 @@ function RequestsSupervisor() {
           <Grid.Col span={12}>
             {console.log(listings)}
 
-            {paginatedListings.length === 0 && !loading ? (
+            {searchedListings.length === 0 && !loading ? (
               <Center>
                 <Text>{t.Notransactions}</Text>
               </Center>
             ) : (
-              <Group align="center" spacing="xl">
-                {paginatedListings.map((listing) =>
-                  <Card
-                    key={listing.id}
-                    withBorder
-                    radius="md"
-                    className={classes.card}
-                    h={"100%"}
-                  >
-                    <div
-                      style={{
-                        cursor: "pointer",
-           }}
-                      onClick={() => {
-                        navigate(
-                          `/dashboard-supervisor/Properties/${listing.id}`
-                        );
-                      }}
+              <>
+                <Group align="center" spacing="xl">
+                  {searchedListings.map((listing) =>
+                    <Card
+                      key={listing.id}
+                      withBorder
+                      radius="md"
+                      className={classes.card}
+                      h={"100%"}
                     >
+                      <div
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          navigate(
+                            `/dashboard-supervisor/Properties/${listing.id}`
+                          );
+                        }}
+                      >
 
 
-                      <Card.Section radius="md">
-                        <Image
-                          src={listing.picture_url}
-                          alt={listing.title}
-                          h="233px"
-                          radius="md"
-                        />
-                        <div className={classes.statusBadge}>
-                          <img
-                            src={
-                              listing.status === "pending"
-                                ? PendingStatus
-                                : listing.status === "approved"
-                                  ? AcceptedStatus
-                                  : RejectedStatus
-                            }
+                        <Card.Section radius="md">
+                          <Image
+                            src={listing.picture_url}
+                            alt={listing.title}
+                            h="233px"
+                            radius="md"
                           />
+                          <div className={classes.statusBadge}>
+                            <img
+                              src={
+                                listing.status === "pending"
+                                  ? PendingStatus
+                                  : listing.status === "approved"
+                                    ? AcceptedStatus
+                                    : RejectedStatus
+                              }
+                            />
+                          </div>
+                        </Card.Section>
+
+                        <div style={{ marginTop: "16px", display: "flex" }}>
+                          <span className={classes.listingPrice}>
+                            <span className="icon-saudi_riyal">&#xea; </span>{" "}
+                            {parseFloat(listing.price)?.toLocaleString()}
+                          </span>
+
+                          <div className={classes.downPaymentBadge}>
+                            {Math.floor(
+                              (listing.down_payment / listing.price) * 100
+                            )}
+                            % {t.DownPayment}
+                          </div>
                         </div>
-                      </Card.Section>
 
-                      <div style={{ marginTop: "16px", display: "flex" }}>
-                        <span className={classes.listingPrice}>
-                          <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                          {parseFloat(listing.price)?.toLocaleString()}
-                        </span>
-
-                        <div className={classes.downPaymentBadge}>
-                          {Math.floor(
-                            (listing.down_payment / listing.price) * 100
-                          )}
-                          % {t.DownPayment}
+                        <div style={{ display: "block" }}>
+                          <div className={classes.listingTitle}>
+                            {listing.title}
+                          </div>
+                          <div className={classes.listingUtilities}>
+                            <div className={classes.listingUtility}>
+                              <div className={classes.utilityImage}>
+                                <img src={rooms}></img>
+                              </div>
+                              {listing.rooms}
+                            </div>
+                            <div className={classes.listingUtility}>
+                              <div className={classes.utilityImage}>
+                                <img src={bathrooms}></img>
+                              </div>
+                              {listing.bathrooms}
+                            </div>
+                            <div className={classes.listingUtility}>
+                              <div className={classes.utilityImage}>
+                                <img src={area}></img>
+                              </div>
+                              {listing.area} sqm
+                            </div>
+                          </div>
+                          <div className={classes.listingEmployee}>
+                            {t.Employee} : {listing.employee?.name}
+                          </div>
+                          <div className={classes.listingLocation}>
+                            {listing.location}
+                          </div>
+                          <div className={classes.listingDate}>
+                            {Math.floor(
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) > 1
+                              ? `${Math.floor(
+                                (new Date() - new Date(listing.created_at)) /
+                                (1000 * 60 * 60 * 24)
+                              )} days ago`
+                              : Math.floor(
+                                (new Date() - new Date(listing.created_at)) /
+                                (1000 * 60 * 60 * 24)
+                              ) === 1
+                                ? "Yesterday"
+                                : "Today"}
+                          </div>
                         </div>
                       </div>
 
-                      <div style={{ display: "block" }}>
-                        <div className={classes.listingTitle}>
-                          {listing.title}
-                        </div>
-                        <div className={classes.listingUtilities}>
-                          <div className={classes.listingUtility}>
-                            <div className={classes.utilityImage}>
-                              <img src={rooms}></img>
-                            </div>
-                            {listing.rooms}
-                          </div>
-                          <div className={classes.listingUtility}>
-                            <div className={classes.utilityImage}>
-                              <img src={bathrooms}></img>
-                            </div>
-                            {listing.bathrooms}
-                          </div>
-                          <div className={classes.listingUtility}>
-                            <div className={classes.utilityImage}>
-                              <img src={area}></img>
-                            </div>
-                            {listing.area} sqm
-                          </div>
-                        </div>
-                        <div className={classes.listingEmployee}>
-                          {t.Employee} : {listing.employee?.name}
-                        </div>
-                        <div className={classes.listingLocation}>
-                          {listing.location}
-                        </div>
-                        <div className={classes.listingDate}>
-                          {Math.floor(
-                            (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
-                          ) > 1
-                            ? `${Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                            )} days ago`
-                            : Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                            ) === 1
-                              ? "Yesterday"
-                              : "Today"}
-                        </div>
-                      </div>
-                    </div>
+                      {listing.status === "pending" && (
+                        <Center>
+                          <Group mt="md" display="flex">
+                            <Button
+                              color="green"
+                              w="110px"
+                              h="40px"
+                              onClick={() =>
+                                updateStatus(listing.id, "approved", null)
+                              }
+                            >
+                              {t.Accept}
+                            </Button>
+                            <Button
+                              color="red"
+                              w="110px"
+                              h="40px"
+                              onClick={() => handleReject(listing.id)}
+                            >
+                              {t.Reject}
+                            </Button>
+                          </Group>
+                        </Center>
+                      )}
+                    </Card>
+                  )}
+                </Group>
 
-                    {listing.status === "pending" && (
-                      <Center>
-                        <Group mt="md" display="flex">
-                          <Button
-                            color="green"
-                            w="110px"
-                            h="40px"
-                            onClick={() =>
-                              updateStatus(listing.id, "approved", null)
-                            }
-                          >
-                            {t.Accept}
-                          </Button>
-                          <Button
-                            color="red"
-                            w="110px"
-                            h="40px"
-                            onClick={() => handleReject(listing.id)}
-                          >
-                            {t.Reject}
-                          </Button>
-                        </Group>
-                      </Center>
-                    )}
-                  </Card>
-                )}
-              </Group>
+                <div ref={ref} style={{ height: 20 }}>
+                  {isFetchingNextPage && <Center><Loader size="sm" /></Center>}
+                </div>
+              </>
             )}
           </Grid.Col>
         </Grid>
-        {/*pagination */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "18px",
-            marginTop: "10px",
-          }}
-        >
-          {currentPage > 1 && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              {currentPage - 1}
-            </button>
-          )}
-
-          <button
-            style={{
-              backgroundColor: "var(--color-5)",
-              color: "var(--color-2);",
-            }}
-            className={classes.currentPagenow}
-          >
-            {currentPage}
-          </button>
-
-          {currentPage < totalPages && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              {currentPage + 1}
-            </button>
-          )}
-        </div>
       </Card>
 
       <Modal

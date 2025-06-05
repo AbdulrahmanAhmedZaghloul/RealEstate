@@ -296,20 +296,6 @@ function StaffSupervisor() {
     fetchDataKPIs();
   }, []);
 
-  //pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(searchedEmployees.length / itemsPerPage);
-  const paginatedEmployees = searchedEmployees.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  // Reset currentPage to 1 when the search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
-
   if (loading) {
     return (
       <>
@@ -418,10 +404,11 @@ function StaffSupervisor() {
               borderTopRightRadius: "10px",
 
             }}   >
-              <Table.Tr style={{
-                backgroundColor: "#f0f0f1",
-
-              }}  >
+              <Table.Tr
+                style={{
+                  borderRadius: "20px",
+                  border: "1px solid var(--color-border)",
+                }} >
                 <Table.Th >{t.Name}</Table.Th>
                 <Table.Th >{t.Position}</Table.Th>
                 <Table.Th >{t.Email}</Table.Th>
@@ -430,12 +417,10 @@ function StaffSupervisor() {
                 <Table.Th />
               </Table.Tr>
             </Table.Thead>
-            {paginatedEmployees?.map((employee) => (
+            {searchedEmployees?.map((employee) => (
               <Table.Tr style={{
-                border: "1px solid var(--color-grey)",
-                borderBottomRightRadius: "none",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
+                borderRadius: "20px",
+                border: "1px solid var(--color-border)",
               }} key={employee.employee_id}>
                 <Table.Td>
                   <Group
@@ -515,43 +500,6 @@ function StaffSupervisor() {
               </Table.Tr>
             ))}
           </Table>
-          {/*pagination */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "18px",
-              marginTop: "20px",
-            }}
-          >
-            {currentPage > 1 && (
-              <button
-                className={classes.currentPage}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                {currentPage - 1}
-              </button>
-            )}
-
-            <button
-              style={{
-                backgroundColor: "var(--color-5)",
-                color: "var(--color-2);",
-              }}
-              className={classes.currentPagenow}
-            >
-              {currentPage}
-            </button>
-
-            {currentPage < totalPages && (
-              <button
-                className={classes.currentPage}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                {currentPage + 1}
-              </button>
-            )}
-          </div>
         </Table.ScrollContainer>
       </Card>
 

@@ -105,7 +105,6 @@ function ContractDetailsSupervisor() {
       expiration_date: (value) =>
         value ? null : "Expiration date is required",
       release_date: (value) => (value ? null : "Release date is required"),
-
       location: (value) => (value ? null : "Location is required"),
     },
     enableReinitialize: true,
@@ -244,7 +243,7 @@ function ContractDetailsSupervisor() {
 
       if (event.key === "ArrowLeft") {
         setSelectedImageIndex((prevIndex) =>
-          (prevIndex - 1 +  contract.real_estate.images.length) % contract.real_estate.images.length
+          (prevIndex - 1 + contract.real_estate.images.length) % contract.real_estate.images.length
         );
       } else if (event.key === "ArrowRight") {
         setSelectedImageIndex((prevIndex) =>
@@ -311,36 +310,36 @@ function ContractDetailsSupervisor() {
                 <div className={classes.ImageContainerBig}>
                   {contract.real_estate.images?.[0] && (
                     <>
-                    <img
-                      key={contract.real_estate.images[0].id}
-                      src={contract.real_estate.images[0].url}
-                      alt={contract.real_estate.title}
-                      className={classes.mainImage}
-                      onClick={() => {
-                        setSelectedImageIndex(0); // لأنها تاني صورة في الـ array
-                        open1();
-                      }}
-                    />
-                    
-                        <p
-                          onClick={() => {
-                            setSelectedImageIndex(
-                              contract.real_estate.images.findIndex(
-                                (image) => image.is_primary
-                              )
-                            );
-                            open1();
-                          }}
-                          style={{
-                            color: "#23262A",
-                            cursor: "pointer"
-                          }}
-                        >
-                          See {contract.real_estate.images.length} Photos
-                        </p>
-                        </>
+                      <img
+                        key={contract.real_estate.images[0].id}
+                        src={contract.real_estate.images[0].url}
+                        alt={contract.real_estate.title}
+                        className={classes.mainImage}
+                        onClick={() => {
+                          setSelectedImageIndex(0); // لأنها تاني صورة في الـ array
+                          open1();
+                        }}
+                      />
+
+                      <p
+                        onClick={() => {
+                          setSelectedImageIndex(
+                            contract.real_estate.images.findIndex(
+                              (image) => image.is_primary
+                            )
+                          );
+                          open1();
+                        }}
+                        style={{
+                          color: "#23262A",
+                          cursor: "pointer"
+                        }}
+                      >
+                        See {contract.real_estate.images.length} Photos
+                      </p>
+                    </>
                   )}
- 
+
                 </div>
 
                 {/* حاوية الصور الإضافية */}
@@ -361,7 +360,7 @@ function ContractDetailsSupervisor() {
                       />
                     ))}
                 </div>
-              </> 
+              </>
             </>
           </div>
           <div className={classes.details}>
@@ -385,9 +384,7 @@ function ContractDetailsSupervisor() {
 
                           className={classes.downPayment}
                         >
-                          {Math.floor(
-                            (contract.down_payment / contract.price) * 100
-                          )}
+                          {contract.down_payment}
                           % {t.DownPayment}
                         </span>
                       </div>
@@ -402,7 +399,6 @@ function ContractDetailsSupervisor() {
                       <div className={classes.flexLocation}>
                         <div className={classes.svgLocation}>
                           <svg
-                            
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
@@ -425,7 +421,6 @@ function ContractDetailsSupervisor() {
                             />
                           </svg>
                           <p
-
                             className={classes.location}
                           >
                             {contract.real_estate.location}
@@ -480,19 +475,22 @@ function ContractDetailsSupervisor() {
                     }
                   >
                     <div className={classes.viewImage}>
+                      {console.log(contract)}
                       <Avatar
-                       
+                        w={90}
+                        h={90}
+                        src={contract.listed_by.picture}
                         mr={10}
                         alt="nameImage"
                       />
                       <span
-                       
+
                       >
                         {contract.listed_by.name}
                       </span>
                     </div>
                     <div
-                    
+
                       className={classes.viewText}
                     >
                       <span>View</span>
@@ -580,7 +578,7 @@ function ContractDetailsSupervisor() {
                   className={classes.InformationGrid}
                 >
                   <div className={classes.InformationButton}>
-                    <h3  
+                    <h3
                     >
 
                       {t.ContractsInformation}
@@ -597,13 +595,13 @@ function ContractDetailsSupervisor() {
 
                   <Grid>
                     <GridCol span={4}>
-                      <p 
+                      <p
                         className={classes.InformationType}
                       >
 
                         {t.Contracttype}
                       </p>
-                      <p 
+                      <p
                         className={classes.InformationSale}
                       >
                         {contract.contract_type}{" "}
@@ -611,13 +609,13 @@ function ContractDetailsSupervisor() {
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p 
+                      <p
                         className={classes.InformationType}
                       >
 
                         {t.Releasedate}
                       </p>
-                      <p 
+                      <p
                         className={classes.InformationSale}
                       >
                         {new Date(contract.release_date).toLocaleDateString(
@@ -648,12 +646,12 @@ function ContractDetailsSupervisor() {
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p 
+                      <p
                         className={classes.InformationType}
                       >
                         {t.Customername}
                       </p>
-                      <p 
+                      <p
                         className={classes.InformationSale}
                       >
                         {contract.customer_name}
@@ -1008,7 +1006,7 @@ function ContractDetailsSupervisor() {
         contract={contract}
         onEditSuccess={fetchContract}
       />
-      
+
       {/* <Modal
         opened={editModalOpened}
         onClose={closeEditModal}

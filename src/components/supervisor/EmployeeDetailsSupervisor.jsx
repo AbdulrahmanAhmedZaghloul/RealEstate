@@ -432,6 +432,11 @@ function EmployeeDetailsSupervisor() {
           </BarChart>
         </ResponsiveContainer>
       </div>
+      <div className={classes.properties}>
+        <div className={classes.propertyList}>
+          <EmployeeProperties id={id} />
+        </div>
+      </div>
 
 
     </div>

@@ -326,7 +326,7 @@ function ContractsSupervisor() {
               <div
                 key={contract.id}
                 className={classes.contractCard}
-                onClick={() => navigate(`/dashboard/Contracts/${contract.id}`)}
+                onClick={() => navigate(`/dashboard-supervisor/Contracts/${contract.id}`)}
                 style={{
                   cursor: "pointer",
                   borderRadius: "20px",

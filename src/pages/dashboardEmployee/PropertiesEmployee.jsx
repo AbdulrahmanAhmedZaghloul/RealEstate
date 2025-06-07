@@ -236,19 +236,6 @@ function PropertiesEmployee() {
     fetchCategories();
   }, []);
 
-  //pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(searchedListings.length / itemsPerPage);
-  const paginatedListings = searchedListings.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  // Reset currentPage to 1 when the search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
 
   useEffect(() => {
     setFilteredListings(listings);
@@ -374,8 +361,6 @@ function PropertiesEmployee() {
               onClick={open}
               style={{
                 cursor: "pointer",
-
-
                 border: "1px solid #B8C0CC",
                 color: "var(--color-4)",
               }}
@@ -389,7 +374,7 @@ function PropertiesEmployee() {
           </div>
         </div>
 
-        {paginatedListings?.length === 0 ? (
+        {listings?.length === 0 ? (
           <>
           
          <Center>
@@ -399,7 +384,7 @@ function PropertiesEmployee() {
        
         ) : (
           <Group align="center" spacing="xl">
-            {paginatedListings.map((listing) => (
+            {listings.map((listing) => (
               <Card
                 key={listing.id}
                 className={classes.card}
@@ -579,44 +564,7 @@ function PropertiesEmployee() {
             ))}
           </Group>
         )}
-        {/*pagination */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "18px",
-            marginTop: "10px",
-          }}
-        >
-          {currentPage > 1 && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              {currentPage - 1}
-            </button>
-          )}
-
-          <button
-            style={{
-              backgroundColor: "var(--color-5)",
-              color: "var(--color-2);",
-            }}
-            className={classes.currentPagenow}
-          >
-            {currentPage}
-          </button>
-
-          {currentPage < totalPages && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              {currentPage + 1}
-            </button>
-          )}
-
-        </div>
+        
       </Card>
 
       <AddPropertyModal

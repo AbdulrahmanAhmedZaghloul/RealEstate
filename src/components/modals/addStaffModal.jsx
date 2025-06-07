@@ -116,6 +116,7 @@ const AddStaffModal = ({
           styles={{ input: { height: 48 } }}
           mb={24}
         />
+
         <TextInput
           label="Phone Number"
           placeholder="512 345 678"
@@ -159,21 +160,6 @@ const AddStaffModal = ({
           error={errors.phone_number}
           mb={24}
         />
-
-        {/* <NumberInput
-          label="Phone Number"
-          hideControls
-          placeholder="Phone number"
-          value={newUser.phone_number}
-          onChange={(value) => {
-            setNewUser({ ...newUser, phone_number: value });
-            if (errors.phone_number) errors.phone_number = "";
-          }}
-          required
-          error={errors.phone_number}
-          styles={{ input: { height: 48 } }}
-          mb={24}
-        /> */}
 
         <Select
           label="Position"
@@ -239,32 +225,6 @@ const AddStaffModal = ({
         >
           {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
         </Button>
-        {/* <Button
-          fullWidth
-          disabled={loading}
-          loading={loading}
-          onClick={() => {
-            // التحقق من كلمة المرور فقط إذا كان المستخدم ليس سوبرفيسور (أو في أي حالة)
-            const passwordError = validateField("password", newUser.password);
-
-            if (passwordError) {
-              errors.password = passwordError;
-              setErrors({ ...errors });
-              return;
-            }
-
-            // لا يوجد أخطاء، نفذ الإضافة
-            onAdd(newUser.position === "supervisor");
-          }}
-          style={{
-            backgroundColor: "var(--color-3)",
-            color: "white",
-            height: 48,
-            borderRadius: 8,
-          }}
-        >
-          {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
-        </Button> */}
 
       </div>
     </Modal>

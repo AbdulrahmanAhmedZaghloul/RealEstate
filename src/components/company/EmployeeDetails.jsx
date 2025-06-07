@@ -284,6 +284,7 @@ function EmployeeDetails() {
       });
     }
   }, [editModalOpened, employee]);
+  
   const handleOpenChangePassword = () => {
     closeEditModal();
     openChangePasswordModal();

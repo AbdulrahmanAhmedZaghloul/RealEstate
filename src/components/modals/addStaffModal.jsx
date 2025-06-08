@@ -26,6 +26,8 @@ const AddStaffModal = ({
   setErrors,
   handleFileChange,
 }) => {
+  console.log(newUser.picture);
+  console.log(onAdd);
   function validateSaudiPhoneNumber(phoneNumber) {
     const cleaned = phoneNumber.replace(/\D/g, "");
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
@@ -53,7 +55,7 @@ const AddStaffModal = ({
           label="Profile Image"
           accept="image/*"
           onChange={handleFileChange}
-          error={errors.image}
+          error={errors.picture}
           styles={{ input: { height: 48 } }}
           mb={24}
         />

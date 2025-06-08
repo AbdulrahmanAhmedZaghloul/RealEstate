@@ -5,7 +5,7 @@
 //Dependency imports
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { ActionIcon, Button, Center, Grid, Group, Loader, Modal, Text, useMantineColorScheme } from "@mantine/core";
+import { ActionIcon, Button, Center, Grid, Group, Loader, Modal, Text, TextInput, useMantineColorScheme } from "@mantine/core";
 import { Menu } from "@mantine/core";
 import {
   BarChart,
@@ -33,6 +33,8 @@ import { useTranslation } from "../../context/LanguageContext";
 import UpdataStaffModal from "../../components/modals/editStaffModal_Supervisor";
 import { useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import { validateField } from "../../hooks/Validation/validation";
 
 function EmployeeDetailsSupervisor() {
   const [employee, setEmployee] = useState(null);
@@ -50,6 +52,17 @@ function EmployeeDetailsSupervisor() {
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   const { colorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
+
+  const [changePasswordModal, { open: openChangePasswordModal, close: closeChangePasswordModal }] = useDisclosure(false);
+  const [passwordErrors, setPasswordErrors] = useState({});
+
+  const [passwordData, setPasswordData] = useState({
+    password: "",
+    employee_id: id,
+  });
+  console.log(id);
+
+  const [showPassword, setShowPassword] = useState(false);
 
 
   const { t } = useTranslation(); // 👈 استدعاء اللغة
@@ -163,6 +176,59 @@ function EmployeeDetailsSupervisor() {
       setLoading(false);
     }
   };
+
+
+  const handleOpenChangePassword = () => {
+    closeEditModal();
+    openChangePasswordModal();
+  };
+
+  // let supervisor_id = ;
+  console.log(employee);
+
+
+  const handleChangePassword = async () => {
+    closeEditModal
+    const errors = {};
+    if (!passwordData.password) errors.password = "Password is required";
+    if (!passwordData.employee_id) errors.employee_id = "Invalid supervisor";
+
+    setPasswordErrors(errors);
+
+    if (Object.keys(errors).length > 0) return;
+
+    setLoading(true);
+    try {
+     const  res =  await axiosInstance.post(`/api/employees/change-password/${id}?_method=PUT`,
+        passwordData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      console.log(res);
+      
+      console.log(passwordData);
+
+      notifications.show({
+        title: t.Success,
+        message: t.Success,
+        color: "green",
+      });
+
+      closeChangePasswordModal();
+    } catch (error) {
+      console.error("Error changing password:", error);
+      notifications.show({
+        title: "Error",
+        message: error.response?.data?.message || "Failed to change password",
+        color: "red",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   useEffect(() => {
     fetchEmployee();
@@ -510,6 +576,45 @@ function EmployeeDetailsSupervisor() {
           <EmployeeProperties id={id} />
         </div>
       </div>
+
+      
+      <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
+        <TextInput
+          label="New Password"
+          type={showPassword ? "text" : "password"}
+          value={passwordData.password}
+          maxLength={50}
+          onChange={(e) => {
+            const newPassword = e.target.value;
+            setPasswordData({ ...passwordData, password: newPassword });
+
+            const error = validateField("password", newPassword);
+            setPasswordErrors((prev) => ({ ...prev, password: error }));
+          }}
+          rightSection={
+            <button
+              type="button"
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+            </button>
+          }
+          error={passwordErrors.password}
+        />
+
+        {passwordErrors.password && (
+          <Text size="sm" color="red" mt={5}>
+            {passwordErrors.password}
+          </Text>
+        )}
+
+        <Button loading={loading} onClick={handleChangePassword} mt="md" fullWidth>
+          Change Password
+        </Button>
+      </Modal>
+
+
       <Modal
         opened={deleteModalOpened}
         onClose={() => setDeleteModalOpened(false)}
@@ -547,6 +652,8 @@ function EmployeeDetailsSupervisor() {
         onClose={closeEditModal}
         employee={editingEmployee}
         onUpdateSuccess={handleUpdateSuccess}
+        handleOpenChangePassword={handleOpenChangePassword}
+
       />
 
     </div>

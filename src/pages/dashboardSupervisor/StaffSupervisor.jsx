@@ -36,7 +36,7 @@ function StaffSupervisor() {
     position: "employee",
     phone_number: "",
     address: "",
-    image: null,
+    picture: null,
     supervisor_id: null,
   });
   const [errors, setErrors] = useState({
@@ -46,7 +46,7 @@ function StaffSupervisor() {
     position: "",
     phone_number: "",
     address: "",
-    image: "",
+    picture: "",
   });
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
@@ -143,7 +143,7 @@ function StaffSupervisor() {
       formData.append("address", newUser.address);
       formData.append("supervisor_id", newUser.supervisor_id);
 
-      if (newUser.image) formData.append("picture", newUser.image);
+      if (newUser.picture) formData.append("picture", newUser.picture);
 
       const endpoint = isSupervisor ? "api/supervisors" : "api/employees";
       const response = await axiosInstance.post(endpoint, formData, {
@@ -152,7 +152,8 @@ function StaffSupervisor() {
           "Content-Type": "multipart/form-data",
         },
       });
-
+      console.log(response);
+      console.log(newUser);
       // fetchSupervisors();
       fetchEmployees();
 
@@ -165,7 +166,7 @@ function StaffSupervisor() {
         position: "employee",
         phone_number: "",
         address: "",
-        image: null,
+        picture: null,
         supervisor_id: null,
       });
 
@@ -504,6 +505,7 @@ function StaffSupervisor() {
       </Card>
 
       <AddStaffModal
+
         opened={addModalOpened}
         onClose={closeAddModal}
         onAdd={handleAddUser}
@@ -511,6 +513,7 @@ function StaffSupervisor() {
         supervisors={supervisors}
         newUser={newUser}
         setNewUser={setNewUser}
+
         errors={errors}
       />
 

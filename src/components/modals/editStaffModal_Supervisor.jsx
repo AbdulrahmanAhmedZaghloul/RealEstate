@@ -12,7 +12,7 @@ import { notifications } from "@mantine/notifications";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 
-const UpdateStaffModal = ({ opened, onClose, employee, onUpdateSuccess }) => {
+const UpdateStaffModal = ({ opened, onClose, employee, onUpdateSuccess,handleOpenChangePassword }) => {
   const [formData, setFormData] = useState({
     name: "",
     phone_number: "",
@@ -193,6 +193,9 @@ const UpdateStaffModal = ({ opened, onClose, employee, onUpdateSuccess }) => {
           styles={{ input: { height: 48, padding: "0px 75px" } }}
           mb={24}
         />
+         <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
+            ChangePassword
+          </Button>
 
         <Group justify="flex-end" mt="md">
           <Button variant="default" onClick={onClose}>

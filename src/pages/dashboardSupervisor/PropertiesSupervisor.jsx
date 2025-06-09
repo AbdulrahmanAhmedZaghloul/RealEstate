@@ -51,7 +51,13 @@ function PropertiesSupervisor() {
   const [loading, setLoading] = useState(false);
   const [filteredListings, setFilteredListings] = useState([]);
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
-
+if (!data || !data.pages) {
+    return (
+      <Center>
+        <Loader size="sm" />
+      </Center>
+    );
+  }
   // تحويل البيانات إلى array مفرد
   // const allListings = data?.pages.flatMap(page => page.listings || []) || [];
   const allListings = data?.pages.flatMap(page => {

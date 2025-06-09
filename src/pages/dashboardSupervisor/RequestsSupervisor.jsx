@@ -382,14 +382,14 @@ function RequestsSupervisor() {
           <Grid.Col span={12}>
             {console.log(listings)}
 
-            {allListings.length === 0 && !loading ? (
+            {allListings?.length === 0 && !loading ? (
               <Center>
                 <Text>{t.Notransactions}</Text>
               </Center>
             ) : (
               <>
                 <Group align="center" spacing="xl">
-                  {allListings.map((listing) =>
+                  {allListings?.map((listing) =>
                     <Card
                       key={listing.id}
                       withBorder

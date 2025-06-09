@@ -85,9 +85,12 @@ function RequestsSupervisor() {
       level: "",
     },
   });
+
   const allListings = data?.pages.flatMap(page =>
     page.data.listings.filter(listing => listing.status === "pending")
   ) || [];
+  
+  
   const [ref, inView] = useInView();
 
   useEffect(() => {
@@ -96,23 +99,23 @@ function RequestsSupervisor() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
   // Form validation using Mantine's useForm
-  const searchedListings = allListings
-    .filter((listing) =>
-      listing.title.toLowerCase().includes(search.toLowerCase())
-    ).filter((listing) => {
-      if (saleFilter === "for_sale") return listing.selling_status === 0;
-      if (saleFilter === "not_for_sale") return listing.selling_status === 1;
-      return true; // all
-    })
-    .sort((a, b) => {
-      if (filter === "newest")
-        return new Date(b.created_at) - new Date(a.created_at);
-      if (filter === "oldest")
-        return new Date(a.created_at) - new Date(b.created_at);
-      if (filter === "highest") return b.price - a.price;
-      if (filter === "lowest") return a.price - b.price;
-      return 0;
-    });
+  // const searchedListings = allListings
+  //   .filter((listing) =>
+  //     listing.title.toLowerCase().includes(search.toLowerCase())
+  //   ).filter((listing) => {
+  //     if (saleFilter === "for_sale") return listing.selling_status === 0;
+  //     if (saleFilter === "not_for_sale") return listing.selling_status === 1;
+  //     return true; // all
+  //   })
+  //   .sort((a, b) => {
+  //     if (filter === "newest")
+  //       return new Date(b.created_at) - new Date(a.created_at);
+  //     if (filter === "oldest")
+  //       return new Date(a.created_at) - new Date(b.created_at);
+  //     if (filter === "highest") return b.price - a.price;
+  //     if (filter === "lowest") return a.price - b.price;
+  //     return 0;
+  //   });
 
 
   // const fetchListings = async () => {
@@ -379,14 +382,14 @@ function RequestsSupervisor() {
           <Grid.Col span={12}>
             {console.log(listings)}
 
-            {searchedListings.length === 0 && !loading ? (
+            {allListings.length === 0 && !loading ? (
               <Center>
                 <Text>{t.Notransactions}</Text>
               </Center>
             ) : (
               <>
                 <Group align="center" spacing="xl">
-                  {searchedListings.map((listing) =>
+                  {allListings.map((listing) =>
                     <Card
                       key={listing.id}
                       withBorder

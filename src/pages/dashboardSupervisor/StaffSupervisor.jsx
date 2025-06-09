@@ -18,6 +18,8 @@ import { useTranslation } from "../../context/LanguageContext";
 import Search from "../../components/icons/search";
 import Dropdown from "../../components/icons/dropdown";
 import AddIcon from "../../components/icons/addIcon";
+import DeleteIcon from "../../components/icons/DeleteIcon";
+import EditIcon from "../../components/icons/edit";
 
 const jobColors = {
   supervisor: "orange",
@@ -469,7 +471,32 @@ function StaffSupervisor() {
                 </Table.Td>
 
                 <Table.Td >
-                  <Group
+
+                  <Group gap={0} justify="flex-end">
+                    <ActionIcon
+                      variant="subtle"
+                      color="gray"
+
+                      onClick={() => {
+                        handleEditClick(employee);
+                        setEditingEmployee(employee); // تخزين بيانات الموظف المحدد
+                        openEditModal(); // فتح نافذة التعديل
+                      }} mr={24}
+                    >
+                      <EditIcon />
+
+                    </ActionIcon>
+                    <ActionIcon
+                      variant="subtle"
+                      color="red"
+                      onClick={() => handleDeleteEmployee(employee.employee_id)}
+
+                    >
+                      <DeleteIcon />
+
+                    </ActionIcon>
+                  </Group>
+                  {/* <Group
                     style={{
                       display: "flex",
                       justifyContent: "center",
@@ -477,6 +504,7 @@ function StaffSupervisor() {
                       gap: "10px",
                     }}
                   >
+
                     <ActionIcon
                       variant="subtle"
                       color="gray"
@@ -495,7 +523,7 @@ function StaffSupervisor() {
                     >
                       <img src={trash} alt="Delete" />
                     </ActionIcon>
-                  </Group>
+                  </Group> */}
                 </Table.Td>
 
               </Table.Tr>

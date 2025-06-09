@@ -35,6 +35,7 @@ import { useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { validateField } from "../../hooks/Validation/validation";
+import EditIcon from "../icons/edit";
 
 function EmployeeDetailsSupervisor() {
   const [employee, setEmployee] = useState(null);
@@ -199,7 +200,7 @@ function EmployeeDetailsSupervisor() {
 
     setLoading(true);
     try {
-     const  res =  await axiosInstance.post(`/api/employees/change-password/${id}?_method=PUT`,
+      const res = await axiosInstance.post(`/api/employees/change-password/${id}?_method=PUT`,
         passwordData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -207,7 +208,7 @@ function EmployeeDetailsSupervisor() {
         },
       });
       console.log(res);
-      
+
       console.log(passwordData);
 
       notifications.show({
@@ -228,7 +229,7 @@ function EmployeeDetailsSupervisor() {
       setLoading(false);
     }
   };
-  
+
 
   useEffect(() => {
     fetchEmployee();
@@ -344,7 +345,7 @@ function EmployeeDetailsSupervisor() {
           </div>
         </div>
       </div>
-
+      {/* 
       <ActionIcon
         variant="subtle"
         color="gray"
@@ -363,15 +364,24 @@ function EmployeeDetailsSupervisor() {
         color="red"
       >
         <img src={trash} alt="Delete" />
-      </ActionIcon>
+      </ActionIcon> */}
 
       <div className={classes.personalInfo}>
-        <div>
-          <h3
-          >
-            {t.PersonalInfo}
-          </h3>
-        </div>
+        <div >
+          <h3 style={{
+          }}>{t.PersonalInfo}</h3>
+          <span style={{
+            cursor: "pointer",
+          }} onClick={() => {
+            handleEditClick(employee);
+            setEditingEmployee(employee); // تخزين بيانات الموظف المحدد
+            openEditModal(); // فتح نافذة التعديل
+          }}>
+            <EditIcon />
+
+          </span>
+
+        </div> 
         <Grid>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
             <h2
@@ -577,7 +587,7 @@ function EmployeeDetailsSupervisor() {
         </div>
       </div>
 
-      
+
       <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
         <TextInput
           label="New Password"

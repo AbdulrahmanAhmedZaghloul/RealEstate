@@ -17,24 +17,24 @@ import classes from "../../styles/realEstates.module.css";
 import { useAuth } from "../../context/authContext";
 
 import { useTranslation } from "../../context/LanguageContext";
- 
+
 //Component Imports
 import Notifications from "../../components/company/Notifications";
 import FiltersModal from "../../components/modals/filterPropertiesModal";
- import { BurgerButton } from "../../components/buttons/burgerButton";
-import { useProperties } from "../../hooks/queries/useProperties"; 
+import { BurgerButton } from "../../components/buttons/burgerButton";
+import { useProperties } from "../../hooks/queries/useProperties";
 import Rooms from "../../components/icons/rooms";
 import Bathrooms from "../../components/icons/bathrooms";
 import Area from "../../components/icons/area";
- import Dropdown from "../../components/icons/dropdown";
+import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
 import AcceptedStatus from "../../assets/status/AcceptedStatus.svg";
 function PropertiesSupervisor() {
   const { user } = useAuth();
   const [isSticky, setIsSticky] = useState(false);
- 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties(); 
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties();
   const [saleFilter, setSaleFilter] = useState("all"); // all / for_sale / not_for_sale
   const [listings, setListings] = useState([]); //Property listings state
   const [employees, setEmployees] = useState([]); //Employees state
@@ -54,9 +54,12 @@ function PropertiesSupervisor() {
 
   // تحويل البيانات إلى array مفرد
   // const allListings = data?.pages.flatMap(page => page.listings || []) || [];
-  const allListings = data?.pages.flatMap(page =>
-    page.data.listings.filter(listing => listing.status === "approved")
-  ) || [];
+  const allListings = data?.pages.flatMap(page => {
+    return page?.data?.listings?.filter(listing => listing?.status === "approved") || [];
+  }) || [];
+  // const allListings = data?.pages.flatMap(page =>
+  //   page.data.listings.filter(listing => listing.status === "approved")
+  // ) || [];
   const [ref, inView] = useInView();
 
   useEffect(() => {
@@ -82,7 +85,7 @@ function PropertiesSupervisor() {
       if (filter === "lowest") return a.price - b.price;
       return 0;
     });
- 
+
 
   const handleFilterProperties = (filters) => {
     const filtered = listings.filter((listing) => {
@@ -122,7 +125,7 @@ function PropertiesSupervisor() {
   };
 
   const { colorScheme } = useMantineColorScheme();
- 
+
 
   useEffect(() => {
     setFilteredListings(listings);
@@ -140,7 +143,7 @@ function PropertiesSupervisor() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
- 
+
   return (
     <>
       <Card className={classes.mainContainer} radius="lg">
@@ -254,137 +257,137 @@ function PropertiesSupervisor() {
                     },
                   },
                 }} />
-                
+
             </div>
           </div>
         </header>
 
 
-        {searchedListings.length === 0  ?
-         (
-          <Center>
-            <Text>No listings found.</Text>
-          </Center>
-        )  : (
-          <>
+        {searchedListings.length === 0 ?
+          (
+            <Center>
+              <Text>No listings found.</Text>
+            </Center>
+          ) : (
+            <>
 
-            <Grid className={classes.sty} align="center" spacing="xl">
-              {console.log(searchedListings)}
-              {searchedListings.map((listing) => (
-                <GridCol
-                  span={4}
-                  key={listing.id}
-                  onClick={() => {
-                    navigate(`/dashboard-supervisor/Properties/${listing.id}`);
-                  }}
-                  style={{
-                    cursor: "pointer",
-                  }}
-                >
-                  <Card className={classes.card}
+              <Grid className={classes.sty} align="center" spacing="xl">
+                {console.log(searchedListings)}
+                {searchedListings.map((listing) => (
+                  <GridCol
+                    span={4}
+                    key={listing.id}
+                    onClick={() => {
+                      navigate(`/dashboard-supervisor/Properties/${listing.id}`);
+                    }}
+                    style={{
+                      cursor: "pointer",
+                    }}
                   >
-                    <Card.Section radius="md">
-                      <div className={classes.listingImage}>
-                        <Image
-                          src={`${listing.picture_url}`}
-                          alt={listing.title}
-                          h="233px"
-                          radius="md"
-                        />
-
-                        <div className={classes.statusBadge}>
-                          <img
-                            src={
-                              listing.status === "approved" ? AcceptedStatus : null
-                            }
+                    <Card className={classes.card}
+                    >
+                      <Card.Section radius="md">
+                        <div className={classes.listingImage}>
+                          <Image
+                            src={`${listing.picture_url}`}
+                            alt={listing.title}
+                            h="233px"
+                            radius="md"
                           />
-                        </div>
 
-                      </div>
-
-                    </Card.Section>
-
-                    <div style={{ marginTop: "16px", display: "flex", flexWrap: "wrap", }}>
-                      <span className={classes.listingPrice}>
-                        <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                        {parseFloat(listing.price)?.toLocaleString()}
-                      </span>
-
-                      <div className={classes.downPaymentBadge}>
-                        {listing.down_payment} %
-                        {t.DownPayment}
-                      </div>
-                    </div>
-
-                    <div style={{ display: "block" }}>
-                      <div className={classes.listingTitle}>{listing.title}</div>
-                      <div className={classes.listingUtilities}>
-                        <div className={classes.listingUtility}>
-                          {listing.rooms === 0 ? null :
-                            <>
-                              <div className={classes.utilityImage}>
-                                <Rooms />
-                              </div>
-                              {listing.rooms}
-                            </>
-
-                          }
-
-                        </div>
-                        <div className={classes.listingUtility}>
-                          {listing.bathrooms === 0 ? null : <>
-                            <div className={classes.utilityImage}>
-                              <Bathrooms />
-                            </div>
-                            {listing.bathrooms}
-                          </>}
-
-                        </div>
-                        <div className={classes.listingUtility}>
-                          <div className={classes.utilityImage}>
-                            <Area />
+                          <div className={classes.statusBadge}>
+                            <img
+                              src={
+                                listing.status === "approved" ? AcceptedStatus : null
+                              }
+                            />
                           </div>
-                          {listing.area} sqm
+
+                        </div>
+
+                      </Card.Section>
+
+                      <div style={{ marginTop: "16px", display: "flex", flexWrap: "wrap", }}>
+                        <span className={classes.listingPrice}>
+                          <span className="icon-saudi_riyal">&#xea; </span>{" "}
+                          {parseFloat(listing.price)?.toLocaleString()}
+                        </span>
+
+                        <div className={classes.downPaymentBadge}>
+                          {listing.down_payment} %
+                          {t.DownPayment}
                         </div>
                       </div>
 
-                      <div className={classes.listingEmployee}>
-                        {t.Category}: {listing.category}
-                      </div>
-                      <div className={classes.listingEmployee}>
-                        {t.Employee}: {listing.employee?.name}
-                      </div>
-                      <div className={classes.listingLocation}>
-                        {listing.location}
-                      </div>
-                      <div className={classes.listingDate}>
-                        {Math.floor(
-                          (new Date() - new Date(listing.created_at)) /
-                          (1000 * 60 * 60 * 24)
-                        ) > 1
-                          ? `${Math.floor(
-                            (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
-                          )} days ago`
-                          : Math.floor(
-                            (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
-                          ) === 1
-                            ? "Yesterday"
-                            : "Today"}
-                      </div>
-                    </div>
-                  </Card>
+                      <div style={{ display: "block" }}>
+                        <div className={classes.listingTitle}>{listing.title}</div>
+                        <div className={classes.listingUtilities}>
+                          <div className={classes.listingUtility}>
+                            {listing.rooms === 0 ? null :
+                              <>
+                                <div className={classes.utilityImage}>
+                                  <Rooms />
+                                </div>
+                                {listing.rooms}
+                              </>
 
-                </GridCol>
-              ))}
-            </Grid>
-            <div ref={ref} style={{ height: 20 }}>
-              {isFetchingNextPage && <Center><Loader size="sm" /></Center>}
-            </div>
-          </>
-        )}
-      </Card> 
+                            }
+
+                          </div>
+                          <div className={classes.listingUtility}>
+                            {listing.bathrooms === 0 ? null : <>
+                              <div className={classes.utilityImage}>
+                                <Bathrooms />
+                              </div>
+                              {listing.bathrooms}
+                            </>}
+
+                          </div>
+                          <div className={classes.listingUtility}>
+                            <div className={classes.utilityImage}>
+                              <Area />
+                            </div>
+                            {listing.area} sqm
+                          </div>
+                        </div>
+
+                        <div className={classes.listingEmployee}>
+                          {t.Category}: {listing.category}
+                        </div>
+                        <div className={classes.listingEmployee}>
+                          {t.Employee}: {listing.employee?.name}
+                        </div>
+                        <div className={classes.listingLocation}>
+                          {listing.location}
+                        </div>
+                        <div className={classes.listingDate}>
+                          {Math.floor(
+                            (new Date() - new Date(listing.created_at)) /
+                            (1000 * 60 * 60 * 24)
+                          ) > 1
+                            ? `${Math.floor(
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
+                            : Math.floor(
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
+                        </div>
+                      </div>
+                    </Card>
+
+                  </GridCol>
+                ))}
+              </Grid>
+              <div ref={ref} style={{ height: 20 }}>
+                {isFetchingNextPage && <Center><Loader size="sm" /></Center>}
+              </div>
+            </>
+          )}
+      </Card>
 
       <FiltersModal
         opened={filterModalOpened}

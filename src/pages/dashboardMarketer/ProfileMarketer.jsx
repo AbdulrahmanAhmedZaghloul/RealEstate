@@ -7,11 +7,11 @@ import axiosInstance from "../../api/config";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "../../context/authContext";
 import Notifications from "../../components/company/Notifications";
-import ProfilePlane from "../../components/company/ProfilePlane";
+// import ProfilePlane from "../../components/company/ProfilePlane";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { ThemeToggle } from "../../Settings/ThemeToggle";
 import { useTranslation } from "../../context/LanguageContext";
-import { useProfile } from "../../hooks/queries/useProfile";
+import { useProfileMarketer } from "../../hooks/queries/useProfileMarketer";
 import { useEditProfile } from "../../hooks/mutations/useEditProfile";
 import EditIcon from "../../components/icons/edit";
 
@@ -46,36 +46,37 @@ function ProfileMarketer() {
   const { user, isSubscribed } = useAuth();
   const isMobile = window.matchMedia("(max-width: 991px)").matches;
   const { t } = useTranslation();
-  const { data, isLoading } = useProfile();
+  const { data, isLoading } = useProfileMarketer();
 
   console.log("Profile data:", data);
 
   // Fetch and initialize profile data
   const fetchProfileData = useCallback(() => {
     if (!data) return;
-    const { user: currUser } = data.data;
+    const { user: currUser } = data.data.profile;
+    console.log(data.data.profile);
 
     setName(currUser.name);
-    setAddress(currUser.company.address);
-    setBio(currUser.company.bio);
-    setPhone(currUser.company.phone_number);
-    setImage(currUser.company.picture_url);
+    // setAddress(currUser.user.address);
+    setBio(currUser.bio);
+    setPhone(currUser.phone_number);
+    setImage(currUser.picture);
     setEmail(currUser.email);
 
     // Initialize form inputs
     setFormName(currUser.name);
-    setFormPhone(currUser.company.phone_number || "+966");
-    setFormAddress(currUser.company.address);
-    setFormBio(currUser.company.bio);
-    setFormImage(currUser.company.picture_url);
+    setFormPhone(currUser.phone_number || "+966");
+    // setFormAddress(currUser.user.address);
+    setFormBio(currUser.bio);
+    setFormImage(currUser.picture);
 
     // Store initial form data
     setInitialFormData({
       name: currUser.name,
-      address: currUser.company.address,
-      bio: currUser.company.bio,
-      phone: currUser.company.phone_number,
-      image: currUser.company.picture_url,
+      // address: currUser.company.address,
+      bio: currUser.bio,
+      phone: currUser.phone_number,
+      image: currUser.picture,
     });
   }, [data]);
 
@@ -568,7 +569,7 @@ function ProfileMarketer() {
             </Modal>
           </Modal>
         </Card>
-        <ProfilePlane />
+        {/* <ProfilePlane /> */}
       </Card>
     </>
   );

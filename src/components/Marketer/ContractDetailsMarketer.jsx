@@ -138,6 +138,57 @@ function ContractDetailsMarketer() {
       });
   };
 
+  // const handleEditContract = (values) => {
+
+  //   if (!validateSaudiPhoneNumber(values.customer_phone)) {
+  //     notifications.show({
+  //       title: "Invalid phone number",
+  //       message: "Please enter a valid Saudi phone number starting with +966.",
+  //       color: "red",
+  //     });
+  //     return;
+  //   }
+  //   const formData = new FormData();
+  //   Object.keys(values).forEach((key) => {
+  //     if (key === "price" || key === "down_payment") {
+  //       formData.append(key, parseFloat(values[key]));
+  //     } else if (key !== "listing_id") {
+  //       formData.append("_method", "put");
+  //       formData.append(key, values[key]);
+  //     }
+  //   });
+  //   setLoading(true);
+  //   axiosInstance
+  //     .post(`/api/v1/contracts/${id}`, formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         Authorization: `Bearer ${user.token}`,
+  //       },
+  //     })
+  //     .then(() => {
+  //       // بعد النجاح
+  //       queryClient.invalidateQueries(['contracts']);
+  //       fetchContract(); // Re-fetch the contract data
+  //       closeEditModal();
+  //       notifications.show({
+  //         title: "Contract Updated",
+  //         message: "Contract has been updated successfully.",
+  //         color: "green",
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       notifications.show({
+  //         title: "Error",
+  //         message: "Failed to update contract",
+  //         color: "red",
+  //       });
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // };
+
   const handleDownloadDocument = () => {
     setLoading(true);
     axiosInstance

@@ -29,7 +29,7 @@ import ProfileActiveDark from "../../assets/dashboard/ProfileActiveDark.svg";
 import Logout from "../../assets/dashboard/logout.svg";
 import { useTranslation } from "../../context/LanguageContext";
 
-export default function SidebarMarketer() {
+export default function Sidebar() {
   const location = useLocation();
   const [profile, setProfile] = useState({});
   const navigate = useNavigate();
@@ -38,20 +38,19 @@ export default function SidebarMarketer() {
   const { t, lang } = useTranslation();
   const { colorScheme } = useMantineColorScheme();
   console.log(colorScheme);
-
   useEffect(() => {
     const fetchUserData = async () => {
       await axiosInstance
-        .get(`api/v1/marketer/profile`, {
+        .get("api/v1/company/profile", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         })
         .then((response) => {
           setProfile({
-            name: response.data.data.profile.name,
-            email: response.data.data.profile.user.email,
-            image: response.data.data.profile.user.picture,
+            name: response.data.data.user.name,
+            email: response.data.data.user.email,
+            image: response.data.data.user.company.picture_url,
           });
         })
         .catch((error) => {
@@ -75,26 +74,25 @@ export default function SidebarMarketer() {
   }, [location.pathname.split("/")[2]]);
 
   const navlist = [
-    // {
-    //   link: "/dashboard/Analytics",
-    //   label: t["Analytics"],
-    //   icon: (
-    //     <img
-    //       src={
-    //         active === "Analytics" && colorScheme === "light"
-    //           ? AnalyticsActive
-    //           : active === "Analytics" && colorScheme === "dark"
-    //             ? AnalyticsActiveDark
-    //             : Analytics
-    //       }
-    //       className={classes.linkIcon}
-    //       style={{
-    //         [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
-    //       }}
-    //     />
-    //   ),
-    // },
-
+    {
+      link: "/dashboard/Analytics",
+      label: t["Analytics"],
+      icon: (
+        <img
+          src={
+            active === "Analytics" && colorScheme === "light"
+              ? AnalyticsActive
+              : active === "Analytics" && colorScheme === "dark"
+                ? AnalyticsActiveDark
+                : Analytics
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
     {
       link: "/dashboard/Properties",
       label: t["Properties"],
@@ -115,27 +113,67 @@ export default function SidebarMarketer() {
         />
       ),
     },
-    
-    // {
-    //   link: "/dashboard/Contracts",
-    //   label: t["Contracts"],
-    //   // label: "Contracts",
-    //   icon: (
-    //     <img
-    //       src={
-    //         active === "Contracts" && colorScheme === "light"
-    //           ? ContractsActive
-    //           : active === "Contracts" && colorScheme === "dark"
-    //             ? ContractsActiveDark
-    //             : Contracts
-    //       }
-    //       className={classes.linkIcon}
-    //       style={{
-    //         [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
-    //       }}
-    //     />
-    //   ),
-    // },
+    {
+      link: "/dashboard/Transactions",
+      label: t["Transactions"],
+      // label: "Transactions",
+      icon: (
+        <img
+          src={
+            active === "Transactions" && colorScheme === "light"
+              ? TransactionsActive
+              : active === "Transactions" && colorScheme === "dark"
+                ? TransactionsActiveDark
+                : Transactions
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
+
+    {
+      link: "/dashboard/Team",
+      label: t["Team"],
+      // label: "Team",
+      icon: (
+        <img
+          src={
+            active === "Team" && colorScheme === "light"
+              ? StaffActive
+              : active === "Team" && colorScheme === "dark"
+                ? StaffActiveDark
+                : Staff
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
+    {
+      link: "/dashboard/Contracts",
+      label: t["Contracts"],
+      // label: "Contracts",
+      icon: (
+        <img
+          src={
+            active === "Contracts" && colorScheme === "light"
+              ? ContractsActive
+              : active === "Contracts" && colorScheme === "dark"
+                ? ContractsActiveDark
+                : Contracts
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
 
     {
       link: "/dashboard",
@@ -174,7 +212,6 @@ export default function SidebarMarketer() {
       <span>{item.label}</span>
     </Link>
   ));
-
   return (
     <nav className={classes.navbar}>
       <div>

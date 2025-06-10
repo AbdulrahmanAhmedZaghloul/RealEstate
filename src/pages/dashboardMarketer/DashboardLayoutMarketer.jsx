@@ -1,10 +1,9 @@
 import { AppShell, Burger, useMantineColorScheme } from "@mantine/core";
-// import Sidebar from "../../components/Marketer/SidebarMarketer";
+import SidebarMarketer from "../../components/Marketer/SidebarMarketer";
 import { Outlet } from "react-router-dom";
 import classes from "../../styles/dashboardLayout.module.css";
 import { useSidebar } from "../../context/sidebarContext";
 import { useTranslation } from "../../context/LanguageContext";
-import SidebarMarketer from "../../components/Marketer/SidebarMarketer";
 
 
 export default function DashboardLayoutMarketer() {

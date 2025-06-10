@@ -108,7 +108,7 @@ const UpdateStaffModal = ({ opened, onClose, employee, onUpdateSuccess,handleOpe
       }
 
       await axiosInstance.post(
-        `api/employees/${employee.employee_id}`,
+        `api/v1/employees/${employee.employee_id}`,
         formDataToSend,
         {
           headers: {

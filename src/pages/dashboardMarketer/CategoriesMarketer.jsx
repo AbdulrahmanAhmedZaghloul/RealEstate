@@ -28,7 +28,7 @@ import { useCategories } from "../../hooks/queries/useCategories";
 import { useTranslation } from "../../context/LanguageContext";
 import { ThemeToggle } from "../../Settings/ThemeToggle";
 
-function CategoriesMarketer() {
+function Categories() {
   const { colorScheme } = useMantineColorScheme();
   const { data: categoriesData, isLoading: categoriesLoading, isError: isCategoriesError, error: categoriesError } = useCategories();
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
@@ -408,4 +408,4 @@ function CategoriesMarketer() {
   );
 }
 
-export default CategoriesMarketer;
+export default Categories;

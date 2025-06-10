@@ -29,7 +29,7 @@ import CategoryIcon from "../../components/icons/CategoryIcon";
 import BathsIcon from "../../components/icons/BathsIcon";
 import BedsIcon from "../../components/icons/BedsIcon";
 import { usePropertiesContracts } from "../../hooks/queries/usePropertiesContracts";
-function ContractsMarketer() {
+function Contracts() {
 
   const {
     data: listingsData,
@@ -462,4 +462,4 @@ function ContractsMarketer() {
   );
 }
 
-export default ContractsMarketer;
+export default Contracts;

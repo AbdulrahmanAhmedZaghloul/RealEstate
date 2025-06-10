@@ -37,7 +37,7 @@ import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
 import CategoryIcon from "../../components/icons/CategoryIcon";
 import LazyImage from "../../components/LazyImage";
-function PropertiesMarketer() {
+function Properties() {
   const { user } = useAuth();
   const [isSticky, setIsSticky] = useState(false);
 
@@ -505,4 +505,4 @@ function PropertiesMarketer() {
   );
 }
 
-export default PropertiesMarketer;
+export default Properties;

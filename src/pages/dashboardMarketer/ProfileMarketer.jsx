@@ -303,17 +303,22 @@ function ProfileMarketer() {
         <Card radius="lg" mt="16px" className={classes.profileContainer}>
           <Group justify="space-between">
             <div className={classes.AvatarBox}>
-              <Avatar src={image} size={100} radius="50%" color="initials" />
-              <Text fz="lg" fw={600} className={classes.name}>
-                {formName}
-              </Text>
+              <div className={classes.Avatardiv}>
+                <Avatar src={image} size={100} radius="50%" color="initials" />
+                <Text fz="lg" fw={600} className={classes.name}>
+                  {formName}
+                </Text>
+
+              </div>
+
+              <div onClick={openFormModal} style={{ cursor: "pointer" }}>
+                <EditIcon />
+              </div>
             </div>
             {/* <Button variant="subtle" onClick={openFormModal}>
               تعديل
             </Button> */}
-            <div onClick={openFormModal} style={{ cursor: "pointer" }}>
-              <EditIcon />
-            </div>
+
           </Group>
 
           <div>

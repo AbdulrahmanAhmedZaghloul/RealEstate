@@ -72,7 +72,7 @@ function StaffSupervisor() {
   const fetchEmployees = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("api/employees", {
+      const response = await axiosInstance.get("api/v1/employees", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       console.log(response.data.data.employees)
@@ -93,7 +93,7 @@ function StaffSupervisor() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/kpi/employee-performance`,
+        `/api/v1/kpi/employee-performance`,
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }
@@ -147,7 +147,7 @@ function StaffSupervisor() {
 
       if (newUser.picture) formData.append("picture", newUser.picture);
 
-      const endpoint = isSupervisor ? "api/supervisors" : "api/employees";
+      const endpoint = isSupervisor ? "api/v1/supervisors" : "api/v1/employees";
       const response = await axiosInstance.post(endpoint, formData, {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -215,7 +215,7 @@ function StaffSupervisor() {
 
   const handleDeleteEmployee = async (id) => {
     try {
-      const response = await axiosInstance.delete(`api/employees/${id}`, {
+      const response = await axiosInstance.delete(`api/v1/employees/${id}`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },

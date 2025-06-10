@@ -105,7 +105,7 @@ function RequestsEmployee() {
   const fetchListings = async () => {
     setLoading(true);
     await axiosInstance
-      .get("api/listings/employee", {
+      .get("api/v1/listings/employee", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -174,7 +174,7 @@ function RequestsEmployee() {
     setLoading(true);
     await axiosInstance
       .post(
-        `/api/listings/${id}/status`,
+        `api/v1/listings/${id}/status`,
         {
           status: newStatus,
           rejection_reason: reason,
@@ -228,7 +228,7 @@ function RequestsEmployee() {
     setLoading(true);
     try {
       const res = await axiosInstance.get(
-        "/api/categories?with_subcategories=true",
+        "api/v1/categories?with_subcategories=true",
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }
@@ -429,9 +429,7 @@ function RequestsEmployee() {
                         </span>
 
                         <div className={classes.downPaymentBadge}>
-                          {Math.floor(
-                            (listing.down_payment / listing.price) * 100
-                          )}
+                          {listing.down_payment}
                           % {t.DownPayment}
                         </div>
                       </div>

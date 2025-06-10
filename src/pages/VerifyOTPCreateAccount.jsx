@@ -42,10 +42,10 @@ export default function VerifyOTPCreateAccount({ pass }) {
             password: location.state?.pass,
           })
           .then((response) => {
-            
-              console.log("yesSubscription-plans");
-              
-              navigate("/subscription-plans");
+
+            console.log("yesSubscription-plans");
+
+            navigate("/subscription-plans");
             const token = response.data.data.token;
             const role = response.data.data.user.role;
             if (token) {
@@ -57,7 +57,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
               });
               sessionStorage.removeItem("email");
               console.log("yesSubscription-plans");
-              
+
               navigate("/subscription-plans");
             }
           })
@@ -114,11 +114,11 @@ export default function VerifyOTPCreateAccount({ pass }) {
     if (user) {
       if (user.role === "marketer") {
         navigate("/dashboard-Marketer", { replace: true });
-      } 
-    
+      }
+
     }
   }, [user, navigate]);
-  
+
   return (
     <Container size={460} my={30}>
       {loading && (

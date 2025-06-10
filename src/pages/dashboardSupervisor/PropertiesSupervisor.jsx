@@ -35,6 +35,7 @@ function PropertiesSupervisor() {
   const [isSticky, setIsSticky] = useState(false);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties();
+
   const [saleFilter, setSaleFilter] = useState("all"); // all / for_sale / not_for_sale
   const [listings, setListings] = useState([]); //Property listings state
   const [employees, setEmployees] = useState([]); //Employees state
@@ -51,15 +52,13 @@ function PropertiesSupervisor() {
   const [loading, setLoading] = useState(false);
   const [filteredListings, setFilteredListings] = useState([]);
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
-if (!data || !data.pages) {
-    return (
-      <Center>
-        <Loader size="sm" />
-      </Center>
-    );
-  }
-  // تحويل البيانات إلى array مفرد
-  // const allListings = data?.pages.flatMap(page => page.listings || []) || [];
+//     if (!data || !data.pages) {
+//   return (
+//     <Center>
+//       <Loader size="sm" />
+//     </Center>
+//   );
+// }
   const allListings = data?.pages.flatMap(page => {
     return page?.data?.listings?.filter(listing => listing?.status === "approved") || [];
   }) || [];

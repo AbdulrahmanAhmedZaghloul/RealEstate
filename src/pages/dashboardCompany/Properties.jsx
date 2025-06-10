@@ -350,7 +350,7 @@ function Properties() {
         </header>
 
 
-        {searchedListings.length === 0 && !isLoading ? (
+        {allListings.length === 0 && !isLoading ? (
           <Center>
             <Text>No listings found.</Text>
           </Center>
@@ -359,7 +359,7 @@ function Properties() {
 
             <Grid className={classes.sty} align="center" spacing="xl">
               {console.log(searchedListings)}
-              {searchedListings.map((listing) => (
+              {allListings.map((listing) => (
                 <GridCol
                   span={4}
                   key={listing.id}

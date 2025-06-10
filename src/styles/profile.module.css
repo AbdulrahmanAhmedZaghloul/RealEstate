@@ -49,10 +49,10 @@
 }
 
 .AvatarBox {
-  /* width: 100%; */
+  width: 100%;
   /* background-color: aqua; */
   display: flex;
-  /* justify-content: start; */
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
   padding: 10px;

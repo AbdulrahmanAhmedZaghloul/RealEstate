@@ -25,7 +25,7 @@ function ProfileSupervisor() {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/api/supervisors`, {
+      const response = await axiosInstance.get(`api/v1/supervisors`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
 

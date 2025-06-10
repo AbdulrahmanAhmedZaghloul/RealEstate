@@ -70,7 +70,7 @@ function PropertiesEmployee() {
   const fetchListings = async () => {
     setLoading(true);
     await axiosInstance
-      .get("api/listings/employee", {
+      .get("api/v1/listings/employee", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -94,7 +94,7 @@ function PropertiesEmployee() {
   const fetchEmployees = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get("/api/employees", {
+      const res = await axiosInstance.get("api/v1/employees", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       console.log(res.data.data.employee);
@@ -111,7 +111,7 @@ function PropertiesEmployee() {
     setLoading(true);
     try {
       const res = await axiosInstance.get(
-        "/api/categories?with_subcategories=true",
+        "api/v1/categories?with_subcategories=true",
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }
@@ -165,7 +165,7 @@ function PropertiesEmployee() {
     );
     setLoading(true);
     axiosInstance
-      .post("api/listings", formData, {
+      .post("api/v1/listings", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${user.token}`,
@@ -429,7 +429,7 @@ function PropertiesEmployee() {
                   </span>
 
                   <div className={classes.downPaymentBadge}>
-                    {Math.floor((listing.down_payment / listing.price) * 100)}%
+                    {listing.down_payment}%
                     {t.DownPayment}
                   </div>
                 </div>

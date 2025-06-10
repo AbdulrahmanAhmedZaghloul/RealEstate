@@ -12,16 +12,17 @@ import {
   Modal,
   Textarea,
   Loader,
- } from "@mantine/core";
+  GridCol,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import classes from "../../styles/realEstates.module.css";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
-import { notifications } from "@mantine/notifications"; 
+import { notifications } from "@mantine/notifications";
 import FiltersModal from "../../components/modals/filterPropertiesModal";
- import area from "../../assets/area.svg";
+import area from "../../assets/area.svg";
 import rooms from "../../assets/rooms.svg";
 import bathrooms from "../../assets/bathrooms.svg";
 import AcceptedStatus from "../../assets/status/AcceptedStatus.svg";
@@ -89,8 +90,8 @@ function RequestsSupervisor() {
   const allListings = data?.pages.flatMap(page =>
     page.data.listings.filter(listing => listing.status === "pending")
   ) || [];
-  
-  
+
+
   const [ref, inView] = useInView();
 
   useEffect(() => {
@@ -188,7 +189,7 @@ function RequestsSupervisor() {
     setLoading(true);
     await axiosInstance
       .post(
-        `/api/listings/${id}/status`,
+        `api/v1/listings/${id}/status`,
         {
           status: newStatus,
           rejection_reason: reason,
@@ -242,7 +243,7 @@ function RequestsSupervisor() {
     setLoading(true);
     try {
       const res = await axiosInstance.get(
-        "/api/categories?with_subcategories=true",
+        "api/v1/categories?with_subcategories=true",
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }
@@ -388,137 +389,143 @@ function RequestsSupervisor() {
               </Center>
             ) : (
               <>
-                <Group align="center" spacing="xl">
+                <Grid className={classes.sty} align="center" spacing="xl">
                   {allListings?.map((listing) =>
-                    <Card
+                    <GridCol
+                      span={4}
                       key={listing.id}
-                      withBorder
-                      radius="md"
-                      className={classes.card}
-                      h={"100%"}
+                      onClick={() => {
+                        navigate(
+                          `/dashboard-supervisor/Properties/${listing.id}`
+                        );
+                      }}
+                      style={{
+                        cursor: "pointer",
+                      }}
                     >
-                      <div
-                        style={{
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          navigate(
-                            `/dashboard-supervisor/Properties/${listing.id}`
-                          );
-                        }}
+                      <Card
+                        key={listing.id}
+                        withBorder
+                        radius="md"
+                        className={classes.card}
+                        h={"100%"}
                       >
+                        {/* <div
 
 
-                        <Card.Section radius="md">
-                          <Image
-                            src={listing.picture_url}
-                            alt={listing.title}
-                            h="233px"
-                            radius="md"
-                          />
-                          <div className={classes.statusBadge}>
-                            <img
-                              src={
-                                listing.status === "pending"
-                                  ? PendingStatus
-                                  : listing.status === "approved"
-                                    ? AcceptedStatus
-                                    : RejectedStatus
-                              }
+                        > */}
+                          <Card.Section radius="md">
+                            <Image
+                              src={listing.picture_url}
+                              alt={listing.title}
+                              h="233px"
+                              radius="md"
                             />
-                          </div>
-                        </Card.Section>
-
-                        <div style={{ marginTop: "16px", display: "flex" }}>
-                          <span className={classes.listingPrice}>
-                            <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                            {parseFloat(listing.price)?.toLocaleString()}
-                          </span>
-
-                          <div className={classes.downPaymentBadge}>
-                            {Math.floor(
-                              (listing.down_payment / listing.price) * 100
-                            )}
-                            % {t.DownPayment}
-                          </div>
-                        </div>
-
-                        <div style={{ display: "block" }}>
-                          <div className={classes.listingTitle}>
-                            {listing.title}
-                          </div>
-                          <div className={classes.listingUtilities}>
-                            <div className={classes.listingUtility}>
-                              <div className={classes.utilityImage}>
-                                <img src={rooms}></img>
-                              </div>
-                              {listing.rooms}
+                            <div className={classes.statusBadge}>
+                              <img
+                                src={
+                                  listing.status === "pending"
+                                    ? PendingStatus
+                                    : listing.status === "approved"
+                                      ? AcceptedStatus
+                                      : RejectedStatus
+                                }
+                              />
                             </div>
-                            <div className={classes.listingUtility}>
-                              <div className={classes.utilityImage}>
-                                <img src={bathrooms}></img>
-                              </div>
-                              {listing.bathrooms}
-                            </div>
-                            <div className={classes.listingUtility}>
-                              <div className={classes.utilityImage}>
-                                <img src={area}></img>
-                              </div>
-                              {listing.area} sqm
+                          </Card.Section>
+
+                          <div style={{ marginTop: "16px", display: "flex" }}>
+                            <span className={classes.listingPrice}>
+                              <span className="icon-saudi_riyal">&#xea; </span>{" "}
+                              {parseFloat(listing.price)?.toLocaleString()}
+                            </span>
+
+                            <div className={classes.downPaymentBadge}>
+                              {Math.floor(
+                                (listing.down_payment / listing.price) * 100
+                              )}
+                              % {t.DownPayment}
                             </div>
                           </div>
-                          <div className={classes.listingEmployee}>
-                            {t.Employee} : {listing.employee?.name}
-                          </div>
-                          <div className={classes.listingLocation}>
-                            {listing.location}
-                          </div>
-                          <div className={classes.listingDate}>
-                            {Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                            ) > 1
-                              ? `${Math.floor(
+
+                          <div style={{ display: "block" }}>
+                            <div className={classes.listingTitle}>
+                              {listing.title}
+                            </div>
+                            <div className={classes.listingUtilities}>
+                              <div className={classes.listingUtility}>
+                                <div className={classes.utilityImage}>
+                                  <img src={rooms}></img>
+                                </div>
+                                {listing.rooms}
+                              </div>
+                              <div className={classes.listingUtility}>
+                                <div className={classes.utilityImage}>
+                                  <img src={bathrooms}></img>
+                                </div>
+                                {listing.bathrooms}
+                              </div>
+                              <div className={classes.listingUtility}>
+                                <div className={classes.utilityImage}>
+                                  <img src={area}></img>
+                                </div>
+                                {listing.area} sqm
+                              </div>
+                            </div>
+                            <div className={classes.listingEmployee}>
+                              {t.Employee} : {listing.employee?.name}
+                            </div>
+                            <div className={classes.listingLocation}>
+                              {listing.location}
+                            </div>
+                            <div className={classes.listingDate}>
+                              {Math.floor(
                                 (new Date() - new Date(listing.created_at)) /
                                 (1000 * 60 * 60 * 24)
-                              )} days ago`
-                              : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                (1000 * 60 * 60 * 24)
-                              ) === 1
-                                ? "Yesterday"
-                                : "Today"}
+                              ) > 1
+                                ? `${Math.floor(
+                                  (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                                )} days ago`
+                                : Math.floor(
+                                  (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                                ) === 1
+                                  ? "Yesterday"
+                                  : "Today"}
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        {/* </div> */}
 
-                      {listing.status === "pending" && (
-                        <Center>
-                          <Group mt="md" display="flex">
-                            <Button
-                              color="green"
-                              w="110px"
-                              h="40px"
-                              onClick={() =>
-                                updateStatus(listing.id, "approved", null)
-                              }
-                            >
-                              {t.Accept}
-                            </Button>
-                            <Button
-                              color="red"
-                              w="110px"
-                              h="40px"
-                              onClick={() => handleReject(listing.id)}
-                            >
-                              {t.Reject}
-                            </Button>
-                          </Group>
-                        </Center>
-                      )}
-                    </Card>
+                        {listing.status === "pending" && (
+                          <Center>
+                            <Group mt="md" display="flex">
+                              <Button
+                                color="green"
+                                w="110px"
+                                h="40px"
+                                onClick={() =>
+                                  updateStatus(listing.id, "approved", null)
+                                }
+                              >
+                                {t.Accept}
+                              </Button>
+                              <Button
+                                color="red"
+                                w="110px"
+                                h="40px"
+                                onClick={() => handleReject(listing.id)}
+                              >
+                                {t.Reject}
+                              </Button>
+                            </Group>
+                          </Center>
+                        )}
+                      </Card>
+                    </GridCol>
+
                   )}
-                </Group>
+                </Grid>
 
                 <div ref={ref} style={{ height: 20 }}>
                   {isFetchingNextPage && <Center><Loader size="sm" /></Center>}

@@ -59,12 +59,7 @@ function PropertiesSupervisor() {
 //     </Center>
 //   );
 // }
-  const allListings = data?.pages.flatMap(page => {
-    return page?.data?.listings?.filter(listing => listing?.status === "approved") || [];
-  }) || [];
-  // const allListings = data?.pages.flatMap(page =>
-  //   page.data.listings.filter(listing => listing.status === "approved")
-  // ) || [];
+
   const [ref, inView] = useInView();
 
   useEffect(() => {
@@ -72,6 +67,13 @@ function PropertiesSupervisor() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const allListings = data?.pages.flatMap(page => {
+    return page?.data?.listings?.filter(listing => listing?.status === "approved") || [];
+  }) || [];
+  // const allListings = data?.pages.flatMap(page =>
+  //   page.data.listings.filter(listing => listing.status === "approved")
+  // ) || [];
+
   // Form validation using Mantine's useForm
   const searchedListings = allListings
     .filter((listing) =>

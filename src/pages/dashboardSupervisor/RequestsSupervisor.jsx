@@ -287,7 +287,6 @@ function RequestsSupervisor() {
     <>
       <Card style={{
         backgroundColor: "var(--color-5)",
-
       }} radius="lg">
         <Grid>
           <Grid.Col span={12}>

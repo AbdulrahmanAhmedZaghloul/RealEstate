@@ -1,9 +1,10 @@
-import {  Card,  Button,  Group,  Text,  Badge,  Center,  Switch,  Modal,  Grid,  GridCol,
+// SubscriptionPlans.jsx
+import {
+  Card, Button, Group, Text, Badge, Center, Switch, Modal, Grid, GridCol,
 } from "@mantine/core";
 import { useState, useEffect } from "react";
 import axiosInstance from "../api/config";
 import { useAuth } from "../context/authContext";
-import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/header/logo-43.png";
 import positionleft from "../assets/palne/positionleft.jpg";
@@ -24,7 +25,7 @@ function SubscriptionPlans() {
   const [hovered, setHovered] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(null);
   const { data: currentSubscription, isLoading: isCurrentLoading, isError: isCurrrentError, error: currentError } = useCurrentSubscription();
-  
+
 
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -44,7 +45,7 @@ function SubscriptionPlans() {
 
   const fetchSubscriptionPlans = async () => {
     try {
-      const response = await axiosInstance.get("/api/subscriptions/plans", {
+      const response = await axiosInstance.get("/api/v1/subscriptions/plans", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       const fetchedPlans = response.data.data.map((plan) => ({
@@ -250,7 +251,7 @@ function SubscriptionPlans() {
                     style={{
                       backgroundColor:
                         plan.name === "Professional" ||
-                        plan.name === "Enterprise Annual"
+                          plan.name === "Enterprise Annual"
                           ? "var(--color-1)"
                           : "transparent",
                       padding: "40px",
@@ -258,7 +259,7 @@ function SubscriptionPlans() {
                       width: "320px",
                       border:
                         plan.name === "Professional" ||
-                        plan.name === "Enterprise Annual"
+                          plan.name === "Enterprise Annual"
                           ? "1px solid rgb(92, 25, 179)"
                           : "1px solid rgb(191, 190, 190)",
                     }}
@@ -269,13 +270,13 @@ function SubscriptionPlans() {
                         style={{
                           color:
                             plan.name === "Professional" ||
-                            plan.name === "Enterprise Annual"
+                              plan.name === "Enterprise Annual"
                               ? "#fff"
                               : "var(--color-2);",
                         }}
                       >
                         {plan.name}
-                      </Text> 
+                      </Text>
                     </Group>
                     <Text
                       size="xl"
@@ -283,7 +284,7 @@ function SubscriptionPlans() {
                       style={{
                         color:
                           plan.name === "Professional" ||
-                          plan.name === "Enterprise Annual"
+                            plan.name === "Enterprise Annual"
                             ? "#fff"
                             : "var(--color-2);",
                       }}
@@ -292,7 +293,7 @@ function SubscriptionPlans() {
                         ? plan.price.monthly
                         : plan.price.annually}
                     </Text>
-                  
+
                     <ul style={{ paddingLeft: "0px", marginBottom: "20px" }}>
                       {plan.features.map((feature, index) => (
                         <li
@@ -300,7 +301,7 @@ function SubscriptionPlans() {
                           style={{
                             color:
                               plan.name === "Professional" ||
-                              plan.name === "Enterprise Annual"
+                                plan.name === "Enterprise Annual"
                                 ? "#fff"
                                 : "var(--color-2);",
                           }}
@@ -310,7 +311,7 @@ function SubscriptionPlans() {
                             style={{
                               color:
                                 plan.name === "Professional" ||
-                                plan.name === "Enterprise Annual"
+                                  plan.name === "Enterprise Annual"
                                   ? "#fff"
                                   : "var(--color-1)",
                               marginRight: "10px",
@@ -338,12 +339,12 @@ function SubscriptionPlans() {
                       style={{
                         backgroundColor:
                           plan.name === "Professional" ||
-                          plan.name === "Enterprise Annual"
+                            plan.name === "Enterprise Annual"
                             ? "#fff"
                             : "var(--color-1)",
                         color:
                           plan.name === "Professional" ||
-                          plan.name === "Enterprise Annual"
+                            plan.name === "Enterprise Annual"
                             ? "var(--color-1)"
                             : "#fff",
                         width: "200px",
@@ -351,7 +352,7 @@ function SubscriptionPlans() {
                         margin: "auto",
                         border:
                           plan.name === "Professional" ||
-                          plan.name === "Enterprise Annual"
+                            plan.name === "Enterprise Annual"
                             ? "1px solid rgb(191, 190, 190)"
                             : "#fff",
                         borderRadius: "10px",
@@ -360,8 +361,8 @@ function SubscriptionPlans() {
                       {hovered && selectedPlan === plan.id
                         ? "Cancel Plan"
                         : selectedPlan === plan.id
-                        ? "Selected"
-                        : "Select Plan"}
+                          ? "Selected"
+                          : "Select Plan"}
                     </Button>
                   </div>
                 </Grid.Col>

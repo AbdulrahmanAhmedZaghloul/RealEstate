@@ -22,7 +22,7 @@ export const useAddContract = (userToken, closeModal) => {
     });
 
     await axiosInstance
-      .post("/api/v1/contracts", formData, {
+      .post("api/v1/contracts", formData, {
         headers: {
           Authorization: `Bearer ${userToken}`,
           "Content-Type": "multipart/form-data",

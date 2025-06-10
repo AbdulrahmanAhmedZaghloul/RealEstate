@@ -3,7 +3,7 @@ import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
 const fetchTerminationReasons = async (token) => {
-    const { data } = await axiosInstance.get("/api/kpi/termination-Reasons?time_frame=yearly", {
+    const { data } = await axiosInstance.get("api/v1/kpi/termination-Reasons?time_frame=yearly", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return data;

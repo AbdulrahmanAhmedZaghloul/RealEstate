@@ -9,7 +9,7 @@ export const useEditProfile = (userToken, closeModal, setLoading) => {
 
     const editProfile = async (formData) => {
 
-        await axiosInstance.post("/api/company/profile/update", formData, {
+        await axiosInstance.post("api/v1/company/profile/update", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${userToken}`,

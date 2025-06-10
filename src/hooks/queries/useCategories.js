@@ -4,7 +4,7 @@ import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
 const fetchCategories = async (token) => {
-    const { data } = await axiosInstance.get("/api/categories?with_subcategories=true", {
+    const { data } = await axiosInstance.get("api/v1/categories?with_subcategories=true", {
         headers: { Authorization: `Bearer ${token}` },
     });
     

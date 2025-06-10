@@ -29,7 +29,7 @@ export default function Register() {
     if (isFormValid()) {
       setLoading(true);
       try {
-        await axiosInstance.post("/api/web/register", {
+        await axiosInstance.post("api/v1/web/register", {
           company_name: account.name,
           email: account.email.toLowerCase(),
           password: account.password,

@@ -71,7 +71,7 @@ export default function Login() {
     if (validateForm()) {
       setLoading(true);
       axiosInstance
-        .post("/api/web/login", {
+        .post("api/v1/web/login", {
           email: credentials.email.toLowerCase(),
           password: credentials.password,
         })
@@ -94,8 +94,18 @@ export default function Login() {
               } else {
                 navigate("/subscription-plans", { replace: true });
               }
-            } else if (role === "supervisor") {
+            } 
+
+            else if (role === "supervisor") {
               navigate("/dashboard-supervisor", { replace: true });
+            }
+            
+            else if (role === "employee") {
+              navigate("/dashboard-employee", { replace: true });
+            }
+            
+            else if (role === "Marketer") {
+              navigate("/dashboard-Marketer", { replace: true });
             }
           }
         })

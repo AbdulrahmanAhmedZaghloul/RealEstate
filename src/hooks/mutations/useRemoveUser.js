@@ -11,8 +11,8 @@ export const useRemoveUser = (userToken, closeModal) => {
     const { userId, isSupervisor } = employeeToDelete;
 
     const endpoint = isSupervisor
-      ? `/api/supervisors/${userId}`
-      : `/api/employees/${userId}`;
+      ? `api/v1/supervisors/${userId}`
+      : `api/v1/employees/${userId}`;
 
     await axiosInstance.delete(endpoint, {
       headers: { Authorization: `Bearer ${userToken}` },

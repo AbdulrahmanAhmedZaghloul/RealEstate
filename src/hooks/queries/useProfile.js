@@ -5,7 +5,7 @@ import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
 const fetchProfile = async (token) => {
-    const { data } = await axiosInstance.get("/api/company/profile", {
+    const { data } = await axiosInstance.get("api/v1/company/profile", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return data;

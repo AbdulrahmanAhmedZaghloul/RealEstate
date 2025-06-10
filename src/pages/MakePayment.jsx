@@ -42,7 +42,7 @@ function MakePayment() {
           <p>
           Quick, safe, and seamless your <br /> dashboard is just a step away
           </p>
-          <button  onClick={() => navigate('/register')}>Next</button>
+          <button  onClick={() => navigate('/dashboard-Marketer')}>Next</button>
         </div>
       </div>
     </div>

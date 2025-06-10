@@ -52,6 +52,14 @@ import RequestsEmployee from "./pages/dashboardEmployee/RequestsEmployee.jsx";
 import PropertyDetailsEmployee from "./components/employee/PropertyDetailsEmployee.jsx";
 import { LanguageProvider } from "./context/LanguageContext.jsx";
 import MatterOrCompany from "./pages/MatterOrCompany.jsx";
+import DashboardLayoutMarketer from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
+import PropertyDetailsMarketer from "./components/Marketer/PropertyDetailsMarketer.jsx";
+import ContractsMarketer from "./pages/dashboardMarketer/ContractsMarketer.jsx";
+import CategoriesMarketer from "./pages/dashboardMarketer/CategoriesMarketer.jsx";
+import PropertiesMarketer from "./pages/dashboardMarketer/PropertiesMarketer.jsx";
+import ContractDetailsMarketer from "./components/Marketer/ContractDetailsMarketer.jsx";
+import AnalyticsMarketer from "./pages/dashboardMarketer/AnalyticsMarketer.jsx";
+import ProfileMarketer from "./pages/dashboardMarketer/ProfileMarketer.jsx";
 // import DashboardMarketerLayout from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
 
 function App() {
@@ -129,7 +137,25 @@ function App() {
               <Route path="Properties" element={<Properties />} />
               <Route path="Contracts/:id" element={<ContractDetails />} />
             </Route>
-            
+
+            {/* Marketer Manager Routes */}
+            <Route
+              path="/dashboard-Marketer"
+              element={
+                <ProtectedRoute allowedRoles={["Marketer"]}>
+                  <DashboardLayoutMarketer />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<ProfileMarketer />} />
+              <Route path="Contracts" element={<ContractsMarketer />} />
+              <Route path="Analytics" element={<AnalyticsMarketer />} />
+              <Route path="Categories" element={<CategoriesMarketer />} />
+              <Route path="Properties/:id" element={<PropertyDetailsMarketer />} />
+              <Route path="Properties" element={<PropertiesMarketer />} />
+              <Route path="Contracts/:id" element={<ContractDetailsMarketer />} />
+            </Route>
+
             {/* Supervisor Routes */}
             <Route
               path="/dashboard-supervisor"

@@ -20,7 +20,7 @@ export const useAddUser = (userToken, closeModal, setNewUser) => {
         console.log(isSupervisor);
         if (newUser.image) formData.append("picture", newUser.image);
 
-        const endpoint = isSupervisor ? "/api/supervisors" : "/api/employees";
+        const endpoint = isSupervisor ? "api/v1/supervisors" : "api/v1/employees";
         const response = await axiosInstance.post(endpoint, formData, {
             headers: {
                 Authorization: `Bearer ${userToken}`,

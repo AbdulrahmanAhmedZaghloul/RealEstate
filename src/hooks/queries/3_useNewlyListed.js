@@ -3,7 +3,7 @@ import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
 const fetchNewlyListed = async (token) => {
-    const { data } = await axiosInstance.get("/api/kpi/newly-listed?time_frame=yearly", {
+    const { data } = await axiosInstance.get("api/v1/kpi/newly-listed?time_frame=yearly", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return data;

@@ -93,7 +93,7 @@ const VerifyOTPForgotPassword = () => {
     setLoading(true);
     console.log(localStorage.getItem("user_email"));
     await axiosInstance
-      .post("/api/web/resend-otp", {
+      .post("/api/v1/web/resend-otp", {
         email: localStorage.getItem("user_email"),
         type: "reset-password",
 

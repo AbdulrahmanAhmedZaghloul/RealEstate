@@ -35,7 +35,7 @@ export const useAddProperty = (userToken, categories, closeModal) => {
       categories.find((cat) => cat.id === parseInt(values.category_id))?.name || ''
     );
 
-    const { data } = await axiosInstance.post('/api/listings/company', formData, {
+    const { data } = await axiosInstance.post('api/v1/listings/company', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${userToken}`,

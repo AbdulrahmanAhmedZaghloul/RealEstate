@@ -4,7 +4,7 @@ import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
 const fetchListings = async ({ token, cursor = 0 }) => {
-  const { data } = await axiosInstance.get(`api/listings/cursor?limit=3&cursor=${cursor}`, {
+  const { data } = await axiosInstance.get(`api/v1/listings/cursor?limit=3&cursor=${cursor}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return data;

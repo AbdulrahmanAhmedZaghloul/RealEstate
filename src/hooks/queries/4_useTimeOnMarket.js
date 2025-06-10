@@ -3,7 +3,7 @@ import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
 const fetchTimeOnMarket = async (token) => {
-    const { data } = await axiosInstance.get("/api/kpi/time-on-market?time_frame=yearly", {
+    const { data } = await axiosInstance.get("api/v1/kpi/time-on-market?time_frame=yearly", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return data;

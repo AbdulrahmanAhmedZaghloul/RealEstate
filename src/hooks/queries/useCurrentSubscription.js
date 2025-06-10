@@ -3,7 +3,7 @@ import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
 const fetchCurrentSubscription = async (token) => {
-    const { data } = await axiosInstance.get("/api/subscriptions/current", {
+    const { data } = await axiosInstance.get("api/v1/subscriptions/current", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return data;

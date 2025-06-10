@@ -16,9 +16,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     // حدد المسار المناسب بناءً على دور المستخدم
     const roleToDashboardPath = {
       company: "/dashboard",
+      marketer: "/dashboard-Marketer",
       supervisor: "/dashboard-supervisor",
       employee: "/dashboard-employee",
-      // Marketer: "/dashboard-Marketer",
     };
 
     const targetPath = roleToDashboardPath[user.role] || "/dashboard";

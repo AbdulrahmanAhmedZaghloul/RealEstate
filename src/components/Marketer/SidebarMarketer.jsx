@@ -29,7 +29,7 @@ import ProfileActiveDark from "../../assets/dashboard/ProfileActiveDark.svg";
 import Logout from "../../assets/dashboard/logout.svg";
 import { useTranslation } from "../../context/LanguageContext";
 
-export default function Sidebar() {
+export default function SidebarMarketer() {
   const location = useLocation();
   const [profile, setProfile] = useState({});
   const navigate = useNavigate();
@@ -38,10 +38,11 @@ export default function Sidebar() {
   const { t, lang } = useTranslation();
   const { colorScheme } = useMantineColorScheme();
   console.log(colorScheme);
+
   useEffect(() => {
     const fetchUserData = async () => {
       await axiosInstance
-        .get("api/v1/company/profile", {
+        .get("/api/company/profile", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -113,47 +114,7 @@ export default function Sidebar() {
         />
       ),
     },
-    {
-      link: "/dashboard/Transactions",
-      label: t["Transactions"],
-      // label: "Transactions",
-      icon: (
-        <img
-          src={
-            active === "Transactions" && colorScheme === "light"
-              ? TransactionsActive
-              : active === "Transactions" && colorScheme === "dark"
-                ? TransactionsActiveDark
-                : Transactions
-          }
-          className={classes.linkIcon}
-          style={{
-            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
-          }}
-        />
-      ),
-    },
-
-    {
-      link: "/dashboard/Team",
-      label: t["Team"],
-      // label: "Team",
-      icon: (
-        <img
-          src={
-            active === "Team" && colorScheme === "light"
-              ? StaffActive
-              : active === "Team" && colorScheme === "dark"
-                ? StaffActiveDark
-                : Staff
-          }
-          className={classes.linkIcon}
-          style={{
-            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
-          }}
-        />
-      ),
-    },
+    
     {
       link: "/dashboard/Contracts",
       label: t["Contracts"],
@@ -212,6 +173,7 @@ export default function Sidebar() {
       <span>{item.label}</span>
     </Link>
   ));
+
   return (
     <nav className={classes.navbar}>
       <div>

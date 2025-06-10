@@ -27,6 +27,7 @@ import FilterIcon from "../../components/icons/filterIcon";
 import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
 import Search from "../../components/icons/search";
 import { usePropertiesContracts } from "../../hooks/queries/usePropertiesContracts";
+import LazyImage from "../../components/LazyImage";
 
 const rejectionReasons = [
   {
@@ -387,12 +388,14 @@ function Transactions() {
                 >
                   {console.log(listing)}
                   <Card.Section radius="md">
-                    <Image
+                    {/* <Image
                       src={listing.picture_url}
                       alt={listing.title}
                       h="233px"
                       radius="md"
-                    />
+                    /> */}
+                    <LazyImage src={listing.picture_url} alt={listing.title} height={200} radius="md" />
+
                     {/* {console.log(listing.employee.primary_image?.image_url)} */}
                   </Card.Section>
 

@@ -10,7 +10,7 @@ export const useCancelPlan = (userToken) => {
     const cancelPlan = async () => {
 
         await axiosInstance.post(
-            "/api/subscriptions/cancel",
+            "api/v1/subscriptions/cancel",
             {},
             {
                 headers: { Authorization: `Bearer ${userToken}` },
@@ -31,6 +31,8 @@ export const useCancelPlan = (userToken) => {
 
         },
         onError: (error) => {
+            console.log(error);
+            
             notifications.show({
                 title: 'Error',
                 message: error.response?.data?.message || 'Failed to cancel subscription',

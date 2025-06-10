@@ -15,7 +15,7 @@ export const useProfileMarketer = () => {
     const { user } = useAuth();
 
     return useQuery({
-        queryKey: ['profile'],
+        queryKey: ['profile-marketer'],
         queryFn: () => fetchProfile(user.token),
         staleTime: 1000 * 60 * 5, // 5 minutes
         cacheTime: 1000 * 60 * 10, // 10 minutes

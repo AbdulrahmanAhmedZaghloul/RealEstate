@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
 
     await axiosInstance
       .post(
-        "/api/logout",
+        "/api/v1/logout",
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -96,7 +96,7 @@ export default function SidebarMarketer() {
     // },
 
     {
-      link: "/dashboard/Properties",
+      link: "/dashboard-Marketer/PropertiesMarketer",
       label: t["Properties"],
       // label: "Properties",
       icon: (
@@ -138,7 +138,7 @@ export default function SidebarMarketer() {
     // },
 
     {
-      link: "/dashboard",
+      link: "/dashboard-Marketer",
       label: t["Profile"],
       // label: "Profile",
       icon: (

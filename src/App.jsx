@@ -148,12 +148,12 @@ function App() {
               }
             >
               <Route index element={<ProfileMarketer />} />
-              <Route path="Contracts" element={<ContractsMarketer />} />
-              <Route path="Analytics" element={<AnalyticsMarketer />} />
-              <Route path="Categories" element={<CategoriesMarketer />} />
-              <Route path="Properties/:id" element={<PropertyDetailsMarketer />} />
-              <Route path="Properties" element={<PropertiesMarketer />} />
-              <Route path="Contracts/:id" element={<ContractDetailsMarketer />} />
+              <Route path="ContractsMarketer" element={<ContractsMarketer />} />
+              <Route path="AnalyticsMarketer" element={<AnalyticsMarketer />} />
+              <Route path="CategoriesMarketer" element={<CategoriesMarketer />} />
+              <Route path="PropertyDetailsMarketer/:id" element={<PropertyDetailsMarketer />} />
+              <Route path="PropertiesMarketer" element={<PropertiesMarketer />} />
+              <Route path="ContractDetailsMarketer/:id" element={<ContractDetailsMarketer />} />
             </Route>
 
             {/* Supervisor Routes */}

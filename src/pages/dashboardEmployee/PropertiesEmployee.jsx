@@ -18,7 +18,7 @@ import search from "../../assets/search.svg";
 import AcceptedStatus from "../../assets/status/AcceptedStatus.svg";
 import RejectedStatus from "../../assets/status/RejectedStatus.svg";
 import PendingStatus from "../../assets/status/PendingStatus.svg";
-  import addIcon from "../../assets/addIcon.svg";
+import addIcon from "../../assets/addIcon.svg";
 import downArrow from "../../assets/downArrow.svg";
 import Notifications from "../../components/company/Notifications";
 import FiltersModal from "../../components/modals/filterPropertiesModal";
@@ -30,6 +30,7 @@ import Search from "../../components/icons/search";
 import Dropdown from "../../components/icons/dropdown";
 import AddIcon from "../../components/icons/addIcon";
 import NotFoundRealEstate from "../../components/icons/NotFoundRealEstate";
+import LazyImage from "../../components/LazyImage";
 function PropertiesEmployee() {
   const [listings, setListings] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -75,7 +76,7 @@ function PropertiesEmployee() {
       })
       .then((res) => {
         console.log(res.data.data);
-        
+
         setListings(res.data?.data?.listings.data || []);
 
         const pendingListings = res.data.data.listings.data.filter(
@@ -283,18 +284,18 @@ function PropertiesEmployee() {
 
         <div className={classes.controls}>
           <div className={classes.divSearch}>
-   <input
-            className={classes.search}
-            placeholder={t.Search}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{
-              border: "1px solid var(--color-border)",
-            }}
-          />
+            <input
+              className={classes.search}
+              placeholder={t.Search}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                border: "1px solid var(--color-border)",
+              }}
+            />
 
-          <Search></Search>
-        
+            <Search></Search>
+
           </div>
           <button
             variant="default"
@@ -311,7 +312,7 @@ function PropertiesEmployee() {
               placeholder={t.Sortby}
               value={filter}
               onChange={setFilter}
-              rightSection={ <Dropdown/>}
+              rightSection={<Dropdown />}
               data={[
                 { value: "newest", label: "Newest" },
                 { value: "oldest", label: "Oldest" },
@@ -366,7 +367,7 @@ function PropertiesEmployee() {
               }}
             >
               <span style={{ marginRight: "13px" }}>
-              <AddIcon/>
+                <AddIcon />
               </span>
               Add
               {/* <img src={addIcon} style={{ marginRight: "13px" }}></img> */}
@@ -376,12 +377,12 @@ function PropertiesEmployee() {
 
         {listings?.length === 0 ? (
           <>
-          
-         <Center>
-          <NotFoundRealEstate/>
-           </Center>
+
+            <Center>
+              <NotFoundRealEstate />
+            </Center>
           </>
-       
+
         ) : (
           <Group align="center" spacing="xl">
             {listings.map((listing) => (
@@ -398,23 +399,25 @@ function PropertiesEmployee() {
               >
 
                 <Card.Section radius="md">
-                  <Image
+                  {/* <Image
                     src={`${listing.primary_image?.image_url}`}
                     alt={listing.title}
                     h="233px"
                     radius="md"
-                  />
-                    <div className={classes.statusBadge}>
-                          <img
-                            src={
-                              listing.status === "pending"
-                                ? PendingStatus
-                                : listing.status === "approved"
-                                  ? AcceptedStatus
-                                  : RejectedStatus
-                            }
-                          />
-                        </div>
+                  /> */}
+                  <LazyImage src={listing?.primary_image?.image_url} alt={listing?.title} height={200} radius="md" />
+
+                  <div className={classes.statusBadge}>
+                    <img
+                      src={
+                        listing.status === "pending"
+                          ? PendingStatus
+                          : listing.status === "approved"
+                            ? AcceptedStatus
+                            : RejectedStatus
+                      }
+                    />
+                  </div>
                 </Card.Section>
 
                 <div style={{ marginTop: "16px", display: "flex" }}>
@@ -564,7 +567,7 @@ function PropertiesEmployee() {
             ))}
           </Group>
         )}
-        
+
       </Card>
 
       <AddPropertyModal
@@ -594,4 +597,3 @@ function PropertiesEmployee() {
 
 export default PropertiesEmployee;
 
- 

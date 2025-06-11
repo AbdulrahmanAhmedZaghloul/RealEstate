@@ -3,19 +3,13 @@
 //Properties
 import { useEffect, useState } from "react";
 import { useInView } from 'react-intersection-observer';
-import {
-  Card, Center, Group, Image, Text, Select, Loader,
-  Grid,
-  GridCol,
-} from "@mantine/core";
+import { Card, Center, Text, Select, Loader, Grid, GridCol } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
-import { useMantineColorScheme } from "@mantine/core";
 
 //Local imports
 import classes from "../../styles/realEstates.module.css";
 import { useAuth } from "../../context/authContext";
-
 import { useTranslation } from "../../context/LanguageContext";
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -35,19 +29,15 @@ import AddIcon from "../../components/icons/addIcon";
 import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
-import CategoryIcon from "../../components/icons/CategoryIcon";
 import LazyImage from "../../components/LazyImage";
+
 function Properties() {
+  const [listingTypeFilter, setListingTypeFilter] = useState("all");
+
   const { user } = useAuth();
   const [isSticky, setIsSticky] = useState(false);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties(listingTypeFilter === "all" ? "" : listingTypeFilter);
 
-  // const {
-  //   data: listingsData,
-  //   isLoading: listingsLoading,
-  //   isError: isListingsError,
-  //   error: listingsError,
-  // } = useProperties();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties();
   const {
     data: employeesData,
     isLoading: employeesLoading,
@@ -82,8 +72,6 @@ function Properties() {
   const [filteredListings, setFilteredListings] = useState([]);
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
-  // تحويل البيانات إلى array مفرد
-  // const allListings = data?.pages.flatMap(page => page.listings || []) || [];
   const allListings = data?.pages.flatMap(page =>
     page.data.listings.filter(listing => listing.status === "approved")
   ) || [];
@@ -99,8 +87,9 @@ function Properties() {
     .filter((listing) =>
       listing.title.toLowerCase().includes(search.toLowerCase())
     ).filter((listing) => {
-      if (saleFilter === "for_sale") return listing.selling_status === 0;
-      if (saleFilter === "not_for_sale") return listing.selling_status === 1;
+      if (listingTypeFilter === "rent") return listing.listing_type === "rent";
+      if (listingTypeFilter === "buy") return listing.listing_type === "buy";
+      if (listingTypeFilter === "booking") return listing.listing_type === "booking";
       return true; // all
     })
     .sort((a, b) => {
@@ -117,6 +106,7 @@ function Properties() {
   const handleAddProperty = (values) => {
 
     // داخل أي كومبوننت
+    queryClient.invalidateQueries(['listingsRealEstate']);
     queryClient.invalidateQueries(['listings']);
 
     mutation.mutate(values);
@@ -159,23 +149,7 @@ function Properties() {
     setFilteredListings(filtered);
   };
 
-  const { colorScheme } = useMantineColorScheme();
 
-  // useEffect(() => {
-  //   setListings(
-  //     allListings.filter(
-  //       (listing) => listing.status === "approved"
-  //     ) || []
-  //   );
-
-  //   setEmployees(employeesData?.data?.employees || []);
-  //   setCategories(categoriesData?.data?.categories || []);
-  //   setSubcategories(
-  //     categoriesData?.data?.categories
-  //       .map((category) => category.subcategories)
-  //       .flat() || []
-  //   );
-  // }, [data, employeesData, categoriesData]);
   useEffect(() => {
 
     setEmployees(employeesData?.data?.employees || []);
@@ -191,18 +165,35 @@ function Properties() {
     setFilteredListings(listings);
   }, [listings]);
 
+
+  // Scroll-based pagination
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY >= 200) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
+      const scrollBottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+
+      if (scrollBottom && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY >= 200) {
+  //       setIsSticky(true);
+  //     } else {
+  //       setIsSticky(false);
+  //     }
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
   const mutation = useAddProperty(user.token, categories, close);
   const isAddPropertyLoading = mutation.isPending;
@@ -304,14 +295,21 @@ function Properties() {
               <Select
                 mr={10}
                 placeholder="For Sale"
-                value={saleFilter}
-                onChange={setSaleFilter}
+                value={listingTypeFilter}
+                onChange={setListingTypeFilter}
                 rightSection={<Dropdown />}
                 data={[
                   { value: "all", label: "All" },
-                  { value: "for_sale", label: "Sale" },
-                  { value: "not_for_sale", label: "Not Sale" },
+                  { value: "rent", label: "For Rent" },
+                  { value: "buy", label: "For Sale" },
+                  { value: "booking", label: "Booking" },
                 ]}
+                // data={[
+                //   { value: "all", label: "All" },
+                //   { value: "rent", label: "Rent" },
+                //   { value: "buy", label: "Buy" },
+                //   { value: "booking", label: "Booking" },
+                // ]}
                 styles={{
                   input: {
                     width: "132px",
@@ -350,7 +348,7 @@ function Properties() {
         </header>
 
 
-        {allListings.length === 0 && !isLoading ? (
+        {searchedListings.length === 0 && !isLoading ? (
           <Center>
             <Text>No listings found.</Text>
           </Center>
@@ -359,7 +357,7 @@ function Properties() {
 
             <Grid className={classes.sty} align="center" spacing="xl">
               {console.log(searchedListings)}
-              {allListings.map((listing) => (
+              {searchedListings.map((listing) => (
                 <GridCol
                   span={4}
                   key={listing.id}
@@ -374,24 +372,14 @@ function Properties() {
                   >
                     <Card.Section radius="md">
                       <div className={classes.listingImage}>
-                        {/* <Image
-                          src={`${listing.picture_url}`}
-                          alt={listing.title}
-                          h="233px"
-                          radius="md"
-                        /> */}
+
                         <LazyImage src={listing.picture_url} alt={listing.title} height={200} radius="md" />
 
                         <p className={classes.listingfor}>
-                          {listing.selling_status === 1
-                            ? "Sold"
-                            : listing.listing_type === "buy"
-                              ? "For Sale"
-                              : listing.listing_type === "rent"
-                                ? "For Rent"
-                                : listing.listing_type === "booking"
-                                  ? "For Booking"
-                                  : listing.listing_type}
+                          {
+                            listing.listing_type
+                          }
+
                         </p>
 
                       </div>
@@ -478,6 +466,7 @@ function Properties() {
             </div>
           </>
         )}
+
       </Card>
 
       <AddPropertyModal

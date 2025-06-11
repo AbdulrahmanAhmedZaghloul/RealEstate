@@ -49,6 +49,7 @@ export const useAddProperty = (userToken, categories, closeModal) => {
     mutationFn: addProperty,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['listings'] });
+      queryClient.invalidateQueries({ queryKey: ['listingsRealEstate'] });
       closeModal?.();
       notifications.show({
         title: 'Property Added',

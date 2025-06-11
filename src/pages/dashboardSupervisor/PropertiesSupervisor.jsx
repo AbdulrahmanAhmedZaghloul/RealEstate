@@ -30,6 +30,7 @@ import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
 import AcceptedStatus from "../../assets/status/AcceptedStatus.svg";
+import LazyImage from "../../components/LazyImage";
 function PropertiesSupervisor() {
   const { user } = useAuth();
   const [isSticky, setIsSticky] = useState(false);
@@ -52,13 +53,13 @@ function PropertiesSupervisor() {
   const [loading, setLoading] = useState(false);
   const [filteredListings, setFilteredListings] = useState([]);
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
-//     if (!data || !data.pages) {
-//   return (
-//     <Center>
-//       <Loader size="sm" />
-//     </Center>
-//   );
-// }
+  //     if (!data || !data.pages) {
+  //   return (
+  //     <Center>
+  //       <Loader size="sm" />
+  //     </Center>
+  //   );
+  // }
 
   const [ref, inView] = useInView();
 
@@ -295,12 +296,15 @@ function PropertiesSupervisor() {
                     >
                       <Card.Section radius="md">
                         <div className={classes.listingImage}>
-                          <Image
+
+                          {/* <Image
                             src={`${listing.picture_url}`}
                             alt={listing.title}
                             h="233px"
                             radius="md"
-                          />
+                          /> */}
+                          
+                          <LazyImage src={listing.picture_url} alt={listing.title} height={200} radius="md" />
 
                           <div className={classes.statusBadge}>
                             <img

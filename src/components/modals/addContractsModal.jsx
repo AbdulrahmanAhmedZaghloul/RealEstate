@@ -28,6 +28,7 @@ const AddContractsModal = ({
   onAdd,
   approvedListings,
 }) => {
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -85,12 +86,13 @@ const AddContractsModal = ({
           : null,
     },
   })
+
   function validateSaudiPhoneNumber(phoneNumber) {
     const cleaned = phoneNumber.replace(/\D/g, "");
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
-  const [loading, setLoading] = useState(false);
+
   function handleSubmit(values) {
     setLoading(true); // تفعيل اللودينج
     onAdd(values)
@@ -297,13 +299,7 @@ const AddContractsModal = ({
                 }
 
                 form.setFieldValue("customer_phone", formattedNumber);
-              }}
-              // onFocus={() => {
-              //   // عند التركيز، نتأكد من وجود +966
-              //   if (!form.values.customer_phone || !form.values.customer_phone.startsWith("+966")) {
-              //     form.setFieldValue("customer_phone", "+966");
-              //   }
-              // }}
+              }} 
               onFocus={() => {
                 if (!form.values.customer_phone || !form.values.customer_phone.startsWith("+966")) {
                   form.setFieldValue("customer_phone", "+966");

@@ -314,6 +314,8 @@ function PropertyDetails() {
                         {parseFloat(listing.price)?.toLocaleString()}
                       </Text>
                       <Text className={classes.Down}>
+                      {console.log(listing.down_payment)}
+                        
                         {listing.down_payment}
                         % {t.DownPayment}
                       </Text>

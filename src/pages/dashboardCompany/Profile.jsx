@@ -105,15 +105,35 @@ function Profile() {
   ]);
 
   // Handlers
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    setImageFile(file);
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
-      setFormImage(imageUrl);
-    }
-  };
+ const handleImageUpload = (event) => {
+  const file = event.target.files[0];
+
+  // التحقق من أن الملف هو صورة فقط
+  if (!file || !file.type.startsWith("image/")) {
+    notifications.show({
+      title: "Invalid File",
+      message: "Please upload an image file only.",
+      color: "red",
+    });
+    return;
+  }
+
+  // التحقق من الحجم (أقل من 5 ميجا)
+  if (file.size > 5 * 1024 * 1024) {
+    notifications.show({
+      title: "File Too Large",
+      message: "The image must be less than 5 MB in size.",
+      color: "red",
+    });
+    return;
+  }
+
+  // إذا كانت الصورة صحيحة، نكمل
+  setImageFile(file);
+  const imageUrl = URL.createObjectURL(file);
+  setImage(imageUrl);
+  setFormImage(imageUrl);
+};
 
   const validatePassword = (value) => {
     if (!value.trim()) return "Password is required";
@@ -136,7 +156,7 @@ function Profile() {
     setLoading(true);
     try {
       await axiosInstance.post(
-        "/api/company/profile/password",
+        "api/v1/company/profile/password",
         {
           current_password: oldPass,
           password: newPass,
@@ -452,65 +472,6 @@ function Profile() {
               }
               leftSectionPointerEvents="none"
             />
-
-            {/* 
-            <TextInput
-              label="Contact Number"
-              mt="md"
-              w="100%"
-              value={formPhone}
-              onChange={(e) => {
-                let input = e.target.value;
-
-                // إزالة كل شيء غير أرقام
-                const digitsOnly = input.replace(/\D/g, "");
-
-                // التأكد من أن القيمة تحتوي على رمز السعودية
-                if (!digitsOnly.startsWith("966") && digitsOnly.length >= 3) {
-                  setFormPhone("+966" + digitsOnly.slice(3, 12));
-                  return;
-                }
-
-                // إذا كانت أقل من 3 أرقام، نبدأ فقط بـ +966
-                if (digitsOnly.length < 3) {
-                  setFormPhone("+966");
-                  return;
-                }
-
-                // تنسيق الرقم بمسافات
-                let formattedNumber = "+966";
-
-                const phoneDigits = digitsOnly.slice(3, 12); // نأخذ حتى 9 أرقام
-
-                if (phoneDigits.length > 0) {
-                  formattedNumber += " " + phoneDigits.slice(0, 3);
-                }
-                if (phoneDigits.length > 3) {
-                  formattedNumber += " " + phoneDigits.slice(3, 6);
-                }
-                if (phoneDigits.length > 6) {
-                  formattedNumber += " " + phoneDigits.slice(6, 9);
-                }
-
-                setFormPhone(formattedNumber);
-              }}
-              onFocus={() => {
-                // عند التركيز، نتأكد من وجود +966
-                if (!formPhone.startsWith("+966")) {
-                  setFormPhone("+966");
-                }
-              }}
-              leftSection={
-                <img
-                  src="https://flagcdn.com/w20/sa.png "
-                  alt="Saudi Arabia"
-                  width={20}
-                  height={20}
-                />
-              }
-              leftSectionPointerEvents="none"
-            /> */}
-
 
             {bio === "" ? (
               <TextInput

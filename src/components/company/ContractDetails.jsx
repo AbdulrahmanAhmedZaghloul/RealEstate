@@ -119,7 +119,7 @@ function ContractDetails() {
   const fetchContract = () => {
     setLoading(true);
     axiosInstance
-      .get(`/api/v1/contracts/${id}`, {
+      .get(`api/v1/contracts/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -192,7 +192,7 @@ function ContractDetails() {
   const handleDownloadDocument = () => {
     setLoading(true);
     axiosInstance
-      .get(`/api/v1/contracts/${id}/download`, {
+      .get(`api/v1/contracts/${id}/download`, {
         headers: { Authorization: `Bearer ${user.token}` },
         responseType: "blob",
       })
@@ -228,7 +228,7 @@ function ContractDetails() {
   const handleDeleteContract = () => {
     setLoading(true);
     axiosInstance
-      .delete(`/api/v1/contracts/${id}`, {
+      .delete(`api/v1/contracts/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(() => {

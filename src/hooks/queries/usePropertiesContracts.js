@@ -13,6 +13,8 @@ const fetchListings = async (token) => {
     return data;
 };
 
+
+
 export const usePropertiesContracts = () => {
   const { user } = useAuth();
 

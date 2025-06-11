@@ -303,13 +303,7 @@ function Properties() {
                   { value: "rent", label: "For Rent" },
                   { value: "buy", label: "For Sale" },
                   { value: "booking", label: "Booking" },
-                ]}
-                // data={[
-                //   { value: "all", label: "All" },
-                //   { value: "rent", label: "Rent" },
-                //   { value: "buy", label: "Buy" },
-                //   { value: "booking", label: "Booking" },
-                // ]}
+                ]} 
                 styles={{
                   input: {
                     width: "132px",
@@ -356,8 +350,7 @@ function Properties() {
           <>
 
             <Grid className={classes.sty} align="center" spacing="xl">
-              {console.log(searchedListings)}
-              {searchedListings.map((listing) => (
+               {searchedListings.map((listing) => (
                 <GridCol
                   span={4}
                   key={listing.id}
@@ -437,6 +430,8 @@ function Properties() {
                         {t.Employee}: {listing.employee?.name}
                       </div>
                       <div className={classes.listingLocation}>
+                        {console.log(listing.location)}
+                        
                         {listing.location}
                       </div>
                       <div className={classes.listingDate}>

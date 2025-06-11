@@ -1,3 +1,137 @@
+// // Dependency imports
+// import {
+//   Modal,
+//   Grid,
+//   Autocomplete,
+//   Select,
+//   Button,
+//   Group,
+//   Divider,
+// } from "@mantine/core";
+// import { useForm } from "@mantine/form";
+
+// //Local imports
+// import classes from "../../styles/modals.module.css";
+// import downArrow from "../../assets/downArrow.svg";
+// import { useMediaQuery } from "@mantine/hooks";
+// const FiltersModal = ({
+//   opened,
+//   onClose,
+//   categories = [],
+//   subcategories = [],
+//   onFilter,
+//   onReset,
+//   initialFilters = {},
+// }) => {
+//   const filterForm = useForm({
+//     initialValues: {
+//       location: "",
+//       category_id: "any",
+//       subcategory_id: "any",
+//       down_payment: "Any",
+//       price: "Any",
+//       area: "Any",
+//       rooms: "Any",
+//       bathrooms: "Any",
+//       level: "Any",
+//       employee: "Any",
+
+//       ...initialFilters,
+//     },
+//   });
+
+//   const handleSubmit = (values) => {
+//     onFilter(values);
+//     onClose();
+//   };
+
+//   const handleReset = () => {
+//     filterForm.reset();
+//     onReset();
+//   };
+//   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
+
+//   return (
+//     <Modal
+//       opened={opened}
+//       onClose={onClose}
+//       title="Filters"
+//       size="md"
+//       radius="lg"
+//       styles={{
+//         title: {
+//           fontSize: 20,
+//           fontWeight: 600,
+//           color: "var(--color-3)",
+//         },
+//       }}
+//     >
+//       <form
+//         onSubmit={filterForm.onSubmit(handleSubmit)}
+//         style={{ padding: isMobile? "15px": "20px 48px" }}
+//       >
+//         <Grid>
+//           {/* Location Field */}
+//           <Grid.Col span={12}>
+//             <Autocomplete
+//               label="Location"
+//               placeholder="Enter location"
+//               {...filterForm.getInputProps("location")}
+//               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+//             />
+//           </Grid.Col>
+
+
+//           {/* Rooms Field */}
+//           <Grid.Col span={12}>
+//             <Autocomplete
+//               label="Rooms"
+//               placeholder="Enter number of rooms"
+//               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+//               data={[{ value: "Any", label: "Any" }]}
+//               {...filterForm.getInputProps("rooms")}
+//             />
+//           </Grid.Col>
+
+//           {/* Bathrooms Field */}
+//           <Grid.Col span={12}>
+//             <Autocomplete
+//               label="Bathrooms"
+//               placeholder="Enter number of bathrooms"
+//               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+//               data={[{ value: "Any", label: "Any" }]}
+//               {...filterForm.getInputProps("bathrooms")}
+//             />
+//           </Grid.Col>
+
+//           {/* Action Buttons */}
+//           <Grid.Col span={12}>
+//             <Divider size="xs" mb={16} mt={16} />
+//             <Group justify="center">
+//               <Button
+//                 type="button"
+//                 onClick={handleReset}
+//                 className={classes.resetButton}
+//               >
+//                 Reset
+//               </Button>
+//               <Button type="submit" className={classes.doneButton}>
+//                 Done
+//               </Button>
+//             </Group>
+//           </Grid.Col>
+//         </Grid>
+//       </form>
+//     </Modal>
+//   );
+// };
+
+// export default FiltersModal;
+
+
+
+
+
 //Dependency imports
 import {
   Modal,
@@ -68,7 +202,7 @@ const FiltersModal = ({
     >
       <form
         onSubmit={filterForm.onSubmit(handleSubmit)}
-        style={{ padding: isMobile? "15px": "20px 48px" }}
+        style={{ padding: isMobile ? "15px" : "20px 48px" }}
       >
         <Grid>
           {/* Location Field */}
@@ -113,7 +247,7 @@ const FiltersModal = ({
                     (subcategory) =>
                       filterForm.values.category_id === "any" ||
                       subcategory.category_id ===
-                        parseInt(filterForm.values.category_id)
+                      parseInt(filterForm.values.category_id)
                   )
                   .map((subcategory) => ({
                     value: String(subcategory.id),
@@ -124,7 +258,7 @@ const FiltersModal = ({
             />
           </Grid.Col>
 
-         
+
 
           {/* Down Payment Field */}
           <Grid.Col span={12}>
@@ -158,7 +292,6 @@ const FiltersModal = ({
               {...filterForm.getInputProps("area")}
             />
           </Grid.Col>
-
           {/* Rooms Field */}
           <Grid.Col span={12}>
             <Autocomplete
@@ -181,19 +314,9 @@ const FiltersModal = ({
             />
           </Grid.Col>
 
-          {/* Level Field */}
-          <Grid.Col span={12}>
-            <Autocomplete
-              label="Level"
-              placeholder="Enter level or select"
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              data={[{ value: "Any", label: "Any" }]}
-              {...filterForm.getInputProps("level")}
-            />
-          </Grid.Col>
 
-           {/* Employee Field */}
-           <Grid.Col span={12}>
+          {/* Employee Field */}
+          <Grid.Col span={12}>
             <Autocomplete
               label="Employee"
               placeholder="Enter employee name"

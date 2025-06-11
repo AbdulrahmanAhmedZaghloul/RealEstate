@@ -22,7 +22,7 @@ import FloorsIcon from "../icons/FloorsIcon";
 import CategoryIcon from "../icons/CategoryIcon";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/edit";
-  import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 function PropertyDetails() {
   const { id } = useParams();
@@ -56,7 +56,7 @@ function PropertyDetails() {
   const fetchListing = async () => {
     setLoading(true);
     try {
-      const { data } = await axiosInstance.get(`/api/listings/employee/${id}`, {
+      const { data } = await axiosInstance.get(`api/v1/listings/employee/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setListing(data?.data.listing);
@@ -74,7 +74,7 @@ function PropertyDetails() {
 
   const handleUpdateProperty = async (updatedData) => {
     try {
-      await axiosInstance.put(`/api/listings/${id}`, updatedData, {
+      await axiosInstance.put(`api/v1/listings/${id}`, updatedData, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       notifications.show({ title: "Success", message: "Listing updated successfully!", color: "green" });
@@ -89,7 +89,7 @@ function PropertyDetails() {
   const handleShareProperty = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.post(`/api/listings/${id}/share`, {}, {
+      const response = await axiosInstance.post(`api/v1/listings/${id}/share`, {}, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setShareLink(response.data.data.share_url);
@@ -112,7 +112,7 @@ function PropertyDetails() {
   const handleDeleteProperty = async () => {
     setLoading(true);
     try {
-      await axiosInstance.delete(`/api/listings/${id}`, {
+      await axiosInstance.delete(`api/v1/listings/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       navigate("/dashboard/properties");
@@ -138,7 +138,7 @@ function PropertyDetails() {
     setLoading(true);
     try {
       await axiosInstance.post(
-        `/api/listings/${id}/status`,
+        `api/v1/listings/${id}/status`,
         { status: newStatus, rejection_reason: reason },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
@@ -199,7 +199,7 @@ function PropertyDetails() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [opened1, listing?.images]);
-  
+
   if (loading) {
     return (
       <Center style={{ height: "80vh" }}>
@@ -213,6 +213,9 @@ function PropertyDetails() {
   }
 
   return (
+    // <>
+    // <p>xasxas</p>
+    // </>
     <>
       <Card
         style={{
@@ -309,13 +312,11 @@ function PropertyDetails() {
                         }}
                         className={classes.price}
                       >
-                        {console.log(listing)}
-                        <span className="icon-saudi_riyal">&#xea; </span>{" "}
+                         <span className="icon-saudi_riyal">&#xea; </span>{" "}
                         {parseFloat(listing.price)?.toLocaleString()}
                       </Text>
                       <Text className={classes.Down}>
-                      {console.log(listing.down_payment)}
-                        
+ 
                         {listing.down_payment}
                         % {t.DownPayment}
                       </Text>
@@ -435,7 +436,7 @@ function PropertyDetails() {
                     <span className={classes.svgSpan}>
                       <div>
                         <CategoryIcon />
-                        <span>{listing.category} / </span>
+                        {/* <span>{listing.category} / </span> */}
                       </div>
                     </span>
                   </Grid.Col>
@@ -502,10 +503,10 @@ function PropertyDetails() {
                   ) : (
                     <Box className={classes.BoxImage}>
                       <div className={classes.divImage}>
-                        <Avatar w={60} h={60} src={listing.employee.picture_url} alt={listing.employee?.name} />
+                        <Avatar w={60} h={60} src={listing.employee.picture_url} alt={listing?.employee?.name} />
                         <span className={classes.spanImage}>
 
-                          {listing.employee?.name}
+                          {listing?.employee?.name}
                         </span>
                       </div>
 
@@ -552,12 +553,11 @@ function PropertyDetails() {
         ) : (
           ""
         )}
-        <Text style={{}} className={classes.Description} fw={600}>
+        {/* <Text style={{}} className={classes.Description} fw={600}>
           {t.Amenities}
         </Text>
         <Text className={classes.Amenities}>
-          <Grid>
-            {/* العمود الأول */}
+            <Grid>
             <Grid.Col span={6}>
               {listing.amenities
                 .filter((_, index) => index % 2 === 0)
@@ -568,7 +568,6 @@ function PropertyDetails() {
                 ))}
             </Grid.Col>
 
-            {/* العمود الثاني */}
             <Grid.Col span={6}>
               {listing.amenities
                 .filter((_, index) => index % 2 === 1)
@@ -578,17 +577,8 @@ function PropertyDetails() {
                   </div>
                 ))}
             </Grid.Col>
-          </Grid>
-        </Text>
-        {/* <Text style={{}} className={classes.Amenities}>
-              {listing.amenities.map((Amenities) => (
-                <div  key={Amenities.category_id}>
-                  <Text style={{}} >
-                    {Amenities.name}
-                  </Text>
-                </div>
-              ))}
-            </Text> */}
+          </Grid>  
+        </Text> */}
 
         {/* <Divider my="sm" /> */}
         <Stack gap="xs" style={{ marginTop: "20px" }}>

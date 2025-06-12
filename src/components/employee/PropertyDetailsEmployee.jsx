@@ -437,7 +437,7 @@ function PropertyDetails() {
                       <div>
                         <CategoryIcon />
                         {console.log(listing)}
-                        <span>{listing.category}   </span>
+                        <span>{listing.category.name} /  {listing.subcategory.name}   </span>
                       </div>
                     </span>
 

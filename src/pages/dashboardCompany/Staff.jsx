@@ -40,6 +40,8 @@ import DownStaff from "../../components/icons/DownStaff";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
 import DeleteIcon from "../../components/icons/DeleteIcon";
+import { useQueryClient } from "@tanstack/react-query";
+import Compressor from 'compressorjs';
 
 const jobColors = {
   supervisor: "orange",
@@ -87,7 +89,6 @@ function Staff() {
   ] = useDisclosure(false);
 
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState(null);
 
@@ -109,6 +110,8 @@ function Staff() {
     position: "",
     phone_number: "",
     address: "",
+    image: null,
+
     supervisor_id: null,
   });
 
@@ -122,11 +125,6 @@ function Staff() {
     image: "",
   });
 
-
-  //delete modal data
-  // console.log(supervisor_id);
-
-
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [searchedEmployees, setSearchedEmployees] = useState([]);
@@ -137,25 +135,10 @@ function Staff() {
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
   const navigate = useNavigate();
-
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 10;
-  // const totalPages = Math.ceil(supervisors.length / itemsPerPage);
-  // const paginatedSupervisors = supervisors.slice(
-  //   (currentPage - 1) * itemsPerPage,
-  //   currentPage * itemsPerPage
-  // );
-  const [changePasswordModal, { open: openChangePasswordModal, close: closeChangePasswordModal }] = useDisclosure(false);
-
-  // Reset currentPage to 1 when the search query changes
-  // useEffect(() => {
-  //   setCurrentPage(1);
-  // }, [searchQuery]);
+  const queryClient = useQueryClient();
 
   const fetchEmployees = async () => {
     try {
-      console.log(employeesData?.data?.employees);
-
       setEmployees(employeesData?.data?.employees || []);
       setSearchedEmployees(employeesData?.data?.employees || []);
     } catch (error) {
@@ -250,6 +233,7 @@ function Staff() {
 
   const mutationRemoveUser = useRemoveUser(user.token, closeDeleteModal);
   const isRemoveUserLoading = mutationRemoveUser.isPending;
+  const [previewImage, setPreviewImage] = useState(null);
 
   // Add a new function to confirm and delete the user
 
@@ -259,8 +243,9 @@ function Staff() {
     // تنفيذ الحذف باستخدام useRemoveUser hook
     mutationRemoveUser.mutate({ employeeToDelete }, {
       onSuccess: () => {
-        <InvalidateQuery queryKey={["listings"]} />
 
+        queryClient.invalidateQueries(['listingsRealEstate']);
+        queryClient.invalidateQueries(['listings']);
         closeDeleteModal();
         setEmployeeToDelete(null);
       },
@@ -271,7 +256,6 @@ function Staff() {
   const isEditUserLoading = mutationEditUser.isPending;
 
   const handleEditUser = (user) => {
-    console.log(user);
     setEditUser({
       id: user.employee_id,
       name: user.name,
@@ -280,7 +264,6 @@ function Staff() {
       phone_number: user.phone_number,
       address: user.address,
       supervisor_id: user.supervisor_id,
-
       image: null, // ستتم ملؤها لاحقًا من المودال
       picture_url: user.picture_url || null, // للعرض فقط
     });
@@ -293,11 +276,39 @@ function Staff() {
     mutationEditUser.mutate({ editUser });
   };
 
+
+
   const handleFileChange = (file) => {
-    setNewUser((prev) => ({ ...prev, image: file }));
+    if (!file) return;
+
+    const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
+    if (file.size > MAX_FILE_SIZE) {
+      notifications.show({
+        title: "Error",
+        message: "Image size should not exceed 2 MB.",
+        color: "red",
+      });
+      return;
+    }
+
+    new Compressor(file, {
+      quality: 0.6, // نسبة الضغط (0.1 إلى 1)
+      success: (compressedResult) => {
+        const compressedFile = new File([compressedResult], file.name, {
+          type: compressedResult.type,
+          lastModified: Date.now(),
+        });
+
+        setNewUser((prev) => ({ ...prev, image: compressedFile }));
+      },
+      error: (err) => {
+        console.error("Compression failed:", err);
+        setNewUser((prev) => ({ ...prev, image: file })); // استخدام الصورة الأصلية
+      },
+    });
   };
 
-  // Group employees by supervisor_id
   const groupEmployeesBySupervisor = () => {
     const grouped = {};
     employees.forEach((user) => {
@@ -367,6 +378,11 @@ function Staff() {
   };
 
 
+  useEffect(() => {
+    if (!addModalOpened) {
+      setPreviewImage(null); // إعادة تعيين الصورة عند إغلاق المودال
+    }
+  }, [addModalOpened]);
 
   useEffect(() => {
     fetchEmployees();
@@ -558,7 +574,7 @@ function Staff() {
                               );
                             }}
                           />
-                          
+
                           <Text
                             fz="sm"
                             fw={500}
@@ -592,9 +608,7 @@ function Staff() {
                               supervisor.status === "active"
                                 ? "#E9FFEF"
                                 : "red",
-                            // deg: 90,
                           }}
-                        // truncate="end"
                         >
                           <span className={classes.spanStatus}>
                             <span className={classes.Statusrom}></span>
@@ -616,15 +630,11 @@ function Staff() {
                       </Table.Td>
 
                       <Table.Td className={classes.tablebody} w="15%">
-                        {/* <Text fz="sm" truncate="end" maw={200}> */}
                         {supervisor.position}
-                        {/* </Text> */}
                       </Table.Td>
 
                       <Table.Td fz="sm" className={classes.tablebody} w="15%">
-                        {/* <Text fz="sm" truncate="end" maw={100}> */}
                         {supervisor.phone_number}
-                        {/* </Text> */}
                       </Table.Td>
 
                       <Table.Td className={classes.tablebody} w="10%">
@@ -636,17 +646,16 @@ function Staff() {
                             mr={24}
                           >
                             <EditIcon />
-                            {/* <img src={edit} /> */}
                           </ActionIcon>
-                           <ActionIcon
+                          <ActionIcon
                             variant="subtle"
                             color="red"
                             onClick={() =>
                               handleRemoveUser(supervisor.supervisor_id, true)
                             }
                           >
-                            <DeleteIcon /> 
-                           </ActionIcon>  
+                            <DeleteIcon />
+                          </ActionIcon>
                         </Group>
                       </Table.Td>
                     </Table.Tr>
@@ -669,7 +678,6 @@ function Staff() {
                                       <Group gap="md" ml={40}>
                                         <Avatar
                                           size={30}
-                                          // src={`${apiUrl}storage/${employee.picture}`}
                                           src={`${employee.picture_url}`}
                                           color={jobColors[employee.position]}
                                           radius={30}
@@ -716,9 +724,7 @@ function Staff() {
                                             employee.status === "active"
                                               ? "#E9FFEF"
                                               : "red",
-                                          // deg: 90,
                                         }}
-                                      // truncate="end"
                                       >
                                         <span className={classes.spanStatus}>
                                           <span
@@ -749,9 +755,7 @@ function Staff() {
                                       className={classes.tablebody}
                                       w="15%"
                                     >
-                                      {/* <Text fz="sm"  > */}
                                       {employee.position}
-                                      {/* </Text> */}
                                     </Table.Td>
 
                                     <Table.Td
@@ -759,9 +763,7 @@ function Staff() {
                                       className={classes.tablebody}
                                       w="15%"
                                     >
-                                      {/* <Text fz="sm"> */}
                                       {employee.phone_number}
-                                      {/* </Text> */}
                                     </Table.Td>
 
                                     <Table.Td w="10%">
@@ -803,7 +805,6 @@ function Staff() {
                 ))}
                 {groupedEmployees["unassigned"]?.map((employee) => (
                   <Table.Tr
-
                     key={employee.employee_id}
                   >
                     <Table.Td className={classes.tablebody} w="20%">
@@ -837,26 +838,13 @@ function Staff() {
                           from:
                             employee.status === "active" ? "#E9FFEF" : "red",
                           to: employee.status === "active" ? "#E9FFEF" : "red",
-                          // deg: 90,
                         }}
-                      // truncate="end"
                       >
                         <span className={classes.spanStatus}>
                           <span className={classes.Statusrom}></span>
-
                           {employee.status}
                         </span>
                       </Badge>
-                      {/* <Badge
-                        color={jobColors[employee.position]}
-                        variant="light"
-                      >
-                        <span className={classes.spanStatus}>
-                          <span className={classes.Statusrom}></span>
-
-                          {employee.status}
-                        </span>
-                      </Badge> */}
                     </Table.Td>
                     <Table.Td>
                       <Anchor component="button" size="sm">
@@ -875,7 +863,6 @@ function Staff() {
                           mr={24}
                         >
                           <EditIcon />
-
                         </ActionIcon>
                         <ActionIcon
                           variant="subtle"
@@ -885,7 +872,6 @@ function Staff() {
                           }
                         >
                           <DeleteIcon />
-
                         </ActionIcon>
                       </Group>
                     </Table.Td>
@@ -899,6 +885,7 @@ function Staff() {
                   border: "1px solid transparent",
                 }}
               >
+
                 {searchedEmployees?.map((employee) => (
                   <Table.Tr
                     style={{
@@ -938,9 +925,7 @@ function Staff() {
                           from:
                             employee.status === "active" ? "#E9FFEF" : "red",
                           to: employee.status === "active" ? "#E9FFEF" : "red",
-                          // deg: 90,
                         }}
-                      // truncate="end"
                       >
                         <span className={classes.spanStatus}>
                           <span className={classes.Statusrom}></span>
@@ -979,7 +964,6 @@ function Staff() {
                           }
                         >
                           <DeleteIcon />
-
                         </ActionIcon>
                       </Group>
                     </Table.Td>
@@ -1022,9 +1006,7 @@ function Staff() {
                             supervisor.status === "active" ? "#E9FFEF" : "red",
                           to:
                             supervisor.status === "active" ? "#E9FFEF" : "red",
-                          // deg: 90,
                         }}
-                      // truncate="end"
                       >
                         <span className={classes.spanStatus}>
                           <span className={classes.Statusrom}></span>
@@ -1067,12 +1049,13 @@ function Staff() {
                     </Table.Td>
                   </Table.Tr>
                 ))}
+
               </Table.Tbody>
             )}
           </Table>
 
         </Table.ScrollContainer>
-      </Card> 
+      </Card>
 
       <AddStaffModal
         opened={addModalOpened}
@@ -1085,6 +1068,9 @@ function Staff() {
         errors={errors}
         setErrors={setErrors}
         handleFileChange={handleFileChange}
+
+        setPreviewImage={setPreviewImage}
+        previewImage={previewImage}
       />
 
       <EditStaffModal
@@ -1097,7 +1083,7 @@ function Staff() {
         setEditUser={setEditUser}
         errors={errors}
         handleFileChange={handleFileChange}
-         currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
+        currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
       />
 
       <DeleteEmployeeModal

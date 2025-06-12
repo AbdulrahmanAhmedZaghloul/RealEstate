@@ -312,11 +312,11 @@ function PropertyDetails() {
                         }}
                         className={classes.price}
                       >
-                         <span className="icon-saudi_riyal">&#xea; </span>{" "}
+                        <span className="icon-saudi_riyal">&#xea; </span>{" "}
                         {parseFloat(listing.price)?.toLocaleString()}
                       </Text>
                       <Text className={classes.Down}>
- 
+
                         {listing.down_payment}
                         % {t.DownPayment}
                       </Text>
@@ -417,8 +417,8 @@ function PropertyDetails() {
                         <BathsIcon />
                         <span>{listing.bathrooms} Baths</span>
                       </div>}
-
                     </span>
+
                     <span className={classes.svgSpan}>
                       <div>
                         <Area />
@@ -426,6 +426,7 @@ function PropertyDetails() {
                         <span>{listing.area} sqm</span>
                       </div>
                     </span>
+
                     <span className={classes.svgSpan}>
                       {listing.floors === 0 ? null : <div>
                         <FloorsIcon />
@@ -433,20 +434,24 @@ function PropertyDetails() {
                       </div>}
 
                     </span>
+
                     <span className={classes.svgSpan}>
                       <div>
                         <CategoryIcon />
-                        {/* <span>{listing.category} / </span> */}
+                        {console.log(listing.category.name)}
+
+                        <span>{listing.category.name} / {listing.subcategory.name} </span>
                       </div>
                     </span>
+
                   </Grid.Col>
                 </Grid>
 
                 <Stack gap="xs">
-                  <Text style={{}} className={classes.Description} fw={600}>
+                  <Text className={classes.Description} fw={600}>
                     {t.Description}
                   </Text>
-                  <Text style={{}} className={classes.listing}>
+                  <Text className={classes.listing}>
                     {expanded ? listing.description : previewText}
                     {words.length > 50 && (
                       <p onClick={() => setExpanded(!expanded)} className={classes.See}>
@@ -461,10 +466,10 @@ function PropertyDetails() {
                   alignItems: "start",
                   flexDirection: "column"
                 }}>
-                  <Text style={{}} className={classes.Description} fw={600}>
+                  <Text className={classes.Description} fw={600}>
                     {t.Status}
                   </Text>
-                  <Text style={{}} className={classes.listing}>
+                  <Text className={classes.listing}>
                     {listing.selling_status === 1 ? "Sold" : listing.listing_type}
                   </Text>
                 </Stack>
@@ -523,10 +528,7 @@ function PropertyDetails() {
                     </Box>
                   )}
                 </Box>
-
-
               </Grid.Col>
-
             </Grid>
           </Grid.Col>
         </Grid>
@@ -553,36 +555,44 @@ function PropertyDetails() {
         ) : (
           ""
         )}
-        {/* <Text style={{}} className={classes.Description} fw={600}>
+        {listing.amenities.length === 0 ? null : <Text className={classes.Description} fw={600}>
           {t.Amenities}
-        </Text>
+        </Text>}
+
         <Text className={classes.Amenities}>
-            <Grid>
-            <Grid.Col span={6}>
-              {listing.amenities
-                .filter((_, index) => index % 2 === 0)
-                .map((amenity) => (
-                  <div key={amenity.category_id}>
-                    <Text>{amenity.name}</Text>
-                  </div>
-                ))}
-            </Grid.Col>
+          <Grid>
+            {listing.amenities.length === 0 ? null :
+              <>
 
-            <Grid.Col span={6}>
-              {listing.amenities
-                .filter((_, index) => index % 2 === 1)
-                .map((amenity) => (
-                  <div key={amenity.category_id}>
-                    <Text>{amenity.name}</Text>
-                  </div>
-                ))}
-            </Grid.Col>
-          </Grid>  
-        </Text> */}
+                <Grid.Col span={6}>
+                  {listing.amenities
+                    .filter((_, index) => index % 2 === 0)
+                    .map((amenity) => (
+                      <div key={amenity.category_id}>
+                        <Text>{amenity.name}</Text>
+                      </div>
+                    ))}
+                </Grid.Col>
 
+                <Grid.Col span={6}>
+                  {listing.amenities
+                    .filter((_, index) => index % 2 === 1)
+                    .map((amenity) => (
+                      <div key={amenity.category_id}>
+                        <Text>{amenity.name}</Text>
+                      </div>
+                    ))}
+                </Grid.Col>
+
+              </>
+            }
+
+
+          </Grid>
+        </Text>
         {/* <Divider my="sm" /> */}
         <Stack gap="xs" style={{ marginTop: "20px" }}>
-          <Text style={{}} className={classes.Locationpom}>
+          <Text className={classes.Locationpom}>
             {t.Location}
           </Text>
           <span className={classes.svgSpan}>
@@ -609,7 +619,7 @@ function PropertyDetails() {
                   stroke-linejoin="round"
                 />
               </svg>
-              <span style={{}}>{listing.location}</span>
+              <span >{listing.location}</span>
             </div>
           </span>
 

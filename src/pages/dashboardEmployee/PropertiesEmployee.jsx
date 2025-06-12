@@ -7,20 +7,13 @@ import { useForm } from "@mantine/form";
 import classes from "../../styles/realEstates.module.css";
 import { useNavigate } from "react-router-dom";
 import axiosInstance, { apiUrl } from "../../api/config";
-import Filter from "../../assets/dashboard/filter.svg";
-import { useAuth } from "../../context/authContext";
-import { notifications } from "@mantine/notifications";
-import area from "../../assets/area.svg";
-import rooms from "../../assets/rooms.svg";
-import bathrooms from "../../assets/bathrooms.svg";
-import search from "../../assets/search.svg";
+ import { useAuth } from "../../context/authContext";
+import { notifications } from "@mantine/notifications"; 
 
 import AcceptedStatus from "../../assets/status/AcceptedStatus.svg";
 import RejectedStatus from "../../assets/status/RejectedStatus.svg";
-import PendingStatus from "../../assets/status/PendingStatus.svg";
-import addIcon from "../../assets/addIcon.svg";
-import downArrow from "../../assets/downArrow.svg";
-import Notifications from "../../components/company/Notifications";
+import PendingStatus from "../../assets/status/PendingStatus.svg"; 
+ import Notifications from "../../components/company/Notifications";
 import FiltersModal from "../../components/modals/filterPropertiesModal";
 import AddPropertyModal from "../../components/modals/addPropertyModal";
 import { BurgerButton } from "../../components/buttons/burgerButton";
@@ -75,11 +68,11 @@ function PropertiesEmployee() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
-        console.log(res.data.data);
+        console.log(res.data.data.listings);
 
-        setListings(res.data?.data?.listings.data || []);
+        setListings(res.data?.data?.listings || []);
 
-        const pendingListings = res.data.data.listings.data.filter(
+        const pendingListings = res.data.data.listings.filter(
           (listing) => listing.status === "approved"
         );
         setListings(pendingListings);
@@ -332,8 +325,6 @@ function PropertiesEmployee() {
                   fontWeight: "500",
                   cursor: "pointer",
                   color: "var(--color-4)",
-
-
                   border: "1px solid #B8C0CC",
                   color: "var(--color-4)",
                 },
@@ -349,12 +340,10 @@ function PropertiesEmployee() {
                   color: "var(--color-4)", // Dropdown option text color
                   "&[data-selected]": {
                     backgroundColor: "var(--color-5)",
-
                   },
                 },
 
                 backgroundColor: "var(--color-5)",
-
               }}
             />
             <button
@@ -405,7 +394,7 @@ function PropertiesEmployee() {
                     h="233px"
                     radius="md"
                   /> */}
-                  <LazyImage src={listing?.primary_image?.image_url} alt={listing?.title} height={200} radius="md" />
+                  <LazyImage src={listing?.picture_url} alt={listing?.title} height={200} radius="md" />
 
                   <div className={classes.statusBadge}>
                     <img

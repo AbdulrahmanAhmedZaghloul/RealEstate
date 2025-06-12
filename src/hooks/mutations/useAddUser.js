@@ -6,7 +6,7 @@ import { notifications } from '@mantine/notifications';
 export const useAddUser = (userToken, closeModal, setNewUser) => {
     const queryClient = useQueryClient();
 
-    const addUser = async ({newUser, isSupervisor}) => {
+    const addUser = async ({ newUser, isSupervisor }) => {
 
         const formData = new FormData();
         formData.append("name", newUser.name);
@@ -27,6 +27,7 @@ export const useAddUser = (userToken, closeModal, setNewUser) => {
                 "Content-Type": "multipart/form-data",
             },
         });
+        console.log("Response from addUser:", response.data);
 
         setNewUser({
             name: "",

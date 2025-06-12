@@ -28,6 +28,9 @@ import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
 import Search from "../../components/icons/search";
 import { usePropertiesContracts } from "../../hooks/queries/usePropertiesContracts";
 import LazyImage from "../../components/LazyImage";
+import Area from "../../components/icons/area";
+import Bathrooms from "../../components/icons/bathrooms";
+import Rooms from "../../components/icons/rooms";
 
 const rejectionReasons = [
   {
@@ -129,19 +132,10 @@ function Transactions() {
       return 0;
     });
 
-  //pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(searchedListings.length / itemsPerPage);
-  // const paginatedListings = searchedListings.slice(
-  //   (currentPage - 1) * itemsPerPage,
-  //   currentPage * itemsPerPage
-  // );
+
 
   // Reset currentPage to 1 when the search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
+
 
   const handleFilterProperties = (filters) => {
     const filtered = listings.filter((listing) => {
@@ -197,16 +191,14 @@ function Transactions() {
         { headers: { Authorization: `Bearer ${user.token}` } }
       )
       .then(() => {
-        // <InvalidateQuery queryKey={["listings"]} />
-        // console.log("InvalidateQuery-updateStatus");
 
         notifications.show({
           title: "Success",
           message: "Listing status updated successfully",
           color: "green",
         });
-        // <InvalidateQuery queryKey={["listings"]} />
 
+        queryClient.invalidateQueries({ queryKey: ["listingsRealEstate"] });
         queryClient.invalidateQueries({ queryKey: ["listings"] });
       })
       .catch((err) => {
@@ -231,7 +223,9 @@ function Transactions() {
   const handleReject = (id) => {
     setSelectedListingId(id);
     setModalOpened(true);
-    <InvalidateQuery queryKey={["listings"]} />
+
+    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate"] });
+    queryClient.invalidateQueries({ queryKey: ["listings"] });
 
   };
 
@@ -254,17 +248,6 @@ function Transactions() {
     setCategories(categoriesData?.data?.categories || []);
   }, [listingsData, categoriesData]);
 
-  // useEffect(() => {
-  //   setListings(
-  //     listingsData?.data?.listings.filter(
-  //       (listing) => listing.status === "pending"
-  //     ) || []
-  //   );
-  //   setCategories(categoriesData?.data?.categories || []);
-  //   <InvalidateQuery queryKey={["listings"]} />
-  //   console.log("InvalidateQuery-useEffect");
-
-  // }, [listingsData, categoriesData]);
 
   if (isLoading) {
     return (
@@ -388,15 +371,9 @@ function Transactions() {
                 >
                   {console.log(listing)}
                   <Card.Section radius="md">
-                    {/* <Image
-                      src={listing.picture_url}
-                      alt={listing.title}
-                      h="233px"
-                      radius="md"
-                    /> */}
+
                     <LazyImage src={listing.picture_url} alt={listing.title} height={200} radius="md" />
 
-                    {/* {console.log(listing.employee.primary_image?.image_url)} */}
                   </Card.Section>
 
                   <div style={{ marginTop: "16px", display: "flex" }}>
@@ -407,7 +384,7 @@ function Transactions() {
                     {console.log(listing.down_payment)}
 
                     <div className={classes.downPaymentBadge}>
-                      {Math.floor((listing.down_payment / listing.price) * 100)}
+                      {listing.down_payment}
                       % Down Payment
                     </div>
                   </div>
@@ -416,30 +393,42 @@ function Transactions() {
                     <div className={classes.listingTitle}>{listing.title}</div>
                     <div className={classes.listingUtilities}>
                       <div className={classes.listingUtility}>
-                        <div className={classes.utilityImage}>
-                          <img src={rooms}></img>
-                        </div>
-                        {listing.rooms}
+                        {listing.rooms === 0 ? null :
+                          <>
+                            <div className={classes.utilityImage}>
+                              <Rooms />
+                            </div>
+                            {listing.rooms}
+                          </>
+
+                        }
+
+                      </div>
+                      <div className={classes.listingUtility}>
+                        {listing.bathrooms === 0 ? null : <>
+                          <div className={classes.utilityImage}>
+                            <Bathrooms />
+                          </div>
+                          {listing.bathrooms}
+                        </>}
+
                       </div>
                       <div className={classes.listingUtility}>
                         <div className={classes.utilityImage}>
-                          <img src={bathrooms}></img>
+                          <Area />
                         </div>
-                        {listing.bathrooms}
-                      </div>
-                      <div className={classes.listingUtility}>
-                        <div className={classes.utilityImage}>
-                          <img src={area}></img>
-                        </div>
-                        {/* {listing.area} sqm */}
                         {listing.area} sqm
                       </div>
                     </div>
+
                     <div className={classes.listingEmployee}>
-                      Employee: {listing.company?.name}
-                      {console.log(listing.company?.name)}
+                      {t.Category}: {listing.category}
+                    </div>
+                    <div className={classes.listingEmployee}>
+                      {t.Employee}: {listing.employee?.name}
                     </div>
                     <div className={classes.listingLocation}>
+ 
                       {listing.location}
                     </div>
                     <div className={classes.listingDate}>

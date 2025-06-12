@@ -12,7 +12,8 @@ import {
 import downArrow from "../../assets/downArrow.svg";
 import { useLocation } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
-
+import { IconCamera } from "@tabler/icons-react";
+import { useState } from "react";
 //Local imports
 //-
 
@@ -29,6 +30,7 @@ const EditStaffModal = ({
   handleOpenChangePassword,
 
 }) => {
+  const [previewImage, setPreviewImage] = useState(editUser.picture_url || null);
   const location = useLocation();
   function validateSaudiPhoneNumber(phoneNumber) {
     const cleaned = phoneNumber.replace(/\D/g, "");
@@ -54,13 +56,109 @@ const EditStaffModal = ({
     >
       <div style={{ padding: "10px" }}>
 
-        <FileInput
+          <FileInput
           label="Profile Image"
           accept="image/*"
           onChange={(file) => setEditUser({ ...editUser, image: file })}
           error={errors.image}
           mb="md"
-        />
+        />  
+
+        {/* Input with Image Preview */}
+        {/* <div style={{ position: "relative", width: 80, height: 80, margin: "15px 0" }}>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (!file) return;
+
+              // التحقق من نوع الملف وحجمه
+              if (!file.type.startsWith("image/")) {
+                notifications.show({
+                  title: "Error",
+                  message: "Only image files are allowed.",
+                  color: "red",
+                });
+                return;
+              }
+
+              const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+              if (file.size > MAX_FILE_SIZE) {
+                notifications.show({
+                  title: "Error",
+                  message: "Image size should not exceed 2 MB.",
+                  color: "red",
+                });
+                return;
+              }
+
+              // ضغط الصورة
+              new Compressor(file, {
+                quality: 0.6,
+                success: (compressedResult) => {
+                  const compressedFile = new File([compressedResult], file.name, {
+                    type: compressedResult.type,
+                    lastModified: Date.now(),
+                  });
+
+                  setEditUser((prev) => ({ ...prev, image: compressedFile }));
+                  setPreviewImage(URL.createObjectURL(compressedFile));
+                },
+                error: (err) => {
+                  console.error("Compression failed:", err);
+                  setEditUser((prev) => ({ ...prev, image: file }));
+                  setPreviewImage(URL.createObjectURL(file));
+                },
+              });
+            }}
+            style={{
+              opacity: 0,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              cursor: "pointer",
+            }}
+          />
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 8,
+              border: "2px dashed #ccc",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              textAlign: "center",
+              fontSize: 14,
+              color: "#666",
+              backgroundColor: "#f9f9f9",
+              backgroundImage: previewImage ? `url(${previewImage})` : "none",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              pointerEvents: "none",
+            }}
+          >
+            {!previewImage && (
+              <>
+                <IconCamera size={30} color="#aaa" />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {errors.image && (
+          <Text size="sm" color="red" mt={5}>
+            {errors.image}
+          </Text>
+        )} */}
+
+
+
 
         <TextInput
           label="Name"
@@ -141,7 +239,7 @@ const EditStaffModal = ({
           error={errors.phone_number}
           mt="md"
         />
-      
+
 
         {editUser.position === "employee" && (
           <Select

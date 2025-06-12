@@ -16,15 +16,16 @@ export const useEditUser = (userToken, closeModal) => {
         formData.append("supervisor_id", editUser.supervisor_id);
 
         formData.append("_method", "put");
+        console.log(editUser.picture_url);
 
-        if (editUser.image instanceof File) {
-            formData.append("picture", editUser.image);
+        if (editUser.picture_url instanceof File) {
+            formData.append("picture", editUser.picture_url);
         } const endpoint =
             editUser.id !== undefined
                 ? `api/v1/employees/${editUser.id}`
                 : `api/v1/supervisors/${editUser.supervisor_id}`;
 
-        await   axiosInstance.post(endpoint, formData, {
+        await axiosInstance.post(endpoint, formData, {
             headers: { Authorization: `Bearer ${userToken}` },
         });
 

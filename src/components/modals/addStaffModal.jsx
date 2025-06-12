@@ -7,12 +7,14 @@ import {
   Button,
   Select,
   NumberInput,
+  Center,
 } from "@mantine/core";
 
 //Local Imports
 import downArrow from "../../assets/downArrow.svg";
 import { validateField } from "../../hooks/Validation/validation";
-// import classes from "../../styles/modals.module.css";
+import { IconCamera } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 
 const AddStaffModal = ({
   opened,
@@ -24,16 +26,15 @@ const AddStaffModal = ({
   setNewUser,
   errors,
   setErrors,
+  setPreviewImage,
+  previewImage,
   handleFileChange,
 }) => {
-  console.log(newUser.picture);
-  console.log(onAdd);
   function validateSaudiPhoneNumber(phoneNumber) {
     const cleaned = phoneNumber.replace(/\D/g, "");
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
-
   return (
     <Modal
       opened={opened}
@@ -51,15 +52,95 @@ const AddStaffModal = ({
       }}
     >
       <div style={{ padding: "10px 28px" }}>
-        <FileInput
-          label="Profile Image"
-          accept="image/*"
-          onChange={handleFileChange}
-          error={errors.picture}
-          styles={{ input: { height: 48 } }}
-          mb={24}
-        />
 
+        {/* Input with Image Preview */}
+        <div style={{ position: "relative", width: 80, height: 80, margin: "15px 0" }}>
+          <input
+            type="file"
+            accept="image/*"
+
+            onChange={(e) => {
+              const file = e.target.files[0];
+
+              if (!file) return;
+
+              // التأكد من أن الملف هو صورة فقط
+              if (!file.type.startsWith("image/")) {
+                notifications.show({
+                  title: "Error",
+                  message: "Only image files are allowed.",
+                  color: "red",
+                });
+                return;
+              }
+
+              // التحقق من الحجم - لا يزيد عن 2 ميجا بايت
+              const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+              if (file.size > MAX_FILE_SIZE) {
+                notifications.show({
+                  title: "Error",
+                  message: "Image size should not exceed 2 MB.",
+                  color: "red",
+                });
+                return;
+              }
+
+              // تحديث الحالة لإظهار preview
+              setNewUser((prev) => ({ ...prev, image: file }));
+
+              // قراءة الصورة وإظهارها
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                setPreviewImage(e.target.result);
+              };
+              reader.readAsDataURL(file);
+            }}
+            style={{
+              opacity: 0,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              cursor: "pointer",
+            }}
+          />
+
+          {/* Display Preview or Camera Icon */}
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 8,
+              border: "2px dashed #ccc",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              textAlign: "center",
+              fontSize: 14,
+              color: "#666",
+              backgroundColor: "#f9f9f9",
+              backgroundImage: previewImage ? `url(${previewImage})` : "none",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              pointerEvents: "none",
+            }}
+          >
+            {!previewImage && (
+              <>
+                <IconCamera size={30} color="#aaa" />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {errors.picture && (
+          <Text size="sm" color="red" mt={5}>
+            {errors.picture}
+          </Text>
+        )}
         <TextInput
           label="Name"
           placeholder="Full name"
@@ -95,7 +176,6 @@ const AddStaffModal = ({
           onChange={(e) => {
             const newPassword = e.target.value;
             setNewUser({ ...newUser, password: newPassword });
-
             const error = validateField("password", newPassword);
             setErrors((prev) => ({ ...prev, password: error }));
           }}
@@ -201,6 +281,7 @@ const AddStaffModal = ({
             rightSection={<img src={downArrow} />}
           />
         )}
+
         <Button
           fullWidth
           disabled={loading}

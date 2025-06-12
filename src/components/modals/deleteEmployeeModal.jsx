@@ -1,8 +1,6 @@
 //Dependency imports
 import { Modal, Button, Text, Group } from "@mantine/core";
-
-//Local imports
-//-
+ 
 
 const DeleteEmployeeModal = ({ opened, onClose, onDelete, loading }) => {
   return (

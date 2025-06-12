@@ -21,10 +21,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 import { notifications } from "@mantine/notifications";
-import FiltersModal from "../../components/modals/filterPropertiesModal";
-import area from "../../assets/area.svg";
-import rooms from "../../assets/rooms.svg";
-import bathrooms from "../../assets/bathrooms.svg";
+import FiltersModal from "../../components/modals/filterPropertiesModal"; 
 import AcceptedStatus from "../../assets/status/AcceptedStatus.svg";
 import RejectedStatus from "../../assets/status/RejectedStatus.svg";
 import PendingStatus from "../../assets/status/PendingStatus.svg";
@@ -35,6 +32,9 @@ import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
 import { useProperties } from "../../hooks/queries/useProperties";
 import { useInView } from "react-intersection-observer";
+import Area from "../../components/icons/area";
+import Bathrooms from "../../components/icons/bathrooms";
+import Rooms from "../../components/icons/rooms";
 const rejectionReasons = [
   {
     value: "Completion of Contract Terms",
@@ -50,7 +50,6 @@ function RequestsSupervisor() {
   const [listings, setListings] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
-  // const [opened, { open, close }] = useDisclosure(false);
   const [modalOpened, setModalOpened] = useState(false);
   const [selectedListingId, setSelectedListingId] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("");
@@ -90,6 +89,7 @@ function RequestsSupervisor() {
   const allListings = data?.pages.flatMap(page =>
     page.data.listings.filter(listing => listing.status === "pending")
   ) || [];
+  console.log(allListings);
 
 
   const [ref, inView] = useInView();
@@ -99,48 +99,6 @@ function RequestsSupervisor() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
-  // Form validation using Mantine's useForm
-  // const searchedListings = allListings
-  //   .filter((listing) =>
-  //     listing.title.toLowerCase().includes(search.toLowerCase())
-  //   ).filter((listing) => {
-  //     if (saleFilter === "for_sale") return listing.selling_status === 0;
-  //     if (saleFilter === "not_for_sale") return listing.selling_status === 1;
-  //     return true; // all
-  //   })
-  //   .sort((a, b) => {
-  //     if (filter === "newest")
-  //       return new Date(b.created_at) - new Date(a.created_at);
-  //     if (filter === "oldest")
-  //       return new Date(a.created_at) - new Date(b.created_at);
-  //     if (filter === "highest") return b.price - a.price;
-  //     if (filter === "lowest") return a.price - b.price;
-  //     return 0;
-  //   });
-
-
-  // const fetchListings = async () => {
-  //   setLoading(true);
-  //   await axiosInstance
-  //     .get("/api/listings/cursor", {
-  //       headers: { Authorization: `Bearer ${user.token}` },
-  //     })
-  //     .then((res) => {
-  //       { console.log(res.data.data.listings.length) }
-  //       const pendingListings = res.data.data.listings.filter(
-  //         (listing) => listing.status === "pending"
-  //       );
-  //       setListings(pendingListings);
-
-  //       // setListings(res.data.data.listings);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.response);
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // };
 
   const handleFilterProperties = (filters) => {
     const filtered = listings.filter((listing) => {
@@ -409,91 +367,116 @@ function RequestsSupervisor() {
                         className={classes.card}
                         h={"100%"}
                       >
-                        {/* <div
 
-
-                        > */}
-                          <Card.Section radius="md">
-                            <Image
-                              src={listing.picture_url}
-                              alt={listing.title}
-                              h="233px"
-                              radius="md"
+                        <Card.Section radius="md">
+                          <Image
+                            src={listing.picture_url}
+                            alt={listing.title}
+                            h="233px"
+                            radius="md"
+                          />
+                          <div className={classes.statusBadge}>
+                            <img
+                              src={
+                                listing.status === "pending"
+                                  ? PendingStatus
+                                  : listing.status === "approved"
+                                    ? AcceptedStatus
+                                    : RejectedStatus
+                              }
                             />
-                            <div className={classes.statusBadge}>
-                              <img
-                                src={
-                                  listing.status === "pending"
-                                    ? PendingStatus
-                                    : listing.status === "approved"
-                                      ? AcceptedStatus
-                                      : RejectedStatus
-                                }
-                              />
-                            </div>
-                          </Card.Section>
-
-                          <div style={{ marginTop: "16px", display: "flex" }}>
-                            <span className={classes.listingPrice}>
-                              <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                              {parseFloat(listing.price)?.toLocaleString()}
-                            </span>
-
-                            <div className={classes.downPaymentBadge}>
-                              {Math.floor(
-                                (listing.down_payment / listing.price) * 100
-                              )}
-                              % {t.DownPayment}
-                            </div>
                           </div>
+                        </Card.Section>
 
-                          <div style={{ display: "block" }}>
-                            <div className={classes.listingTitle}>
-                              {listing.title}
+                        <div style={{ marginTop: "16px", display: "flex" }}>
+                          <span className={classes.listingPrice}>
+                            <span className="icon-saudi_riyal">&#xea; </span>{" "}
+                            {parseFloat(listing.price)?.toLocaleString()}
+                          </span>
+
+                          <div className={classes.downPaymentBadge}>
+                            {Math.floor(
+                              (listing.down_payment / listing.price) * 100
+                            )}
+                            % {t.DownPayment}
+                          </div>
+                        </div>
+
+                        <div style={{ display: "block" }}>
+                          <div className={classes.listingTitle}>
+                            {listing.title}
+                          </div>
+                          <div className={classes.listingUtilities}>
+                            <div className={classes.listingUtility}>
+                              {listing.rooms === 0 ? null :
+                                <>
+                                  <div className={classes.utilityImage}>
+                                    <Rooms />
+                                  </div>
+                                  {listing.rooms}
+                                </>
+
+                              }
+
                             </div>
-                            <div className={classes.listingUtilities}>
-                              <div className={classes.listingUtility}>
+
+                            <div className={classes.listingUtility}>
+                              {listing.bathrooms === 0 ? null : <>
                                 <div className={classes.utilityImage}>
-                                  <img src={rooms}></img>
-                                </div>
-                                {listing.rooms}
-                              </div>
-                              <div className={classes.listingUtility}>
-                                <div className={classes.utilityImage}>
-                                  <img src={bathrooms}></img>
+                                  <Bathrooms />
                                 </div>
                                 {listing.bathrooms}
+                              </>}
+
+                            </div>
+                            <div className={classes.listingUtility}>
+                              <div className={classes.utilityImage}>
+                                <Area />
                               </div>
-                              <div className={classes.listingUtility}>
-                                <div className={classes.utilityImage}>
-                                  <img src={area}></img>
-                                </div>
-                                {listing.area} sqm
+                              {listing.area} sqm
+                            </div>
+                            {/* <div className={classes.listingUtility}>
+                              <div className={classes.utilityImage}>
+                                <img src={rooms}></img>
                               </div>
+                              {listing.rooms}
                             </div>
-                            <div className={classes.listingEmployee}>
-                              {t.Employee} : {listing.employee?.name}
+                            <div className={classes.listingUtility}>
+                              <div className={classes.utilityImage}>
+                                <img src={bathrooms}></img>
+                              </div>
+                              {listing.bathrooms}
                             </div>
-                            <div className={classes.listingLocation}>
-                              {listing.location}
-                            </div>
-                            <div className={classes.listingDate}>
-                              {Math.floor(
+                            <div className={classes.listingUtility}>
+                              <div className={classes.utilityImage}>
+                                <img src={area}></img>
+                              </div>
+                              {listing.area} sqm
+                            </div> */}
+                          </div>
+                          <div className={classes.listingEmployee}>
+                            {t.Employee} : {listing.employee?.name}
+                          </div>
+                          <div className={classes.listingLocation}>
+                            {listing.location}
+                          </div>
+                          <div className={classes.listingDate}>
+                            {Math.floor(
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) > 1
+                              ? `${Math.floor(
                                 (new Date() - new Date(listing.created_at)) /
                                 (1000 * 60 * 60 * 24)
-                              ) > 1
-                                ? `${Math.floor(
-                                  (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                                )} days ago`
-                                : Math.floor(
-                                  (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                                ) === 1
-                                  ? "Yesterday"
-                                  : "Today"}
-                            </div>
+                              )} days ago`
+                              : Math.floor(
+                                (new Date() - new Date(listing.created_at)) /
+                                (1000 * 60 * 60 * 24)
+                              ) === 1
+                                ? "Yesterday"
+                                : "Today"}
                           </div>
+                        </div>
                         {/* </div> */}
 
                         {listing.status === "pending" && (

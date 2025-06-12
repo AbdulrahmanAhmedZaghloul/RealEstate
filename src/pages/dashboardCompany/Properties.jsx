@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 //Component Imports
 import Notifications from "../../components/company/Notifications";
-import FiltersModal from "../../components/modals/filterPropertiesModal";
+// import FiltersModal from "../../components/modals/filterPropertiesModal";
 import AddPropertyModal from "../../components/modals/addPropertyModal";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { useProperties } from "../../hooks/queries/useProperties";
@@ -30,14 +30,41 @@ import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
 import LazyImage from "../../components/LazyImage";
+import FiltersModal from "./FiltersModal";
 
 function Properties() {
   const [listingTypeFilter, setListingTypeFilter] = useState("all");
 
   const { user } = useAuth();
   const [isSticky, setIsSticky] = useState(false);
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties(listingTypeFilter === "all" ? "" : listingTypeFilter);
+  const [filters, setFilters] = useState({
+    location: "",
+    rooms: "",
+    priceMin: "",
+    priceMax: "",
+    category: "",
+    subcategory: "",
+  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties(
+    listingTypeFilter === "all" ? "" : listingTypeFilter,
+    filters
+  );
+  //   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties(
+  //   listingTypeFilter === "all" ? "" : listingTypeFilter,
+  //   filters
+  // );
+  const resetFilters = () => {
+    setFilters({
+      location: "",
+      rooms: "",
+      priceMin: "",
+      priceMax: "",
+      category: "",
+      subcategory: "",
+      // employee: "", // 👈 إعادة تعيين الموظف
 
+    });
+  };
   const {
     data: employeesData,
     isLoading: employeesLoading,
@@ -63,10 +90,10 @@ function Properties() {
   const [search, setSearch] = useState(""); //Search bar value state
   const [filter, setFilter] = useState(""); //Filter overall value state
   const [opened, { open, close }] = useDisclosure(false);
-  const [
-    filterModalOpened,
-    { open: openFilterModal, close: closeFilterModal },
-  ] = useDisclosure(false);
+  // const [
+  //   filterModalOpened,
+  //   { open: openFilterModal, close: closeFilterModal },
+  // ] = useDisclosure(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [filteredListings, setFilteredListings] = useState([]);
@@ -111,42 +138,13 @@ function Properties() {
 
     mutation.mutate(values);
   };
-
-  const handleFilterProperties = (filters) => {
-    const filtered = listings.filter((listing) => {
-      return (
-        (filters.location === "" ||
-          (listing.location || "")
-            .toLowerCase()
-            .includes(filters.location.toLowerCase())) &&
-        (filters.category_id === "any" ||
-          listing.category_id === parseInt(filters.category_id)) &&
-        (filters.subcategory_id === "any" ||
-          listing.subcategory_id === parseInt(filters.subcategory_id)) &&
-        (filters.down_payment === "Any" ||
-          (listing.down_payment || "")
-            .toLowerCase()
-            .includes(filters.down_payment.toLowerCase())) &&
-        (filters.price === "Any" ||
-          (listing.price || "") == parseFloat(filters.price.toLowerCase())) &&
-        (filters.area === "Any" ||
-          (listing.area || "")
-            .toLowerCase()
-            .includes(filters.area.toLowerCase())) &&
-        (filters.rooms === "Any" ||
-          listing.rooms === parseInt(filters.rooms)) &&
-        (filters.bathrooms === "Any" ||
-          listing.bathrooms === parseInt(filters.bathrooms)) &&
-        (filters.level === "Any" ||
-          listing.floors === parseInt(filters.level)) &&
-        (filters.employee === "Any" ||
-          (listing.employee.name || "")
-            .toLowerCase()
-            .includes(filters.employee.toLowerCase()))
-      );
-    });
-
-    setFilteredListings(filtered);
+  const [
+    filterModalOpened,
+    { open: openFilterModal, close: closeFilterModal },
+  ] = useDisclosure(false);
+  const handleFilterProperties = (newFilters) => {
+    setFilters((prev) => ({ ...prev, ...newFilters }));
+    closeFilterModal();
   };
 
 
@@ -160,10 +158,6 @@ function Properties() {
         .flat() || []
     );
   }, [employeesData, categoriesData]);
-
-  useEffect(() => {
-    setFilteredListings(listings);
-  }, [listings]);
 
 
   // Scroll-based pagination
@@ -182,18 +176,6 @@ function Properties() {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (window.scrollY >= 200) {
-  //       setIsSticky(true);
-  //     } else {
-  //       setIsSticky(false);
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
 
   const mutation = useAddProperty(user.token, categories, close);
   const isAddPropertyLoading = mutation.isPending;
@@ -279,9 +261,11 @@ function Properties() {
                     border: "1.5px solid var(--color-border)",
                     backgroundColor: "var(--color-7)",
                   },
+
                   wrapper: {
                     width: "132px",
                   },
+
                   item: {
                     color: "var(--color-4)", // Dropdown option text color
                     "&[data-selected]": {
@@ -303,7 +287,7 @@ function Properties() {
                   { value: "rent", label: "For Rent" },
                   { value: "buy", label: "For Sale" },
                   { value: "booking", label: "Booking" },
-                ]} 
+                ]}
                 styles={{
                   input: {
                     width: "132px",
@@ -322,9 +306,11 @@ function Properties() {
                     border: "1.5px solid var(--color-border)",
                     backgroundColor: "var(--color-7)",
                   },
+
                   wrapper: {
                     width: "132px",
                   },
+
                   item: {
                     color: "var(--color-4)", // Dropdown option text color
                     "&[data-selected]": {
@@ -342,7 +328,7 @@ function Properties() {
         </header>
 
 
-        {searchedListings.length === 0 && !isLoading ? (
+        {allListings.length === 0 && !isLoading ? (
           <Center>
             <Text>No listings found.</Text>
           </Center>
@@ -350,7 +336,7 @@ function Properties() {
           <>
 
             <Grid className={classes.sty} align="center" spacing="xl">
-               {searchedListings.map((listing) => (
+              {allListings.map((listing) => (
                 <GridCol
                   span={4}
                   key={listing.id}
@@ -430,8 +416,7 @@ function Properties() {
                         {t.Employee}: {listing.employee?.name}
                       </div>
                       <div className={classes.listingLocation}>
-                        {console.log(listing.location)}
-                        
+ 
                         {listing.location}
                       </div>
                       <div className={classes.listingDate}>
@@ -480,6 +465,7 @@ function Properties() {
         categories={categories}
         subcategories={subcategories}
         onFilter={handleFilterProperties}
+        resetFilters={resetFilters}
         onReset={() => {
           setFilteredListings(listings);
           closeFilterModal();

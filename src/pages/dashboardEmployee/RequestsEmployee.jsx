@@ -36,35 +36,18 @@ import { useTranslation } from "../../context/LanguageContext";
 import Search from "../../components/icons/search";
 import FilterIcon from "../../components/icons/filterIcon";
 import Dropdown from "../../components/icons/dropdown";
-
-const rejectionReasons = [
-  {
-    value: "Completion of Contract Terms",
-    label: "Completion of Contract Terms",
-  },
-  { value: "Breach of Contract", label: "Breach of Contract" },
-  { value: "Mutual Agreement", label: "Mutual Agreement" },
-  { value: "Financial", label: "Financial" },
-  { value: "Legal", label: "Legal" },
-  { value: "Other", label: "Other" },
-];
+ 
 function RequestsEmployee() {
   const [listings, setListings] = useState([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("");
-  // const [opened, { open, close }] = useDisclosure(false);
-  const [modalOpened, setModalOpened] = useState(false);
-  const [selectedListingId, setSelectedListingId] = useState(null);
-  const [rejectionReason, setRejectionReason] = useState("");
-  const [otherReason, setOtherReason] = useState("");
+  const [filter, setFilter] = useState(""); 
   const navigate = useNavigate();
   const { user } = useAuth();
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
 
   const [loading, setLoading] = useState(false);
-  const CHARACTER_LIMIT = 200;
-  const [filteredListings, setFilteredListings] = useState([]);
+   const [filteredListings, setFilteredListings] = useState([]);
   const [
     filterModalOpened,
     { open: openFilterModal, close: closeFilterModal },
@@ -109,12 +92,11 @@ function RequestsEmployee() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
-        // console.log(res.data.data.listings);
+        console.log(res.data.data.listings);
 
-        // setListings(res.data.data.listings.data);
-
+ 
         console.log(res)
-        const pendingListings = res.data.data.listings.listings.filter(
+        const pendingListings = res.data.data.listings.filter(
           (listing) => listing.status === "pending"
         );
         setListings(pendingListings);
@@ -170,59 +152,7 @@ function RequestsEmployee() {
 
   }, [listings]);
 
-  const updateStatus = async (id, newStatus, reason) => {
-    setLoading(true);
-    await axiosInstance
-      .post(
-        `api/v1/listings/${id}/status`,
-        {
-          status: newStatus,
-          rejection_reason: reason,
-        },
-        { headers: { Authorization: `Bearer ${user.token}` } }
-      )
-      .then(() => {
-        fetchListings();
-        notifications.show({
-          title: "Success",
-          message: "Listing status updated successfully",
-          color: "green",
-        });
-      })
-      .catch((err) => {
-        notifications.show({
-          title: "Error",
-          message: "Failed to update listing status",
-          color: "red",
-        });
-        console.log(err.response);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
-    setListings((prevListings) =>
-      prevListings.map((listing) =>
-        listing.id === id ? { ...listing, status: newStatus } : listing
-      )
-    );
-  };
-
-  // const handleReject = (id) => {
-  //   setSelectedListingId(id);
-  //   setModalOpened(true);
-  // };
-  // // cursor
-  // const handleRejectSubmit = () => {
-  //   if (selectedListingId) {
-  //     const reason =
-  //       rejectionReason === "Other" ? otherReason : rejectionReason;
-  //     updateStatus(selectedListingId, "rejected", reason);
-  //     setModalOpened(false);
-  //     setRejectionReason("");
-  //     setOtherReason("");
-  //   }
-  // };
+ 
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -251,19 +181,7 @@ function RequestsEmployee() {
     fetchCategories();
   }, []);
 
-  //pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(searchedListings.length / itemsPerPage);
-  const paginatedListings = searchedListings.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  // Reset currentPage to 1 when the search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
+ 
 
   if (loading) {
     return (
@@ -376,8 +294,6 @@ function RequestsEmployee() {
           </div>
 
           <Grid.Col span={12}>
-            {/* {console.log(listings)} */}
-
             {listings.length === 0 ? (
               <Center>
                 <Text>{t.Notransactions}</Text>
@@ -482,116 +398,14 @@ function RequestsEmployee() {
                         </div>
                       </div>
                     </div>
-
-                    {/* {listing.status === "pending" && (
-                      <Center>
-                        <Group mt="md" display="flex">
-                          <Button
-                            color="green"
-                            w="110px"
-                            h="40px"
-                            onClick={() =>
-                              updateStatus(listing.id, "approved", null)
-                            }
-                          >
-                            {t.Accept}
-                          </Button>
-                          <Button
-                            color="red"
-                            w="110px"
-                            h="40px"
-                            onClick={() => handleReject(listing.id)}
-                          >
-                            {t.Reject}
-                          </Button>
-                        </Group>
-                      </Center>
-                    )} */}
                   </Card>
                 )}
               </Group>
             )}
           </Grid.Col>
-        </Grid>
-        {/*pagination */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "18px",
-            marginTop: "10px",
-          }}
-        >
-          {currentPage > 1 && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              {currentPage - 1}
-            </button>
-          )}
+        </Grid> 
 
-          <button
-            style={{
-              backgroundColor: "var(--color-5)",
-              color: "var(--color-2);",
-            }}
-            className={classes.currentPagenow}
-          >
-            {currentPage}
-          </button>
-
-          {currentPage < totalPages && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              {currentPage + 1}
-            </button>
-          )}
-        </div>
       </Card>
-
-      {/* <Modal
-        opened={modalOpened}
-        onClose={() => setModalOpened(false)}
-        title="Reject Listing"
-        centered
-      >
-        <Select
-          label="Select Rejection Reason"
-          value={rejectionReason}
-          onChange={(value) => setRejectionReason(value)}
-          data={rejectionReasons}
-          mb={20}
-        />
-        {rejectionReason === "Other" && (
-          <Textarea
-            placeholder="Enter rejection reason"
-            value={otherReason}
-            onChange={(e) => setOtherReason(e.target.value)}
-            maxLength={CHARACTER_LIMIT}
-            autosize
-            minRows={3}
-          />
-        )}
-        {rejectionReason === "Other" && (
-          <Text size="sm" color="dimmed">
-            {CHARACTER_LIMIT - (otherReason.length || rejectionReason.length)}{" "}
-            characters remaining
-          </Text>
-        )}
-
-        <Group position="right" mt="md">
-          <Button
-            disabled={!rejectionReason && !otherReason}
-            onClick={handleRejectSubmit}
-            color="red"
-          >
-            Reject
-          </Button>
-        </Group>
-      </Modal> */}
       <FiltersModal
         opened={filterModalOpened}
         onClose={closeFilterModal}

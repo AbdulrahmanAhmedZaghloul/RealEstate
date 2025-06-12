@@ -53,13 +53,8 @@ function PropertiesSupervisor() {
   const [loading, setLoading] = useState(false);
   const [filteredListings, setFilteredListings] = useState([]);
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
-  //     if (!data || !data.pages) {
-  //   return (
-  //     <Center>
-  //       <Loader size="sm" />
-  //     </Center>
-  //   );
-  // }
+
+  
 
   const [ref, inView] = useInView();
 
@@ -71,10 +66,7 @@ function PropertiesSupervisor() {
   const allListings = data?.pages.flatMap(page => {
     return page?.data?.listings?.filter(listing => listing?.status === "approved") || [];
   }) || [];
-  // const allListings = data?.pages.flatMap(page =>
-  //   page.data.listings.filter(listing => listing.status === "approved")
-  // ) || [];
-
+  
   // Form validation using Mantine's useForm
   const searchedListings = allListings
     .filter((listing) =>
@@ -296,14 +288,7 @@ function PropertiesSupervisor() {
                     >
                       <Card.Section radius="md">
                         <div className={classes.listingImage}>
-
-                          {/* <Image
-                            src={`${listing.picture_url}`}
-                            alt={listing.title}
-                            h="233px"
-                            radius="md"
-                          /> */}
-                          
+ 
                           <LazyImage src={listing.picture_url} alt={listing.title} height={200} radius="md" />
 
                           <div className={classes.statusBadge}>

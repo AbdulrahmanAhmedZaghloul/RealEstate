@@ -11,7 +11,7 @@ import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 import { notifications } from "@mantine/notifications";
 import Filter from "../../assets/dashboard/filter.svg";
-import FiltersModal from "../../components/modals/filterPropertiesModal";
+// import FiltersModal from "../../components/modals/filterPropertiesModal";
 import downArrow from "../../assets/downArrow.svg";
 import area from "../../assets/area.svg";
 import rooms from "../../assets/rooms.svg";
@@ -31,6 +31,7 @@ import LazyImage from "../../components/LazyImage";
 import Area from "../../components/icons/area";
 import Bathrooms from "../../components/icons/bathrooms";
 import Rooms from "../../components/icons/rooms";
+import FiltersModal from "./FiltersModal";
 
 const rejectionReasons = [
   {
@@ -81,6 +82,11 @@ function Transactions() {
     filterModalOpened,
     { open: openFilterModal, close: closeFilterModal },
   ] = useDisclosure(false);
+  const handleFilterProperties = (newFilters) => {
+    setFilters((prev) => ({ ...prev, ...newFilters }));
+    closeFilterModal();
+  };
+
   const queryClient = useQueryClient();
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
@@ -137,42 +143,6 @@ function Transactions() {
   // Reset currentPage to 1 when the search query changes
 
 
-  const handleFilterProperties = (filters) => {
-    const filtered = listings.filter((listing) => {
-      return (
-        (filters.location === "" ||
-          (listing.location || "")
-            .toLowerCase()
-            .includes(filters.location.toLowerCase())) &&
-        (filters.category_id === "any" ||
-          listing.category_id === parseInt(filters.category_id)) &&
-        (filters.subcategory_id === "any" ||
-          listing.subcategory_id === parseInt(filters.subcategory_id)) &&
-        (filters.down_payment === "Any" ||
-          (listing.down_payment || "")
-            .toLowerCase()
-            .includes(filters.down_payment.toLowerCase())) &&
-        (filters.price === "Any" ||
-          (listing.price || "") == parseFloat(filters.price.toLowerCase())) &&
-        (filters.area === "Any" ||
-          (listing.area || "")
-            .toLowerCase()
-            .includes(filters.area.toLowerCase())) &&
-        (filters.rooms === "Any" ||
-          listing.rooms === parseInt(filters.rooms)) &&
-        (filters.bathrooms === "Any" ||
-          listing.bathrooms === parseInt(filters.bathrooms)) &&
-        (filters.level === "Any" ||
-          listing.floors === parseInt(filters.level)) &&
-        (filters.employee === "Any" ||
-          (listing.employee.name || "")
-            .toLowerCase()
-            .includes(filters.employee.toLowerCase()))
-      );
-    });
-
-    setFilteredListings(filtered);
-  };
 
   useEffect(() => {
     setFilteredListings(listings);
@@ -428,7 +398,7 @@ function Transactions() {
                       {t.Employee}: {listing.employee?.name}
                     </div>
                     <div className={classes.listingLocation}>
- 
+
                       {listing.location}
                     </div>
                     <div className={classes.listingDate}>
@@ -474,42 +444,6 @@ function Transactions() {
             ))}
           </Group>
         )}
-        {/*pagination */}
-        {/* <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "18px",
-            marginTop: "10px",
-          }}
-        >
-          {currentPage > 1 && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              {currentPage - 1}
-            </button>
-          )}
-
-          <button
-            style={{
-              backgroundColor: "var(--color-5)",
-            }}
-            className={classes.currentPagenow}
-          >
-            {currentPage}
-          </button>
-
-          {currentPage < totalPages && (
-            <button
-              className={classes.currentPage}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              {currentPage + 1}
-            </button>
-          )}
-        </div> */}
       </Card>
 
       <Modal

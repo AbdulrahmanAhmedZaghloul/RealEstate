@@ -2,7 +2,7 @@
 import { Select, TextInput, Button, Modal,   } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
-export default function FiltersModal({ opened, onClose, categories, onFilter, onReset ,resetFilters }) {
+export default function FiltersModal({ opened, onClose, categories, onFilter, onReset    }) {
     const form = useForm({
         initialValues: {
             location: "",
@@ -59,7 +59,7 @@ export default function FiltersModal({ opened, onClose, categories, onFilter, on
 
                 <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
                     <Button type="submit" fullWidth>Apply</Button>
-                    <Button  onClick={resetFilters()} color="gray" fullWidth>Reset</Button>
+                    <Button onClick={onReset}  color="gray" fullWidth>Reset</Button>
                 </div>
             </form>
         </Modal>

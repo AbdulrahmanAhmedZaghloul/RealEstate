@@ -89,11 +89,7 @@ function Properties() {
   const [subcategories, setSubcategories] = useState([]); //Subcategories state
   const [search, setSearch] = useState(""); //Search bar value state
   const [filter, setFilter] = useState(""); //Filter overall value state
-  const [opened, { open, close }] = useDisclosure(false);
-  // const [
-  //   filterModalOpened,
-  //   { open: openFilterModal, close: closeFilterModal },
-  // ] = useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure(false); 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [filteredListings, setFilteredListings] = useState([]);
@@ -110,24 +106,24 @@ function Properties() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
   // Form validation using Mantine's useForm
-  const searchedListings = allListings
-    .filter((listing) =>
-      listing.title.toLowerCase().includes(search.toLowerCase())
-    ).filter((listing) => {
-      if (listingTypeFilter === "rent") return listing.listing_type === "rent";
-      if (listingTypeFilter === "buy") return listing.listing_type === "buy";
-      if (listingTypeFilter === "booking") return listing.listing_type === "booking";
-      return true; // all
-    })
-    .sort((a, b) => {
-      if (filter === "newest")
-        return new Date(b.created_at) - new Date(a.created_at);
-      if (filter === "oldest")
-        return new Date(a.created_at) - new Date(b.created_at);
-      if (filter === "highest") return b.price - a.price;
-      if (filter === "lowest") return a.price - b.price;
-      return 0;
-    });
+  // const searchedListings = allListings
+  //   .filter((listing) =>
+  //     listing.title.toLowerCase().includes(search.toLowerCase())
+  //   ).filter((listing) => {
+  //     if (listingTypeFilter === "rent") return listing.listing_type === "rent";
+  //     if (listingTypeFilter === "buy") return listing.listing_type === "buy";
+  //     if (listingTypeFilter === "booking") return listing.listing_type === "booking";
+  //     return true; // all
+  //   })
+  //   .sort((a, b) => {
+  //     if (filter === "newest")
+  //       return new Date(b.created_at) - new Date(a.created_at);
+  //     if (filter === "oldest")
+  //       return new Date(a.created_at) - new Date(b.created_at);
+  //     if (filter === "highest") return b.price - a.price;
+  //     if (filter === "lowest") return a.price - b.price;
+  //     return 0;
+  //   });
 
 
   const handleAddProperty = (values) => {
@@ -416,7 +412,7 @@ function Properties() {
                         {t.Employee}: {listing.employee?.name}
                       </div>
                       <div className={classes.listingLocation}>
- 
+
                         {listing.location}
                       </div>
                       <div className={classes.listingDate}>
@@ -465,7 +461,6 @@ function Properties() {
         categories={categories}
         subcategories={subcategories}
         onFilter={handleFilterProperties}
-        resetFilters={resetFilters}
         onReset={() => {
           setFilteredListings(listings);
           closeFilterModal();

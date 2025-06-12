@@ -118,11 +118,11 @@ function Profile() {
     return;
   }
 
-  // التحقق من الحجم (أقل من 5 ميجا)
-  if (file.size > 5 * 1024 * 1024) {
+  // التحقق من الحجم (أقل من 2 ميجا)
+  if (file.size > 2 * 1024 * 1024) {
     notifications.show({
       title: "File Too Large",
-      message: "The image must be less than 5 MB in size.",
+      message: "The image must be less than 2 MB in size.",
       color: "red",
     });
     return;

@@ -76,7 +76,7 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
 
             setLoading(true);
             try {
-                await axiosInstance.post(`api/v1/contracts/${contract.id}`, formData, {
+                await axiosInstance.post(`contracts/${contract.id}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         Authorization: `Bearer ${localStorage.getItem("token")}`,

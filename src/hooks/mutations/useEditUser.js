@@ -22,8 +22,8 @@ export const useEditUser = (userToken, closeModal) => {
             formData.append("picture", editUser.picture_url);
         } const endpoint =
             editUser.id !== undefined
-                ? `api/v1/employees/${editUser.id}`
-                : `api/v1/supervisors/${editUser.supervisor_id}`;
+                ? `employees/${editUser.id}`
+                : `supervisors/${editUser.supervisor_id}`;
 
         await axiosInstance.post(endpoint, formData, {
             headers: { Authorization: `Bearer ${userToken}` },

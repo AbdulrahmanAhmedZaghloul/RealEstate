@@ -153,7 +153,7 @@ function Transactions() {
     setLoading(true);
     await axiosInstance
       .post(
-        `/api/listings/${id}/status`,
+        `listings/${id}/status`,
         {
           status: newStatus,
           rejection_reason: reason,

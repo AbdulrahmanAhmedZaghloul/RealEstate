@@ -11,7 +11,7 @@ export const useEditPlan = (userToken) => {
     const editPlan = async (planId, autoRenew) => {
 
         await axiosInstance.post(
-            "api/v1/subscriptions/subscribe",
+            "subscriptions/subscribe",
             {
               plan_id: planId,
               payment_method: "stripe",

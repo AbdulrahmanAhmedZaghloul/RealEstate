@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
 
     await axiosInstance
       .post(
-        "/api/v1/logout",
+        "logout",
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
       ? sessionStorage.getItem("token")
       : localStorage.getItem("token");
     return await axiosInstance
-      .get("/api/subscriptions/current", {
+      .get("subscriptions/current", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {

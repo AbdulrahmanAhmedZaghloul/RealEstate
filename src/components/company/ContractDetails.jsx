@@ -104,14 +104,14 @@ function ContractDetails() {
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
-    console.log(id);
+  console.log(id);
 
   const fetchContract = (id) => {
     console.log(id);
 
     setLoading(true);
     axiosInstance
-      .get(`api/v1/contracts/${id}`, {
+      .get(`contracts/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -132,7 +132,7 @@ function ContractDetails() {
   const handleDownloadDocument = () => {
     setLoading(true);
     axiosInstance
-      .get(`api/v1/contracts/${id}/download`, {
+      .get(`contracts/${id}/download`, {
         headers: { Authorization: `Bearer ${user.token}` },
         responseType: "blob",
       })
@@ -168,7 +168,7 @@ function ContractDetails() {
   const handleDeleteContract = () => {
     setLoading(true);
     axiosInstance
-      .delete(`api/v1/contracts/${id}`, {
+      .delete(`contracts/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(() => {
@@ -241,14 +241,16 @@ function ContractDetails() {
       </Center>
     );
   }
-        {console.log(contract)}
+  {
+    console.log(contract);
+  }
 
   return (
     <>
       <Card shadow="sm" className={classes.card}>
         <div className={classes.imageContainer}>
           <>
-             <div className={classes.ImageContainerBig}>
+            <div className={classes.ImageContainerBig}>
               {contract.real_estate.images?.[0] && (
                 <img
                   key={contract.real_estate.images[0].id}
@@ -263,7 +265,7 @@ function ContractDetails() {
               )}
             </div>
 
-             <div className={classes.widthImageContainer}>
+            <div className={classes.widthImageContainer}>
               {contract.real_estate.images
                 ?.filter((_, index) => index > 0) // Skip first image (primary)
                 .slice(0, 2) // Take next 2 images
@@ -666,10 +668,10 @@ function ContractDetails() {
           },
         }}
       >
-         {contract.real_estate.images &&
+        {contract.real_estate.images &&
           contract.real_estate.images.length > 0 && (
             <div style={{ position: "relative", textAlign: "center" }}>
-               <img
+              <img
                 src={contract.real_estate.images[selectedImageIndex].url}
                 alt={contract.real_estate.title}
                 style={{
@@ -744,7 +746,7 @@ function ContractDetails() {
                 {selectedImageIndex + 1} / {contract.real_estate.images.length}
               </div>
             </div>
-          )}  
+          )}
       </Modal>
 
       {/* Delete Contract Modal */}

@@ -10,7 +10,7 @@ export const useCancelPlan = (userToken) => {
     const cancelPlan = async () => {
 
         await axiosInstance.post(
-            "api/v1/subscriptions/cancel",
+            "subscriptions/cancel",
             {},
             {
                 headers: { Authorization: `Bearer ${userToken}` },

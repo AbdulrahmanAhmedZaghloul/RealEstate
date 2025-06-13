@@ -33,7 +33,7 @@ export default function ForgotPassword() {
     if (!validateEmail()) return;
     setLoading(true);
     try {
-      const response = await axiosInstance.post("api/v1/web/forgot-password", {
+      const response = await axiosInstance.post("web/forgot-password", {
         email: account.email.toLowerCase(),
       });
       localStorage.setItem("user_email", account.email.toLowerCase());

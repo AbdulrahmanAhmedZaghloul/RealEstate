@@ -39,7 +39,7 @@ const EditEmployeeProfile = ({ opened, onClose, employee, onUpdate }) => {
       data.append("picture", placeholderImage); // Use a placeholder image
 
       const response = await axiosInstance.post(
-        "/api/v1/company/profile/update",
+        "company/profile/update",
         data,
         {
           headers: { Authorization: `Bearer ${user.token}` },

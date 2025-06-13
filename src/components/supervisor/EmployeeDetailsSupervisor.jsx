@@ -71,7 +71,7 @@ function EmployeeDetailsSupervisor() {
 
   const handleDeleteEmployee = async (id) => {
     try {
-      const response = await axiosInstance.delete(`api/v1/employees/${id}`, {
+      const response = await axiosInstance.delete(`employees/${id}`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -110,7 +110,7 @@ function EmployeeDetailsSupervisor() {
   const fetchEmployee = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`api/v1/employees/${id}`, {
+      const response = await axiosInstance.get(`employees/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
 
@@ -125,7 +125,7 @@ function EmployeeDetailsSupervisor() {
   const fetchEmployeeListings = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`api/v1/listings/cursor`, {
+      const response = await axiosInstance.get(`listings/cursor`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
 
@@ -147,7 +147,7 @@ function EmployeeDetailsSupervisor() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `api/v1/kpi/employee/${id}/performance`,
+        `kpi/employee/${id}/performance`,
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }
@@ -200,7 +200,7 @@ function EmployeeDetailsSupervisor() {
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post(`api/v1/employees/change-password/${id}?_method=PUT`,
+      const res = await axiosInstance.post(`employees/change-password/${id}?_method=PUT`,
         passwordData, {
         headers: {
           "Content-Type": "multipart/form-data",

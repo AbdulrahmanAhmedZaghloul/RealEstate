@@ -97,7 +97,7 @@ function EmployeeProperties({ id }) {
   const fetchEmployees = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get("api/v1/employees", {
+      const res = await axiosInstance.get("employees", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setEmployees(res.data.data.employees);
@@ -112,7 +112,7 @@ function EmployeeProperties({ id }) {
     setLoading(true);
     try {
       const res = await axiosInstance.get(
-        "api/v1/categories?with_subcategories=true",
+        "categories?with_subcategories=true",
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }

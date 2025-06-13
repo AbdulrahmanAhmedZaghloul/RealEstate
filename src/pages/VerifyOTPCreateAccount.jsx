@@ -29,7 +29,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
     // Handle OTP verification logic here
     setLoading(true);
     await axiosInstance
-      .post("api/v1/web/verify-registration", {
+      .post("web/verify-registration", {
         email: sessionStorage.getItem("email"),
         otp: OTP,
         type: "reset_password",
@@ -37,7 +37,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
       })
       .then(async () => {
         await axiosInstance
-          .post("/api/v1/web/login", {
+          .post("web/login", {
             email: sessionStorage.getItem("email"),
             password: location.state?.pass,
           })
@@ -86,7 +86,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
     setLoading(true);
     console.log(sessionStorage.getItem("email"));
     await axiosInstance
-      .post("/api/v1/web/resend-otp", {
+      .post("web/resend-otp", {
         email: sessionStorage.getItem("email"),
         type: "register",
       })

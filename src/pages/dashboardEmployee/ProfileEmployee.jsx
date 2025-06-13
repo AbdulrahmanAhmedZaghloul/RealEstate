@@ -40,7 +40,7 @@ function ProfileEmployee() {
   const fetchEmployee = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`api/v1/employees`, {
+      const response = await axiosInstance.get(`employees`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       console.log(response.data.data.employee)
@@ -56,7 +56,7 @@ function ProfileEmployee() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `api/v1/kpi/employee/${employee.employee_id}/performance`,
+        `kpi/employee/${employee.employee_id}/performance`,
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }

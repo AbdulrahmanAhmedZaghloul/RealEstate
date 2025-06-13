@@ -31,7 +31,7 @@ export default function SidebarSupervisor() {
   useEffect(() => {
     const fetchUserData = async () => {
       await axiosInstance
-        .get("api/v1/supervisors", {
+        .get("supervisors", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

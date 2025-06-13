@@ -232,7 +232,7 @@ const AddPropertyModal = React.memo(
     const addAmenityToDatabase = async (name, categoryId) => {
       try {
         const response = await axiosInstance.post(
-          "api/v1/amenities",
+          "amenities",
           { name, category_id: categoryId },
           { headers: { Authorization: `Bearer ${user.token}` } }
         );
@@ -246,7 +246,7 @@ const AddPropertyModal = React.memo(
     const fetchAmenities = async () => {
       setAmenitiesLoading(true);
       try {
-        const response = await axiosInstance.get(`api/v1/amenities`, {
+        const response = await axiosInstance.get(`amenities`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         return response.data;

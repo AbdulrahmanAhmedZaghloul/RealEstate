@@ -48,8 +48,7 @@ function Profile() {
   const { t } = useTranslation();
   const { data, isLoading } = useProfile();
 
-  console.log("Profile data:", data);
-
+ 
   // Fetch and initialize profile data
   const fetchProfileData = useCallback(() => {
     if (!data) return;
@@ -156,7 +155,7 @@ function Profile() {
     setLoading(true);
     try {
       await axiosInstance.post(
-        "api/v1/company/profile/password",
+        "company/profile/password",
         {
           current_password: oldPass,
           password: newPass,

@@ -44,7 +44,7 @@ function SupervisorDetails() {
   const handleDeleteSupervisor = async () => {
     setDeleting(true);
     try {
-      await axiosInstance.delete(`api/v1/supervisors/${id}`, {
+      await axiosInstance.delete(`supervisors/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       notifications.show({
@@ -119,7 +119,7 @@ function SupervisorDetails() {
     if (editUser.image) formData.append("picture", editUser.image);
     setLoading(true);
     try {
-      const endpoint = `api/v1/supervisors/${id}`;
+      const endpoint = `supervisors/${id}`;
       await axiosInstance.post(endpoint, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -163,7 +163,7 @@ function SupervisorDetails() {
   const fetchSupervisors = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("api/v1/supervisors", {
+      const response = await axiosInstance.get("supervisors", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       console.log(response.data.data.supervisors);
@@ -199,7 +199,7 @@ function SupervisorDetails() {
     setLoading(true);
     const token = sessionStorage.getItem("token");
     try {
-      const response = await axiosInstance.get(`api/v1/supervisors/${id}`, {
+      const response = await axiosInstance.get(`supervisors/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSupervisor(response.data.data.supervisor);
@@ -244,7 +244,7 @@ function SupervisorDetails() {
 
     setLoading(true);
     try {
-      await axiosInstance.put(`api/v1/supervisors/change-password/${id}`, passwordData, {
+      await axiosInstance.put(`supervisors/change-password/${id}`, passwordData, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },

@@ -42,7 +42,7 @@ export default function SidebarMarketer() {
   useEffect(() => {
     const fetchUserData = async () => {
       await axiosInstance
-        .get(`api/v1/marketer/profile`, {
+        .get(`marketer/profile`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

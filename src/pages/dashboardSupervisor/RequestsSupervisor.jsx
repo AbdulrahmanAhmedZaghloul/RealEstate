@@ -161,7 +161,7 @@ function RequestsSupervisor() {
     setLoading(true);
     await axiosInstance
       .post(
-        `api/v1/listings/${id}/status`,
+        `listings/${id}/status`,
         {
           status: newStatus,
           rejection_reason: reason,
@@ -215,7 +215,7 @@ function RequestsSupervisor() {
     setLoading(true);
     try {
       const res = await axiosInstance.get(
-        "api/v1/categories?with_subcategories=true",
+        "categories?with_subcategories=true",
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }

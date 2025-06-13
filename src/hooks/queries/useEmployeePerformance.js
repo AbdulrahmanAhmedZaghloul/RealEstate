@@ -3,7 +3,7 @@ import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
 const fetchEmployeePerformance = async (token) => {
-    const { data } = await axiosInstance.get("api/v1/kpi/employee-performance", {
+    const { data } = await axiosInstance.get("kpi/employee-performance", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return data;

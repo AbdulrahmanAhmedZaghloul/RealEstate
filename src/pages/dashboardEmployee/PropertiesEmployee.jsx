@@ -75,7 +75,7 @@ function PropertiesEmployee() {
   const fetchListings = async () => {
     setLoading(true);
     await axiosInstance
-      .get("api/v1/listings/employee", {
+      .get("listings/employee", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -99,7 +99,7 @@ function PropertiesEmployee() {
   const fetchEmployees = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get("api/v1/employees", {
+      const res = await axiosInstance.get("employees", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       console.log(res.data.data.employee);
@@ -116,7 +116,7 @@ function PropertiesEmployee() {
     setLoading(true);
     try {
       const res = await axiosInstance.get(
-        "api/v1/categories?with_subcategories=true",
+        "categories?with_subcategories=true",
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }
@@ -170,7 +170,7 @@ function PropertiesEmployee() {
     );
     setLoading(true);
     axiosInstance
-      .post("api/v1/listings", formData, {
+      .post("listings", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${user.token}`,

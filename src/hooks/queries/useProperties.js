@@ -28,7 +28,7 @@ const fetchListings = async ({
 
   });
 
-  const { data } = await axiosInstance.get(`api/v1/listings/cursor?${params}`, {
+  const { data } = await axiosInstance.get(`listings/cursor?${params}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 console.log("Fetched Listings Data:", data);

@@ -58,7 +58,7 @@ function EmployeeDetails() {
   const handleDeleteEmployee = async () => {
     setDeleting(true);
     try {
-      await axiosInstance.delete(`/api/employees/${id}`, {
+      await axiosInstance.delete(`employees/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       notifications.show({
@@ -144,7 +144,7 @@ function EmployeeDetails() {
     if (editUser.image) formData.append("picture", editUser.image);
     setLoading(true);
     try {
-      const endpoint = `api/v1/employees/${id}`;
+      const endpoint = `employees/${id}`;
       await axiosInstance.post(endpoint, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -175,7 +175,7 @@ function EmployeeDetails() {
   const fetchSupervisors = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("api/v1/supervisors", {
+      const response = await axiosInstance.get("supervisors", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       console.log(response);
@@ -196,7 +196,7 @@ function EmployeeDetails() {
   const fetchEmployee = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`api/v1/employees/${id}`, {
+      const response = await axiosInstance.get(`employees/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
 
@@ -213,7 +213,7 @@ function EmployeeDetails() {
   const fetchEmployeeListings = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`api/v1/listings`, {
+      const response = await axiosInstance.get(`listings`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
 
@@ -247,7 +247,7 @@ function EmployeeDetails() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `api/v1/kpi/employee/${id}/performance`,
+        `kpi/employee/${id}/performance`,
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }
@@ -306,7 +306,7 @@ function EmployeeDetails() {
 
     setLoading(true);
     try {
-     const  res =  await axiosInstance.post(`api/v1/employees/change-password/${id}?_method=PUT`,
+     const  res =  await axiosInstance.post(`employees/change-password/${id}?_method=PUT`,
         passwordData, {
         headers: {
           "Content-Type": "multipart/form-data",

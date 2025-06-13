@@ -28,7 +28,7 @@ export default function SidebarEmployee() {
   useEffect(() => {
     const fetchUserData = async () => {
       await axiosInstance
-        .get("api/v1/employees", {
+        .get("employees", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

@@ -45,7 +45,7 @@ function SubscriptionPlans() {
 
   const fetchSubscriptionPlans = async () => {
     try {
-      const response = await axiosInstance.get("/api/v1/subscriptions/plans", {
+      const response = await axiosInstance.get("subscriptions/plans", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       const fetchedPlans = response.data.data.map((plan) => ({

@@ -117,7 +117,7 @@ function PageShareContract() {
   const fetchContract = () => {
     setLoading(true);
     axiosInstance
-      .get(`/api/v1/contracts/${id}`, {
+      .get(`contracts/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -157,7 +157,7 @@ function PageShareContract() {
     });
     setLoading(true);
     axiosInstance
-      .post(`/api/v1/contracts/${id}`, formData, {
+      .post(`contracts/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${user.token}`,
@@ -190,7 +190,7 @@ function PageShareContract() {
   const handleDownloadDocument = () => {
     setLoading(true);
     axiosInstance
-      .get(`/api/v1/contracts/${id}/download`, {
+      .get(`contracts/${id}/download`, {
         headers: { Authorization: `Bearer ${user.token}` },
         responseType: "blob",
       })
@@ -226,7 +226,7 @@ function PageShareContract() {
   const handleDeleteContract = () => {
     setLoading(true);
     axiosInstance
-      .delete(`/api/v1/contracts/${id}`, {
+      .delete(`contracts/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(() => {

@@ -71,7 +71,7 @@ export default function Login() {
     if (validateForm()) {
       setLoading(true);
       axiosInstance
-        .post("api/v1/web/login", {
+        .post("web/login", {
           email: credentials.email.toLowerCase(),
           password: credentials.password,
         })

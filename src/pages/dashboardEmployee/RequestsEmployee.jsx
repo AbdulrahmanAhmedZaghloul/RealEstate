@@ -75,7 +75,7 @@ function RequestsEmployee() {
   const fetchListings = async () => {
     setLoading(true);
     await axiosInstance
-      .get("api/v1/listings/employee", {
+      .get("listings/employee", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -145,7 +145,7 @@ function RequestsEmployee() {
     setLoading(true);
     try {
       const res = await axiosInstance.get(
-        "api/v1/categories?with_subcategories=true",
+        "categories?with_subcategories=true",
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }

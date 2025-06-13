@@ -41,7 +41,7 @@ export default function Sidebar() {
   useEffect(() => {
     const fetchUserData = async () => {
       await axiosInstance
-        .get("api/v1/company/profile", {
+        .get("company/profile", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

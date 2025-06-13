@@ -58,7 +58,7 @@ function ContractDetailsSupervisor() {
   const fetchContract = () => {
     setLoading(true);
     axiosInstance
-      .get(`api/v1/contracts/${id}`, {
+      .get(`contracts/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
@@ -142,7 +142,7 @@ function ContractDetailsSupervisor() {
     });
     setLoading(true);
     axiosInstance
-      .post(`api/v1/contracts/${id}`, formData, {
+      .post(`contracts/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${user.token}`,
@@ -175,7 +175,7 @@ function ContractDetailsSupervisor() {
   const handleDownloadDocument = () => {
     setLoading(true);
     axiosInstance
-      .get(`api/v1/contracts/${id}/download`, {
+      .get(`contracts/${id}/download`, {
         headers: { Authorization: `Bearer ${user.token}` },
         responseType: "blob",
       })
@@ -211,7 +211,7 @@ function ContractDetailsSupervisor() {
   const handleDeleteContract = () => {
     setLoading(true);
     axiosInstance
-      .delete(`api/v1/contracts/${id}`, {
+      .delete(`contracts/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(() => {
@@ -313,7 +313,7 @@ function ContractDetailsSupervisor() {
                       <img
                         key={contract.real_estate.images[0].id}
                         src={contract.real_estate.images[0].url}
-                        // alt={contract.real_estate.title}
+                        alt={contract.real_estate.title}
                         className={classes.mainImage}
                         onClick={() => {
                           setSelectedImageIndex(0); // لأنها تاني صورة في الـ array
@@ -351,7 +351,7 @@ function ContractDetailsSupervisor() {
                       <img
                         key={image.id}
                         src={image.url}
-                        // alt={contract.real_estate.title}
+                        alt={contract.real_estate.title}
                         className={classes.mainImage}
                         onClick={() => {
                           setSelectedImageIndex(index + 1); // +1 because we skipped primary
@@ -428,7 +428,6 @@ function ContractDetailsSupervisor() {
                         </div>
                         <div>
                           <p
-
                             className={classes.time}
                           >
                             {Math.floor(

@@ -56,7 +56,7 @@ function PropertyDetailsMarketer() {
   const fetchListing = async () => {
     setLoading(true);
     try {
-      const { data } = await axiosInstance.get(`/api/listings/employee/${id}`, {
+      const { data } = await axiosInstance.get(`listings/employee/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setListing(data?.data.listing);
@@ -74,7 +74,7 @@ function PropertyDetailsMarketer() {
 
   const handleUpdateProperty = async (updatedData) => {
     try {
-      await axiosInstance.put(`/api/listings/${id}`, updatedData, {
+      await axiosInstance.put(`listings/${id}`, updatedData, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       notifications.show({ title: "Success", message: "Listing updated successfully!", color: "green" });
@@ -89,7 +89,7 @@ function PropertyDetailsMarketer() {
   const handleShareProperty = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.post(`/api/listings/${id}/share`, {}, {
+      const response = await axiosInstance.post(`listings/${id}/share`, {}, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setShareLink(response.data.data.share_url);
@@ -112,7 +112,7 @@ function PropertyDetailsMarketer() {
   const handleDeleteProperty = async () => {
     setLoading(true);
     try {
-      await axiosInstance.delete(`/api/listings/${id}`, {
+      await axiosInstance.delete(`listings/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       navigate("/dashboard/properties");
@@ -137,8 +137,7 @@ function PropertyDetailsMarketer() {
   const handleUpdateListing = async (newStatus, reason) => {
     setLoading(true);
     try {
-      await axiosInstance.post(
-        `/api/listings/${id}/status`,
+      await axiosInstance.post(`listings/${id}/status`,
         { status: newStatus, rejection_reason: reason },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );

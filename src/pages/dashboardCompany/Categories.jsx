@@ -104,7 +104,7 @@ function Categories() {
     setLoading(true);
     try {
       await axiosInstance.post(
-        `/api/categories/${newSubcategory.category_id}/subcategories`,
+        `categories/${newSubcategory.category_id}/subcategories`,
         newSubcategory,
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
@@ -143,8 +143,8 @@ function Categories() {
     setLoading(true);
     try {
       const endpoint = editItem.isSubcategory
-        ? `/api/categories/${editItem.category_id}/subcategories/${editItem.id}`
-        : `/api/categories/${editItem.id}`;
+        ? `categories/${editItem.category_id}/subcategories/${editItem.id}`
+        : `categories/${editItem.id}`;
 
       await axiosInstance.put(endpoint, editItem, {
         headers: { Authorization: `Bearer ${user.token}` },

@@ -3,7 +3,7 @@ import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
 const fetchCategoryPerformance = async (token) => {
-    const { data } = await axiosInstance.get("api/v1/kpi/category-performance?time_frame=yearly", {
+    const { data } = await axiosInstance.get("kpi/category-performance?time_frame=yearly", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return data;

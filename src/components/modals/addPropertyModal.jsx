@@ -1,34 +1,35 @@
-  // Dependency imports
-  import {
-    Modal,
-    Grid,
-    TextInput,
-    Textarea,
-    NumberInput,
-    Select,
-    Button,
-    Center,
-    Autocomplete,
-    Group,
-    Text,
-    Divider,
-    Loader,
-  } from "@mantine/core";
-  import { useForm } from "@mantine/form";
-  import { useState, useEffect } from "react";
-  import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
-  import React from "react";
-  import Compressor from 'compressorjs'; // ✅ إضافة مكتبة الضغط
+// Dependency imports
+import {
+  Modal,
+  Grid,
+  TextInput,
+  Textarea,
+  NumberInput,
+  Select,
+  Button,
+  Center,
+  Autocomplete,
+  Group,
+  Text,
+  Divider,
+  Loader,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useState, useEffect, useRef } from "react";
+import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
+import React from "react";
+import Compressor from "compressorjs"; // ✅ إضافة مكتبة الضغط
 
-  // Local imports
-  import currentLocation from "../../assets/currentLocation.svg";
-  import classes from "../../styles/modals.module.css";
-  import edit from "../../assets/edit.svg";
-  import downArrow from "../../assets/downArrow.svg";
-  import axiosInstance from "../../api/config";
-  import { useAuth } from "../../context/authContext";
+// Local imports
+import currentLocation from "../../assets/currentLocation.svg";
+import classes from "../../styles/modals.module.css";
+import edit from "../../assets/edit.svg";
+import downArrow from "../../assets/downArrow.svg";
+import axiosInstance from "../../api/config";
+import { useAuth } from "../../context/authContext";
 
-  const AddPropertyModal = React.memo(({
+const AddPropertyModal = React.memo(
+  ({
     opened,
     onClose,
     categories = [],
@@ -62,13 +63,16 @@
       },
       validate: {
         title: (value) => (value.trim() ? null : "Title is required"),
-        description: (value) => (value.trim() ? null : "Description is required"),
+        description: (value) =>
+          value.trim() ? null : "Description is required",
         price: (value) => (value > 0 ? null : "Price must be greater than 0"),
         area: (value) => (value > 0 ? null : "Area must be greater than 0"),
         location: (value) => (value.trim() ? null : "Location is required"),
         rooms: (value) => {
           const categoryId = form.values.category_id;
-          const category = categories.find(cat => cat.id === parseInt(categoryId));
+          const category = categories.find(
+            (cat) => cat.id === parseInt(categoryId)
+          );
           const categoryName = category?.name.toLowerCase();
           if (categoryName === "residential") {
             return value > 0 ? null : "Rooms must be greater than 0";
@@ -77,7 +81,9 @@
         },
         bathrooms: (value) => {
           const categoryId = form.values.category_id;
-          const category = categories.find(cat => cat.id === parseInt(categoryId));
+          const category = categories.find(
+            (cat) => cat.id === parseInt(categoryId)
+          );
           const categoryName = category?.name.toLowerCase();
           if (categoryName === "residential") {
             return value > 0 ? null : "Bathrooms must be greater than 0";
@@ -86,7 +92,9 @@
         },
         floors: (value) => {
           const categoryId = form.values.category_id;
-          const category = categories.find(cat => cat.id === parseInt(categoryId));
+          const category = categories.find(
+            (cat) => cat.id === parseInt(categoryId)
+          );
           const categoryName = category?.name.toLowerCase();
           if (categoryName === "residential") {
             return value > 0 ? null : "Floors must be greater than 0";
@@ -97,10 +105,13 @@
           if (value.length < 3) {
             return "Please upload at least 3 images";
           }
-          if (value.length > 8) { // ✅ تغيير الحد الأقصى إلى 5 صور
+          if (value.length > 8) {
+            // ✅ تغيير الحد الأقصى إلى 5 صور
             return "You cannot upload more than 5 images";
           }
-          const oversizedImage = value.find(image => image.size > 20 * 1024 * 1024); // ✅ تحقق من الحجم قبل الرفع
+          const oversizedImage = value.find(
+            (image) => image.size > 20 * 1024 * 1024
+          ); // ✅ تحقق من الحجم قبل الرفع
           if (oversizedImage) {
             return "Each image must be less than 20 MB";
           }
@@ -116,11 +127,16 @@
           return null;
         },
         employee_id: (value) =>
-          user.role === "employee" ? null : value ? null : "Employee is required",
-        category_id: (value) => (value ? null : "Property category is required"),
+          user.role === "employee"
+            ? null
+            : value
+            ? null
+            : "Employee is required",
+        category_id: (value) =>
+          value ? null : "Property category is required",
         subcategory_id: (value) => (value ? null : "Property type is required"),
         listing_type: (value) => (value ? null : "Property type is required"),
-      }
+      },
     });
 
     const categoryMap = categories.reduce((map, category) => {
@@ -146,8 +162,8 @@
     // ✅ تنظيف Object URLs عند إغلاق النافذة
     useEffect(() => {
       return () => {
-        form.values.images.forEach(image => {
-          if (typeof image === 'object' && image instanceof Blob) {
+        form.values.images.forEach((image) => {
+          if (typeof image === "object" && image instanceof Blob) {
             URL.revokeObjectURL(URL.createObjectURL(image));
           }
         });
@@ -168,7 +184,11 @@
             );
             const data = await response.json();
             const address = data.address;
-            const formattedLocation = `${address.suburb || address.neighbourhood || ""}, ${address.city || address.town || address.village || ""}, ${address.state || ""}`;
+            const formattedLocation = `${
+              address.suburb || address.neighbourhood || ""
+            }, ${address.city || address.town || address.village || ""}, ${
+              address.state || ""
+            }`;
             setSearchValue(formattedLocation);
             form.setFieldValue("location", formattedLocation);
             setRegion(address.state || "");
@@ -240,7 +260,9 @@
 
     const handleCategoryChange = async (categoryId) => {
       form.setFieldValue("category_id", categoryId);
-      const selectedCategory = categories.find(cat => cat.id === parseInt(categoryId));
+      const selectedCategory = categories.find(
+        (cat) => cat.id === parseInt(categoryId)
+      );
       if (selectedCategory) {
         setSelectedCategoryType(selectedCategory.name.toLowerCase());
       }
@@ -262,18 +284,23 @@
             categoryMap[categoryId] === "residential" ? formattedAmenities : [],
           commercial:
             selectedCategory.name.toLowerCase() === "commercial" ||
-              selectedCategory.name.toLowerCase() === "land"
+            selectedCategory.name.toLowerCase() === "land"
               ? formattedAmenities
               : [],
         });
       } catch (error) {
-        console.error("Error fetching or filtering amenities for category:", error);
+        console.error(
+          "Error fetching or filtering amenities for category:",
+          error
+        );
       }
     };
 
     const handleAmenityBlur = async (amenity, index, type) => {
       if (!amenity.name.trim()) {
-        const updatedAmenities = form.values.amenities[type].filter((item, i) => i !== index);
+        const updatedAmenities = form.values.amenities[type].filter(
+          (item, i) => i !== index
+        );
         form.setFieldValue(`amenities.${type}`, updatedAmenities);
       } else {
         try {
@@ -306,6 +333,77 @@
           console.error("Error adding or fetching amenities:", error);
         }
       }
+    };
+
+    const handleImageChange = async (e) => {
+      let files = Array.from(e.target.files);
+
+      // التحقق من أن الملفات هي صور فقط
+      const validImages = [];
+      const invalidFiles = [];
+
+      files.forEach((file) => {
+        if (file.type.startsWith("image/")) {
+          validImages.push(file);
+        } else {
+          invalidFiles.push(file.name);
+        }
+      });
+
+      // إظهار رسالة خطأ إذا كان هناك ملفات غير صور
+      if (invalidFiles.length > 0) {
+        notifications.show({
+          title: "Invalid Files",
+          message: `The following files are not images and were not uploaded: ${invalidFiles.join(
+            ", "
+          )}`,
+          color: "red",
+        });
+      }
+
+      // التحقق من وجود تكرار
+      const existingFiles = form.values.images.map((image) =>
+        image.name ? image.name : image
+      );
+
+      const newValidImages = validImages.filter(
+        (file) => !existingFiles.includes(file.name)
+      );
+
+      // التحقق من الحد الأقصى
+      const totalImages = form.values.images.length + newValidImages.length;
+      if (totalImages > 8) {
+        form.setFieldError("images", "You cannot upload more than 8 images");
+        e.target.value = null;
+        return;
+      }
+
+      // ضغط الصور
+      const compressedFiles = await Promise.all(
+        newValidImages.map(
+          (file) =>
+            new Promise((resolve) => {
+              new Compressor(file, {
+                quality: 0.6, // جودة الصورة (60% من الأصلية)
+                maxWidth: 1200,
+                maxHeight: 1200,
+                success(result) {
+                  resolve(new File([result], file.name, { type: result.type }));
+                },
+                error() {
+                  resolve(file); // fallback بدون ضغط إذا فشل
+                },
+              });
+            })
+        )
+      );
+
+      // تحديث قائمة الصور بالصور المضغوطة
+      const updatedImages = [...form.values.images, ...compressedFiles];
+      form.setFieldValue("images", updatedImages);
+      form.clearFieldError("images");
+
+      e.target.value = null;
     };
 
     useEffect(() => {
@@ -341,122 +439,39 @@
         });
     }, []);
 
-    // ✅ تعديل دالة رفع الصور مع ضغط وتحديد عدد أقصى
+    const prevOpened = React.useRef();
 
-    // const handleImageChange = async (e) => {
+    useEffect(() => {
+      if (opened && !prevOpened.current) {
+        // فقط عند الفتح الأولي
+        form.reset();
+        setSearchValue(""); // 👈 إعادة تعيين location
+        setRegion("");
+        setCity("");
+        setDistrict("");
+        setLocationError("");
+      }
 
-    // let files = Array.from(e.target.files);
+      if (!opened && prevOpened.current) {
+        // فقط عند الإغلاق
+        form.reset();
+        setSearchValue(""); // 👈 إعادة تعيين location
+        setRegion("");
+        setCity("");
+        setDistrict("");
+        setLocationError("");
+      }
 
-    // // التحقق من أن الملفات هي صور فقط
-    // const validImages = [];
-    // const invalidFiles = [];
-
-    // files.forEach(file => {
-    //   if (file.type.startsWith('image/')) {
-    //     validImages.push(file);
-    //   } else {
-    //     invalidFiles.push(file.name);
+      prevOpened.current = opened;
+    }, [opened]);
+    // useEffect(() => {
+    //   if (opened) {
+    //     form.reset(); // 👈 Reset form fields
     //   }
-    // });
-
-    // // إظهار رسالة خطأ إذا كان هناك ملفات غير صور
-    // if (invalidFiles.length > 0) {
-    //   notifications.show({
-    //     title: 'Invalid Files',
-    //     message: `The following files are not images and were not uploaded: ${invalidFiles.join(', ')}`,
-    //     color: 'red',
-    //   });
-    // }
-
-    // // التحقق من وجود تكرار
-    // const existingFiles = form.values.images.map((image) =>
-    //   image.name ? image.name : image
-    // );
-
-    // const newValidImages = validImages.filter(file => !existingFiles.includes(file.name));
-
-    // // التحقق من الحد الأقصى
-    // const totalImages = form.values.images.length + newValidImages.length;
-    // if (totalImages > 8) {
-    //   form.setFieldError("images", "You can only upload up to 8 images");
-    //   e.target.value = null;
-    //   return;
-    // }
-
-    // // تحديث قائمة الصور
-    // const updatedImages = [...form.values.images, ...newValidImages];
-    // form.setFieldValue("images", updatedImages);
-    // form.clearFieldError("images");
-
-    // e.target.value = null;
-    // };
- 
-const handleImageChange = async (e) => {
-  let files = Array.from(e.target.files);
-
-  // التحقق من أن الملفات هي صور فقط
-  const validImages = [];
-  const invalidFiles = [];
-
-  files.forEach(file => {
-    if (file.type.startsWith('image/')) {
-      validImages.push(file);
-    } else {
-      invalidFiles.push(file.name);
-    }
-  });
-
-  // إظهار رسالة خطأ إذا كان هناك ملفات غير صور
-  if (invalidFiles.length > 0) {
-    notifications.show({
-      title: 'Invalid Files',
-      message: `The following files are not images and were not uploaded: ${invalidFiles.join(', ')}`,
-      color: 'red',
-    });
-  }
-
-  // التحقق من وجود تكرار
-  const existingFiles = form.values.images.map((image) =>
-    image.name ? image.name : image
-  );
-
-  const newValidImages = validImages.filter(file => !existingFiles.includes(file.name));
-
-  // التحقق من الحد الأقصى
-  const totalImages = form.values.images.length + newValidImages.length;
-  if (totalImages > 8) {
-    form.setFieldError("images", "You cannot upload more than 8 images");
-    e.target.value = null;
-    return;
-  }
-
-  // ضغط الصور
-  const compressedFiles = await Promise.all(
-    newValidImages.map(
-      (file) =>
-        new Promise((resolve) => {
-          new Compressor(file, {
-            quality: 0.6, // جودة الصورة (60% من الأصلية)
-            maxWidth: 1200,
-            maxHeight: 1200,
-            success(result) {
-              resolve(new File([result], file.name, { type: result.type }));
-            },
-            error() {
-              resolve(file); // fallback بدون ضغط إذا فشل
-            },
-          });
-        })
-    )
-  );
-
-  // تحديث قائمة الصور بالصور المضغوطة
-  const updatedImages = [...form.values.images, ...compressedFiles];
-  form.setFieldValue("images", updatedImages);
-  form.clearFieldError("images");
-
-  e.target.value = null;
-};
+    //   if (onClose) {
+    //     form.reset(); // 👈 Reset form fields
+    //   }
+    // }, [opened]);
     return (
       <Modal
         opened={opened}
@@ -476,7 +491,11 @@ const handleImageChange = async (e) => {
           <Grid p={isMobile ? 15 : 30}>
             <Grid.Col span={isMobile ? 12 : 6}>
               <div>
-                <Text size="sm" weight={500} style={{ fontSize: 14, fontWeight: 500, marginBottom: 7 }}>
+                <Text
+                  size="sm"
+                  weight={500}
+                  style={{ fontSize: 14, fontWeight: 500, marginBottom: 7 }}
+                >
                   Upload Images
                 </Text>
                 <div
@@ -493,27 +512,29 @@ const handleImageChange = async (e) => {
                     style={
                       form.errors.images
                         ? {
-                          border: "1px dashed red",
-                          borderRadius: "8px",
-                          width: "60px",
-                          height: "60px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
-                        }
+                            border: "1px dashed red",
+                            borderRadius: "8px",
+                            width: "60px",
+                            height: "60px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                          }
                         : {
-                          border: "1px dashed var(--color-4)",
-                          borderRadius: "8px",
-                          width: "60px",
-                          height: "60px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
-                        }
+                            border: "1px dashed var(--color-4)",
+                            borderRadius: "8px",
+                            width: "60px",
+                            height: "60px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                          }
                     }
-                    onClick={() => document.getElementById("image-upload").click()}
+                    onClick={() =>
+                      document.getElementById("image-upload").click()
+                    }
                   >
                     <input
                       id="image-upload"
@@ -523,7 +544,9 @@ const handleImageChange = async (e) => {
                       multiple
                       onChange={handleImageChange} // ✅ استخدم الدالة الجديدة
                     />
-                    <div style={{ fontSize: "16px", color: "var(--color-4)" }}>+</div>
+                    <div style={{ fontSize: "16px", color: "var(--color-4)" }}>
+                      +
+                    </div>
                   </div>
 
                   {/* Display Uploaded Images */}
@@ -538,18 +561,26 @@ const handleImageChange = async (e) => {
                           height: "60px",
                           borderRadius: "8px",
                           overflow: "hidden",
-                          border: exceedsSize ? "2px solid red" : "1px solid #ccc",
+                          border: exceedsSize
+                            ? "2px solid red"
+                            : "1px solid #ccc",
                         }}
                       >
                         <img
                           src={URL.createObjectURL(image)}
                           alt={`Uploaded ${index}`}
-                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
                         />
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            const updatedImages = form.values.images.filter((_, i) => i !== index);
+                            const updatedImages = form.values.images.filter(
+                              (_, i) => i !== index
+                            );
                             form.setFieldValue("images", updatedImages);
                           }}
                           style={{
@@ -643,7 +674,10 @@ const handleImageChange = async (e) => {
 
               {/* Down Payment */}
               <NumberInput
-                styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
+                }}
                 label="Down Payment"
                 placeholder="Enter the down payment (e.g., 25.5%)"
                 hideControls
@@ -656,7 +690,8 @@ const handleImageChange = async (e) => {
                 clampBehavior="strict"
                 error={
                   form.values.down_payment !== null &&
-                    (form.values.down_payment < 0 || form.values.down_payment > 100)
+                  (form.values.down_payment < 0 ||
+                    form.values.down_payment > 100)
                     ? "Down payment must be between 0 and 100%"
                     : form.errors.down_payment
                 }
@@ -677,7 +712,10 @@ const handleImageChange = async (e) => {
                 suffix="%"
               />
 
-              {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
+              {!(
+                selectedCategoryType === "commercial" ||
+                selectedCategoryType === "land"
+              ) && (
                 <NumberInput
                   label="Rooms"
                   placeholder="Enter number of rooms"
@@ -698,7 +736,10 @@ const handleImageChange = async (e) => {
                 />
               )}
 
-              {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
+              {!(
+                selectedCategoryType === "commercial" ||
+                selectedCategoryType === "land"
+              ) && (
                 <NumberInput
                   disabled={
                     selectedCategoryType === "commercial" ||
@@ -719,7 +760,10 @@ const handleImageChange = async (e) => {
                 />
               )}
 
-              {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
+              {!(
+                selectedCategoryType === "commercial" ||
+                selectedCategoryType === "land"
+              ) && (
                 <NumberInput
                   label="Floors"
                   placeholder="Enter number of floors"
@@ -750,14 +794,16 @@ const handleImageChange = async (e) => {
                 onChange={setSearchValue}
                 onBlur={() => {
                   const isValidLocation =
-                    locationOptions.some(loc => loc.value === searchValue) ||
+                    locationOptions.some((loc) => loc.value === searchValue) ||
                     searchValue === "Get Current Location";
 
                   if (isValidLocation) {
                     if (searchValue === "Get Current Location") {
                       getCurrentLocation();
                     } else {
-                      const selected = locationOptions.find(loc => loc.value === searchValue);
+                      const selected = locationOptions.find(
+                        (loc) => loc.value === searchValue
+                      );
                       if (selected) {
                         setRegion(selected.region);
                         setCity(selected.city);
@@ -769,15 +815,25 @@ const handleImageChange = async (e) => {
                   } else {
                     setSearchValue("");
                     form.setFieldValue("location", "");
-                    setLocationError("Please select a valid location from the list");
-                    form.setFieldError("location", "Please select a valid location");
+                    setLocationError(
+                      "Please select a valid location from the list"
+                    );
+                    form.setFieldError(
+                      "location",
+                      "Please select a valid location"
+                    );
                   }
                 }}
                 error={locationError || form.errors.location}
                 renderOption={({ option }) => (
                   <Group>
                     {option.label === "Get Current Location" && (
-                      <img src={currentLocation} alt="location" height={20} width={20} />
+                      <img
+                        src={currentLocation}
+                        alt="location"
+                        height={20}
+                        width={20}
+                      />
                     )}
                     <span>{option.label}</span>
                   </Group>
@@ -820,7 +876,8 @@ const handleImageChange = async (e) => {
                   .filter(
                     (subcategory) =>
                       subcategory.id !== undefined &&
-                      subcategory.category_id === parseInt(form.values.category_id)
+                      subcategory.category_id ===
+                        parseInt(form.values.category_id)
                   )
                   .map((subcategory) => ({
                     value: String(subcategory.id),
@@ -924,10 +981,16 @@ const handleImageChange = async (e) => {
                         }}
                         className={classes.amenitiesBadge}
                         onClick={() => {
-                          const updatedAmenities = form.values.amenities.residential.map(
-                            (item, i) => (i === index ? { ...item, selected: !item.selected } : item)
+                          const updatedAmenities =
+                            form.values.amenities.residential.map((item, i) =>
+                              i === index
+                                ? { ...item, selected: !item.selected }
+                                : item
+                            );
+                          form.setFieldValue(
+                            "amenities.residential",
+                            updatedAmenities
                           );
-                          form.setFieldValue("amenities.residential", updatedAmenities);
                         }}
                       >
                         {amenity.isCustom ? (
@@ -944,12 +1007,21 @@ const handleImageChange = async (e) => {
                             }}
                             value={amenity.name}
                             onChange={(e) => {
-                              const updatedAmenities = form.values.amenities.residential.map(
-                                (item, i) => (i === index ? { ...item, name: e.target.value } : item)
+                              const updatedAmenities =
+                                form.values.amenities.residential.map(
+                                  (item, i) =>
+                                    i === index
+                                      ? { ...item, name: e.target.value }
+                                      : item
+                                );
+                              form.setFieldValue(
+                                "amenities.residential",
+                                updatedAmenities
                               );
-                              form.setFieldValue("amenities.residential", updatedAmenities);
                             }}
-                            onBlur={() => handleAmenityBlur(amenity, index, "residential")}
+                            onBlur={() =>
+                              handleAmenityBlur(amenity, index, "residential")
+                            }
                             placeholder="Enter amenity name"
                             style={{ width: "100px", height: "20px" }}
                           />
@@ -982,10 +1054,16 @@ const handleImageChange = async (e) => {
                         }}
                         className={classes.amenitiesBadge}
                         onClick={() => {
-                          const updatedAmenities = form.values.amenities.commercial.map(
-                            (item, i) => (i === index ? { ...item, selected: !item.selected } : item)
+                          const updatedAmenities =
+                            form.values.amenities.commercial.map((item, i) =>
+                              i === index
+                                ? { ...item, selected: !item.selected }
+                                : item
+                            );
+                          form.setFieldValue(
+                            "amenities.commercial",
+                            updatedAmenities
                           );
-                          form.setFieldValue("amenities.commercial", updatedAmenities);
                         }}
                       >
                         {amenity.isCustom ? (
@@ -1002,12 +1080,21 @@ const handleImageChange = async (e) => {
                             }}
                             value={amenity.name}
                             onChange={(e) => {
-                              const updatedAmenities = form.values.amenities.commercial.map(
-                                (item, i) => (i === index ? { ...item, name: e.target.value } : item)
+                              const updatedAmenities =
+                                form.values.amenities.commercial.map(
+                                  (item, i) =>
+                                    i === index
+                                      ? { ...item, name: e.target.value }
+                                      : item
+                                );
+                              form.setFieldValue(
+                                "amenities.commercial",
+                                updatedAmenities
                               );
-                              form.setFieldValue("amenities.commercial", updatedAmenities);
                             }}
-                            onBlur={() => handleAmenityBlur(amenity, index, "commercial")}
+                            onBlur={() =>
+                              handleAmenityBlur(amenity, index, "commercial")
+                            }
                             placeholder="Enter amenity name"
                             style={{ width: "100px", height: "20px" }}
                           />
@@ -1035,6 +1122,7 @@ const handleImageChange = async (e) => {
         </form>
       </Modal>
     );
-  });
+  }
+);
 
-  export default AddPropertyModal;
+export default AddPropertyModal;

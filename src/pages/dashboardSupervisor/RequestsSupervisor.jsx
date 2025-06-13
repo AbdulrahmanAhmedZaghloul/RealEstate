@@ -1,18 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  Center,
-  Grid,
-  Group,
-  Image,
-  Text,
-  Select,
-  Modal,
-  Textarea,
-  Loader,
-  GridCol,
+import {Badge,Button,Card,Center,Grid,Group,Image,Text,Select,Modal,Textarea,Loader,GridCol,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -21,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 import { notifications } from "@mantine/notifications";
-import FiltersModal from "../../components/modals/filterPropertiesModal"; 
+import FiltersModal from "../dashboardCompany/FiltersModal";
 import AcceptedStatus from "../../assets/status/AcceptedStatus.svg";
 import RejectedStatus from "../../assets/status/RejectedStatus.svg";
 import PendingStatus from "../../assets/status/PendingStatus.svg";
@@ -35,6 +22,8 @@ import { useInView } from "react-intersection-observer";
 import Area from "../../components/icons/area";
 import Bathrooms from "../../components/icons/bathrooms";
 import Rooms from "../../components/icons/rooms";
+import Dropdown from "../../components/icons/dropdown";
+
 const rejectionReasons = [
   {
     value: "Completion of Contract Terms",
@@ -47,6 +36,8 @@ const rejectionReasons = [
   { value: "Other", label: "Other" },
 ];
 function RequestsSupervisor() {
+  const [listingTypeFilter, setListingTypeFilter] = useState("all");
+
   const [listings, setListings] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
@@ -62,13 +53,37 @@ function RequestsSupervisor() {
   const [loading, setLoading] = useState(false);
   const CHARACTER_LIMIT = 200;
   const [filteredListings, setFilteredListings] = useState([]);
+
   const [
     filterModalOpened,
     { open: openFilterModal, close: closeFilterModal },
   ] = useDisclosure(false);
 
+  const [filters, setFilters] = useState({
+    location: "",
+    rooms: "",
+    priceMin: "",
+    priceMax: "",
+    category: "",
+    subcategory: "",
+  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useProperties(
+      listingTypeFilter === "all" ? "" : listingTypeFilter,
+      filters
+    );
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties();
+  const resetFilters = () => {
+    setFilters({
+      location: "",
+      rooms: "",
+      priceMin: "",
+      priceMax: "",
+      category: "",
+      subcategory: "",
+      // employee: "", // 👈 إعادة تعيين الموظف
+    });
+  };
 
   const { t } = useTranslation(); // 👈 استدعاء اللغة
 
@@ -86,11 +101,11 @@ function RequestsSupervisor() {
     },
   });
 
-  const allListings = data?.pages.flatMap(page =>
-    page.data.listings.filter(listing => listing.status === "pending")
-  ) || [];
+  const allListings =
+    data?.pages.flatMap((page) =>
+      page.data.listings.filter((listing) => listing.status === "pending")
+    ) || [];
   console.log(allListings);
-
 
   const [ref, inView] = useInView();
 
@@ -139,8 +154,7 @@ function RequestsSupervisor() {
 
   useEffect(() => {
     setFilteredListings(listings);
-    console.log('Updated listings length:', listings.length);
-
+    console.log("Updated listings length:", listings.length);
   }, [listings]);
 
   const updateStatus = async (id, newStatus, reason) => {
@@ -155,7 +169,7 @@ function RequestsSupervisor() {
         { headers: { Authorization: `Bearer ${user.token}` } }
       )
       .then(() => {
-        fetchListings();
+        // fetchListings();
         notifications.show({
           title: "Success",
           message: "Listing status updated successfully",
@@ -224,8 +238,6 @@ function RequestsSupervisor() {
     fetchCategories();
   }, []);
 
-
-
   if (loading) {
     return (
       <div
@@ -243,16 +255,25 @@ function RequestsSupervisor() {
 
   return (
     <>
-      <Card style={{
-        backgroundColor: "var(--color-5)",
-      }} radius="lg">
+      <Card
+        style={{
+          backgroundColor: "var(--color-5)",
+        }}
+        radius="lg"
+      >
         <Grid>
           <Grid.Col span={12}>
             <BurgerButton />
-            <span style={{
-              color: "var(--color-3)",
-              fontSize: "24px", fontWeight: "500"
-            }} className={classes.title}>{t.Requests}</span>
+            <span
+              style={{
+                color: "var(--color-3)",
+                fontSize: "24px",
+                fontWeight: "500",
+              }}
+              className={classes.title}
+            >
+              {t.Requests}
+            </span>
             <Notifications />
           </Grid.Col>
 
@@ -268,7 +289,6 @@ function RequestsSupervisor() {
                   border: "1px solid #B8C0CC",
                 }}
                 maxLength={30}
-
               />
               <Search />
             </div>
@@ -283,7 +303,6 @@ function RequestsSupervisor() {
               }}
             >
               <FilterIcon />
-
             </button>
 
             <div className={classes.addAndSort}>
@@ -291,9 +310,20 @@ function RequestsSupervisor() {
                 placeholder={t.Sortby}
                 value={filter}
                 onChange={setFilter}
-                rightSection={<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12.4198 0.452003L13.4798 1.513L7.70277 7.292C7.6102 7.38516 7.50012 7.45909 7.37887 7.50953C7.25762 7.55998 7.12759 7.58595 6.99627 7.58595C6.86494 7.58595 6.73491 7.55998 6.61366 7.50953C6.49241 7.45909 6.38233 7.38516 6.28977 7.292L0.509766 1.513L1.56977 0.453002L6.99477 5.877L12.4198 0.452003Z" fill="#7A739F" />
-                </svg>}
+                rightSection={
+                  <svg
+                    width="14"
+                    height="8"
+                    viewBox="0 0 14 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12.4198 0.452003L13.4798 1.513L7.70277 7.292C7.6102 7.38516 7.50012 7.45909 7.37887 7.50953C7.25762 7.55998 7.12759 7.58595 6.99627 7.58595C6.86494 7.58595 6.73491 7.55998 6.61366 7.50953C6.49241 7.45909 6.38233 7.38516 6.28977 7.292L0.509766 1.513L1.56977 0.453002L6.99477 5.877L12.4198 0.452003Z"
+                      fill="#7A739F"
+                    />
+                  </svg>
+                }
                 data={[
                   { value: "newest", label: "Newest" },
                   { value: "oldest", label: "Oldest" },
@@ -321,7 +351,6 @@ function RequestsSupervisor() {
                   },
                   wrapper: {
                     width: "132px",
-
                   },
                   item: {
                     color: "var(--color-4)", // Dropdown option text color
@@ -331,7 +360,50 @@ function RequestsSupervisor() {
                   },
 
                   backgroundColor: "var(--color-5)",
+                }}
+              />
 
+              <Select
+                mr={10}
+                placeholder="For Sale"
+                value={listingTypeFilter}
+                onChange={setListingTypeFilter}
+                rightSection={<Dropdown />}
+                data={[
+                  { value: "all", label: "All" },
+                  { value: "rent", label: "For Rent" },
+                  { value: "buy", label: "For Sale" },
+                  { value: "booking", label: "Booking" },
+                ]}
+                styles={{
+                  input: {
+                    width: "132px",
+                    height: "48px",
+                    borderRadius: "15px",
+                    border: "1px solid var(--color-border)",
+                    padding: "14px 24px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    backgroundColor: "var(--color-7)",
+                  },
+
+                  dropdown: {
+                    borderRadius: "15px", // Curved dropdown menu
+                    border: "1.5px solid var(--color-border)",
+                    backgroundColor: "var(--color-7)",
+                  },
+
+                  wrapper: {
+                    width: "132px",
+                  },
+
+                  item: {
+                    color: "var(--color-4)", // Dropdown option text color
+                    "&[data-selected]": {
+                      color: "white", // Selected option text color
+                    },
+                  },
                 }}
               />
             </div>
@@ -347,7 +419,7 @@ function RequestsSupervisor() {
             ) : (
               <>
                 <Grid className={classes.sty} align="center" spacing="xl">
-                  {allListings?.map((listing) =>
+                  {allListings?.map((listing) => (
                     <GridCol
                       span={4}
                       key={listing.id}
@@ -367,7 +439,6 @@ function RequestsSupervisor() {
                         className={classes.card}
                         h={"100%"}
                       >
-
                         <Card.Section radius="md">
                           <Image
                             src={listing.picture_url}
@@ -381,8 +452,8 @@ function RequestsSupervisor() {
                                 listing.status === "pending"
                                   ? PendingStatus
                                   : listing.status === "approved"
-                                    ? AcceptedStatus
-                                    : RejectedStatus
+                                  ? AcceptedStatus
+                                  : RejectedStatus
                               }
                             />
                           </div>
@@ -408,26 +479,25 @@ function RequestsSupervisor() {
                           </div>
                           <div className={classes.listingUtilities}>
                             <div className={classes.listingUtility}>
-                              {listing.rooms === 0 ? null :
+                              {listing.rooms === 0 ? null : (
                                 <>
                                   <div className={classes.utilityImage}>
                                     <Rooms />
                                   </div>
                                   {listing.rooms}
                                 </>
-
-                              }
-
+                              )}
                             </div>
 
                             <div className={classes.listingUtility}>
-                              {listing.bathrooms === 0 ? null : <>
-                                <div className={classes.utilityImage}>
-                                  <Bathrooms />
-                                </div>
-                                {listing.bathrooms}
-                              </>}
-
+                              {listing.bathrooms === 0 ? null : (
+                                <>
+                                  <div className={classes.utilityImage}>
+                                    <Bathrooms />
+                                  </div>
+                                  {listing.bathrooms}
+                                </>
+                              )}
                             </div>
                             <div className={classes.listingUtility}>
                               <div className={classes.utilityImage}>
@@ -463,18 +533,18 @@ function RequestsSupervisor() {
                           <div className={classes.listingDate}>
                             {Math.floor(
                               (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
+                                (1000 * 60 * 60 * 24)
                             ) > 1
                               ? `${Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                (1000 * 60 * 60 * 24)
-                              )} days ago`
+                                  (new Date() - new Date(listing.created_at)) /
+                                    (1000 * 60 * 60 * 24)
+                                )} days ago`
                               : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                (1000 * 60 * 60 * 24)
-                              ) === 1
-                                ? "Yesterday"
-                                : "Today"}
+                                  (new Date() - new Date(listing.created_at)) /
+                                    (1000 * 60 * 60 * 24)
+                                ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                           </div>
                         </div>
                         {/* </div> */}
@@ -505,12 +575,15 @@ function RequestsSupervisor() {
                         )}
                       </Card>
                     </GridCol>
-
-                  )}
+                  ))}
                 </Grid>
 
                 <div ref={ref} style={{ height: 20 }}>
-                  {isFetchingNextPage && <Center><Loader size="sm" /></Center>}
+                  {isFetchingNextPage && (
+                    <Center>
+                      <Loader size="sm" />
+                    </Center>
+                  )}
                 </div>
               </>
             )}
@@ -568,6 +641,7 @@ function RequestsSupervisor() {
         onReset={() => {
           setFilteredListings(listings);
           closeFilterModal();
+          resetFilters();
         }}
       />
     </>

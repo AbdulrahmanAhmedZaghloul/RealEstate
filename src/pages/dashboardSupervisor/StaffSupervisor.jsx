@@ -41,15 +41,26 @@ function StaffSupervisor() {
     picture: null,
     supervisor_id: null,
   });
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-    position: "",
-    phone_number: "",
-    address: "",
-    picture: "",
-  });
+  // const [errors, setErrors] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  //   position: "",
+  //   phone_number: "",
+  //   address: "",
+  //   picture: "",
+  // });
+  
+    const [errors, setErrors] = useState({
+      name: "",
+      email: "",
+      password: "",
+      position: "",
+      phone_number: "",
+      address: "",
+      image: "",
+    });
+  
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [searchedEmployees, setSearchedEmployees] = useState([]);
@@ -131,6 +142,9 @@ function StaffSupervisor() {
         )
     );
   };
+
+    const [previewImage, setPreviewImage] = useState(null);
+
 
   const handleAddUser = async (isSupervisor) => {
     if (!validateForm(newUser)) return;
@@ -294,6 +308,11 @@ function StaffSupervisor() {
 
   // const isSmallScreen = useMediaQuery("(min-width: 1025px)");
 
+  useEffect(() => {
+    if (!addModalOpened) {
+      setPreviewImage(null); // إعادة تعيين الصورة عند إغلاق المودال
+    }
+  }, [addModalOpened]);
   useEffect(() => {
     fetchEmployees();
     fetchDataKPIs();
@@ -541,6 +560,8 @@ function StaffSupervisor() {
         supervisors={supervisors}
         newUser={newUser}
         setNewUser={setNewUser}
+        setErrors={setErrors}
+        setPreviewImage={setPreviewImage}
 
         errors={errors}
       />

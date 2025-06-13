@@ -14,7 +14,7 @@ import {
 import downArrow from "../../assets/downArrow.svg";
 import { validateField } from "../../hooks/Validation/validation";
 import { IconCamera } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, React } from "react";
 
 const AddStaffModal = ({
   opened,
@@ -35,6 +35,42 @@ const AddStaffModal = ({
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
+  const prevOpenedRef = useRef(opened);
+  const defaultNewUser = {
+    name: "",
+    email: "",
+    password: "",
+    address: "",
+    phone_number: "",
+    position: "employee",
+    supervisor_id: null,
+    image: null,
+  };
+  useEffect(() => {
+    if (!opened && prevOpenedRef.current) {
+      // تم إغلاق المودال الآن
+      setNewUser(defaultNewUser);
+      setErrors({
+        name: "",
+        email: "",
+        password: "",
+        address: "",
+        phone_number: "",
+        image: "",
+      });
+      setPreviewImage(null);
+    }
+
+    prevOpenedRef.current = opened;
+  }, [opened]);
+  //  useEffect(() => {
+  //     if (opened) {
+  //       form.reset(); // 👈 Reset form fields
+  //     }
+  //     if (onClose) {
+  //       form.reset(); // 👈 Reset form fields
+  //     }
+  //   }, [opened]);
   return (
     <Modal
       opened={opened}
@@ -52,13 +88,18 @@ const AddStaffModal = ({
       }}
     >
       <div style={{ padding: "10px 28px" }}>
-
         {/* Input with Image Preview */}
-        <div style={{ position: "relative", width: 80, height: 80, margin: "15px 0" }}>
+        <div
+          style={{
+            position: "relative",
+            width: 80,
+            height: 80,
+            margin: "15px 0",
+          }}
+        >
           <input
             type="file"
             accept="image/*"
-
             onChange={(e) => {
               const file = e.target.files[0];
 
@@ -298,7 +339,8 @@ const AddStaffModal = ({
             if (!validateSaudiPhoneNumber(newUser.phone_number)) {
               setErrors({
                 ...errors,
-                phone_number: "Please enter a valid Saudi phone number starting with 5.",
+                phone_number:
+                  "Please enter a valid Saudi phone number starting with 5.",
               });
               return;
             }
@@ -308,7 +350,6 @@ const AddStaffModal = ({
         >
           {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
         </Button>
-
       </div>
     </Modal>
   );

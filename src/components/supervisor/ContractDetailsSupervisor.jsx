@@ -313,7 +313,7 @@ function ContractDetailsSupervisor() {
                       <img
                         key={contract.real_estate.images[0].id}
                         src={contract.real_estate.images[0].url}
-                        alt={contract.real_estate.title}
+                        // alt={contract.real_estate.title}
                         className={classes.mainImage}
                         onClick={() => {
                           setSelectedImageIndex(0); // لأنها تاني صورة في الـ array
@@ -351,7 +351,7 @@ function ContractDetailsSupervisor() {
                       <img
                         key={image.id}
                         src={image.url}
-                        alt={contract.real_estate.title}
+                        // alt={contract.real_estate.title}
                         className={classes.mainImage}
                         onClick={() => {
                           setSelectedImageIndex(index + 1); // +1 because we skipped primary
@@ -818,7 +818,7 @@ function ContractDetailsSupervisor() {
               {/* Display the selected image */}
               <img
                 src={contract.real_estate.images[selectedImageIndex].url}
-                alt={contract.real_estate.title}
+                // alt={contract.real_estate.title}
                 style={{
                   width: "100%",
                   height: "400px",
@@ -1006,78 +1006,6 @@ function ContractDetailsSupervisor() {
         contract={contract}
         onEditSuccess={fetchContract}
       />
-
-      {/* <Modal
-        opened={editModalOpened}
-        onClose={closeEditModal}
-        title="Edit Contract"
-        size="xl"
-        radius="lg"
-        styles={{
-          title: {
-            fontSize: 20,
-            fontWeight: 600,
-            color: "var(--color-3)",
-          },
-        }}
-        centered
-      >
-        <form onSubmit={form.onSubmit(handleEditContract)}>
-          <Stack>
-            <TextInput label="Title" {...form.getInputProps("title")} />
-            <Textarea
-              label="Description"
-              {...form.getInputProps("description")}
-            />
-            <NumberInput label="Price" {...form.getInputProps("price")} />
-            <NumberInput
-              label="Down Payment"
-              {...form.getInputProps("down_payment")}
-            />
-            <Select
-              label="Contract Type"
-              data={[
-                { value: "sale", label: "Sale" },
-                { value: "rent", label: "Rent" },
-              ]}
-              {...form.getInputProps("contract_type")}
-            />
-            <TextInput
-              label="Customer Name"
-              {...form.getInputProps("customer_name")}
-            />
-            <TextInput
-              label="Customer Phone"
-              {...form.getInputProps("customer_phone")}
-            />
-            <TextInput
-              label="Creation Date"
-              type="date"
-              {...form.getInputProps("creation_date")}
-            />
-            <TextInput
-              label="Effective Date"
-              type="date"
-              {...form.getInputProps("effective_date")}
-            />
-            <TextInput
-              label="Expiration Date"
-              type="date"
-              {...form.getInputProps("expiration_date")}
-            />
-            <TextInput
-              label="Release Date"
-              type="date"
-              {...form.getInputProps("release_date")}
-            />
-            <TextInput label="Location" {...form.getInputProps("location")} />
-
-            <Button type="submit" fullWidth mt="xl" bg={"#1e3a8a"} radius="md">
-              Save
-            </Button>
-          </Stack>
-        </form>
-      </Modal> */}
     </>
   );
 }

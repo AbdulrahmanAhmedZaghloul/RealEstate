@@ -406,7 +406,7 @@ function Properties() {
                       </div>
 
                       <div className={classes.listingEmployee}>
-                        {t.Category}: {listing.category}
+                        {t.Category}: {listing.category} / {listing.subcategory.name}
                       </div>
                       <div className={classes.listingEmployee}>
                         {t.Employee}: {listing.employee?.name}
@@ -464,6 +464,7 @@ function Properties() {
         onReset={() => {
           setFilteredListings(listings);
           closeFilterModal();
+          resetFilters()
         }}
       />
     </>

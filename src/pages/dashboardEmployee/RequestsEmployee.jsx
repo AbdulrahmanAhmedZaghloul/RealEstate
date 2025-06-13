@@ -1,19 +1,6 @@
 
 import { useEffect, useState } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  Center,
-  Grid,
-  Group,
-  Image,
-  Text,
-  Select,
-  Modal,
-  Textarea,
-  Loader,
-  useMantineColorScheme,
+import {Badge,Button,Card,Center,Grid,Group,Image,Text,Select,Modal,Textarea,Loader,useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";

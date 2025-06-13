@@ -156,6 +156,7 @@
 }
 
 .ContractsDescription {
+  margin-top: 20px;
   margin-bottom: 0;
   font-weight: 600;
   color: var(--color-2);

@@ -56,7 +56,6 @@
 /* Burger hidden by default */
 .burger {
   display: none;
-  
 }
 
 /* Drawer styles */
@@ -112,7 +111,9 @@
 
   .burger {
     display: block;
-    color: #fff !important;
+    /* color: #fff !important;
+     */
+     cursor: pointer;
   }
 
   .drawerLinks .navLinks {

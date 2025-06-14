@@ -8,16 +8,14 @@ import mobile from "../assets/Home/Home (2) 1.png";
 import mobile_2 from "../assets/Home/iphone 18.png";
 import mobile_3 from "../assets/Home/Home (2) 1.png";
 
-// import mop from "../assets/header/84ab9af47301aaabd64b04e9ab1be9c9.png";
-import { Grid, GridCol } from "@mantine/core";
+ import { Grid, GridCol } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 
 function Home() {
   const navigate = useNavigate();
 
-  // const isSmallScreen = useMediaQuery("(min-width: 1020px)");
-
+ 
   useEffect(() => {
     if (location.pathname === "/") {
       console.log(location.pathname);

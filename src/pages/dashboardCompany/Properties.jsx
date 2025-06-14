@@ -1,9 +1,15 @@
-
-
 //Properties
 import { useEffect, useState } from "react";
-import { useInView } from 'react-intersection-observer';
-import { Card, Center, Text, Select, Loader, Grid, GridCol } from "@mantine/core";
+import { useInView } from "react-intersection-observer";
+import {
+  Card,
+  Center,
+  Text,
+  Select,
+  Loader,
+  Grid,
+  GridCol,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import classes from "../../styles/realEstates.module.css";
 import { useAuth } from "../../context/authContext";
 import { useTranslation } from "../../context/LanguageContext";
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from "@tanstack/react-query";
 
 //Component Imports
 import Notifications from "../../components/company/Notifications";
@@ -45,14 +51,11 @@ function Properties() {
     category: "",
     subcategory: "",
   });
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties(
-    listingTypeFilter === "all" ? "" : listingTypeFilter,
-    filters
-  );
-  //   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties(
-  //   listingTypeFilter === "all" ? "" : listingTypeFilter,
-  //   filters
-  // );
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useProperties(
+      listingTypeFilter === "all" ? "" : listingTypeFilter,
+      filters
+    ); 
   const resetFilters = () => {
     setFilters({
       location: "",
@@ -62,7 +65,6 @@ function Properties() {
       category: "",
       subcategory: "",
       // employee: "", // 👈 إعادة تعيين الموظف
-
     });
   };
   const {
@@ -89,15 +91,16 @@ function Properties() {
   const [subcategories, setSubcategories] = useState([]); //Subcategories state
   const [search, setSearch] = useState(""); //Search bar value state
   const [filter, setFilter] = useState(""); //Filter overall value state
-  const [opened, { open, close }] = useDisclosure(false); 
+  const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [filteredListings, setFilteredListings] = useState([]);
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
-  const allListings = data?.pages.flatMap(page =>
-    page.data.listings.filter(listing => listing.status === "approved")
-  ) || [];
+  const allListings =
+    data?.pages.flatMap((page) =>
+      page.data.listings.filter((listing) => listing.status === "approved")
+    ) || [];
   const [ref, inView] = useInView();
 
   useEffect(() => {
@@ -106,31 +109,11 @@ function Properties() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
   // Form validation using Mantine's useForm
-  // const searchedListings = allListings
-  //   .filter((listing) =>
-  //     listing.title.toLowerCase().includes(search.toLowerCase())
-  //   ).filter((listing) => {
-  //     if (listingTypeFilter === "rent") return listing.listing_type === "rent";
-  //     if (listingTypeFilter === "buy") return listing.listing_type === "buy";
-  //     if (listingTypeFilter === "booking") return listing.listing_type === "booking";
-  //     return true; // all
-  //   })
-  //   .sort((a, b) => {
-  //     if (filter === "newest")
-  //       return new Date(b.created_at) - new Date(a.created_at);
-  //     if (filter === "oldest")
-  //       return new Date(a.created_at) - new Date(b.created_at);
-  //     if (filter === "highest") return b.price - a.price;
-  //     if (filter === "lowest") return a.price - b.price;
-  //     return 0;
-  //   });
-
 
   const handleAddProperty = (values) => {
-
     // داخل أي كومبوننت
-    queryClient.invalidateQueries(['listingsRealEstate']);
-    queryClient.invalidateQueries(['listings']);
+    queryClient.invalidateQueries(["listingsRealEstate"]);
+    queryClient.invalidateQueries(["listings"]);
 
     mutation.mutate(values);
   };
@@ -143,9 +126,7 @@ function Properties() {
     closeFilterModal();
   };
 
-
   useEffect(() => {
-
     setEmployees(employeesData?.data?.employees || []);
     setCategories(categoriesData?.data?.categories || []);
     setSubcategories(
@@ -154,7 +135,6 @@ function Properties() {
         .flat() || []
     );
   }, [employeesData, categoriesData]);
-
 
   // Scroll-based pagination
   useEffect(() => {
@@ -170,8 +150,6 @@ function Properties() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-
 
   const mutation = useAddProperty(user.token, categories, close);
   const isAddPropertyLoading = mutation.isPending;
@@ -204,28 +182,31 @@ function Properties() {
           <span className={classes.title}>{t.Properties}</span>
           <Notifications />
         </div>
-        <header className={`${classes.header} ${isSticky ? classes.sticky : ""}`}>
-
-
+        <header
+          className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
+        >
           <div className={classes.controls}>
-            <div className={classes.divSearch}>
-              <input
-                className={classes.search}
-                placeholder={t.Search}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <Search />
-            </div>
+            <div className={classes.flexSearch}>
+              <div className={classes.divSearch}>
+                <input
+                  className={classes.search}
+                  placeholder={t.Search}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <Search />
+              </div>
 
-            <button
-              variant="default"
-              radius="md"
-              onClick={openFilterModal}
-              className={classes.filter}
-            >
-              <FilterIcon />
-            </button>
+              <button
+                variant="default"
+                radius="md"
+                onClick={openFilterModal}
+                className={classes.filter}
+              >
+                <FilterIcon />
+              </button>
+
+            </div>
             <div className={classes.addAndSort}>
               <Select
                 mr={10}
@@ -269,7 +250,6 @@ function Properties() {
                     },
                   },
                 }}
-
               />
               {/* New Sale Status Filter Select */}
               <Select
@@ -313,16 +293,20 @@ function Properties() {
                       color: "white", // Selected option text color
                     },
                   },
-                }} />
-              <button style={{
-                cursor: "pointer",
-              }} className={classes.add} onClick={open}>
+                }}
+              />
+              <button
+                style={{
+                  cursor: "pointer",
+                }}
+                className={classes.add}
+                onClick={open}
+              >
                 <AddIcon /> {t.Add}
               </button>
             </div>
           </div>
         </header>
-
 
         {allListings.length === 0 && !isLoading ? (
           <Center>
@@ -330,11 +314,15 @@ function Properties() {
           </Center>
         ) : (
           <>
-
-            <Grid className={classes.sty} align="center" spacing="xl">
+            <Grid
+              className={classes.sty}
+              align="center"
+              spacing="xl"
+              // justify="center"
+            >
               {allListings.map((listing) => (
                 <GridCol
-                  span={4}
+                  span={{ base: 12, lg: 4, md: 6, sm: 6 }}
                   key={listing.id}
                   onClick={() => {
                     navigate(`/dashboard/Properties/${listing.id}`);
@@ -343,59 +331,63 @@ function Properties() {
                     cursor: "pointer",
                   }}
                 >
-                  <Card className={classes.card}
-                  >
+                  <Card className={classes.card}>
                     <Card.Section radius="md">
                       <div className={classes.listingImage}>
-
-                        <LazyImage src={listing.picture_url} alt={listing.title} height={200} radius="md" />
+                        <LazyImage
+                          src={listing.picture_url}
+                          alt={listing.title}
+                          height={200}
+                          radius="md"
+                        />
 
                         <p className={classes.listingfor}>
-                          {
-                            listing.listing_type
-                          }
-
+                          {listing.listing_type}
                         </p>
-
                       </div>
-
                     </Card.Section>
 
-                    <div style={{ marginTop: "16px", display: "flex", flexWrap: "wrap", }}>
+                    <div
+                      style={{
+                        marginTop: "16px",
+                        display: "flex",
+                        flexWrap: "wrap",
+                      }}
+                    >
                       <span className={classes.listingPrice}>
                         <span className="icon-saudi_riyal">&#xea; </span>{" "}
                         {parseFloat(listing.price)?.toLocaleString()}
                       </span>
 
                       <div className={classes.downPaymentBadge}>
-                        {listing.down_payment} %
-                        {t.DownPayment}
+                        {listing.down_payment} %{t.DownPayment}
                       </div>
                     </div>
 
                     <div style={{ display: "block" }}>
-                      <div className={classes.listingTitle}>{listing.title}</div>
+                      <div className={classes.listingTitle}>
+                        {listing.title}
+                      </div>
                       <div className={classes.listingUtilities}>
                         <div className={classes.listingUtility}>
-                          {listing.rooms === 0 ? null :
+                          {listing.rooms === 0 ? null : (
                             <>
                               <div className={classes.utilityImage}>
                                 <Rooms />
                               </div>
                               {listing.rooms}
                             </>
-
-                          }
-
+                          )}
                         </div>
                         <div className={classes.listingUtility}>
-                          {listing.bathrooms === 0 ? null : <>
-                            <div className={classes.utilityImage}>
-                              <Bathrooms />
-                            </div>
-                            {listing.bathrooms}
-                          </>}
-
+                          {listing.bathrooms === 0 ? null : (
+                            <>
+                              <div className={classes.utilityImage}>
+                                <Bathrooms />
+                              </div>
+                              {listing.bathrooms}
+                            </>
+                          )}
                         </div>
                         <div className={classes.listingUtility}>
                           <div className={classes.utilityImage}>
@@ -406,43 +398,45 @@ function Properties() {
                       </div>
 
                       <div className={classes.listingEmployee}>
-                        {t.Category}: {listing.category} / {listing.subcategory.name}
+                        {t.Category}: {listing.category} /{" "}
+                        {listing.subcategory.name}
                       </div>
                       <div className={classes.listingEmployee}>
                         {t.Employee}: {listing.employee?.name}
                       </div>
                       <div className={classes.listingLocation}>
-
                         {listing.location}
                       </div>
                       <div className={classes.listingDate}>
                         {Math.floor(
                           (new Date() - new Date(listing.created_at)) /
-                          (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                         ) > 1
                           ? `${Math.floor(
-                            (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
-                          )} days ago`
+                              (new Date() - new Date(listing.created_at)) /
+                                (1000 * 60 * 60 * 24)
+                            )} days ago`
                           : Math.floor(
-                            (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
-                          ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() - new Date(listing.created_at)) /
+                                (1000 * 60 * 60 * 24)
+                            ) === 1
+                          ? "Yesterday"
+                          : "Today"}
                       </div>
                     </div>
                   </Card>
-
                 </GridCol>
               ))}
             </Grid>
             <div ref={ref} style={{ height: 20 }}>
-              {isFetchingNextPage && <Center><Loader size="sm" /></Center>}
+              {isFetchingNextPage && (
+                <Center>
+                  <Loader size="sm" />
+                </Center>
+              )}
             </div>
           </>
         )}
-
       </Card>
 
       <AddPropertyModal
@@ -462,9 +456,9 @@ function Properties() {
         subcategories={subcategories}
         onFilter={handleFilterProperties}
         onReset={() => {
-          setFilteredListings(listings);
+          setFilteredListings(allListings);
           closeFilterModal();
-          resetFilters()
+          resetFilters();
         }}
       />
     </>

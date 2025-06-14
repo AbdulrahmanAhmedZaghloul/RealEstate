@@ -13,10 +13,21 @@
 
 .controls {
   display: flex;
-
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: var(--mantine-spacing-lg);
   margin-top: 24px;
   width: 100%;
+}
+
+.flexSearch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .divSearch {
@@ -28,7 +39,7 @@
 .header {
   width: 100%;
   /* background-color: var(--color-7);  */
-  z-index: 100; 
+  z-index: 100;
   display: flex;
   justify-content: center;
   /* ليكون فوق باقي المحتوى */
@@ -45,7 +56,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--color-5);
 }
-
 
 .divSearch svg {
   position: absolute;
@@ -74,13 +84,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 .addAndSort {
   margin-left: auto;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -145,7 +155,6 @@
   display: flex;
   align-items: center;
   margin-right: 20px;
-
 }
 
 .svgSpan svg {
@@ -154,7 +163,6 @@
 
 .svgSpan {
   margin-top: 5px;
-  ;
 }
 
 .svgSpan span {
@@ -371,7 +379,8 @@ justify-content: center; */
 
 .section {
   padding: var(--mantine-spacing-md);
-  border-top: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-top: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 
 .icon {
@@ -387,17 +396,22 @@ justify-content: center; */
 
 .contractCard {
   display: flex;
+  flex-wrap: wrap;
   border: 1px solid var(--color-border);
   background-color: var(--color-7);
   border-radius: 16px;
   cursor: pointer;
+    overflow: hidden;
+
 }
 
-
 .contractImage {
-  width: 315px;
+  /* width: 315px; */
   height: 256px;
+  /* height: 60%; */
   border-radius: 16px 0 0 16px;
+  overflow: hidden;
+  object-fit: cover;
 }
 
 .contractDetails {
@@ -440,6 +454,9 @@ justify-content: center; */
 
 .contractInfo {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  /* justify-content: center; */
   gap: 8px;
   font-size: 14px;
   color: var(--color-2);
@@ -487,20 +504,21 @@ justify-content: center; */
     display: flex;
   }
 
-  .card {
+  /* .card {
     width: 353px;
     margin-left: auto;
     margin-right: auto;
-  }
+  } */
 
   .card Image {
-    width: 353px !important;
+    width: 100%;
+    /* width: 353px !important; */
   }
 
-  .contractImage {
+  /* .contractImage {
     height: 222px;
     width: 30%;
-  }
+  } */
 
   .contractPrice {
     overflow: hidden;

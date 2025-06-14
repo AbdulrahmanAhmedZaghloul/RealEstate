@@ -72,6 +72,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
   width: 100%;
 }
 
@@ -175,6 +177,11 @@
 
 .svgCol {
   display: flex;
+  
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .svgSpan div {
@@ -317,8 +324,7 @@
   vertical-align: middle;
   color: var(--color-3);
   margin-top: 20px;
-  ;
-}
+ }
 
 .listing {
   font-family: Poppins;
@@ -474,13 +480,8 @@
   .Description,
   .listing {
     margin-left: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
-
-  .BoxImage {
-    width: 80%;
-    margin: 0;
-    margin-left: 10px;
-  }
+ 
 
 }

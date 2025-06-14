@@ -14,6 +14,7 @@ const fetchListings = async ({
   category = "",
   subcategory = "",
 }) => {
+  
   const params = new URLSearchParams({
     limit: 3,
     cursor,
@@ -24,22 +25,18 @@ const fetchListings = async ({
     ...(priceMax && { price_max: priceMax }),
     ...(category && { category_id: category }),
     ...(subcategory && { subcategory_id: subcategory }),
-      // ...(employee && { employee_id: employee }),  
-
+    // ...(employee && { employee_id: employee }),
   });
 
   const { data } = await axiosInstance.get(`listings/cursor?${params}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-console.log("Fetched Listings Data:", data);
+  console.log("Fetched Listings Data:", data);
 
   return data;
 };
 
-export const useProperties = (
-  listingType,
-  filters = {}
-) => {
+export const useProperties = (listingType, filters = {}) => {
   const { user } = useAuth();
 
   return useInfiniteQuery({
@@ -60,7 +57,6 @@ export const useProperties = (
   });
 };
 
-
 // //  useProperties.js
 // import { useInfiniteQuery } from "@tanstack/react-query";
 // import axiosInstance from "../../api/config";
@@ -74,7 +70,7 @@ export const useProperties = (
 //     }
 //   );
 //   console.log(data);
-  
+
 //   return data;
 // };
 

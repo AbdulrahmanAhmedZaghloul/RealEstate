@@ -1,4 +1,13 @@
-import { Card, Center, Loader, Text, Image, Select } from "@mantine/core";
+import {
+  Card,
+  Center,
+  Loader,
+  Text,
+  Image,
+  Select,
+  GridCol,
+  Grid,
+} from "@mantine/core";
 import classes from "../../styles/realEstates.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -30,7 +39,6 @@ import BathsIcon from "../../components/icons/BathsIcon";
 import BedsIcon from "../../components/icons/BedsIcon";
 import { usePropertiesContracts } from "../../hooks/queries/usePropertiesContracts";
 function Contracts() {
-
   const {
     data: listingsData,
     isLoading: listingsLoading,
@@ -69,12 +77,12 @@ function Contracts() {
   console.log(contractsData);
 
   useEffect(() => {
-
     setContracts(contractsData?.contracts.data || []);
 
     setApprovedListings(
       listingsData?.data?.listings?.filter(
-        (listing) => listing.status === "approved" && listing.selling_status === 0
+        (listing) =>
+          listing.status === "approved" && listing.selling_status === 0
       ) || []
     );
   }, [contractsData, listingsData]);
@@ -132,7 +140,8 @@ function Contracts() {
   const searchedContracts = filteredContracts
     .filter((contract) =>
       contract.title.toLowerCase().includes(search.toLowerCase())
-    ).filter((contract) => {
+    )
+    .filter((contract) => {
       if (saleFilter === "sale") return contract.contract_type === "sale";
       if (saleFilter === "rental") return contract.contract_type === "rental";
       if (saleFilter === "booking") return contract.contract_type === "booking";
@@ -150,7 +159,6 @@ function Contracts() {
         return 0;
       }
     });
-
 
   useEffect(() => {
     setFilteredContracts(contracts);
@@ -188,28 +196,29 @@ function Contracts() {
         </div>
 
         <div className={classes.controls}>
-          <div className={classes.divSearch}>
-            <input
-              className={classes.search}
-              placeholder={t.Search}
-              value={search}
+          <div className={classes.flexSearch}>
+            <div className={classes.divSearch}>
+              <input
+                className={classes.search}
+                placeholder={t.Search}
+                value={search}
+                radius="md"
+                onChange={(e) => setSearch(e.target.value)}
+              />
+
+              <Search />
+            </div>
+
+            <button
+              variant="default"
               radius="md"
-              onChange={(e) => setSearch(e.target.value)}
-            />
-
-            <Search />
+              onClick={openFilterModal}
+              className={classes.filter}
+              style={{ cursor: "pointer" }}
+            >
+              <FilterIcon />
+            </button>
           </div>
-
-
-          <button
-            variant="default"
-            radius="md"
-            onClick={openFilterModal}
-            className={classes.filter}
-            style={{ cursor: "pointer" }}
-          >
-            <FilterIcon />
-          </button>
 
           <div className={classes.addAndSort}>
             <Select
@@ -217,10 +226,7 @@ function Contracts() {
               placeholder={t.Sortby}
               value={filter}
               onChange={setFilter}
-              rightSection={
-
-                <Dropdown />
-              }
+              rightSection={<Dropdown />}
               data={[
                 { value: "newest", label: "Newest" },
                 { value: "oldest", label: "Oldest" },
@@ -256,7 +262,6 @@ function Contracts() {
                 },
               }}
             />
-
 
             {/* New Sale Status Filter Select */}
             <Select
@@ -298,8 +303,8 @@ function Contracts() {
                     color: "white", // Selected option text color
                   },
                 },
-              }} />
-
+              }}
+            />
 
             <button
               className={classes.add}
@@ -310,13 +315,12 @@ function Contracts() {
                 border: "1px solid var(--color-border)",
               }}
             >
-              <span style={{
-
-                marginRight: "10px",
-
-              }}>
+              <span
+                style={{
+                  marginRight: "10px",
+                }}
+              >
                 <AddIcon />
-
               </span>
               {t.Add}
             </button>
@@ -330,7 +334,7 @@ function Contracts() {
             </Center>
           ) : (
             searchedContracts.map((contract) => (
-              <div
+              <Grid
                 key={contract.id}
                 className={classes.contractCard}
                 onClick={() => navigate(`/dashboard/Contracts/${contract.id}`)}
@@ -341,7 +345,10 @@ function Contracts() {
                 }}
               >
                 {console.log(contract)}
-                <div className={classes.contractImage}>
+                <GridCol
+                  span={{ base: 12, lg: 4, md: 6, sm: 12 }}
+                  className={classes.contractImage}
+                >
                   <div className={classes.listingImage}>
                     <Image
                       src={contract.real_estate.image}
@@ -351,12 +358,13 @@ function Contracts() {
                     <p className={classes.listingfor}>
                       {contract.contract_type}
                     </p>
-
                   </div>
-                </div>
+                </GridCol>
 
-
-                <div className={classes.contractDetails}>
+                <GridCol
+                  span={{ base: 12, lg: 8, md: 6, sm: 12 }}
+                  className={classes.contractDetails}
+                >
                   <div
                     style={{
                       display: "flex",
@@ -371,26 +379,31 @@ function Contracts() {
                       </span>
                     </div>
                     <span className={classes.contractDownPayment}>
-                      {contract.down_payment}
-                      % {t.DownPayment}
+                      {contract.down_payment}% {t.DownPayment}
                     </span>
                   </div>
 
-                  <div className={classes.contractTitle}>{contract.real_estate.title}</div>
+                  <div className={classes.contractTitle}>
+                    {contract.real_estate.title}
+                  </div>
                   <div className={classes.contractInfo}>
-                    {contract.real_estate.rooms === 0 ? null : <span className={classes.svgSpan}>
-                      <div>
-                        <BedsIcon />
-                        <span>{contract.real_estate.rooms} Beds</span>
-                      </div>
-                    </span>}
+                    {contract.real_estate.rooms === 0 ? null : (
+                      <span className={classes.svgSpan}>
+                        <div>
+                          <BedsIcon />
+                          <span>{contract.real_estate.rooms} Beds</span>
+                        </div>
+                      </span>
+                    )}
 
-                    {contract.real_estate.bathrooms === 0 ? null : <span className={classes.svgSpan}>
-                      <div>
-                        <BathsIcon />
-                        <span>{contract.real_estate.bathrooms} Baths</span>
-                      </div>
-                    </span>}
+                    {contract.real_estate.bathrooms === 0 ? null : (
+                      <span className={classes.svgSpan}>
+                        <div>
+                          <BathsIcon />
+                          <span>{contract.real_estate.bathrooms} Baths</span>
+                        </div>
+                      </span>
+                    )}
 
                     <span className={classes.svgSpan}>
                       <div>
@@ -403,10 +416,12 @@ function Contracts() {
                     <span className={classes.svgSpan}>
                       <div>
                         <CategoryIcon />
-                        <span>{contract.real_estate.category} / {contract.real_estate.type}</span>
+                        <span>
+                          {contract.real_estate.category} /{" "}
+                          {contract.real_estate.type}
+                        </span>
                       </div>
                     </span>
-
                   </div>
                   <div className={classes.contractEmployee}>
                     <span>
@@ -416,28 +431,28 @@ function Contracts() {
                   <span className={classes.contractInfo}>
                     {contract.real_estate.location}
                   </span>
+
                   <div className={classes.contractDate}>
                     {Math.floor(
                       (new Date() - new Date(contract.creation_date)) /
-                      (1000 * 60 * 60 * 24)
+                        (1000 * 60 * 60 * 24)
                     ) > 1
                       ? `${Math.floor(
-                        (new Date() - new Date(contract.creation_date)) /
-                        (1000 * 60 * 60 * 24)
-                      )} days ago`
+                          (new Date() - new Date(contract.creation_date)) /
+                            (1000 * 60 * 60 * 24)
+                        )} days ago`
                       : Math.floor(
-                        (new Date() - new Date(contract.creation_date)) /
-                        (1000 * 60 * 60 * 24)
-                      ) === 1
-                        ? "Yesterday"
-                        : "Today"}
+                          (new Date() - new Date(contract.creation_date)) /
+                            (1000 * 60 * 60 * 24)
+                        ) === 1
+                      ? "Yesterday"
+                      : "Today"}
                   </div>
-                </div>
-              </div>
+                </GridCol>
+              </Grid>
             ))
           )}
         </div>
-
       </Card>
 
       <AddContractsModal

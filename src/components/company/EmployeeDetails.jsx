@@ -22,8 +22,8 @@ import { IconEye, IconEyeOff } from "@tabler/icons-react"; // أو أي مكتب
 import EditIcon from "../icons/edit";
 import { useQueryClient } from "@tanstack/react-query";
 import { validateField } from "../../hooks/Validation/validation";
-// import DeleteIcon from "../icons/DeleteIcon";
-
+import DeleteIcon from "../icons/DeleteIcon";
+ 
 function EmployeeDetails() {
   const [employee, setEmployee] = useState(null);
   const [employeeListings, setEmployeeListings] = useState([]);
@@ -452,7 +452,7 @@ function EmployeeDetails() {
           }}
           onClick={openDeleteModal}
           className={classes.deleteIcon}>
-          {/* <DeleteIcon /> */}
+          <DeleteIcon />
         </span>
 
       </div>
@@ -491,19 +491,19 @@ function EmployeeDetails() {
             <h3 style={{
             }}>{employee.supervisor.name}</h3>
           </Grid.Col>
-          <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
+          <Grid.Col span={isMobile ? 12 : 3} className={classes.gridCol}>
             <h2 style={{
             }}>{t.Phone}</h2>
             <h3 style={{
             }}> {employee.phone_number} </h3>
           </Grid.Col>
-          <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
+          <Grid.Col span={isMobile ? 12 : 3} className={classes.gridCol}>
             <h2 style={{
             }}>{t.CreatedAt}</h2>
             <h3 style={{
             }}>{new Date(employee.created_at).toLocaleDateString("en-GB")}</h3>
           </Grid.Col>
-          <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
+          <Grid.Col span={isMobile ?12 : 3} className={classes.gridCol}>
             <h2 style={{
             }}>{t.address}</h2>
             <h3 style={{
@@ -521,10 +521,12 @@ function EmployeeDetails() {
         <div style={{
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
         }}
-          className={classes.card}>
-          <div style={{
-          }}
-            className={classes.cardTitle}>{t.Selling}</div>
+          className={classes.card}
+          >
+          <div  
+            className={classes.cardTitle}>
+              
+              {t.Selling}</div>
           <div style={{
           }} className={classes.cardCount}>
             {kpiData?.performance_metrics?.sales?.count}

@@ -292,7 +292,7 @@ function Profile() {
                   {name}
                 </Text>
               </div>
-              <div onClick={openFormModal} style={{ cursor: "pointer" }}>
+              <div  className={classes.Edit} onClick={openFormModal} style={{ cursor: "pointer" }}>
                 <EditIcon />
               </div>
             </div>

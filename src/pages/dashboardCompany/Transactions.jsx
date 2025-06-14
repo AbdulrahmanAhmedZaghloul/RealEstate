@@ -1,6 +1,23 @@
 import { useEffect, useState } from "react";
 import {
-  Badge, Button, Card, Center, Grid, Group, Image, Text, Select, Input, Stack, Modal, TextInput, NumberInput, FileInput, Textarea, Loader,
+  Badge,
+  Button,
+  Card,
+  Center,
+  Grid,
+  Group,
+  Image,
+  Text,
+  Select,
+  Input,
+  Stack,
+  Modal,
+  TextInput,
+  NumberInput,
+  FileInput,
+  Textarea,
+  Loader,
+  GridCol,
 } from "@mantine/core";
 import { useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -10,12 +27,6 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 import { notifications } from "@mantine/notifications";
-import Filter from "../../assets/dashboard/filter.svg";
-// import FiltersModal from "../../components/modals/filterPropertiesModal";
-import downArrow from "../../assets/downArrow.svg";
-import area from "../../assets/area.svg";
-import rooms from "../../assets/rooms.svg";
-import bathrooms from "../../assets/bathrooms.svg";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import Notifications from "../../components/company/Notifications";
 import { useTranslation } from "../../context/LanguageContext";
@@ -32,6 +43,8 @@ import Area from "../../components/icons/area";
 import Bathrooms from "../../components/icons/bathrooms";
 import Rooms from "../../components/icons/rooms";
 import FiltersModal from "./FiltersModal";
+import { useInView } from "react-intersection-observer";
+import { useEmployees } from "../../hooks/queries/useEmployees";
 
 const rejectionReasons = [
   {
@@ -45,13 +58,34 @@ const rejectionReasons = [
   { value: "Other", label: "Other" },
 ];
 function Transactions() {
-  const {
-    data: listingsData,
-    isLoading: listingsLoading,
-    isError: isListingsError,
-    error: listingsError,
-  } = usePropertiesContracts();
-
+  // const {
+  //   data: listingsData,
+  //   isLoading: listingsLoading,
+  //   isError: isListingsError,
+  //   error: listingsError,
+  // } = usePropertiesContracts();
+    const [listingTypeFilter, setListingTypeFilter] = useState("all");
+  
+  const [filters, setFilters] = useState({
+    location: "",
+    rooms: "",
+    priceMin: "",
+    priceMax: "",
+    category: "",
+    subcategory: "",
+  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useProperties(
+      listingTypeFilter === "all" ? "" : listingTypeFilter,
+      filters
+    );
+    
+      const {
+        data: employeesData,
+        isLoading: employeesLoading,
+        isError: isEmployeesError,
+        error: employeesError,
+      } = useEmployees();
   const {
     data: categoriesData,
     isLoading: categoriesLoading,
@@ -59,14 +93,13 @@ function Transactions() {
     error: categoriesError,
   } = useCategories();
 
-  const isLoading = listingsLoading || categoriesLoading;
-  const isError = isListingsError || isCategoriesError;
-  const error = listingsError || categoriesError;
-
+ 
+  const isLoading = employeesLoading || categoriesLoading;
+  const isError = isEmployeesError || isCategoriesError;
+  const error = employeesError || categoriesError;
   const [listings, setListings] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
-  const [opened, { open, close }] = useDisclosure(false);
   const [modalOpened, setModalOpened] = useState(false);
   const [selectedListingId, setSelectedListingId] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("");
@@ -89,8 +122,6 @@ function Transactions() {
 
   const queryClient = useQueryClient();
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
-
-  // const queryClient = useQueryClient();
 
   // Form validation using Mantine's useForm
   const form = useForm({
@@ -138,18 +169,14 @@ function Transactions() {
       return 0;
     });
 
-
-
   // Reset currentPage to 1 when the search query changes
-
-
 
   useEffect(() => {
     setFilteredListings(listings);
   }, [listings]);
 
   const updateStatus = async (id, newStatus, reason) => {
-    lo
+    lo;
     setLoading(true);
     await axiosInstance
       .post(
@@ -161,7 +188,6 @@ function Transactions() {
         { headers: { Authorization: `Bearer ${user.token}` } }
       )
       .then(() => {
-
         notifications.show({
           title: "Success",
           message: "Listing status updated successfully",
@@ -196,7 +222,6 @@ function Transactions() {
 
     queryClient.invalidateQueries({ queryKey: ["listingsRealEstate"] });
     queryClient.invalidateQueries({ queryKey: ["listings"] });
-
   };
 
   const handleRejectSubmit = () => {
@@ -209,16 +234,29 @@ function Transactions() {
       setOtherReason("");
     }
   };
-
-
-  useEffect(() => {
-    setListings(
-      listingsData?.data?.listings.filter((listing) => listing.status === "pending") || []
-    );
-    setCategories(categoriesData?.data?.categories || []);
-  }, [listingsData, categoriesData]);
-
-
+  const resetFilters = () => {
+    setFilters({
+      location: "",
+      rooms: "",
+      priceMin: "",
+      priceMax: "",
+      category: "",
+      subcategory: "",
+      // employee: "", // 👈 إعادة تعيين الموظف
+    });
+  };
+  
+    const allListings =
+      data?.pages.flatMap((page) =>
+        page.data.listings.filter((listing) => listing.status === "pending")
+      ) || [];
+    const [ref, inView] = useInView();
+  
+    useEffect(() => {
+      if (inView && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
   if (isLoading) {
     return (
       <div
@@ -246,33 +284,26 @@ function Transactions() {
         </div>
 
         <div className={classes.controls}>
-          <div className={classes.divSearch}>
-            <Search />
-          </div>
-          <input
-            style={{
-              border: "1px solid var(--color-border)",
-            }}
-            className={classes.search}
-            placeholder={t.Search}
-            value={search}
-            radius="md"
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className={classes.flexSearch}>
+            <div className={classes.divSearch}>
+              <input
+                className={classes.search}
+                placeholder={t.Search}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Search />
+            </div>
 
-          <button
-            style={{
-              margin: "0px 10px",
-              border: "1px solid var(--color-border)",
-              cursor: "pointer",
-            }}
-            variant="default"
-            radius="md"
-            onClick={openFilterModal}
-            className={classes.filter}
-          >
-            <FilterIcon />
-          </button>
+            <button
+              variant="default"
+              radius="md"
+              onClick={openFilterModal}
+              className={classes.filter}
+            >
+              <FilterIcon />
+            </button>
+          </div>
 
           <div className={classes.addAndSort}>
             <Select
@@ -318,20 +349,28 @@ function Transactions() {
           </div>
         </div>
 
-        {listings.length === 0 && !loading ? (
+        {allListings.length === 0 && !loading ? (
           <Center>
             <Text>{t.Notransactions}</Text>
           </Center>
         ) : (
-          <Group align="center" spacing="xl">
-            {listings.map((listing) => (
-
-              <Card
+          <Grid
+            className={classes.sty}
+            align="center"
+            spacing="xl"
+            // justify="center"
+          >
+            {" "}
+            {allListings.map((listing) => (
+              <GridCol
+                span={{ base: 12, lg: 4, md: 6, sm: 6 }}
                 key={listing.id}
-                withBorder
-                radius="md"
-                className={classes.card}
-                h={"100%"}
+                onClick={() => {
+                  navigate(`/dashboard/Properties/${listing.id}`);
+                }}
+                style={{
+                  cursor: "pointer",
+                }}
               >
                 <div
                   style={{ cursor: "pointer" }}
@@ -341,9 +380,12 @@ function Transactions() {
                 >
                   {console.log(listing)}
                   <Card.Section radius="md">
-
-                    <LazyImage src={listing.picture_url} alt={listing.title} height={200} radius="md" />
-
+                    <LazyImage
+                      src={listing.picture_url}
+                      alt={listing.title}
+                      height={200}
+                      radius="md"
+                    />
                   </Card.Section>
 
                   <div style={{ marginTop: "16px", display: "flex" }}>
@@ -354,8 +396,7 @@ function Transactions() {
                     {console.log(listing.down_payment)}
 
                     <div className={classes.downPaymentBadge}>
-                      {listing.down_payment}
-                      % Down Payment
+                      {listing.down_payment}% Down Payment
                     </div>
                   </div>
 
@@ -363,25 +404,24 @@ function Transactions() {
                     <div className={classes.listingTitle}>{listing.title}</div>
                     <div className={classes.listingUtilities}>
                       <div className={classes.listingUtility}>
-                        {listing.rooms === 0 ? null :
+                        {listing.rooms === 0 ? null : (
                           <>
                             <div className={classes.utilityImage}>
                               <Rooms />
                             </div>
                             {listing.rooms}
                           </>
-
-                        }
-
+                        )}
                       </div>
                       <div className={classes.listingUtility}>
-                        {listing.bathrooms === 0 ? null : <>
-                          <div className={classes.utilityImage}>
-                            <Bathrooms />
-                          </div>
-                          {listing.bathrooms}
-                        </>}
-
+                        {listing.bathrooms === 0 ? null : (
+                          <>
+                            <div className={classes.utilityImage}>
+                              <Bathrooms />
+                            </div>
+                            {listing.bathrooms}
+                          </>
+                        )}
                       </div>
                       <div className={classes.listingUtility}>
                         <div className={classes.utilityImage}>
@@ -398,24 +438,23 @@ function Transactions() {
                       {t.Employee}: {listing.employee?.name}
                     </div>
                     <div className={classes.listingLocation}>
-
                       {listing.location}
                     </div>
                     <div className={classes.listingDate}>
                       {Math.floor(
                         (new Date() - new Date(listing.created_at)) /
-                        (1000 * 60 * 60 * 24)
+                          (1000 * 60 * 60 * 24)
                       ) > 1
                         ? `${Math.floor(
-                          (new Date() - new Date(listing.created_at)) /
-                          (1000 * 60 * 60 * 24)
-                        )} days ago`
+                            (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                          )} days ago`
                         : Math.floor(
-                          (new Date() - new Date(listing.created_at)) /
-                          (1000 * 60 * 60 * 24)
-                        ) === 1
-                          ? "Yesterday"
-                          : "Today"}
+                            (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                          ) === 1
+                        ? "Yesterday"
+                        : "Today"}
                     </div>
                   </div>
                 </div>
@@ -440,9 +479,9 @@ function Transactions() {
                     </Button>
                   </Group>
                 </Center>
-              </Card>
+              </GridCol>
             ))}
-          </Group>
+          </Grid>
         )}
       </Card>
 
@@ -494,8 +533,9 @@ function Transactions() {
         subcategories={subcategories}
         onFilter={handleFilterProperties}
         onReset={() => {
-          setFilteredListings(listings);
+          setListingTypeFilter(allListings);
           closeFilterModal();
+          resetFilters();
         }}
       />
     </>

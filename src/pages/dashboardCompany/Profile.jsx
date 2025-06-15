@@ -19,7 +19,7 @@ import CropModal from "../../components/CropModal";
 function Profile() {
   // State hooks
   const [cropModalOpen, setCropModalOpen] = useState(false);
-const [rawImage, setRawImage] = useState(null);
+  const [rawImage, setRawImage] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
@@ -108,26 +108,26 @@ const [rawImage, setRawImage] = useState(null);
 
   // Handlers
   const handleImageUpload = (event) => {
-  const file = event.target.files[0];
-  if (!file || !file.type.startsWith("image/")) {
-    notifications.show({ title: "Invalid File", message: "Please upload an image file only.", color: "red" });
-    return;
-  }
-  if (file.size > 2 * 1024 * 1024) {
-    notifications.show({ title: "File Too Large", message: "The image must be less than 2 MB in size.", color: "red" });
-    return;
-  }
+    const file = event.target.files[0];
+    if (!file || !file.type.startsWith("image/")) {
+      notifications.show({ title: "Invalid File", message: "Please upload an image file only.", color: "red" });
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      notifications.show({ title: "File Too Large", message: "The image must be less than 2 MB in size.", color: "red" });
+      return;
+    }
 
-  const imageUrl = URL.createObjectURL(file);
-  setRawImage(imageUrl); // to show in crop modal
-  setCropModalOpen(true);
-};
+    const imageUrl = URL.createObjectURL(file);
+    setRawImage(imageUrl); // to show in crop modal
+    setCropModalOpen(true);
+  };
 
-const handleCropComplete = ({ file, url }) => {
-  setImageFile(file);
-  setImage(url);
-  setFormImage(url);
-};
+  const handleCropComplete = ({ file, url }) => {
+    setImageFile(file);
+    setImage(url);
+    setFormImage(url);
+  };
 
   // const handleImageUpload = (event) => {
   //   const file = event.target.files[0];
@@ -380,17 +380,18 @@ const handleCropComplete = ({ file, url }) => {
               <img
                 src={image}
                 alt=" enlarged avatar"
-       
+
                 className={classes.imgModal}
               />
             </Center>
           </Modal>
-<CropModal
-  imageSrc={rawImage}
-  opened={cropModalOpen}
-  onClose={() => setCropModalOpen(false)}
-  onCropComplete={handleCropComplete}
-/>
+          
+          <CropModal
+            imageSrc={rawImage}
+            opened={cropModalOpen}
+            onClose={() => setCropModalOpen(false)}
+            onCropComplete={handleCropComplete}
+          />
 
 
           <Modal opened={formModalOpened} onClose={closeFormModal} centered radius="lg" className={classes.Modal}>

@@ -224,6 +224,7 @@ function PropertyDetails() {
     };
   }, [opened1, listing?.images]);
 
+  
   if (loading) {
     return (
       <Center style={{ height: "80vh" }}>

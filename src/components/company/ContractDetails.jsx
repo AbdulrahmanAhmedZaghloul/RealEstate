@@ -38,7 +38,7 @@ import BedsIcon from "../icons/BedsIcon";
 function ContractDetails() {
 const { id: idParam } = useParams();
 const id = Number(idParam);
-  const [contract, setContract] = useState([]);
+  const [contract, setContract] = useState(null);
   const [shareLink, setShareLink] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
@@ -105,6 +105,9 @@ const id = Number(idParam);
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
+
+ 
+
  
   const fetchContract = ( ) => {
     console.log(id);
@@ -117,9 +120,9 @@ const id = Number(idParam);
       .then((res) => {
         console.log(res.data.data);
 
-        setContract(res.data.data);
-        setShareLink(res.data.data.share_url);
-        console.log(res.data.data.share_url);
+        setContract(res?.data?.data);
+        setShareLink(res?.data?.data?.share_url);
+        console.log(res?.data?.data?.share_url);
       })
       .catch((err) => {
         console.log(err);
@@ -128,6 +131,9 @@ const id = Number(idParam);
         setLoading(false);
       });
   };
+
+                  {console.log(contract)
+                }
 
   const handleDownloadDocument = () => {
     setLoading(true);
@@ -142,7 +148,7 @@ const id = Number(idParam);
         link.href = url;
         link.setAttribute(
           "download",
-          `contract_${id}.${contract.document_type}`
+          `contract_${id}.${contract?.document_type}`
         );
         document.body.appendChild(link);
         link.click();
@@ -193,10 +199,37 @@ const id = Number(idParam);
         setLoading(false);
       });
   };
-  useEffect(() => {
+  // useEffect(() => {
+  //   fetchContract();
+  // }, []);
+
+    useEffect(() => {
     fetchContract();
   }, []);
 
+
+  useEffect(() => {
+      const handleKeyDown = (event) => {
+        if (!opened1) return; // لا نفذ إلا إذا كان المودال مفتوحًا
+  
+        if (event.key === "ArrowLeft") {
+          setSelectedImageIndex(
+            (prevIndex) =>
+              (prevIndex - 1 + contract?.real_estate.images.length) % contract?.real_estate.images.length
+          );
+        } else if (event.key === "ArrowRight") {
+          setSelectedImageIndex(
+            (prevIndex) => (prevIndex + 1) % contract?.real_estate.images.length
+          );
+        }
+      };
+  
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }, [opened1, contract?.real_estate]);
+  
   useEffect(() => {
     if (contract) {
       form.setValues({
@@ -215,6 +248,7 @@ const id = Number(idParam);
       });
     }
   }, [contract]);
+ 
 
   if (loading) {
     return (
@@ -249,29 +283,29 @@ const id = Number(idParam);
         <div className={classes.imageContainer}>
           <>
             <div className={classes.ImageContainerBig}>
-              {contract.real_estate.images?.[0] && (
+              {contract?.real_estate?.images?.[0] && (
                 <img
-                  key={contract.real_estate.images[0].id}
-                  src={contract.real_estate.images[0].url}
-                  alt={contract.real_estate.title}
+                  key={contract?.real_estate?.images[0]?.id}
+                  src={contract?.real_estate?.images[0]?.url}
+                  alt={contract?.real_estate?.title}
                   className={classes.mainImage}
                   onClick={() => {
                     setSelectedImageIndex(0); // لأنها تاني صورة في الـ array
                     open1();
                   }}
+
                 />
               )}
             </div>
-
             <div className={classes.widthImageContainer}>
-              {contract.real_estate.images
+              {contract?.real_estate?.images
                 ?.filter((_, index) => index > 0) // Skip first image (primary)
                 .slice(0, 2) // Take next 2 images
                 .map((image, index) => (
                   <img
-                    key={image.id}
-                    src={image.url}
-                    alt={contract.real_estate.title}
+                    key={image?.id}
+                    src={image?.url}
+                    alt={contract?.real_estate?.title}
                     className={classes.mainImage}
                     onClick={() => {
                       setSelectedImageIndex(index + 1); // +1 because we skipped primary
@@ -292,17 +326,17 @@ const id = Number(idParam);
                     <div className={classes.text}>
                       <Text className={classes.price}>
                         <span className="icon-saudi_riyal">&#xea; </span>
-                        {parseFloat(contract.price).toLocaleString()}
+                        {parseFloat(contract?.price).toLocaleString()}
                       </Text>
 
                       <Text className={classes.Down}>
-                        {parseFloat(contract.down_payment).toLocaleString()}%{" "}
+                        {parseFloat(contract?.down_payment).toLocaleString()}%{" "}
                         {t.DownPayment}
                       </Text>
                     </div>
 
                     <h3 className={classes.title}>
-                      {contract.real_estate.title}
+                      {contract?.real_estate?.title}
                     </h3>
 
                     <div className={classes.flexLocation}>
@@ -330,23 +364,23 @@ const id = Number(idParam);
                           />
                         </svg>
                         <p className={classes.location}>
-                          {contract.real_estate.location}
+                          {contract?.real_estate?.location}
                         </p>
                       </div>
                       <div>
                         <p className={classes.time}>
                           {Math.floor(
-                            (new Date() - new Date(contract.creation_date)) /
+                            (new Date() - new Date(contract?.creation_date)) /
                               (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
                                 (new Date() -
-                                  new Date(contract.creation_date)) /
+                                  new Date(contract?.creation_date)) /
                                   (1000 * 60 * 60 * 24)
                               )} days ago`
                             : Math.floor(
                                 (new Date() -
-                                  new Date(contract.creation_date)) /
+                                  new Date(contract?.creation_date)) /
                                   (1000 * 60 * 60 * 24)
                               ) === 1
                             ? "Yesterday"
@@ -356,19 +390,19 @@ const id = Number(idParam);
                     </div>
 
                     <Grid.Col span={12} className={classes.svgCol}>
-                      {contract.real_estate.rooms === 0 ? null : (
+                      {contract?.real_estate?.rooms === 0 ? null : (
                         <span className={classes.svgSpan}>
                           <div>
                             <BedsIcon />
-                            <span>{contract.real_estate.rooms} Beds</span>
+                            <span>{contract?.real_estate?.rooms} Beds</span>
                           </div>
                         </span>
                       )}
-                      {contract.real_estate.bathrooms === 0 ? null : (
+                      {contract?.real_estate?.bathrooms === 0 ? null : (
                         <span className={classes.svgSpan}>
                           <div>
                             <BathsIcon />
-                            <span>{contract.real_estate.bathrooms} Baths</span>
+                            <span>{contract?.real_estate?.bathrooms} Baths</span>
                           </div>
                         </span>
                       )}
@@ -377,15 +411,15 @@ const id = Number(idParam);
                         <div>
                           <Area />
 
-                          <span>{contract.real_estate.area} sqm</span>
+                          <span>{contract?.real_estate?.area} sqm</span>
                         </div>
                       </span>
 
-                      {contract.real_estate.floors === 0 ? null : (
+                      {contract?.real_estate?.floors === 0 ? null : (
                         <span className={classes.svgSpan}>
                           <div>
                             <FloorsIcon />
-                            <span>{contract.real_estate.floors}</span>
+                            <span>{contract?.real_estate?.floors}</span>
                           </div>
                         </span>
                       )}
@@ -394,15 +428,15 @@ const id = Number(idParam);
                         <div>
                           <CategoryIcon />
                           <span>
-                            {contract.real_estate.category} /{" "}
-                            {contract.real_estate.type}{" "}
+                            {contract?.real_estate?.category} /{" "}
+                            {contract?.real_estate?.type}{" "}
                           </span>
                         </div>
                       </span>
                     </Grid.Col>
                     <div className={classes.description}>
                       <h4>{t.Description}</h4>
-                      <p>{contract.real_estate.description}</p>
+                      <p>{contract?.real_estate?.description}</p>
                     </div>
                   </Grid.Col>
                 </Grid>
@@ -411,7 +445,7 @@ const id = Number(idParam);
                 <div
                   className={classes.viewContainer}
                   onClick={() =>
-                    navigate(`/dashboard/employee/${contract.listed_by.id}`)
+                    navigate(`/dashboard/employee/${contract?.listed_by?.id}`)
                   }
                 >
                   <div className={classes.viewImage}>
@@ -419,11 +453,11 @@ const id = Number(idParam);
                       h={100}
                       w={100}
                       mr={10}
-                      src={contract.listed_by.picture}
+                      src={contract?.listed_by?.picture}
                       alt="nameImage"
                     />
 
-                    <span>{contract.listed_by.name}</span>
+                    <span>{contract?.listed_by?.name}</span>
                   </div>
                   <div className={classes.viewText}>
                     <span>View</span>
@@ -497,7 +531,7 @@ const id = Number(idParam);
               {t.ContractDescription}
             </h4>
             <p className={classes.ContractsDescriptionTag}>
-              {contract.description}
+              {contract?.description}
             </p>
 
             <Grid className={classes.ContractsInformation}>
@@ -524,14 +558,14 @@ const id = Number(idParam);
                     <p className={classes.InformationType}>{t.Contracttype}</p>
                     <h4>{t.description}</h4>
                     <p className={classes.InformationSale}>
-                      {contract.contract_type}
+                      {contract?.contract_type}
                     </p>
                   </GridCol>
 
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Releasedate}</p>
                     <p className={classes.InformationSale}>
-                      {new Date(contract.release_date).toLocaleDateString(
+                      {new Date(contract?.release_date).toLocaleDateString(
                         "en-GB"
                       )}
                     </p>
@@ -540,7 +574,7 @@ const id = Number(idParam);
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.DownPayment}</p>
                     <p className={classes.InformationSale}>
-                      {parseFloat(contract.down_payment).toLocaleString()}
+                      {parseFloat(contract?.down_payment).toLocaleString()}
                       {"%"}
                     </p>
                   </GridCol>
@@ -548,30 +582,30 @@ const id = Number(idParam);
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Customername}</p>
                     <p className={classes.InformationSale}>
-                      {contract.customer_name}
+                      {contract?.customer_name}
                     </p>
                   </GridCol>
 
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Customerphone}</p>
                     <p className={classes.InformationSale}>
-                      {contract.customer_phone}
+                      {contract?.customer_phone}
                     </p>
                   </GridCol>
 
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Status}</p>
-                    <p className={classes.InformationSale}>{contract.status}</p>
+                    <p className={classes.InformationSale}>{contract?.status}</p>
                   </GridCol>
 
-                  {contract.contract_type === "sale" ? null : (
+                  {contract?.contract_type === "sale" ? null : (
                     <>
                       <GridCol span={4}>
                         <p className={classes.InformationType}>
                           {t.Creationdate}
                         </p>
                         <p className={classes.InformationSale}>
-                          {new Date(contract.expiration_date).toLocaleString()}
+                          {new Date(contract?.expiration_date).toLocaleString()}
                         </p>
                       </GridCol>
 
@@ -580,7 +614,7 @@ const id = Number(idParam);
                           {t.Effectivedate}
                         </p>
                         <p className={classes.InformationSale}>
-                          {new Date(contract.effective_date).toLocaleString()}
+                          {new Date(contract?.effective_date).toLocaleString()}
                         </p>
                       </GridCol>
 
@@ -589,7 +623,7 @@ const id = Number(idParam);
                           {t.Expirationdate}
                         </p>
                         <p className={classes.InformationSale}>
-                          {new Date(contract.expiration_date).toLocaleString()}
+                          {new Date(contract?.expiration_date).toLocaleString()}
                         </p>
                       </GridCol>
                     </>
@@ -623,12 +657,12 @@ const id = Number(idParam);
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <span style={{}}>{contract.real_estate.location}</span>
+                  <span style={{}}>{contract?.real_estate?.location}</span>
                 </div>
                 <iframe
                   className={classes.locationMap}
                   src={`https://www.google.com/maps?q=${encodeURIComponent(
-                    contract.real_estate.location
+                    contract?.real_estate?.location
                   )}&output=embed`}
                   width="650"
                   height="450"
@@ -664,12 +698,12 @@ const id = Number(idParam);
           },
         }}
       >
-        {contract.real_estate.images &&
+        {contract?.real_estate.images &&
           contract.real_estate.images.length > 0 && (
             <div style={{ position: "relative", textAlign: "center" }}>
               <img
-                src={contract.real_estate.images[selectedImageIndex].url}
-                alt={contract.real_estate.title}
+                src={contract?.real_estate.images[selectedImageIndex].url}
+                alt={contract?.real_estate.title}
                 style={{
                   width: "100%",
                   height: "400px",
@@ -739,7 +773,7 @@ const id = Number(idParam);
                   fontSize: "14px",
                 }}
               >
-                {selectedImageIndex + 1} / {contract.real_estate.images.length}
+                {selectedImageIndex + 1} / {contract?.real_estate.images.length}
               </div>
             </div>
           )}

@@ -104,8 +104,7 @@ function ContractDetails() {
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
-  console.log(id);
-
+ 
   const fetchContract = (id) => {
     console.log(id);
 
@@ -434,8 +433,7 @@ function ContractDetails() {
               </Grid.Col>
             </Grid>
 
-            {/* Contract */}
-            <Grid>
+             <Grid>
               <Grid.Col
                 span={isMobile ? 12 : 8}
                 className={classes.ContractSection}
@@ -496,8 +494,7 @@ function ContractDetails() {
               </Grid.Col>
             </Grid>
 
-            {/* <h3 className={classes.ContractsTitle}>{contract.title}</h3> */}
-            <h4 className={classes.ContractsDescription}>
+             <h4 className={classes.ContractsDescription}>
               {t.ContractDescription}
             </h4>
             <p className={classes.ContractsDescriptionTag}>
@@ -575,7 +572,7 @@ function ContractDetails() {
                           {t.Creationdate}
                         </p>
                         <p className={classes.InformationSale}>
-                          {/* {new Date(contract.expiration_date).toLocaleString()} */}
+                          {new Date(contract.expiration_date).toLocaleString()}
                         </p>
                       </GridCol>
 
@@ -584,7 +581,7 @@ function ContractDetails() {
                           {t.Effectivedate}
                         </p>
                         <p className={classes.InformationSale}>
-                          {/* {new Date(contract.effective_date).toLocaleString()} */}
+                          {new Date(contract.effective_date).toLocaleString()}
                         </p>
                       </GridCol>
 
@@ -593,7 +590,7 @@ function ContractDetails() {
                           {t.Expirationdate}
                         </p>
                         <p className={classes.InformationSale}>
-                          {/* {new Date(contract.expiration_date).toLocaleString()} */}
+                          {new Date(contract.expiration_date).toLocaleString()}
                         </p>
                       </GridCol>
                     </>

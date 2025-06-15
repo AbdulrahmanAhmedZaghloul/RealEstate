@@ -27,6 +27,7 @@ import edit from "../../assets/edit.svg";
 import downArrow from "../../assets/downArrow.svg";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
+import { useLocation } from "react-router-dom";
 
 const AddPropertyModal = React.memo(
   ({
@@ -126,12 +127,12 @@ const AddPropertyModal = React.memo(
           }
           return null;
         },
-        employee_id: (value) =>
-          user.role === "employee"
-            ? null
-            : value
-            ? null
-            : "Employee is required",
+          employee_id: (value) =>
+      user.role === "employee" || isMarketerPropertiesPage
+        ? null
+        : value
+        ? null
+        : "Employee is required",
         category_id: (value) =>
           value ? null : "Property category is required",
         subcategory_id: (value) => (value ? null : "Property type is required"),
@@ -158,6 +159,8 @@ const AddPropertyModal = React.memo(
     const [amenitiesLoading, setAmenitiesLoading] = useState(false);
     const { user } = useAuth();
     const isMobile = useMediaQuery(`(max-width: 991px)`);
+    const location = useLocation();
+    const isMarketerPropertiesPage = location.pathname === "/dashboard-Marketer/PropertiesMarketer";
 
     // ✅ تنظيف Object URLs عند إغلاق النافذة
     useEffect(() => {
@@ -184,11 +187,9 @@ const AddPropertyModal = React.memo(
             );
             const data = await response.json();
             const address = data.address;
-            const formattedLocation = `${
-              address.suburb || address.neighbourhood || ""
-            }, ${address.city || address.town || address.village || ""}, ${
-              address.state || ""
-            }`;
+            const formattedLocation = `${address.suburb || address.neighbourhood || ""
+              }, ${address.city || address.town || address.village || ""}, ${address.state || ""
+              }`;
             setSearchValue(formattedLocation);
             form.setFieldValue("location", formattedLocation);
             setRegion(address.state || "");
@@ -236,6 +237,7 @@ const AddPropertyModal = React.memo(
           { name, category_id: categoryId },
           { headers: { Authorization: `Bearer ${user.token}` } }
         );
+response        
         return response.data;
       } catch (error) {
         console.error("Failed to add amenity:", error);
@@ -249,6 +251,8 @@ const AddPropertyModal = React.memo(
         const response = await axiosInstance.get(`amenities`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
+        console.log(response);
+        
         return response.data;
       } catch (error) {
         console.error("Failed to fetch amenities:", error);
@@ -284,7 +288,7 @@ const AddPropertyModal = React.memo(
             categoryMap[categoryId] === "residential" ? formattedAmenities : [],
           commercial:
             selectedCategory.name.toLowerCase() === "commercial" ||
-            selectedCategory.name.toLowerCase() === "land"
+              selectedCategory.name.toLowerCase() === "land"
               ? formattedAmenities
               : [],
         });
@@ -464,14 +468,6 @@ const AddPropertyModal = React.memo(
 
       prevOpened.current = opened;
     }, [opened]);
-    // useEffect(() => {
-    //   if (opened) {
-    //     form.reset(); // 👈 Reset form fields
-    //   }
-    //   if (onClose) {
-    //     form.reset(); // 👈 Reset form fields
-    //   }
-    // }, [opened]);
     return (
       <Modal
         opened={opened}
@@ -512,25 +508,25 @@ const AddPropertyModal = React.memo(
                     style={
                       form.errors.images
                         ? {
-                            border: "1px dashed red",
-                            borderRadius: "8px",
-                            width: "60px",
-                            height: "60px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                          }
+                          border: "1px dashed red",
+                          borderRadius: "8px",
+                          width: "60px",
+                          height: "60px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                        }
                         : {
-                            border: "1px dashed var(--color-4)",
-                            borderRadius: "8px",
-                            width: "60px",
-                            height: "60px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                          }
+                          border: "1px dashed var(--color-4)",
+                          borderRadius: "8px",
+                          width: "60px",
+                          height: "60px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                        }
                     }
                     onClick={() =>
                       document.getElementById("image-upload").click()
@@ -690,8 +686,8 @@ const AddPropertyModal = React.memo(
                 clampBehavior="strict"
                 error={
                   form.values.down_payment !== null &&
-                  (form.values.down_payment < 0 ||
-                    form.values.down_payment > 100)
+                    (form.values.down_payment < 0 ||
+                      form.values.down_payment > 100)
                     ? "Down payment must be between 0 and 100%"
                     : form.errors.down_payment
                 }
@@ -716,69 +712,69 @@ const AddPropertyModal = React.memo(
                 selectedCategoryType === "commercial" ||
                 selectedCategoryType === "land"
               ) && (
-                <NumberInput
-                  label="Rooms"
-                  placeholder="Enter number of rooms"
-                  min={0}
-                  {...form.getInputProps("rooms")}
-                  error={form.errors.rooms}
-                  hideControls
-                  disabled={
-                    selectedCategoryType === "commercial" ||
-                    selectedCategoryType === "land"
-                  }
-                  styles={{
-                    input: { width: 289, height: 48 },
-                    wrapper: { width: 289 },
-                  }}
-                  mb={24}
-                  maxLength={2}
-                />
-              )}
+                  <NumberInput
+                    label="Rooms"
+                    placeholder="Enter number of rooms"
+                    min={0}
+                    {...form.getInputProps("rooms")}
+                    error={form.errors.rooms}
+                    hideControls
+                    disabled={
+                      selectedCategoryType === "commercial" ||
+                      selectedCategoryType === "land"
+                    }
+                    styles={{
+                      input: { width: 289, height: 48 },
+                      wrapper: { width: 289 },
+                    }}
+                    mb={24}
+                    maxLength={2}
+                  />
+                )}
 
               {!(
                 selectedCategoryType === "commercial" ||
                 selectedCategoryType === "land"
               ) && (
-                <NumberInput
-                  disabled={
-                    selectedCategoryType === "commercial" ||
-                    selectedCategoryType === "land"
-                  }
-                  label="Bathrooms"
-                  placeholder="Enter number of bathrooms"
-                  min={0}
-                  {...form.getInputProps("bathrooms")}
-                  error={form.errors.bathrooms}
-                  hideControls
-                  styles={{
-                    input: { width: 289, height: 48 },
-                    wrapper: { width: 289 },
-                  }}
-                  mb={24}
-                  maxLength={2}
-                />
-              )}
+                  <NumberInput
+                    disabled={
+                      selectedCategoryType === "commercial" ||
+                      selectedCategoryType === "land"
+                    }
+                    label="Bathrooms"
+                    placeholder="Enter number of bathrooms"
+                    min={0}
+                    {...form.getInputProps("bathrooms")}
+                    error={form.errors.bathrooms}
+                    hideControls
+                    styles={{
+                      input: { width: 289, height: 48 },
+                      wrapper: { width: 289 },
+                    }}
+                    mb={24}
+                    maxLength={2}
+                  />
+                )}
 
               {!(
                 selectedCategoryType === "commercial" ||
                 selectedCategoryType === "land"
               ) && (
-                <NumberInput
-                  label="Floors"
-                  placeholder="Enter number of floors"
-                  min={1}
-                  {...form.getInputProps("floors")}
-                  error={form.errors.floors}
-                  hideControls
-                  styles={{
-                    input: { width: 289, height: 48 },
-                    wrapper: { width: 289 },
-                  }}
-                  mb={24}
-                  maxLength={3}
-                />
-              )}
+                  <NumberInput
+                    label="Floors"
+                    placeholder="Enter number of floors"
+                    min={1}
+                    {...form.getInputProps("floors")}
+                    error={form.errors.floors}
+                    hideControls
+                    styles={{
+                      input: { width: 289, height: 48 },
+                      wrapper: { width: 289 },
+                    }}
+                    mb={24}
+                    maxLength={3}
+                  />
+                )}
             </Grid.Col>
 
             <Grid.Col span={6}>
@@ -877,7 +873,7 @@ const AddPropertyModal = React.memo(
                     (subcategory) =>
                       subcategory.id !== undefined &&
                       subcategory.category_id ===
-                        parseInt(form.values.category_id)
+                      parseInt(form.values.category_id)
                   )
                   .map((subcategory) => ({
                     value: String(subcategory.id),
@@ -913,7 +909,8 @@ const AddPropertyModal = React.memo(
               />
 
               {/* Assign Employee */}
-              {user.role === "employee" ? null : (
+              {/* Assign Employee - Only show if user is not an employee */}
+              {user.role === "employee" || isMarketerPropertiesPage ? null : (
                 <Select
                   label="Assign Employee"
                   placeholder="Select an employee"
@@ -933,6 +930,27 @@ const AddPropertyModal = React.memo(
                   mb={24}
                 />
               )}
+
+              {/* {user.role === "employee" ? null : (
+                <Select
+                  label="Assign Employee"
+                  placeholder="Select an employee"
+                  data={employees
+                    .filter((employee) => employee.employee_id !== undefined)
+                    .map((employee) => ({
+                      value: String(employee.employee_id),
+                      label: employee.name,
+                    }))}
+                  {...form.getInputProps("employee_id")}
+                  error={form.errors.employee_id}
+                  styles={{
+                    input: { width: 289, height: 48 },
+                    wrapper: { width: 289 },
+                  }}
+                  rightSection={<img src={downArrow} />}
+                  mb={24}
+                />
+              )} */}
 
               {/* Amenities */}
               <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 24 }}>

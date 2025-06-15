@@ -110,14 +110,14 @@ export default function VerifyOTPCreateAccount({ pass }) {
       });
   };
 
-  useEffect(() => {
-    if (user) {
-      if (user.role === "marketer") {
-        navigate("/dashboard-Marketer", { replace: true });
-      }
+  // useEffect(() => {
+  //   if (user) {
+  //     if (user.role === "marketer") {
+  //       navigate("/dashboard-Marketer", { replace: true });
+  //     }
 
-    }
-  }, [user, navigate]);
+  //   }
+  // }, [user, navigate]);
 
   return (
     <Container size={460} my={30}>

@@ -20,6 +20,7 @@ import Dropdown from "../../components/icons/dropdown";
 import AddIcon from "../../components/icons/addIcon";
 import DeleteIcon from "../../components/icons/DeleteIcon";
 import EditIcon from "../../components/icons/edit";
+import { useQueryClient } from "@tanstack/react-query";
 
 const jobColors = {
   supervisor: "orange",
@@ -50,17 +51,17 @@ function StaffSupervisor() {
   //   address: "",
   //   picture: "",
   // });
-  
-    const [errors, setErrors] = useState({
-      name: "",
-      email: "",
-      password: "",
-      position: "",
-      phone_number: "",
-      address: "",
-      image: "",
-    });
-  
+
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    position: "",
+    phone_number: "",
+    address: "",
+    image: "",
+  });
+
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [searchedEmployees, setSearchedEmployees] = useState([]);
@@ -80,6 +81,8 @@ function StaffSupervisor() {
 
   const { t } = useTranslation(); // 👈 استدعاء اللغة
 
+  const queryClient = useQueryClient();
+
   const fetchEmployees = async () => {
     setLoading(true);
     try {
@@ -88,6 +91,8 @@ function StaffSupervisor() {
       });
       console.log(response.data.data.employees)
 
+        queryClient.invalidateQueries({ queryKey: ["supervisors"] });
+        queryClient.invalidateQueries({ queryKey: ["employees"] });
       setEmployees(response.data.data.employees);
       setSearchedEmployees(response.data.data.employees);
     } catch (error) {
@@ -100,6 +105,7 @@ function StaffSupervisor() {
       setLoading(false);
     }
   };
+  
   const fetchDataKPIs = async () => {
     setLoading(true);
     try {
@@ -143,7 +149,7 @@ function StaffSupervisor() {
     );
   };
 
-    const [previewImage, setPreviewImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
 
   const handleAddUser = async (isSupervisor) => {
@@ -170,7 +176,9 @@ function StaffSupervisor() {
       });
       console.log(response);
       console.log(newUser);
-      // fetchSupervisors();
+
+      queryClient.invalidateQueries({ queryKey: ["supervisors"] });
+      queryClient.invalidateQueries({ queryKey: ["employees"] });
       fetchEmployees();
 
       closeAddModal();
@@ -224,6 +232,9 @@ function StaffSupervisor() {
 
   // Handle Update Success
   const handleUpdateSuccess = () => {
+
+    queryClient.invalidateQueries({ queryKey: ["supervisors"] });
+    queryClient.invalidateQueries({ queryKey: ["employees"] });
     fetchEmployees(); // Refresh the employee list
   };
 
@@ -241,6 +252,9 @@ function StaffSupervisor() {
           message: response.data.message || "Employee deleted successfully",
           color: "green",
         });
+
+        queryClient.invalidateQueries({ queryKey: ["supervisors"] });
+        queryClient.invalidateQueries({ queryKey: ["employees"] });
 
         // بعد الحذف نحدث قائمة الموظفين
         fetchEmployees();

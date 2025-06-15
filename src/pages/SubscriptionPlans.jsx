@@ -24,7 +24,8 @@ function SubscriptionPlans() {
   const [cancelModalOpened, setCancelModalOpened] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(null);
-  const { data: currentSubscription, isLoading: isCurrentLoading, isError: isCurrrentError, error: currentError } = useCurrentSubscription();
+  const { data: currentSubscription, isLoading: isCurrentLoading, isError: isCurrrentError, error: currentError }
+   = useCurrentSubscription();
 
 
   const navigate = useNavigate();
@@ -48,6 +49,8 @@ function SubscriptionPlans() {
       const response = await axiosInstance.get("subscriptions/plans", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
+      console.log("Fetched Plans:", response.data.data);
+
       const fetchedPlans = response.data.data.map((plan) => ({
         id: plan.id,
         name: plan.name,
@@ -64,6 +67,7 @@ function SubscriptionPlans() {
           `Supervisors Limit: ${plan.supervisors_limit || "Unlimited"}`,
         ],
       }));
+      console.log("Fetched Plans:", fetchedPlans);
       setPlans(fetchedPlans);
     } catch (error) {
       console.error("Error fetching subscription plans:", error);

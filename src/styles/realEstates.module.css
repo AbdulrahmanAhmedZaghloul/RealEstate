@@ -11,6 +11,11 @@
   margin-top: 24px;
 }
 
+.positionButtons{ 
+  position: relative;
+  z-index: 13123123123000;
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;

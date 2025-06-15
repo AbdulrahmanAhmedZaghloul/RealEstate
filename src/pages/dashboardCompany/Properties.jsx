@@ -55,7 +55,7 @@ function Properties() {
     useProperties(
       listingTypeFilter === "all" ? "" : listingTypeFilter,
       filters
-    ); 
+    );
   const resetFilters = () => {
     setFilters({
       location: "",
@@ -97,10 +97,7 @@ function Properties() {
   const [filteredListings, setFilteredListings] = useState([]);
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
-  const allListings =
-    data?.pages.flatMap((page) =>
-      page.data.listings.filter((listing) => listing.status === "approved")
-    ) || [];
+  const allListings = data?.pages.flatMap((page) => page.data.listings) || [];
   const [ref, inView] = useInView();
 
   useEffect(() => {
@@ -111,7 +108,6 @@ function Properties() {
   // Form validation using Mantine's useForm
 
   const handleAddProperty = (values) => {
-    // داخل أي كومبوننت
     queryClient.invalidateQueries(["listingsRealEstate"]);
     queryClient.invalidateQueries(["listings"]);
 
@@ -318,7 +314,6 @@ function Properties() {
               className={classes.sty}
               align="center"
               spacing="xl"
-              // justify="center"
             >
               {allListings.map((listing) => (
                 <GridCol
@@ -342,7 +337,7 @@ function Properties() {
                         />
 
                         <p className={classes.listingfor}>
-                          {listing.listing_type}
+                          {listing.selling_status === 1 ? "sold" : listing.listing_type}
                         </p>
                       </div>
                     </Card.Section>
@@ -410,18 +405,18 @@ function Properties() {
                       <div className={classes.listingDate}>
                         {Math.floor(
                           (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
+                          (1000 * 60 * 60 * 24)
                         ) > 1
                           ? `${Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                                (1000 * 60 * 60 * 24)
-                            )} days ago`
+                            (new Date() - new Date(listing.created_at)) /
+                            (1000 * 60 * 60 * 24)
+                          )} days ago`
                           : Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                                (1000 * 60 * 60 * 24)
-                            ) === 1
-                          ? "Yesterday"
-                          : "Today"}
+                            (new Date() - new Date(listing.created_at)) /
+                            (1000 * 60 * 60 * 24)
+                          ) === 1
+                            ? "Yesterday"
+                            : "Today"}
                       </div>
                     </div>
                   </Card>

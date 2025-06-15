@@ -111,7 +111,6 @@ function Staff() {
     phone_number: "",
     address: "",
     image: null,
-
     supervisor_id: null,
   });
 
@@ -216,12 +215,12 @@ function Staff() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
   const mutationAddUser = useAddUser(user.token, closeAddModal, setNewUser);
   const isAddUserLoading = mutationAddUser.isPending;
 
   const handleAddUser = async (isSupervisor) => {
     if (!validateForm(newUser)) return;
-
     mutationAddUser.mutate({ newUser, isSupervisor });
   };
 

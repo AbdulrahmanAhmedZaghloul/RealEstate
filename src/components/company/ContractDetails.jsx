@@ -105,7 +105,7 @@ function ContractDetails() {
     return regex.test(cleaned);
   }
  
-  const fetchContract = (id) => {
+  const fetchContract = ( ) => {
     console.log(id);
 
     setLoading(true);

@@ -1,25 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  Center,
-  Grid,
-  Group,
-  Image,
-  Text,
-  Select,
-  Input,
-  Stack,
-  Modal,
-  TextInput,
-  NumberInput,
-  FileInput,
-  Textarea,
-  Loader,
-  GridCol,
+import {Button,Card,Center,Grid,Group,Text,Select,Modal,Textarea,Loader,GridCol,
 } from "@mantine/core";
-import { useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import classes from "../../styles/realEstates.module.css";
@@ -30,14 +11,12 @@ import { notifications } from "@mantine/notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import Notifications from "../../components/company/Notifications";
 import { useTranslation } from "../../context/LanguageContext";
-import { useProperties } from "../../hooks/queries/useProperties";
+import { usePropertiesTransactions } from "../../hooks/queries/usePropertiesTransactions";
 import { useCategories } from "../../hooks/queries/useCategories";
 import { useQueryClient } from "@tanstack/react-query";
 import Dropdown from "../../components/icons/dropdown";
 import FilterIcon from "../../components/icons/filterIcon";
-import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
 import Search from "../../components/icons/search";
-import { usePropertiesContracts } from "../../hooks/queries/usePropertiesContracts";
 import LazyImage from "../../components/LazyImage";
 import Area from "../../components/icons/area";
 import Bathrooms from "../../components/icons/bathrooms";
@@ -57,15 +36,10 @@ const rejectionReasons = [
   { value: "Legal", label: "Legal" },
   { value: "Other", label: "Other" },
 ];
+
 function Transactions() {
-  // const {
-  //   data: listingsData,
-  //   isLoading: listingsLoading,
-  //   isError: isListingsError,
-  //   error: listingsError,
-  // } = usePropertiesContracts();
-    const [listingTypeFilter, setListingTypeFilter] = useState("all");
-  
+  const [listingTypeFilter, setListingTypeFilter] = useState("all");
+
   const [filters, setFilters] = useState({
     location: "",
     rooms: "",
@@ -75,17 +49,17 @@ function Transactions() {
     subcategory: "",
   });
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useProperties(
+    usePropertiesTransactions(
       listingTypeFilter === "all" ? "" : listingTypeFilter,
       filters
     );
-    
-      const {
-        data: employeesData,
-        isLoading: employeesLoading,
-        isError: isEmployeesError,
-        error: employeesError,
-      } = useEmployees();
+ 
+  const {
+    data: employeesData,
+    isLoading: employeesLoading,
+    isError: isEmployeesError,
+    error: employeesError,
+  } = useEmployees();
   const {
     data: categoriesData,
     isLoading: categoriesLoading,
@@ -93,7 +67,7 @@ function Transactions() {
     error: categoriesError,
   } = useCategories();
 
- 
+
   const isLoading = employeesLoading || categoriesLoading;
   const isError = isEmployeesError || isCategoriesError;
   const error = employeesError || categoriesError;
@@ -176,7 +150,7 @@ function Transactions() {
   }, [listings]);
 
   const updateStatus = async (id, newStatus, reason) => {
-    lo;
+    
     setLoading(true);
     await axiosInstance
       .post(
@@ -194,6 +168,7 @@ function Transactions() {
           color: "green",
         });
 
+        queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
         queryClient.invalidateQueries({ queryKey: ["listingsRealEstate"] });
         queryClient.invalidateQueries({ queryKey: ["listings"] });
       })
@@ -221,6 +196,7 @@ function Transactions() {
     setModalOpened(true);
 
     queryClient.invalidateQueries({ queryKey: ["listingsRealEstate"] });
+    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
     queryClient.invalidateQueries({ queryKey: ["listings"] });
   };
 
@@ -245,18 +221,20 @@ function Transactions() {
       // employee: "", // 👈 إعادة تعيين الموظف
     });
   };
+const allListings =
+  data?.pages.flatMap((page) =>
+    page.data ? [...page.data] : []
+  ) ?? [];
+
+  console.log(allListings);
   
-    const allListings =
-      data?.pages.flatMap((page) =>
-        page.data.listings.filter((listing) => listing.status === "pending")
-      ) || [];
-    const [ref, inView] = useInView();
-  
-    useEffect(() => {
-      if (inView && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
-    }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
   if (isLoading) {
     return (
       <div
@@ -358,16 +336,14 @@ function Transactions() {
             className={classes.sty}
             align="center"
             spacing="xl"
-            // justify="center"
+          // justify="center"
           >
             {" "}
             {allListings.map((listing) => (
               <GridCol
                 span={{ base: 12, lg: 4, md: 6, sm: 6 }}
                 key={listing.id}
-                onClick={() => {
-                  navigate(`/dashboard/Properties/${listing.id}`);
-                }}
+              
                 style={{
                   cursor: "pointer",
                 }}
@@ -443,23 +419,23 @@ function Transactions() {
                     <div className={classes.listingDate}>
                       {Math.floor(
                         (new Date() - new Date(listing.created_at)) /
-                          (1000 * 60 * 60 * 24)
+                        (1000 * 60 * 60 * 24)
                       ) > 1
                         ? `${Math.floor(
-                            (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                          )} days ago`
+                          (new Date() - new Date(listing.created_at)) /
+                          (1000 * 60 * 60 * 24)
+                        )} days ago`
                         : Math.floor(
-                            (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                          ) === 1
-                        ? "Yesterday"
-                        : "Today"}
+                          (new Date() - new Date(listing.created_at)) /
+                          (1000 * 60 * 60 * 24)
+                        ) === 1
+                          ? "Yesterday"
+                          : "Today"}
                     </div>
                   </div>
                 </div>
 
-                <Center>
+                <Center className={classes.positionButtons}>
                   <Group mt="md" display="flex">
                     <Button
                       color="green"

@@ -14,9 +14,11 @@ export default function FiltersModal({
     initialValues: {
       location: "",
       rooms: "",
+      bathrooms: "",
+      areaMin: "",
+      areaMax: "",
       priceMin: "",
       priceMax: "",
-      // employee: "",
       category: "",
       subcategory: "",
     },
@@ -29,22 +31,50 @@ export default function FiltersModal({
   const handleSubmit = (values) => {
     onFilter(values);
   };
-  
-    useEffect(() => {
-      if (opened) {
-        form.reset();      // 👈 Reset form fields
-       }
-    }, [opened]);
+
+  useEffect(() => {
+    if (opened) {
+      form.reset();      // 👈 Reset form fields
+    }
+  }, [opened]);
 
   return (
     <Modal opened={opened} onClose={onClose} title="Filters">
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput label="Location" {...form.getInputProps("location")} />
-        <TextInput
-          label="Rooms"
-          type="number"
-          {...form.getInputProps("rooms")}
-        />
+        <Grid mt={10} mb={10}>
+          <Grid.Col span={6}>
+            <TextInput
+              label="Rooms"
+              type="number"
+              {...form.getInputProps("rooms")}
+            />
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <TextInput
+              label="Bathrooms"
+              type="number"
+              {...form.getInputProps("bathrooms")}
+            />
+          </Grid.Col>
+        </Grid>
+        <Grid mt={10} mb={10}>
+          <Grid.Col span={6}>
+            <TextInput
+              label="Min Area (sqm)"
+              type="number"
+              {...form.getInputProps("areaMin")}
+            />
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <TextInput
+              label="Max Area (sqm)"
+              type="number"
+              {...form.getInputProps("areaMax")}
+            />
+          </Grid.Col>
+        </Grid>
+
         <Grid mt={10} mb={10}>
           <Grid.Col span={6}>
             <TextInput
@@ -62,21 +92,6 @@ export default function FiltersModal({
           </Grid.Col>
         </Grid>
 
-        {/* <Select
-                    label="Employee"
-                    placeholder="Select Employee"
-                    data={[
-                        { value: "", label: "All Employees" },
-                        ...(employee?.map(emp => ({
-                            value: emp.id.toString(),
-                            label: emp.name,
-                        })) || [])
-                    ]}
-                    value={filters.employee}
-                    onChange={(value) =>
-                        setFilters((prev) => ({ ...prev, employee: value }))
-                    }
-                /> */}
 
         <Grid mt={10} mb={10}>
           <Grid.Col span={6}>

@@ -7,18 +7,29 @@ const fetchListings = async ({
   token,
   page = 1, // نستخدم رقم الصفحة بدلاً من cursor
   listingType = "",
-  filters = {},
-}) => {
+
+  location = "",
+  rooms = "",
+  bathrooms = "",
+  areaMin = "",
+  areaMax = "",
+  priceMin = "",
+  priceMax = "",
+  category = "",
+  subcategory = "",}) => {
   const params = new URLSearchParams({
     page,
     limit: 3,
-    ...(listingType && listingType !== "all" ? { listing_type: listingType } : {}),
-    ...(filters.location && { location: filters.location }),
-    ...(filters.rooms && { rooms: filters.rooms }),
-    ...(filters.priceMin && { price_min: filters.priceMin }),
-    ...(filters.priceMax && { price_max: filters.priceMax }),
-    ...(filters.category && { category_id: filters.category }),
-    ...(filters.subcategory && { subcategory_id: filters.subcategory }),
+    listing_type: listingType,
+    ...(location && { location }),
+    ...(rooms && { rooms }),
+    ...(bathrooms && { bathrooms }),
+    ...(areaMin && { area_min: areaMin }),
+    ...(areaMax && { area_max: areaMax }),
+    ...(priceMin && { price_min: priceMin }),
+    ...(priceMax && { price_max: priceMax }),
+    ...(category && { category_id: category }),
+    ...(subcategory && { subcategory_id: subcategory }),
   });
 
   const { data } = await axiosInstance.get(`listings/pending?${params}`, {

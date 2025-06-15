@@ -6,10 +6,12 @@
   background-color: var(--color-5);
   width: 100%;
 }
+
 .profileContainer {
   border: 1px solid var(--color-border);
   background-color: var(--color-7);
 }
+
 .mainThemeToggle {
   display: flex;
   justify-content: space-between;
@@ -19,8 +21,6 @@
 .ThemeToggle {
   display: flex;
   align-items: center;
-  /* gap: 1rem; */
-  /* margin: 0 20px; */
 }
 
 .title {
@@ -59,7 +59,7 @@
   padding: 10px;
 }
 
-.Edit{
+.Edit {
   margin-left: auto;
 }
 
@@ -78,7 +78,7 @@
   letter-spacing: 0%;
   color: var(--color-2);
   text-align: center;
- }
+}
 
 .AvatarProfile p {
   font-family: Poppins;
@@ -110,6 +110,13 @@
   color: var(--color-2);
   padding-left: 3rem;
   overflow-wrap: break-word;
+}
+
+.imgModal {
+  width: 140px;
+  height: 140px;
+  border-radius: 100px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* .ModalAvatar{

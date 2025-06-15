@@ -36,7 +36,8 @@ import Area from "../icons/area";
 import BathsIcon from "../icons/BathsIcon";
 import BedsIcon from "../icons/BedsIcon";
 function ContractDetails() {
-  const { id } = useParams();
+const { id: idParam } = useParams();
+const id = Number(idParam);
   const [contract, setContract] = useState([]);
   const [shareLink, setShareLink] = useState("");
   const [loading, setLoading] = useState(false);
@@ -240,9 +241,7 @@ function ContractDetails() {
       </Center>
     );
   }
-  {
-    console.log(contract);
-  }
+ 
 
   return (
     <>

@@ -5,22 +5,29 @@ import { useAuth } from "../../context/authContext";
 
 const fetchListings = async ({
   token,
-  cursor = 0,
   listingType = "",
   location = "",
   rooms = "",
+  bathrooms = "",
+  areaMin = "",
+  areaMax = "",
   priceMin = "",
   priceMax = "",
   category = "",
   subcategory = "",
+    cursor = 0,
+
 }) => {
-  
+
   const params = new URLSearchParams({
     limit: 3,
     cursor,
     listing_type: listingType,
     ...(location && { location }),
     ...(rooms && { rooms }),
+    ...(bathrooms && { bathrooms }),
+    ...(areaMin && { area_min: areaMin }),
+    ...(areaMax && { area_max: areaMax }),
     ...(priceMin && { price_min: priceMin }),
     ...(priceMax && { price_max: priceMax }),
     ...(category && { category_id: category }),
@@ -56,36 +63,3 @@ export const useProperties = (listingType, filters = {}) => {
       lastPage?.data?.pagination?.next_cursor ?? undefined,
   });
 };
-
-// //  useProperties.js
-// import { useInfiniteQuery } from "@tanstack/react-query";
-// import axiosInstance from "../../api/config";
-// import { useAuth } from "../../context/authContext";
-
-// const fetchListings = async ({ token, cursor = 0, listingType = "" }) => {
-//   const { data } = await axiosInstance.get(
-//     `api/v1/listings/cursor?limit=3&cursor=${cursor}&listing_type=${listingType}`,
-//     {
-//       headers: { Authorization: `Bearer ${token}` },
-//     }
-//   );
-//   console.log(data);
-
-//   return data;
-// };
-
-// export const useProperties = (listingType) => {
-//   const { user } = useAuth();
-
-//   return useInfiniteQuery({
-//     queryKey: ["listingsRealEstate", listingType],
-//     queryFn: ({ pageParam = 0 }) =>
-//       fetchListings({ token: user.token, cursor: pageParam, listingType }),
-//     staleTime: 0,
-//     cacheTime: 1000 * 60 * 5,
-//     enabled: !!user?.token,
-//     refetchOnWindowFocus: false,
-//     getNextPageParam: (lastPage) =>
-//       lastPage?.data?.pagination?.next_cursor ?? undefined,
-//   });
-// };

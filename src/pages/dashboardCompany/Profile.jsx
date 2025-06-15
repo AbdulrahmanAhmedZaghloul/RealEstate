@@ -14,9 +14,13 @@ import { useTranslation } from "../../context/LanguageContext";
 import { useProfile } from "../../hooks/queries/useProfile";
 import { useEditProfile } from "../../hooks/mutations/useEditProfile";
 import EditIcon from "../../components/icons/edit";
+import CropModal from "../../components/CropModal";
 
 function Profile() {
   // State hooks
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+const [rawImage, setRawImage] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -28,7 +32,6 @@ function Profile() {
   const [newPass, setNewPass] = useState("");
   const [passErr, setPassErr] = useState("");
   const [email, setEmail] = useState("");
-  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [initialFormData, setInitialFormData] = useState(null);
   const [formName, setFormName] = useState("");
@@ -48,7 +51,7 @@ function Profile() {
   const { t } = useTranslation();
   const { data, isLoading } = useProfile();
 
- 
+
   // Fetch and initialize profile data
   const fetchProfileData = useCallback(() => {
     if (!data) return;
@@ -104,35 +107,57 @@ function Profile() {
   ]);
 
   // Handlers
- const handleImageUpload = (event) => {
+  const handleImageUpload = (event) => {
   const file = event.target.files[0];
-
-  // التحقق من أن الملف هو صورة فقط
   if (!file || !file.type.startsWith("image/")) {
-    notifications.show({
-      title: "Invalid File",
-      message: "Please upload an image file only.",
-      color: "red",
-    });
+    notifications.show({ title: "Invalid File", message: "Please upload an image file only.", color: "red" });
     return;
   }
-
-  // التحقق من الحجم (أقل من 2 ميجا)
   if (file.size > 2 * 1024 * 1024) {
-    notifications.show({
-      title: "File Too Large",
-      message: "The image must be less than 2 MB in size.",
-      color: "red",
-    });
+    notifications.show({ title: "File Too Large", message: "The image must be less than 2 MB in size.", color: "red" });
     return;
   }
 
-  // إذا كانت الصورة صحيحة، نكمل
-  setImageFile(file);
   const imageUrl = URL.createObjectURL(file);
-  setImage(imageUrl);
-  setFormImage(imageUrl);
+  setRawImage(imageUrl); // to show in crop modal
+  setCropModalOpen(true);
 };
+
+const handleCropComplete = ({ file, url }) => {
+  setImageFile(file);
+  setImage(url);
+  setFormImage(url);
+};
+
+  // const handleImageUpload = (event) => {
+  //   const file = event.target.files[0];
+
+  //   // التحقق من أن الملف هو صورة فقط
+  //   if (!file || !file.type.startsWith("image/")) {
+  //     notifications.show({
+  //       title: "Invalid File",
+  //       message: "Please upload an image file only.",
+  //       color: "red",
+  //     });
+  //     return;
+  //   }
+
+  //   // التحقق من الحجم (أقل من 2 ميجا)
+  //   if (file.size > 2 * 1024 * 1024) {
+  //     notifications.show({
+  //       title: "File Too Large",
+  //       message: "The image must be less than 2 MB in size.",
+  //       color: "red",
+  //     });
+  //     return;
+  //   }
+
+  //   // إذا كانت الصورة صحيحة، نكمل
+  //   setImageFile(file);
+  //   const imageUrl = URL.createObjectURL(file);
+  //   setImage(imageUrl);
+  //   setFormImage(imageUrl);
+  // };
 
   const validatePassword = (value) => {
     if (!value.trim()) return "Password is required";
@@ -292,7 +317,7 @@ function Profile() {
                   {name}
                 </Text>
               </div>
-              <div  className={classes.Edit} onClick={openFormModal} style={{ cursor: "pointer" }}>
+              <div className={classes.Edit} onClick={openFormModal} style={{ cursor: "pointer" }}>
                 <EditIcon />
               </div>
             </div>
@@ -355,16 +380,17 @@ function Profile() {
               <img
                 src={image}
                 alt=" enlarged avatar"
-                style={{
-                  width: "100%",
-                  height: "40vh",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-                  objectFit: "fill"
-                }}
+       
+                className={classes.imgModal}
               />
             </Center>
           </Modal>
+<CropModal
+  imageSrc={rawImage}
+  opened={cropModalOpen}
+  onClose={() => setCropModalOpen(false)}
+  onCropComplete={handleCropComplete}
+/>
 
 
           <Modal opened={formModalOpened} onClose={closeFormModal} centered radius="lg" className={classes.Modal}>

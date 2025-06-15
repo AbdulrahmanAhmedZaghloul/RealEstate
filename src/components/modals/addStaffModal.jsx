@@ -1,4 +1,4 @@
-//Dependency imports
+//AddStaffModal.jsx
 import {
   Modal,
   FileInput,
@@ -62,15 +62,7 @@ const AddStaffModal = ({
     }
 
     prevOpenedRef.current = opened;
-  }, [opened]);
-  //  useEffect(() => {
-  //     if (opened) {
-  //       form.reset(); // 👈 Reset form fields
-  //     }
-  //     if (onClose) {
-  //       form.reset(); // 👈 Reset form fields
-  //     }
-  //   }, [opened]);
+  }, [opened]); 
   return (
     <Modal
       opened={opened}

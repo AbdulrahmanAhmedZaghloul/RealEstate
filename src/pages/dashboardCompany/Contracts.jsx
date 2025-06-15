@@ -77,7 +77,7 @@ function Contracts() {
   console.log(contractsData);
 
   useEffect(() => {
-    setContracts(contractsData?.data.data || []);
+    setContracts(contractsData?.data || []);
 
     setApprovedListings(
       listingsData?.data?.listings?.filter(

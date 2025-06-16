@@ -39,6 +39,8 @@ import LazyImage from "../../components/LazyImage";
 import FiltersModal from "./FiltersModal";
 import { debounce } from "lodash";
 function Properties() {
+  const [sortBy, setSortBy] = useState(""); // created_at / price
+  const [sortDir, setSortDir] = useState(""); // asc / desc
   const [listingTypeFilter, setListingTypeFilter] = useState("all");
   const [searchType, setSearchType] = useState("title"); // "title" أو "employee"
   const { user } = useAuth();
@@ -122,6 +124,8 @@ function Properties() {
     closeFilterModal();
   };
 
+  
+
   useEffect(() => {
     setEmployees(employeesData?.data?.employees || []);
     setCategories(categoriesData?.data?.categories || []);
@@ -148,20 +152,64 @@ function Properties() {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   useEffect(() => {
-  const debouncedSearch = debounce((value) => {
-    setFilters((prev) => ({ ...prev, search: value }));
-  }, 500);
+    const debouncedSearch = debounce((value) => {
+      setFilters((prev) => ({ ...prev, search: value }));
+    }, 500);
 
-  if (search.trim() !== "") {
-    debouncedSearch(search);
-  } else {
-    setFilters((prev) => ({ ...prev, search: "" }));
+    if (search.trim() !== "") {
+      debouncedSearch(search);
+    } else {
+      setFilters((prev) => ({ ...prev, search: "" }));
+    }
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [search]);
+
+
+ useEffect(() => {
+  let sort_by = "";
+  let sort_dir = "";
+
+  switch (filter) {
+    case "newest":
+      sort_by = "created_at";
+      sort_dir = "desc";
+      break;
+    case "oldest":
+      sort_by = "created_at";
+      sort_dir = "asc";
+      break;
+    case "highest":
+      sort_by = "price";
+      sort_dir = "desc";
+      break;
+    case "lowest":
+      sort_by = "price";
+      sort_dir = "asc";
+      break;
+    default:
+      sort_by = "";
+      sort_dir = "";
   }
 
-  return () => {
-    debouncedSearch.cancel();
-  };
-}, [search]);
+  setFilters((prev) => ({
+    ...prev,
+    sort_by,
+    sort_dir,
+  }));
+}, [filter]);
+
+
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      sort_by: sortBy,
+      sort_dir: sortDir,
+    }));
+  }, [sortBy, sortDir]);
+
   const mutation = useAddProperty(user.token, categories, close);
   const isAddPropertyLoading = mutation.isPending;
 
@@ -227,7 +275,10 @@ function Properties() {
                 mr={10}
                 placeholder={t.Sortby}
                 value={filter}
-                onChange={setFilter}
+                onChange={(value) => {
+                  setFilter(value);
+                  handleSortChange(value);
+                }}
                 rightSection={<Dropdown />}
                 data={[
                   { value: "newest", label: "Newest" },
@@ -235,36 +286,6 @@ function Properties() {
                   { value: "highest", label: "Highest price" },
                   { value: "lowest", label: "Lowest price" },
                 ]}
-                styles={{
-                  input: {
-                    width: "132px",
-                    height: "48px",
-                    borderRadius: "15px",
-                    border: "1px solid var(--color-border)",
-                    padding: "14px 24px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    cursor: "pointer",
-                    backgroundColor: "var(--color-7)",
-                  },
-
-                  dropdown: {
-                    borderRadius: "15px", // Curved dropdown menu
-                    border: "1.5px solid var(--color-border)",
-                    backgroundColor: "var(--color-7)",
-                  },
-
-                  wrapper: {
-                    width: "132px",
-                  },
-
-                  item: {
-                    color: "var(--color-4)", // Dropdown option text color
-                    "&[data-selected]": {
-                      color: "white", // Selected option text color
-                    },
-                  },
-                }}
               />
               {/* New Sale Status Filter Select */}
               <Select

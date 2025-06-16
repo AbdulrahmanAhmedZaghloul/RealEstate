@@ -38,6 +38,7 @@ function Main() {
       }}
     >
       <QueryClientProvider client={queryClient}>
+        
         <LanguageProvider>
           <Notifications />
           <HashRouter >

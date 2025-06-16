@@ -28,7 +28,7 @@ const fetchContracts = async (token, filters = {}) => {
   if (filters.effective_date) params.append('effective_date', filters.effective_date);
   if (filters.expiration_date) params.append('expiration_date', filters.expiration_date);
 
-  const { data } = await axiosInstance.get(`contracts?${params.toString()}`, {
+  const { data } = await axiosInstance.get(`contracts?limit=100&cursor=0${params.toString()}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

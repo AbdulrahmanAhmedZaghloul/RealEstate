@@ -14,6 +14,8 @@ const fetchListings = async ({
   priceMin = "",
   priceMax = "",
   category = "",
+   sort_by = "",    // 👈 جديد
+  sort_dir = "",    // 👈 جديد
   search = "", // 👈 هنا تم إضافة متغير جديد
   subcategory = "",
   cursor = 0,
@@ -34,7 +36,8 @@ const fetchListings = async ({
     ...(category && { category_id: category }),
     ...(subcategory && { subcategory_id: subcategory }),
     ...(search && { search }), // 👈 استخدام المُعامل الجديد هنا
-
+ ...(sort_by && { sort_by }),     // 👈 تم الإضافة
+    ...(sort_dir && { sort_dir }),
   });
 
   const { data } = await axiosInstance.get(`listings/cursor?${params}`, {
@@ -65,3 +68,24 @@ export const useProperties = (listingType, filters = {}) => {
       lastPage?.data?.pagination?.next_cursor ?? undefined,
   });
 };
+
+// export const useProperties = (listingType, filters = {}) => {
+//   const { user } = useAuth();
+
+//   return useInfiniteQuery({
+//     queryKey: ["listingsRealEstate", listingType, filters],
+//     queryFn: ({ pageParam = 0 }) =>
+//       fetchListings({
+//         token: user.token,
+//         cursor: pageParam,
+//         listingType,
+//         ...filters,
+//       }),
+//     staleTime: 0,
+//     cacheTime: 1000 * 60 * 5,
+//     enabled: !!user?.token,
+//     refetchOnWindowFocus: false,
+//     getNextPageParam: (lastPage) =>
+//       lastPage?.data?.pagination?.next_cursor ?? undefined,
+//   });
+// };

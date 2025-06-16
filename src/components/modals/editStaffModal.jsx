@@ -209,23 +209,7 @@ const EditStaffModal = ({
             </p>
           )}
 
-          {/* <FileInput
-          label="Profile Image"
-          accept="image/*"
-          onChange={(file) => {
-            if (file && file.size > 2 * 1024 * 1024) { // 2 MB بالبايت
-              notifications.show({
-                title: "Error",
-                message: "Image size should not exceed 2 MB.",
-                color: "red",
-              });
-              return;
-            }
-            setEditUser({ ...editUser, image: file });
-          }}
-          error={errors.image}
-          mb="md"
-        /> */}
+         
           <TextInput
             label="Name"
             placeholder="Full Name"

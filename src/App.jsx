@@ -60,6 +60,7 @@ import PropertiesMarketer from "./pages/dashboardMarketer/PropertiesMarketer.jsx
 import ContractDetailsMarketer from "./components/Marketer/ContractDetailsMarketer.jsx";
 import AnalyticsMarketer from "./pages/dashboardMarketer/AnalyticsMarketer.jsx";
 import ProfileMarketer from "./pages/dashboardMarketer/ProfileMarketer.jsx";
+import ShareContracts from "./pages/ShareContracts.jsx";
 // import DashboardMarketerLayout from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
 
 function App() {
@@ -114,6 +115,7 @@ function App() {
             />
             {/* <Route path="*" element={<h1>404111</h1>} /> */}
             <Route path="/subscription-plans" element={<SubscriptionPlans />} />
+            <Route path="/ShareContracts" element={<ShareContracts />} />
 
 
             {/* Company Manager Routes */}

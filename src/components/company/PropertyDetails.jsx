@@ -35,7 +35,7 @@ import CategoryIcon from "../icons/CategoryIcon";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/edit";
 import { useQueryClient } from "@tanstack/react-query";
-import LocationIcon from "../icons/locationIcon";
+import LocationIcon from "../icons/LocationIcon";
 
 function PropertyDetails() {
   const { id } = useParams();

@@ -14,8 +14,9 @@ const fetchListings = async ({
   priceMin = "",
   priceMax = "",
   category = "",
+  search = "", // 👈 هنا تم إضافة متغير جديد
   subcategory = "",
-    cursor = 0,
+  cursor = 0,
 
 }) => {
 
@@ -32,7 +33,8 @@ const fetchListings = async ({
     ...(priceMax && { price_max: priceMax }),
     ...(category && { category_id: category }),
     ...(subcategory && { subcategory_id: subcategory }),
-    // ...(employee && { employee_id: employee }),
+    ...(search && { search }), // 👈 استخدام المُعامل الجديد هنا
+
   });
 
   const { data } = await axiosInstance.get(`listings/cursor?${params}`, {

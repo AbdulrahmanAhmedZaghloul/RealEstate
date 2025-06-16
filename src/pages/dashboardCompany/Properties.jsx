@@ -37,10 +37,10 @@ import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
 import LazyImage from "../../components/LazyImage";
 import FiltersModal from "./FiltersModal";
-
+import { debounce } from "lodash";
 function Properties() {
   const [listingTypeFilter, setListingTypeFilter] = useState("all");
-
+  const [searchType, setSearchType] = useState("title"); // "title" أو "employee"
   const { user } = useAuth();
   const [isSticky, setIsSticky] = useState(false);
   const [filters, setFilters] = useState({
@@ -147,6 +147,21 @@ function Properties() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+  useEffect(() => {
+  const debouncedSearch = debounce((value) => {
+    setFilters((prev) => ({ ...prev, search: value }));
+  }, 500);
+
+  if (search.trim() !== "") {
+    debouncedSearch(search);
+  } else {
+    setFilters((prev) => ({ ...prev, search: "" }));
+  }
+
+  return () => {
+    debouncedSearch.cancel();
+  };
+}, [search]);
   const mutation = useAddProperty(user.token, categories, close);
   const isAddPropertyLoading = mutation.isPending;
 
@@ -188,7 +203,11 @@ function Properties() {
                   className={classes.search}
                   placeholder={t.Search}
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSearch(value);
+                    setFilters((prev) => ({ ...prev, search: value }));
+                  }}
                 />
                 <Search />
               </div>

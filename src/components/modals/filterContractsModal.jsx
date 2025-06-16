@@ -67,14 +67,14 @@ const FilterContractsModal = ({
           </Grid.Col>
 
           {/* Title */}
-          <Grid.Col span={12}>
+          {/* <Grid.Col span={12}>
             <TextInput
               label="Title"
               placeholder="Enter contract title"
               {...filterForm.getInputProps("title")}
               styles={{ input: { width: "100%", height: 48 } }}
             />
-          </Grid.Col>
+          </Grid.Col> */}
 
           {/* Customer Name */}
           <Grid.Col span={12}>
@@ -87,14 +87,14 @@ const FilterContractsModal = ({
           </Grid.Col>
 
           {/* Employee Name */}
-          <Grid.Col span={12}>
+          {/* <Grid.Col span={12}>
             <TextInput
               label="Employee Name"
               placeholder="Enter employee name"
               {...filterForm.getInputProps("employee_name")}
               styles={{ input: { width: "100%", height: 48 } }}
             />
-          </Grid.Col>
+          </Grid.Col> */}
 
           {/* Location */}
           <Grid.Col span={12}>
@@ -107,7 +107,7 @@ const FilterContractsModal = ({
           </Grid.Col>
 
           {/* Contract Type */}
-          <Grid.Col span={12}>
+          {/* <Grid.Col span={12}>
             <Select
               label="Contract Type"
               placeholder="Select type"
@@ -120,7 +120,7 @@ const FilterContractsModal = ({
               {...filterForm.getInputProps("contract_type")}
               styles={{ input: { width: "100%", height: 48 } }}
             />
-          </Grid.Col>
+          </Grid.Col> */}
 
           {/* Status */}
           <Grid.Col span={12}>
@@ -137,37 +137,7 @@ const FilterContractsModal = ({
               styles={{ input: { width: "100%", height: 48 } }}
             />
           </Grid.Col>
-
-          {/* Creation Date */}
-          <Grid.Col span={12}>
-            <TextInput
-              label="Creation Date"
-              type="date"
-              {...filterForm.getInputProps("creation_date")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col>
-
-          {/* Effective Date */}
-          <Grid.Col span={12}>
-            <TextInput
-              label="Effective Date"
-              type="date"
-              {...filterForm.getInputProps("effective_date")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col>
-
-          {/* Expiration Date */}
-          <Grid.Col span={12}>
-            <TextInput
-              label="Expiration Date"
-              type="date"
-              {...filterForm.getInputProps("expiration_date")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col>
-
+ 
           {/* Buttons */}
           <Grid.Col span={12} mt="md">
             <Group justify="center">

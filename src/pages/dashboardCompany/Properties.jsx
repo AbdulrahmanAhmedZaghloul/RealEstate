@@ -41,34 +41,35 @@ function Properties() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({});
-const [openedFilterModal, { open: openFilterModal, close: closeFilterModal }] = useDisclosure(false);
+  const [openedFilterModal, { open: openFilterModal, close: closeFilterModal }] = useDisclosure(false);
   const [sortBy, setSortBy] = useState("newest");
   const sortOptions = [
-  { value: "newest", label: "Newest" },
-  { value: "oldest", label: "Oldest" },
-  { value: "highest", label: "Highest price" },
-  { value: "lowest", label: "Lowest price" },
-];
+    { value: "newest", label: "Newest" },
+    { value: "oldest", label: "Oldest" },
+    { value: "highest", label: "Highest price" },
+    { value: "lowest", label: "Lowest price" },
+  ];
   const [isSticky, setIsSticky] = useState(false);
 
   const transactionOptions = [
-  { value: "all", label: "All" },
-  { value: "rent", label: "For Rent" },
-  { value: "buy", label: "For Sale" },
-  { value: "booking", label: "Booking" }
-];
+    { value: "all", label: "All" },
+    { value: "rent", label: "For Rent" },
+    { value: "buy", label: "For Sale" },
+    { value: "booking", label: "Booking" }
+  ];
 
-const [transactionType, setTransactionType] = useState("all");
+  const [transactionType, setTransactionType] = useState("all");
+  const listing_type = transactionType; // ✅ Define it first
 
-const {
-  data,
-  isLoading,
-  isError,
-  error,
-  fetchNextPage,
-  hasNextPage,
-  isFetching
-} = useProperties(transactionType,sortBy ,filters ,searchTerm); // 👈 تمرير الفلتر
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching
+  } = useProperties(listing_type, sortBy, filters, searchTerm); // 👈 تمرير الفلتر
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -93,24 +94,24 @@ const {
 
   const [opened, { open, close }] = useDisclosure(false);
   const { t } = useTranslation();
- const filterForm = useForm({
-  initialValues: {
-    location: "",
-    rooms: "",
-    bathrooms: "",
-    areaMin: "",
-    areaMax: "",
-    priceMin: "",
-    priceMax: "",
-    category: "",
-    subcategory: "",
-  },
-});
+  const filterForm = useForm({
+    initialValues: {
+      location: "",
+      rooms: "",
+      bathrooms: "",
+      areaMin: "",
+      areaMax: "",
+      priceMin: "",
+      priceMax: "",
+      category: "",
+      subcategory: "",
+    },
+  });
   const loadMoreRef = useRef(null);
 
   const mutation = useAddProperty(user.token, categories, close);
 
-  
+
   const [ref, inView] = useInView();
 
   useEffect(() => {
@@ -163,24 +164,25 @@ const {
   ]);
 
 
-const handleApplyFilters = (values) => {
-  // تحويل القيم الفارغة إلى undefined لتجنب إرسالها للـ API
-  const filteredValues = Object.fromEntries(
-    Object.entries(values).filter(([_, v]) => v != null && v !== "")
-  );
-  setFilters(filteredValues);
-  closeFilterModal();
-};
+  const handleApplyFilters = (values) => {
+    // تحويل القيم الفارغة إلى undefined لتجنب إرسالها للـ API
+    const filteredValues = Object.fromEntries(
+      Object.entries(values).filter(([_, v]) => v != null && v !== "")
+    );
+    setFilters(filteredValues);
+    closeFilterModal();
+  };
 
-const handleResetFilters = () => {
-  setFilters({});
-  form.reset();
+  const handleResetFilters = () => {
     setFilters({});
-  filterForm.reset();         // 👈 إعادة تعيين الحقول
-  closeFilterModal();         
-   // إذا كنت تريد إعادة تعيين الحقول في المودال
-};
-  if (  employeesLoading || categoriesLoading) {
+    form.reset();
+    setFilters({});
+    filterForm.reset();         // 👈 إعادة تعيين الحقول
+    closeFilterModal();
+    // إذا كنت تريد إعادة تعيين الحقول في المودال
+  };
+  
+  if (employeesLoading || categoriesLoading) {
     return (
       <Center
         style={{
@@ -190,7 +192,7 @@ const handleResetFilters = () => {
           transform: "translate(-50%, -50%)",
         }}
       >
-         <Loader size="md" />
+        <Loader size="md" />
       </Center>
     );
   }
@@ -210,35 +212,35 @@ const handleResetFilters = () => {
 
         <header className={`${classes.header} ${isSticky ? classes.sticky : ""}`}>
           <div className={classes.controls}>
-                        <div className={classes.flexSearch}>
-          <div className={classes.divSearch}>
-  <input
-    className={classes.search}
-    placeholder={t.Search}
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-  />
-  <Search />
-</div>
-<button className={classes.add} onClick={openFilterModal}>
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5 7H19M5 12H19M5 17H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-  </svg>
-  &nbsp;
-</button>
-                        </div>
-             
+            <div className={classes.flexSearch}>
+              <div className={classes.divSearch}>
+                <input
+                  className={classes.search}
+                  placeholder={t.Search}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Search />
+              </div>
+              <button className={classes.add} onClick={openFilterModal}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 7H19M5 12H19M5 17H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                &nbsp;
+              </button>
+            </div>
+
 
             <div className={classes.addAndSort}>
               <Select
-  // label="Sort By"
-  placeholder="Choose sorting method"
-  data={sortOptions}
-  value={sortBy}
-  onChange={setSortBy}
-  radius="md"
-  size="sm"
-  
+                // label="Sort By"
+                placeholder="Choose sorting method"
+                data={sortOptions}
+                value={sortBy}
+                onChange={setSortBy}
+                radius="md"
+                size="sm"
+
                 styles={{
                   input: {
                     width: "132px",
@@ -269,17 +271,17 @@ const handleResetFilters = () => {
                     },
                   },
                 }}
-/>
-                <Select
-                                rightSection={<Dropdown />}
+              />
+              <Select
+                rightSection={<Dropdown />}
 
-    value={transactionType}
-    onChange={setTransactionType}
-    data={transactionOptions}
-     placeholder="Select type"
-    radius="md"
-    size="sm"
-    styles={{
+                value={transactionType}
+                onChange={setTransactionType}
+                data={transactionOptions}
+                placeholder="Select type"
+                radius="md"
+                size="sm"
+                styles={{
                   input: {
                     width: "132px",
                     height: "48px",
@@ -309,7 +311,7 @@ const handleResetFilters = () => {
                     },
                   },
                 }}
-  />
+              />
 
               <button
                 style={{ cursor: "pointer" }}
@@ -412,18 +414,18 @@ const handleResetFilters = () => {
                         <div className={classes.listingDate}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
                             : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                         </div>
                       </div>
                     </Card>
@@ -433,18 +435,18 @@ const handleResetFilters = () => {
 
             {/* 👇 عنصر غير مرئي لتحفيز التحميل عند الوصول إليه */}
             <div ref={loadMoreRef} style={{ height: "20px" }} />
- 
-{isFetching && (
-  <Center>
-    <Loader size="sm" />
-  </Center>
-)}
-{/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
-{!isLoading && data?.pages.flatMap((page) => page.data.listings).length === 0 && (
-  <Center>
-    <Text>{t.NoListingsFound}</Text>
-  </Center>
-)} 
+
+            {isFetching && (
+              <Center>
+                <Loader size="sm" />
+              </Center>
+            )}
+            {/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
+            {!isLoading && data?.pages.flatMap((page) => page.data.listings).length === 0 && (
+              <Center>
+                <Text>{t.NoListingsFound}</Text>
+              </Center>
+            )}
           </>
         )}
       </Card>
@@ -459,18 +461,17 @@ const handleResetFilters = () => {
         loading={mutation.isPending}
       />
       <FiltersModal
-  opened={openedFilterModal}
-  onClose={closeFilterModal}
-  categories={categories}
-  onFilter={handleApplyFilters}
-  onReset={handleResetFilters}
-    form={filterForm} // 👈 إرسال النموذج للمودال
+        opened={openedFilterModal}
+        onClose={closeFilterModal}
+        categories={categories}
+        onFilter={handleApplyFilters}
+        onReset={handleResetFilters}
+        form={filterForm} // 👈 إرسال النموذج للمودال
 
-/>
+      />
     </>
   );
 }
 
 export default Properties;
 
- 

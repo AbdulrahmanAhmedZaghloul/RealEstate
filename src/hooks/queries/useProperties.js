@@ -6,7 +6,7 @@ import { useAuth } from "../../context/authContext";
 const fetchListings = async ({
   token,
   cursor = 0,
-  transactionType = "all",
+  listing_type = "all",
   sortBy = "newest",
   filters = {},
   searchTerm = "",
@@ -44,8 +44,8 @@ const fetchListings = async ({
     ...filters,
   };
 
-  if (transactionType !== "all") {
-    params.transaction_type = transactionType;
+  if (listing_type !== "all") {
+    params.listing_type = listing_type;
   }
 
   if (searchTerm) {
@@ -58,56 +58,12 @@ const fetchListings = async ({
   });
 
   return data;
-};
+}; 
 
-// const fetchListings = async ({ token, cursor = 0, transactionType = "all", sortBy = "newest", filters = {} }) => {
-//   let sort_by = "";
-//   let sort_dir = "";
 
-//   switch (sortBy) {
-//     case "newest":
-//       sort_by = "created_at";
-//       sort_dir = "desc";
-//       break;
-//     case "oldest":
-//       sort_by = "created_at";
-//       sort_dir = "asc";
-//       break;
-//     case "highest":
-//       sort_by = "price";
-//       sort_dir = "desc";
-//       break;
-//     case "lowest":
-//       sort_by = "price";
-//       sort_dir = "asc";
-//       break;
-//     default:
-//       sort_by = "created_at";
-//       sort_dir = "desc";
-//   }
-
-//   const params = {
-//     limit: 6,
-//     cursor,
-//     sort_by,
-//     sort_dir,
-//     ...filters, // 👈 يتم دمج الفلاتر هنا
-//   };
-
-//   if (transactionType !== "all") {
-//     params.transaction_type = transactionType;
-//   }
-
-//   const { data } = await axiosInstance.get("listings/cursor", {
-//     headers: { Authorization: `Bearer ${token}` },
-//     params,
-//   });
-
-//   return data;
-// };
 
 export const useProperties = (
-  transactionType = "all",
+  listing_type = "all",
   sortBy = "newest",
   filters = {},
   searchTerm = ""
@@ -115,12 +71,12 @@ export const useProperties = (
   const { user } = useAuth();
 
   return useInfiniteQuery({
-    queryKey: ["listingsRealEstate", transactionType, sortBy, filters, searchTerm],
+    queryKey: ["listingsRealEstate", listing_type, sortBy, filters, searchTerm],
     queryFn: ({ pageParam = 0 }) =>
       fetchListings({
         token: user.token,
         cursor: pageParam,
-        transactionType,
+        listing_type,
         sortBy,
         filters,
         searchTerm,
@@ -135,29 +91,4 @@ export const useProperties = (
     refetchOnWindowFocus: false,
   });
 };
-
-// export const useProperties = (transactionType = "all", sortBy = "newest", filters = {}) => {
-//   const { user } = useAuth();
-
-//   return useInfiniteQuery({
-//     queryKey: ["listingsRealEstate", transactionType, sortBy, filters],
-//     queryFn: ({ pageParam = 0 }) =>
-//       fetchListings({
-//         token: user.token,
-//         cursor: pageParam,
-//         transactionType,
-//         sortBy,
-//         filters,
-//       }),
-//     initialPageParam: 0,
-//     getNextPageParam: (lastPage) => {
-//       return lastPage.data?.pagination?.next_cursor ?? undefined;
-//     },
-//     staleTime: 0,
-//     cacheTime: 1000 * 60 * 5,
-//     enabled: !!user?.token,
-//     refetchOnWindowFocus: false,
-//   });
-// };
-
-
+ 

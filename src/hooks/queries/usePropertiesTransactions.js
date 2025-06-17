@@ -1,135 +1,162 @@
-// useProperties.js
+ 
+
+
+// usePropertiesTransactions.js
+// import { useInfiniteQuery } from "@tanstack/react-query";
+// import axiosInstance from "../../api/config";
+// import { useAuth } from "../../context/authContext";
+
+// const fetchListings = async ({ token, cursor = 0 }) => {
+//   const { data } = await axiosInstance.get(`listings/pending?limit=3&cursor=${cursor}`, {
+//     headers: { Authorization: `Bearer ${token}` },
+//   });
+
+//   return data;
+// };
+
+// export const usePropertiesTransactions = () => {
+//   const { user } = useAuth();
+
+//   return useInfiniteQuery({
+//     queryKey: ["listingsRealEstate-pending"],
+//     queryFn: ({ pageParam = 0 }) =>
+//       fetchListings({
+//         token: user.token,
+//         cursor: pageParam,
+//       }),
+//     initialPageParam: 0,
+//     getNextPageParam: (lastPage) => {
+//       console.log("Last Page Data:", lastPage);
+      
+//       // تأكد أن lastPage.pagination.next_cursor موجود
+//       return lastPage?.data.pagination?.next_cursor ?? undefined;
+//     },
+//     enabled: !!user?.token,
+//     refetchOnWindowFocus: false,
+//   });
+// };
+ 
+
+
+
+// usePropertiesTransactions.js
+// import { useInfiniteQuery } from "@tanstack/react-query";
+// import axiosInstance from "../../api/config";
+// import { useAuth } from "../../context/authContext";
+
+// const fetchListings = async ({ token, cursor = 0, listingType = "all", sortBy = "created_at", sortDir = "desc" }) => {
+//   let url = listingType === "all"
+//     ? `listings/pending?limit=6&cursor=${cursor}`
+//     : `listings/pending?listing_type=${listingType}&limit=6&cursor=${cursor}`;
+
+//   // إضافة الفلاتر الجديدة
+//   url += `&sort_by=${sortBy}&sort_dir=${sortDir}`;
+
+//   const { data } = await axiosInstance.get(url, {
+//     headers: { Authorization: `Bearer ${token}` },
+//   });
+
+//   return data;
+// };
+
+// export const usePropertiesTransactions = (listingType = "all", sortBy = "created_at", sortDir = "desc") => {
+//   const { user } = useAuth();
+
+//   return useInfiniteQuery({
+//     queryKey: ["listingsRealEstate-pending", listingType, sortBy, sortDir],
+//     queryFn: ({ pageParam = 0 }) =>
+//       fetchListings({
+//         token: user.token,
+//         cursor: pageParam,
+//         listingType,
+//         sortBy,
+//         sortDir,
+//       }),
+//     initialPageParam: 0,
+//     getNextPageParam: (lastPage) => {
+//       return lastPage?.data?.pagination?.next_cursor ?? undefined;
+//     },
+//     enabled: !!user?.token,
+//     refetchOnWindowFocus: false,
+//   });
+// };
+
+
+
+
+
+
+
+
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 
 const fetchListings = async ({
   token,
-  page = 1, // نستخدم رقم الصفحة بدلاً من cursor
-  listingType = "",
+  cursor = 0,
+  listingType = "all",
+  sortBy = "created_at",
+  sortDir = "desc",
+  filters = {}
+}) => {
+  let url = new URL(`listings/pending`, window.location.origin);
 
-  location = "",
-  rooms = "",
-  bathrooms = "",
-  areaMin = "",
-  areaMax = "",
-  priceMin = "",
-  priceMax = "",
-  category = "",
-  subcategory = "",}) => {
-  const params = new URLSearchParams({
-    page,
-    limit: 3,
-    listing_type: listingType,
-    ...(location && { location }),
-    ...(rooms && { rooms }),
-    ...(bathrooms && { bathrooms }),
-    ...(areaMin && { area_min: areaMin }),
-    ...(areaMax && { area_max: areaMax }),
-    ...(priceMin && { price_min: priceMin }),
-    ...(priceMax && { price_max: priceMax }),
-    ...(category && { category_id: category }),
-    ...(subcategory && { subcategory_id: subcategory }),
+  // إضافة الباراميتيرات الأساسية
+  url.searchParams.append("limit", 6);
+  url.searchParams.append("cursor", cursor);
+  if (listingType !== "all") url.searchParams.append("listing_type", listingType);
+  url.searchParams.append("sort_by", sortBy);
+  url.searchParams.append("sort_dir", sortDir);
+
+  // إضافة الفلاتر
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      url.searchParams.append(key, value);
+    }
   });
 
-  const { data } = await axiosInstance.get(`listings/pending?${params}`, {
+  const { data } = await axiosInstance.get(url.pathname + url.search, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  console.log("Fetched Listings Data:", data);
-
-  return {
-    data: data?.data?.listings?.data,
-    pagination: {
-      currentPage: data?.data?.listings?.current_page,
-      lastPage: data?.data?.listings?.last_page,
-    },
-  };
+  return data;
 };
-
-export const usePropertiesTransactions = (listingType, filters = {}) => {
+export const usePropertiesTransactions = (
+  listingType = "all",
+  sortBy = "created_at",
+  sortDir = "desc",
+  filters = {}
+) => {
   const { user } = useAuth();
 
-  return useInfiniteQuery({
-    queryKey: ["listingsRealEstate-pending", listingType, filters],
-    queryFn: ({ pageParam = 1 }) =>
+  // نجعل enabled false ما لم يتم تفعيله من الخارج
+  const [enabled, setEnabled] = useState(false);
+
+  const query = useInfiniteQuery({
+    queryKey: ["listingsRealEstate-pending", listingType, sortBy, sortDir, filters],
+    queryFn: ({ pageParam = 0 }) =>
       fetchListings({
         token: user.token,
-        page: pageParam,
+        cursor: pageParam,
         listingType,
+        sortBy,
+        sortDir,
         filters,
       }),
-    staleTime: 0,
-    cacheTime: 1000 * 60 * 5,
-    enabled: !!user?.token,
-    refetchOnWindowFocus: false,
-
-    // تحديد متى هناك صفحة تالية
+    initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-        console.log(lastPage);
-        
-      const nextPage = lastPage?.pagination?.currentPage + 1;
-      return lastPage?.pagination?.currentPage < lastPage?.pagination?.lastPage
-        ? nextPage
-        : undefined;
+      return lastPage?.data?.pagination?.next_cursor ?? undefined;
     },
+    enabled: !!user?.token && enabled, // ← هنا الشرط الجديد
+    refetchOnWindowFocus: false,
   });
+
+  return {
+    ...query,
+    enableQuery: () => setEnabled(true), // ← دالة لتفعيل الاستعلام
+    resetQuery: () => {
+      setEnabled(false); // ← لإعادة التعيين
+    }
+  };
 };
-// // useProperties.js
-// import { useInfiniteQuery } from "@tanstack/react-query";
-// import axiosInstance from "../../api/config";
-// import { useAuth } from "../../context/authContext";
-
-// const fetchListings = async ({
-//   token,
-//   cursor = 0,
-//   listingType = "",
-//   location = "",
-//   rooms = "",
-//   priceMin = "",
-//   priceMax = "",
-//   category = "",
-//   subcategory = "",
-// }) => {
-  
-//   const params = new URLSearchParams({
-//     limit: 3,
-//     cursor,
-//     listing_type: listingType,
-//     ...(location && { location }),
-//     ...(rooms && { rooms }),
-//     ...(priceMin && { price_min: priceMin }),
-//     ...(priceMax && { price_max: priceMax }),
-//     ...(category && { category_id: category }),
-//     ...(subcategory && { subcategory_id: subcategory }),
-//     // ...(employee && { employee_id: employee }),
-//   });
-
-//   const { data } = await axiosInstance.get(`listings/pending?${params}`, {
-//     headers: { Authorization: `Bearer ${token}` },
-//   });
-//   console.log("Fetched Listings Data:", data);
-
-//   return data;
-// };
-
-// export const usePropertiesTransactions = (listingType, filters = {}) => {
-//   const { user } = useAuth();
-
-//   return useInfiniteQuery({
-//     queryKey: ["listingsRealEstate", listingType, filters],
-//     queryFn: ({ pageParam = 0 }) =>
-//       fetchListings({
-//         token: user.token,
-//         cursor: pageParam,
-//         listingType,
-//         ...filters,
-//       }),
-//     staleTime: 0,
-//     cacheTime: 1000 * 60 * 5,
-//     enabled: !!user?.token,
-//     refetchOnWindowFocus: false,
-//     getNextPageParam: (lastPage) =>
-//       lastPage?.data?.pagination?.next_cursor ?? undefined,
-//   });
-// };

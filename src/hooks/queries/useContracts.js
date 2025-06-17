@@ -30,18 +30,25 @@ const fetchContracts = (token, filters = {}) => async ({ pageParam = 0 }) => {
 
   
   // Pagination
-  params.append('limit', 10);
+  params.append('limit', 2);
   params.append('cursor', pageParam);
 
   const { data } = await axiosInstance.get(`contracts?${params.toString()}`, {
     headers: { Authorization: `Bearer ${token}` },
+
   });
 
+
   return {
-    contracts: data.data || [],
-    nextCursor: data.pagination?.next_cursor,
-    hasMore: data.pagination?.has_more ?? false,
-  };
+  contracts: data.data || [],
+  nextCursor: data.pagination?.next_cursor ?? undefined,
+  hasMore: Boolean(data.pagination?.has_more), // ضمان قيمة boolean
+};
+  // return {
+  //   contracts: data.data || [],
+  //   nextCursor: data.pagination?.next_cursor,
+  //   hasMore: data.pagination?.has_more ?? false,
+  // };
 };
 
 export const useContracts = (filters = {}) => {
@@ -53,8 +60,7 @@ export const useContracts = (filters = {}) => {
     queryFn: fetchContracts(token, filters),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      return lastPage.hasMore ? lastPage.nextCursor : undefined;
-    },
+  return lastPage.hasMore ? lastPage.nextCursor : null;    },
     enabled: !!token,
     staleTime: 0,
     cacheTime: 1000 * 60 * 5,

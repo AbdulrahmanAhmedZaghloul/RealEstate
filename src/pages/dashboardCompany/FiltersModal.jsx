@@ -9,20 +9,22 @@ export default function FiltersModal({
   categories,
   onFilter,
   onReset,
+  form
 }) {
-  const form = useForm({
-    initialValues: {
-      location: "",
-      rooms: "",
-      bathrooms: "",
-      areaMin: "",
-      areaMax: "",
-      priceMin: "",
-      priceMax: "",
-      category: "",
-      subcategory: "",
-    },
-  });
+
+  // const form = useForm({
+  //   initialValues: {
+  //     location: "",
+  //     rooms: "",
+  //     bathrooms: "",
+  //     areaMin: "",
+  //     areaMax: "",
+  //     priceMin: "",
+  //     priceMax: "",
+  //     category: "",
+  //     subcategory: "",
+  //   },
+  // });
 
   const subcategories =
     categories.find((cat) => cat.id.toString() === form.values.category)

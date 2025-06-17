@@ -5,87 +5,159 @@ import { useAuth } from "../../context/authContext";
 
 const fetchListings = async ({
   token,
-  listingType = "",
-  location = "",
-  rooms = "",
-  bathrooms = "",
-  areaMin = "",
-  areaMax = "",
-  priceMin = "",
-  priceMax = "",
-  category = "",
-   sort_by = "",    // 👈 جديد
-  sort_dir = "",    // 👈 جديد
-  search = "", // 👈 هنا تم إضافة متغير جديد
-  subcategory = "",
   cursor = 0,
-
+  transactionType = "all",
+  sortBy = "newest",
+  filters = {},
+  searchTerm = "",
 }) => {
+  let sort_by = "";
+  let sort_dir = "";
 
-  const params = new URLSearchParams({
-    limit: 3,
+  switch (sortBy) {
+    case "newest":
+      sort_by = "created_at";
+      sort_dir = "desc";
+      break;
+    case "oldest":
+      sort_by = "created_at";
+      sort_dir = "asc";
+      break;
+    case "highest":
+      sort_by = "price";
+      sort_dir = "desc";
+      break;
+    case "lowest":
+      sort_by = "price";
+      sort_dir = "asc";
+      break;
+    default:
+      sort_by = "created_at";
+      sort_dir = "desc";
+  }
+
+  const params = {
+    limit: 6,
     cursor,
-    listing_type: listingType,
-    ...(location && { location }),
-    ...(rooms && { rooms }),
-    ...(bathrooms && { bathrooms }),
-    ...(areaMin && { area_min: areaMin }),
-    ...(areaMax && { area_max: areaMax }),
-    ...(priceMin && { price_min: priceMin }),
-    ...(priceMax && { price_max: priceMax }),
-    ...(category && { category_id: category }),
-    ...(subcategory && { subcategory_id: subcategory }),
-    ...(search && { search }), // 👈 استخدام المُعامل الجديد هنا
- ...(sort_by && { sort_by }),     // 👈 تم الإضافة
-    ...(sort_dir && { sort_dir }),
-  });
+    sort_by,
+    sort_dir,
+    ...filters,
+  };
 
-  const { data } = await axiosInstance.get(`listings/cursor?${params}`, {
+  if (transactionType !== "all") {
+    params.transaction_type = transactionType;
+  }
+
+  if (searchTerm) {
+    params.search = searchTerm; // 👈 إرسال مصطلح البحث إلى الـ API
+  }
+
+  const { data } = await axiosInstance.get("listings/cursor", {
     headers: { Authorization: `Bearer ${token}` },
+    params,
   });
-  console.log("Fetched Listings Data:", data);
 
   return data;
 };
 
-export const useProperties = (listingType, filters = {}) => {
+// const fetchListings = async ({ token, cursor = 0, transactionType = "all", sortBy = "newest", filters = {} }) => {
+//   let sort_by = "";
+//   let sort_dir = "";
+
+//   switch (sortBy) {
+//     case "newest":
+//       sort_by = "created_at";
+//       sort_dir = "desc";
+//       break;
+//     case "oldest":
+//       sort_by = "created_at";
+//       sort_dir = "asc";
+//       break;
+//     case "highest":
+//       sort_by = "price";
+//       sort_dir = "desc";
+//       break;
+//     case "lowest":
+//       sort_by = "price";
+//       sort_dir = "asc";
+//       break;
+//     default:
+//       sort_by = "created_at";
+//       sort_dir = "desc";
+//   }
+
+//   const params = {
+//     limit: 6,
+//     cursor,
+//     sort_by,
+//     sort_dir,
+//     ...filters, // 👈 يتم دمج الفلاتر هنا
+//   };
+
+//   if (transactionType !== "all") {
+//     params.transaction_type = transactionType;
+//   }
+
+//   const { data } = await axiosInstance.get("listings/cursor", {
+//     headers: { Authorization: `Bearer ${token}` },
+//     params,
+//   });
+
+//   return data;
+// };
+
+export const useProperties = (
+  transactionType = "all",
+  sortBy = "newest",
+  filters = {},
+  searchTerm = ""
+) => {
   const { user } = useAuth();
 
   return useInfiniteQuery({
-    queryKey: ["listingsRealEstate", listingType, filters],
+    queryKey: ["listingsRealEstate", transactionType, sortBy, filters, searchTerm],
     queryFn: ({ pageParam = 0 }) =>
       fetchListings({
         token: user.token,
         cursor: pageParam,
-        listingType,
-        ...filters,
+        transactionType,
+        sortBy,
+        filters,
+        searchTerm,
       }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      return lastPage.data?.pagination?.next_cursor ?? undefined;
+    },
     staleTime: 0,
     cacheTime: 1000 * 60 * 5,
     enabled: !!user?.token,
     refetchOnWindowFocus: false,
-    getNextPageParam: (lastPage) =>
-      lastPage?.data?.pagination?.next_cursor ?? undefined,
   });
 };
 
-// export const useProperties = (listingType, filters = {}) => {
+// export const useProperties = (transactionType = "all", sortBy = "newest", filters = {}) => {
 //   const { user } = useAuth();
 
 //   return useInfiniteQuery({
-//     queryKey: ["listingsRealEstate", listingType, filters],
+//     queryKey: ["listingsRealEstate", transactionType, sortBy, filters],
 //     queryFn: ({ pageParam = 0 }) =>
 //       fetchListings({
 //         token: user.token,
 //         cursor: pageParam,
-//         listingType,
-//         ...filters,
+//         transactionType,
+//         sortBy,
+//         filters,
 //       }),
+//     initialPageParam: 0,
+//     getNextPageParam: (lastPage) => {
+//       return lastPage.data?.pagination?.next_cursor ?? undefined;
+//     },
 //     staleTime: 0,
 //     cacheTime: 1000 * 60 * 5,
 //     enabled: !!user?.token,
 //     refetchOnWindowFocus: false,
-//     getNextPageParam: (lastPage) =>
-//       lastPage?.data?.pagination?.next_cursor ?? undefined,
 //   });
 // };
+
+

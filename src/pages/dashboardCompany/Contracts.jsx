@@ -133,8 +133,7 @@ function Contracts() {
   }, [listingsData]);
   // استدعاء API مع Infinite Query
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useContracts(filters);
-  console.log(data);
+    useContracts(filters); 
 
   // تحديد نهاية الصفحة (infinity scroll)
   const observerRef = useRef();
@@ -311,18 +310,18 @@ function Contracts() {
                   <div className={classes.contractDate}>
                     {Math.floor(
                       (new Date() - new Date(contract.creation_date)) /
-                        (1000 * 60 * 60 * 24)
+                      (1000 * 60 * 60 * 24)
                     ) > 1
                       ? `${Math.floor(
-                          (new Date() - new Date(contract.creation_date)) /
-                            (1000 * 60 * 60 * 24)
-                        )} days ago`
+                        (new Date() - new Date(contract.creation_date)) /
+                        (1000 * 60 * 60 * 24)
+                      )} days ago`
                       : Math.floor(
-                          (new Date() - new Date(contract.creation_date)) /
-                            (1000 * 60 * 60 * 24)
-                        ) === 1
-                      ? "Yesterday"
-                      : "Today"}
+                        (new Date() - new Date(contract.creation_date)) /
+                        (1000 * 60 * 60 * 24)
+                      ) === 1
+                        ? "Yesterday"
+                        : "Today"}
                   </div>
                 </GridCol>
               </Grid>
@@ -337,6 +336,10 @@ function Contracts() {
               )}
             </div>
           )}
+          {console.log(hasNextPage)}
+          {console.log(isFetchingNextPage)}
+          {console.log(observerRef)}
+
         </div>
       </Card>
 

@@ -16,6 +16,7 @@ import { validateField } from "../../hooks/Validation/validation";
 import { IconCamera } from "@tabler/icons-react";
 import { useEffect, useRef, React, useState } from "react";
 import CropModal from "../CropModal";
+import { useLocation } from "react-router-dom";
 
 const AddStaffModal = ({
   opened,
@@ -38,6 +39,8 @@ const AddStaffModal = ({
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
+  const location = useLocation();
+
   const prevOpenedRef = useRef(opened);
   const defaultNewUser = {
     name: "",
@@ -277,45 +280,50 @@ const AddStaffModal = ({
             mb={24}
           />
 
-          <Select
-            label="Position"
-            placeholder="Select type"
-            rightSection={<img src={downArrow} />}
-            value={newUser.position}
-            onChange={(value) => setNewUser({ ...newUser, position: value })}
-            data={[
-              { value: "supervisor", label: "Supervisor" },
-              { value: "employee", label: "Employee" },
-            ]}
-            styles={{ input: { height: 48 } }}
-            mb={24}
-          />
+          {!location.pathname.includes("/dashboard/supervisor/team") ? null : (
+            <>
+              <Select
+                label="Position"
+                placeholder="Select type"
+                rightSection={<img src={downArrow} />}
+                value={newUser.position}
+                onChange={(value) =>
+                  setNewUser({ ...newUser, position: value })
+                }
+                data={[
+                  { value: "supervisor", label: "Supervisor" },
+                  { value: "employee", label: "Employee" },
+                ]}
+                styles={{ input: { height: 48 } }}
+                mb={24}
+              />
 
-          {newUser.position === "employee" && (
-            <Select
-              label="Supervisor"
-              placeholder="Select supervisor"
-              value={
-                newUser.supervisor_id !== null
-                  ? String(newUser.supervisor_id)
-                  : ""
-              }
-              onChange={(value) => {
-                setNewUser((prev) => ({
-                  ...prev,
-                  supervisor_id: value ? Number(value) : null,
-                }));
-              }}
-              data={(supervisors || []).map((supervisor) => ({
-                value: String(supervisor.supervisor_id),
-                label: supervisor.name,
-              }))}
-              styles={{ input: { height: 48 } }}
-              mb={24}
-              rightSection={<img src={downArrow} />}
-            />
+              {newUser.position === "employee" && (
+                <Select
+                  label="Supervisor"
+                  placeholder="Select supervisor"
+                  value={
+                    newUser.supervisor_id !== null
+                      ? String(newUser.supervisor_id)
+                      : ""
+                  }
+                  onChange={(value) => {
+                    setNewUser((prev) => ({
+                      ...prev,
+                      supervisor_id: value ? Number(value) : null,
+                    }));
+                  }}
+                  data={(supervisors || []).map((supervisor) => ({
+                    value: String(supervisor.supervisor_id),
+                    label: supervisor.name,
+                  }))}
+                  styles={{ input: { height: 48 } }}
+                  mb={24}
+                  rightSection={<img src={downArrow} />}
+                />
+              )}
+            </>
           )}
-
           <Button
             fullWidth
             disabled={loading}
@@ -341,7 +349,9 @@ const AddStaffModal = ({
               onAdd(newUser.position === "supervisor");
             }}
           >
-            {newUser.position === "employee" ? "Add Employee" : "Add Supervisor"}
+            {newUser.position === "employee"
+              ? "Add Employee"
+              : "Add Supervisor"}
           </Button>
         </div>
       </Modal>
@@ -357,7 +367,6 @@ const AddStaffModal = ({
         }}
       />
     </>
-
   );
 };
 

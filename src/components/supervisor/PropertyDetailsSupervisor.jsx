@@ -431,7 +431,7 @@ function PropertyDetailsSupervisor() {
                     <span className={classes.svgSpan}>
                       <div>
                         <CategoryIcon />
-                        <span>{listing.category} / </span>
+                        <span>{listing.category.name} /  {listing.subcategory.name}</span>
                       </div>
                     </span>
                     

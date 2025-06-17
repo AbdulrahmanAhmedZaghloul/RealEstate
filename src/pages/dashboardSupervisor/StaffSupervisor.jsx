@@ -1,5 +1,16 @@
 import {
-  ActionIcon, Anchor, Avatar, Badge, Group, Table, Text, Center, Loader, Card, Select, useMantineColorScheme,
+  ActionIcon,
+  Anchor,
+  Avatar,
+  Badge,
+  Group,
+  Table,
+  Text,
+  Center,
+  Loader,
+  Card,
+  Select,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
@@ -8,8 +19,6 @@ import axiosInstance from "../../api/config";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import classes from "../../styles/realEstates.module.css";
-import edit from "../../assets/edit.svg";
-import trash from "../../assets/trash.svg";
 import AddStaffModal from "../../components/modals/addStaffModal";
 import UpdataStaffModal from "./../../components/modals/editStaffModal_Supervisor";
 import { BurgerButton } from "../../components/buttons/burgerButton";
@@ -42,15 +51,6 @@ function StaffSupervisor() {
     picture: null,
     supervisor_id: null,
   });
-  // const [errors, setErrors] = useState({
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  //   position: "",
-  //   phone_number: "",
-  //   address: "",
-  //   picture: "",
-  // });
 
   const [errors, setErrors] = useState({
     name: "",
@@ -89,10 +89,10 @@ function StaffSupervisor() {
       const response = await axiosInstance.get("employees", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      console.log(response.data.data.employees)
+      console.log(response.data.data.employees);
 
-        queryClient.invalidateQueries({ queryKey: ["supervisors"] });
-        queryClient.invalidateQueries({ queryKey: ["employees"] });
+      queryClient.invalidateQueries({ queryKey: ["supervisors"] });
+      queryClient.invalidateQueries({ queryKey: ["employees"] });
       setEmployees(response.data.data.employees);
       setSearchedEmployees(response.data.data.employees);
     } catch (error) {
@@ -105,23 +105,19 @@ function StaffSupervisor() {
       setLoading(false);
     }
   };
-  
+
   const fetchDataKPIs = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(
-        `kpi/employee-performance`,
-        {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }
-      );
+      const response = await axiosInstance.get(`kpi/employee-performance`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
 
       const apiData = response.data.data;
 
       // Map API data to state
       console.log(apiData);
       setKpiData(apiData);
-
     } catch (error) {
       console.error("Error fetching KPI data:", error);
       notifications.show({
@@ -142,15 +138,14 @@ function StaffSupervisor() {
       query.trim() === ""
         ? employees
         : employees.filter((employee) =>
-          `${employee.name} ${employee.phone_number} ${employee.email}`
-            .toLowerCase()
-            .includes(query)
-        )
+            `${employee.name} ${employee.phone_number} ${employee.email}`
+              .toLowerCase()
+              .includes(query)
+          )
     );
   };
 
   const [previewImage, setPreviewImage] = useState(null);
-
 
   const handleAddUser = async (isSupervisor) => {
     if (!validateForm(newUser)) return;
@@ -232,7 +227,6 @@ function StaffSupervisor() {
 
   // Handle Update Success
   const handleUpdateSuccess = () => {
-
     queryClient.invalidateQueries({ queryKey: ["supervisors"] });
     queryClient.invalidateQueries({ queryKey: ["employees"] });
     fetchEmployees(); // Refresh the employee list
@@ -326,7 +320,10 @@ function StaffSupervisor() {
     if (!addModalOpened) {
       setPreviewImage(null); // إعادة تعيين الصورة عند إغلاق المودال
     }
-  }, [addModalOpened]);
+    if (!editModalOpened) {
+      setPreviewImage(null); // إعادة تعيين الصورة عند إغلاق المودال
+    }
+  }, [addModalOpened ,editModalOpened]);
   useEffect(() => {
     fetchEmployees();
     fetchDataKPIs();
@@ -352,15 +349,24 @@ function StaffSupervisor() {
 
   return (
     <>
-      <Card style={{
-        backgroundColor: "#ffff",
-        display: "flex", justifyContent: "center"
-      }} radius="lg">
+      <Card
+        style={{
+          backgroundColor: "#ffff",
+          display: "flex",
+          justifyContent: "center",
+        }}
+        radius="lg"
+      >
         <div>
           <BurgerButton />
-          <span style={{
-            fontWeight: "500",
-          }} className={classes.title}>{t.Staff}</span>
+          <span
+            style={{
+              fontWeight: "500",
+            }}
+            className={classes.title}
+          >
+            {t.Staff}
+          </span>
           <Notifications />
         </div>
         <div className={classes.controls}>
@@ -419,45 +425,52 @@ function StaffSupervisor() {
                 },
               }}
             />
-            <button style={{
-              cursor: "pointer",
-              border: "1.5px solid var(--color-border)",
-            }} className={classes.add} onClick={openAddModal}>
+            <button
+              style={{
+                cursor: "pointer",
+                border: "1.5px solid var(--color-border)",
+              }}
+              className={classes.add}
+              onClick={openAddModal}
+            >
               <AddIcon />
-              <span style={{ marginLeft: "13px" }}>
-                {t.Add}
-              </span>
+              <span style={{ marginLeft: "13px" }}>{t.Add}</span>
             </button>
           </div>
         </div>
         <Table.ScrollContainer shadow="xs" mt={20}>
           <Table verticalSpacing="sm">
-            <Table.Thead style={{
-              border: "1px solid var(--color-grey)",
-              borderBottom: "none",
-              borderBottomRightRadius: "none",
-              borderTopLeftRadius: "10px",
-              borderTopRightRadius: "10px",
-
-            }}   >
+            <Table.Thead
+              style={{
+                border: "1px solid var(--color-grey)",
+                borderBottom: "none",
+                borderBottomRightRadius: "none",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+              }}
+            >
               <Table.Tr
                 style={{
                   borderRadius: "20px",
                   border: "1px solid var(--color-border)",
-                }} >
-                <Table.Th >{t.Name}</Table.Th>
-                <Table.Th >{t.Position}</Table.Th>
-                <Table.Th >{t.Email}</Table.Th>
-                <Table.Th >{t.Phone}</Table.Th>
-                <Table.Th >{t.Supervisor}</Table.Th>
+                }}
+              >
+                <Table.Th>{t.Name}</Table.Th>
+                <Table.Th>{t.Position}</Table.Th>
+                <Table.Th>{t.Email}</Table.Th>
+                <Table.Th>{t.Phone}</Table.Th>
+                <Table.Th>{t.Supervisor}</Table.Th>
                 <Table.Th />
               </Table.Tr>
             </Table.Thead>
             {searchedEmployees?.map((employee) => (
-              <Table.Tr style={{
-                borderRadius: "20px",
-                border: "1px solid var(--color-border)",
-              }} key={employee.employee_id}>
+              <Table.Tr
+                style={{
+                  borderRadius: "20px",
+                  border: "1px solid var(--color-border)",
+                }}
+                key={employee.employee_id}
+              >
                 <Table.Td>
                   <Group
                     style={{ cursor: "pointer" }}
@@ -474,59 +487,52 @@ function StaffSupervisor() {
                       color={jobColors[employee.position]}
                       radius={30}
                     />
-                    <Text style={{
-                    }} fw={500}>
+                    <Text style={{}} fw={500}>
                       {employee.name}
                     </Text>
                   </Group>
                 </Table.Td>
 
-                <Table.Td >
+                <Table.Td>
                   <Badge color={jobColors[employee.position]} variant="light">
                     {employee.position}
                   </Badge>
                 </Table.Td>
 
-                <Table.Td >
+                <Table.Td>
                   <Anchor component="button" size="sm">
                     {employee.email}
                   </Anchor>
                 </Table.Td>
 
-                <Table.Td >
-                  <Text style={{
-                  }}>{employee.phone_number}</Text>
+                <Table.Td>
+                  <Text style={{}}>{employee.phone_number}</Text>
                 </Table.Td>
 
-                <Table.Td >
-                  <Text style={{
-                  }}>{employee.supervisor?.name || "N/A"}</Text>
+                <Table.Td>
+                  <Text style={{}}>{employee.supervisor?.name || "N/A"}</Text>
                 </Table.Td>
 
-                <Table.Td >
-
+                <Table.Td>
                   <Group gap={0} justify="flex-end">
                     <ActionIcon
                       variant="subtle"
                       color="gray"
-
                       onClick={() => {
                         handleEditClick(employee);
                         setEditingEmployee(employee); // تخزين بيانات الموظف المحدد
                         openEditModal(); // فتح نافذة التعديل
-                      }} mr={24}
+                      }}
+                      mr={24}
                     >
                       <EditIcon />
-
                     </ActionIcon>
                     <ActionIcon
                       variant="subtle"
                       color="red"
                       onClick={() => handleDeleteEmployee(employee.employee_id)}
-
                     >
                       <DeleteIcon />
-
                     </ActionIcon>
                   </Group>
                   {/* <Group
@@ -558,7 +564,6 @@ function StaffSupervisor() {
                     </ActionIcon>
                   </Group> */}
                 </Table.Td>
-
               </Table.Tr>
             ))}
           </Table>
@@ -566,7 +571,6 @@ function StaffSupervisor() {
       </Card>
 
       <AddStaffModal
-
         opened={addModalOpened}
         onClose={closeAddModal}
         onAdd={handleAddUser}
@@ -576,7 +580,6 @@ function StaffSupervisor() {
         setNewUser={setNewUser}
         setErrors={setErrors}
         setPreviewImage={setPreviewImage}
-
         errors={errors}
       />
 
@@ -585,8 +588,8 @@ function StaffSupervisor() {
         onClose={closeEditModal}
         employee={editingEmployee}
         onUpdateSuccess={handleUpdateSuccess}
+        setPreviewImage={setPreviewImage}
       />
-
     </>
   );
 }

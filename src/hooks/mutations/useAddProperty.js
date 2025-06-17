@@ -2,9 +2,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../../api/config';
 import { notifications } from '@mantine/notifications';
+import { useLocation } from 'react-router-dom'; // 🟢 جديد
 
 export const useAddProperty = (userToken, categories, closeModal) => {
   const queryClient = useQueryClient();
+  const { pathname } = useLocation(); // 🟢 نجيب المسار الحالي
+  const endpoint = pathname.includes('dashboard-employee') ? 'listings' : 'listings/company';
 
   const addProperty = async (values) => {
     const formData = new FormData();
@@ -35,7 +38,7 @@ export const useAddProperty = (userToken, categories, closeModal) => {
       categories.find((cat) => cat.id === parseInt(values.category_id))?.name || ''
     );
 
-    const { data } = await axiosInstance.post('listings/company', formData, {
+    const { data } = await axiosInstance.post(endpoint, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${userToken}`,
@@ -48,8 +51,9 @@ export const useAddProperty = (userToken, categories, closeModal) => {
   return useMutation({
     mutationFn: addProperty,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['listings'] });
-      queryClient.invalidateQueries({ queryKey: ['listingsRealEstate'] });
+    
+        queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+        queryClient.invalidateQueries(["listingsRealEstate-employee"]);
       closeModal?.();
       notifications.show({
         title: 'Property Added',

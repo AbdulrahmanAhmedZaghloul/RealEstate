@@ -6,6 +6,8 @@ const fetchEmployees = async (token) => {
     const { data } = await axiosInstance.get("employees", {
         headers: { Authorization: `Bearer ${token}` },
     });
+    console.log(data);
+    
     return data;
 };
 

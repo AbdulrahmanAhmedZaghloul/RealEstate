@@ -1,70 +1,57 @@
-/// useContracts.jsx
+ 
 
+// hooks/queries/useContracts.js
+
+
+
+// hooks/queries/useContracts.js
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axiosInstance from '../../api/config';
 import { useAuth } from '../../context/authContext';
 
-const fetchContracts = (token, filters = {}) => async ({ pageParam = 0 }) => {
-  const params = new URLSearchParams();
+const fetchContracts = (token, cursor, filters) => async () => {
+  const params = {
+    limit: 6,
+    cursor: cursor || 0,
 
-  // Filters
-  if (filters.search) params.append('search', filters.search);
-    if (filters.contract_type && filters.contract_type !== 'all') {
-    params.append('contract_type', filters.contract_type);
-  }
+    // Search & Filters
+    search: filters.search || undefined,
+    customer_name: filters.customer_name || undefined,
+    location: filters.location || undefined,
+    status: filters.status !== 'all' ? filters.status : undefined,
+    contract_type: filters.contract_type !== 'all' ? filters.contract_type : undefined,
 
-  if (filters.title) params.append('title', filters.title);
-  if (filters.customer_name) params.append('customer_name', filters.customer_name);
-  if (filters.employee_name) params.append('employee_name', filters.employee_name);
-  if (filters.location) params.append('location', filters.location);
-  if (filters.status && filters.status !== 'all') params.append('status', filters.status);
-  if (filters.contract_type && filters.contract_type !== 'all') params.append('contract_type', filters.contract_type);
-  if (filters.creation_date) params.append('creation_date', filters.creation_date);
-  if (filters.effective_date) params.append('effective_date', filters.effective_date);
-  if (filters.expiration_date) params.append('expiration_date', filters.expiration_date);
+    // Sort
+    sort_by: filters.sort_by || undefined,
+    sort_dir: filters.sort_dir || undefined,
+  };
 
-
-    // Sorting
-  if (filters.sort_by) params.append('sort_by', filters.sort_by);
-  if (filters.sort_dir) params.append('sort_dir', filters.sort_dir);
-
-  
-  // Pagination
-  params.append('limit', 2);
-  params.append('cursor', pageParam);
-
-  const { data } = await axiosInstance.get(`contracts?${params.toString()}`, {
+  const response = await axiosInstance.get('contracts', {
     headers: { Authorization: `Bearer ${token}` },
-
+    params,
   });
 
-
-  return {
-  contracts: data.data || [],
-  nextCursor: data.pagination?.next_cursor ?? undefined,
-  hasMore: Boolean(data.pagination?.has_more), // ضمان قيمة boolean
-};
-  // return {
-  //   contracts: data.data || [],
-  //   nextCursor: data.pagination?.next_cursor,
-  //   hasMore: data.pagination?.has_more ?? false,
-  // };
+  return response.data;
 };
 
-export const useContracts = (filters = {}) => {
+export const useContracts = (filters) => {
   const { user } = useAuth();
   const token = user?.token;
 
   return useInfiniteQuery({
     queryKey: ['contracts', filters],
-    queryFn: fetchContracts(token, filters),
+    queryFn: ({ pageParam = 0 }) => fetchContracts(token, pageParam, filters)(),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-  return lastPage.hasMore ? lastPage.nextCursor : null;    },
-    enabled: !!token,
+      const pagination = lastPage?.data?.pagination;
+      if (pagination && pagination.has_more) {
+        return pagination.next_cursor;
+      }
+      return undefined;
+    },
     staleTime: 0,
     cacheTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
+    enabled: !!token,
   });
 };
 
@@ -73,36 +60,37 @@ export const useContracts = (filters = {}) => {
 // import axiosInstance from '../../api/config';
 // import { useAuth } from '../../context/authContext';
 
-// const fetchContracts = (token) => async ({ pageParam = 0 }) => {
-//     console.log(token);
-
-//   const { data } = await axiosInstance.get(`contracts?limit=2&cursor=${pageParam}`, {
+// const fetchContracts = (token, cursor, contractType, sortBy, sortDir) => async () => {
+//   const response = await axiosInstance.get('contracts', {
 //     headers: { Authorization: `Bearer ${token}` },
+//     params: {
+//       limit: 6,
+//       cursor: cursor || 0,
+//       contract_type: contractType !== 'all' ? contractType : undefined,
+//       sort_by: sortBy || undefined,
+//       sort_dir: sortDir || undefined,
+//     },
 //   });
-
-//   console.log("API Response:", data); // للتأكد من هيكل البيانات
-
-//   return {
-//     contracts: data?.data?.data || [],
-//     nextCursor: data?.data?.pagination?.next_cursor,
-//     hasMore: data?.data?.pagination?.has_more ?? false,
-//   };
+//   return response.data;
 // };
 
-// export const useContracts = () => {
+// export const useContracts = (contractType, sortBy, sortDir) => {
 //   const { user } = useAuth();
 //   const token = user?.token;
-// console.log();
 
 //   return useInfiniteQuery({
-//     queryKey: ['contracts'],
-//     queryFn: fetchContracts(token), // تمرير التوكن قبل تنفيذ الدالة
+//     queryKey: ['contracts', contractType, sortBy, sortDir],
+//     queryFn: ({ pageParam = 0 }) => fetchContracts(token, pageParam, contractType, sortBy, sortDir)(),
 //     initialPageParam: 0,
 //     getNextPageParam: (lastPage) => {
-//       return lastPage.hasMore ? lastPage.nextCursor : undefined;
+//       const pagination = lastPage?.data?.pagination;
+//       if (pagination && pagination.has_more) {
+//         return pagination.next_cursor;
+//       }
+//       return undefined;
 //     },
-//     enabled: !!token, // لن يُنفذ الاستعلام إذا لم يكن هناك توكن
 //     staleTime: 0,
 //     cacheTime: 1000 * 60 * 5,
+//     enabled: !!token,
 //   });
-// }; 
+// };

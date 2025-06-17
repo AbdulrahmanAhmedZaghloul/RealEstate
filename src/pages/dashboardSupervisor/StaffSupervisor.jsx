@@ -588,8 +588,7 @@ function StaffSupervisor() {
         onClose={closeEditModal}
         employee={editingEmployee}
         onUpdateSuccess={handleUpdateSuccess}
-        setPreviewImage={setPreviewImage}
-      />
+       />
     </>
   );
 }

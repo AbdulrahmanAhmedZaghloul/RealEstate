@@ -1,7 +1,18 @@
 //Dependency imports
 import classes from "../../styles/contractDetails.module.css";
 import {
-  Card, Button, Center, Stack, Select, Textarea, TextInput, NumberInput, Modal, Loader, Group, Grid, GridCol, Avatar, Image, useMantineColorScheme, Text,
+  Card,
+  Button,
+  Center,
+  Modal,
+  Loader,
+  Group,
+  Grid,
+  GridCol,
+  Avatar,
+  Image,
+  useMantineColorScheme,
+  Text,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Updated import
@@ -25,7 +36,8 @@ import Area from "../icons/area";
 import BathsIcon from "../icons/BathsIcon";
 import BedsIcon from "../icons/BedsIcon";
 function ContractDetailsMarketer() {
-  const { id } = useParams();
+  const { id: idParam } = useParams();
+  const id = Number(idParam);
   const [contract, setContract] = useState(null);
   const [shareLink, setShareLink] = useState("");
   const [loading, setLoading] = useState(false);
@@ -93,42 +105,24 @@ function ContractDetailsMarketer() {
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
-  useEffect(() => {
-    fetchContract();
-  }, []);
 
-  useEffect(() => {
-    if (contract) {
-      form.setValues({
-        listing_id: contract.real_estate.id,
-        title: contract.title,
-        description: contract.description,
-        price: contract.price,
-        down_payment: contract.down_payment,
-        contract_type: contract.contract_type,
-        customer_name: contract.customer_name,
-        customer_phone: contract.customer_phone,
-        creation_date: contract.creation_date?.split("T")[0],
-        effective_date: contract.effective_date?.split("T")[0],
-        expiration_date: contract.expiration_date?.split("T")[0],
-        release_date: contract.release_date?.split("T")[0],
-      });
-    }
-  }, [contract]);
+
+
 
   const fetchContract = () => {
+    console.log(id);
+
     setLoading(true);
     axiosInstance
       .get(`contracts/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data.data);
 
-        setContract(res.data.contract);
-        setShareLink(res.data.contract.share_url);
-        console.log(res.data.contract.share_url);
-
+        setContract(res?.data?.data);
+        setShareLink(res?.data?.data?.share_url);
+        console.log(res?.data?.data?.share_url);
       })
       .catch((err) => {
         console.log(err);
@@ -138,56 +132,9 @@ function ContractDetailsMarketer() {
       });
   };
 
-  // const handleEditContract = (values) => {
-
-  //   if (!validateSaudiPhoneNumber(values.customer_phone)) {
-  //     notifications.show({
-  //       title: "Invalid phone number",
-  //       message: "Please enter a valid Saudi phone number starting with +966.",
-  //       color: "red",
-  //     });
-  //     return;
-  //   }
-  //   const formData = new FormData();
-  //   Object.keys(values).forEach((key) => {
-  //     if (key === "price" || key === "down_payment") {
-  //       formData.append(key, parseFloat(values[key]));
-  //     } else if (key !== "listing_id") {
-  //       formData.append("_method", "put");
-  //       formData.append(key, values[key]);
-  //     }
-  //   });
-  //   setLoading(true);
-  //   axiosInstance
-  //     .post(`contracts/${id}`, formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //         Authorization: `Bearer ${user.token}`,
-  //       },
-  //     })
-  //     .then(() => {
-  //       // بعد النجاح
-  //       queryClient.invalidateQueries(['contracts']);
-  //       fetchContract(); // Re-fetch the contract data
-  //       closeEditModal();
-  //       notifications.show({
-  //         title: "Contract Updated",
-  //         message: "Contract has been updated successfully.",
-  //         color: "green",
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       notifications.show({
-  //         title: "Error",
-  //         message: "Failed to update contract",
-  //         color: "red",
-  //       });
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // };
+  {
+    console.log(contract)
+  }
 
   const handleDownloadDocument = () => {
     setLoading(true);
@@ -202,7 +149,7 @@ function ContractDetailsMarketer() {
         link.href = url;
         link.setAttribute(
           "download",
-          `contract_${id}.${contract.document_type}`
+          `contract_${id}.${contract?.document_type}`
         );
         document.body.appendChild(link);
         link.click();
@@ -233,13 +180,13 @@ function ContractDetailsMarketer() {
       })
       .then(() => {
         // بعد النجاح
-        queryClient.invalidateQueries(['contracts']);
+        queryClient.invalidateQueries(["contracts"]);
         notifications.show({
           title: "Contract Deleted", // Updated notification message
           message: "Contract has been deleted successfully.",
           color: "green",
         });
-        navigate("/dashboard/contracts");
+        navigate("/dashboard-Marketer/ContractsMarketer");
       })
       .catch((err) => {
         console.log(err);
@@ -253,6 +200,56 @@ function ContractDetailsMarketer() {
         setLoading(false);
       });
   };
+  // useEffect(() => {
+  //   fetchContract();
+  // }, []);
+
+  useEffect(() => {
+    fetchContract();
+  }, []);
+
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (!opened1) return; // لا نفذ إلا إذا كان المودال مفتوحًا
+
+      if (event.key === "ArrowLeft") {
+        setSelectedImageIndex(
+          (prevIndex) =>
+            (prevIndex - 1 + contract?.real_estate.images.length) % contract?.real_estate.images.length
+        );
+      } else if (event.key === "ArrowRight") {
+        setSelectedImageIndex(
+          (prevIndex) => (prevIndex + 1) % contract?.real_estate.images.length
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [opened1, contract?.real_estate]);
+
+  useEffect(() => {
+    if (contract) {
+      form.setValues({
+        listing_id: contract.id,
+        title: contract.title,
+        description: contract.description,
+        price: contract.price,
+        down_payment: contract.down_payment,
+        contract_type: contract.contract_type,
+        customer_name: contract.customer_name,
+        customer_phone: contract.customer_phone,
+        creation_date: contract.creation_date?.split("T")[0],
+        effective_date: contract.effective_date?.split("T")[0],
+        expiration_date: contract.expiration_date?.split("T")[0],
+        release_date: contract.release_date?.split("T")[0],
+      });
+    }
+  }, [contract]);
+
 
   if (loading) {
     return (
@@ -280,42 +277,36 @@ function ContractDetailsMarketer() {
     );
   }
 
+
   return (
     <>
-      <Card
-
-        shadow="sm"
-        className={classes.card}
-      >
+      <Card shadow="sm" className={classes.card}>
         <div className={classes.imageContainer}>
           <>
-            {/* حاوية الصورة الرئيسية */}
             <div className={classes.ImageContainerBig}>
-               {contract.real_estate.images?.[0] && (
+              {contract?.real_estate?.images?.[0] && (
                 <img
-                  key={contract.real_estate.images[0].id}
-                  src={contract.real_estate.images[0].url}
-                  alt={contract.real_estate.title}
+                  key={contract?.real_estate?.images[0]?.id}
+                  src={contract?.real_estate?.images[0]?.url}
+                  alt={contract?.real_estate?.title}
                   className={classes.mainImage}
                   onClick={() => {
                     setSelectedImageIndex(0); // لأنها تاني صورة في الـ array
                     open1();
                   }}
+
                 />
               )}
-
             </div>
-
-            {/* حاوية الصور الإضافية */}
             <div className={classes.widthImageContainer}>
-              {contract.real_estate.images
+              {contract?.real_estate?.images
                 ?.filter((_, index) => index > 0) // Skip first image (primary)
                 .slice(0, 2) // Take next 2 images
                 .map((image, index) => (
                   <img
-                    key={image.id}
-                    src={image.url}
-                    alt={contract.real_estate.title}
+                    key={image?.id}
+                    src={image?.url}
+                    alt={contract?.real_estate?.title}
                     className={classes.mainImage}
                     onClick={() => {
                       setSelectedImageIndex(index + 1); // +1 because we skipped primary
@@ -334,22 +325,20 @@ function ContractDetailsMarketer() {
                 <Grid>
                   <Grid.Col span={isMobile ? 12 : 12}>
                     <div className={classes.text}>
-                      <Text
-                        className={classes.price}
-                      >
+                      <Text className={classes.price}>
                         <span className="icon-saudi_riyal">&#xea; </span>
-                        {parseFloat(contract.price).toLocaleString()}
+                        {parseFloat(contract?.price).toLocaleString()}
                       </Text>
 
-                      <Text
-                        className={classes.Down}
-                      >
-                        {parseFloat(contract.down_payment).toLocaleString()}
-                        % {t.DownPayment}
+                      <Text className={classes.Down}>
+                        {parseFloat(contract?.down_payment).toLocaleString()}%{" "}
+                        {t.DownPayment}
                       </Text>
                     </div>
 
-                    <h3 className={classes.title}>{contract.real_estate.title}</h3>
+                    <h3 className={classes.title}>
+                      {contract?.real_estate?.title}
+                    </h3>
 
                     <div className={classes.flexLocation}>
                       <div className={classes.svgLocation}>
@@ -376,23 +365,23 @@ function ContractDetailsMarketer() {
                           />
                         </svg>
                         <p className={classes.location}>
-                          {contract.real_estate.location}
+                          {contract?.real_estate?.location}
                         </p>
                       </div>
                       <div>
                         <p className={classes.time}>
                           {Math.floor(
-                            (new Date() - new Date(contract.creation_date)) /
+                            (new Date() - new Date(contract?.creation_date)) /
                             (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
                               (new Date() -
-                                new Date(contract.creation_date)) /
+                                new Date(contract?.creation_date)) /
                               (1000 * 60 * 60 * 24)
                             )} days ago`
                             : Math.floor(
                               (new Date() -
-                                new Date(contract.creation_date)) /
+                                new Date(contract?.creation_date)) /
                               (1000 * 60 * 60 * 24)
                             ) === 1
                               ? "Yesterday"
@@ -402,46 +391,53 @@ function ContractDetailsMarketer() {
                     </div>
 
                     <Grid.Col span={12} className={classes.svgCol}>
-                      {contract.real_estate.rooms === 0 ? null : <span className={classes.svgSpan}>
-                        <div>
-                          <BedsIcon />
-                          <span>{contract.real_estate.rooms} Beds</span>
-                        </div>
-                      </span>}
-                      {contract.real_estate.bathrooms === 0 ? null :
+                      {contract?.real_estate?.rooms === 0 ? null : (
+                        <span className={classes.svgSpan}>
+                          <div>
+                            <BedsIcon />
+                            <span>{contract?.real_estate?.rooms} Beds</span>
+                          </div>
+                        </span>
+                      )}
+                      {contract?.real_estate?.bathrooms === 0 ? null : (
                         <span className={classes.svgSpan}>
                           <div>
                             <BathsIcon />
-                            <span>{contract.real_estate.bathrooms} Baths</span>
+                            <span>{contract?.real_estate?.bathrooms} Baths</span>
                           </div>
                         </span>
-                      }
+                      )}
 
                       <span className={classes.svgSpan}>
                         <div>
                           <Area />
 
-                          <span>{contract.real_estate.area} sqm</span>
+                          <span>{contract?.real_estate?.area} sqm</span>
                         </div>
                       </span>
-                      
-                      {contract.real_estate.floors === 0 ? null :<span className={classes.svgSpan}>
-                        <div>
-                          <FloorsIcon />
-                          <span>{contract.real_estate.floors}</span>
-                        </div>
-                      </span>}
-                      
+
+                      {contract?.real_estate?.floors === 0 ? null : (
+                        <span className={classes.svgSpan}>
+                          <div>
+                            <FloorsIcon />
+                            <span>{contract?.real_estate?.floors}</span>
+                          </div>
+                        </span>
+                      )}
+
                       <span className={classes.svgSpan}>
                         <div>
                           <CategoryIcon />
-                          <span>{contract.real_estate.category} / {contract.real_estate.type} </span>
+                          <span>
+                            {contract?.real_estate?.category} /{" "}
+                            {contract?.real_estate?.type}{" "}
+                          </span>
                         </div>
                       </span>
                     </Grid.Col>
                     <div className={classes.description}>
                       <h4>{t.Description}</h4>
-                      <p>{contract.real_estate.description}</p>
+                      <p>{contract?.real_estate?.description}</p>
                     </div>
                   </Grid.Col>
                 </Grid>
@@ -450,7 +446,7 @@ function ContractDetailsMarketer() {
                 <div
                   className={classes.viewContainer}
                   onClick={() =>
-                    navigate(`/dashboard/employee/${contract.listed_by.id}`)
+                    navigate(`/dashboard/employee/${contract?.listed_by?.id}`)
                   }
                 >
                   <div className={classes.viewImage}>
@@ -458,11 +454,11 @@ function ContractDetailsMarketer() {
                       h={100}
                       w={100}
                       mr={10}
-                      src={contract.listed_by.picture}
+                      src={contract?.listed_by?.picture}
                       alt="nameImage"
                     />
 
-                    <span>{contract.listed_by.name}</span>
+                    <span>{contract?.listed_by?.name}</span>
                   </div>
                   <div className={classes.viewText}>
                     <span>View</span>
@@ -471,18 +467,12 @@ function ContractDetailsMarketer() {
               </Grid.Col>
             </Grid>
 
-            {/* Contract */}
             <Grid>
               <Grid.Col
                 span={isMobile ? 12 : 8}
                 className={classes.ContractSection}
               >
-                <h4
-                  style={{
-                  }}
-                >
-                  {t.Contract}
-                </h4>
+                <h4 style={{}}>{t.Contract}</h4>
                 <div className={classes.ContractImage}>
                   <div>
                     <img src={Contract} alt="ContractImage" />
@@ -531,19 +521,19 @@ function ContractDetailsMarketer() {
                       </Button>
                     </div>
                     <div className={classes.documents}>
-                      <p
-
-                      >
-                        View Documents
-                      </p>
+                      <p>View Documents</p>
                     </div>
                   </div>
                 </div>
               </Grid.Col>
             </Grid>
-            <h3 className={classes.ContractsTitle}>{contract.title}</h3>
-            <h4 className={classes.ContractsDescription}>{t.ContractDescription}</h4>
-            <p className={classes.ContractsDescriptionTag}>{contract.description}</p>
+
+            <h4 className={classes.ContractsDescription}>
+              {t.ContractDescription}
+            </h4>
+            <p className={classes.ContractsDescriptionTag}>
+              {contract?.description}
+            </p>
 
             <Grid className={classes.ContractsInformation}>
               <GridCol
@@ -569,14 +559,14 @@ function ContractDetailsMarketer() {
                     <p className={classes.InformationType}>{t.Contracttype}</p>
                     <h4>{t.description}</h4>
                     <p className={classes.InformationSale}>
-                      {contract.contract_type}
+                      {contract?.contract_type}
                     </p>
                   </GridCol>
 
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Releasedate}</p>
                     <p className={classes.InformationSale}>
-                      {new Date(contract.release_date).toLocaleDateString(
+                      {new Date(contract?.release_date).toLocaleDateString(
                         "en-GB"
                       )}
                     </p>
@@ -585,43 +575,47 @@ function ContractDetailsMarketer() {
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.DownPayment}</p>
                     <p className={classes.InformationSale}>
-                      {parseFloat(contract.down_payment).toLocaleString()}{"%"}
+                      {parseFloat(contract?.down_payment).toLocaleString()}
+                      {"%"}
                     </p>
                   </GridCol>
 
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Customername}</p>
                     <p className={classes.InformationSale}>
-                      {contract.customer_name}
+                      {contract?.customer_name}
                     </p>
                   </GridCol>
 
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Customerphone}</p>
                     <p className={classes.InformationSale}>
-                      {contract.customer_phone}
+                      {contract?.customer_phone}
                     </p>
                   </GridCol>
 
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Status}</p>
-                    <p className={classes.InformationSale}>{contract.status}</p>
+                    <p className={classes.InformationSale}>{contract?.status}</p>
                   </GridCol>
 
-                  {contract.contract_type === "sale" ? null :
-
+                  {contract?.contract_type === "sale" ? null : (
                     <>
                       <GridCol span={4}>
-                        <p className={classes.InformationType}>{t.Creationdate}</p>
+                        <p className={classes.InformationType}>
+                          {t.Creationdate}
+                        </p>
                         <p className={classes.InformationSale}>
-                          {new Date(contract.expiration_date).toLocaleString()}
+                          {new Date(contract?.expiration_date).toLocaleString()}
                         </p>
                       </GridCol>
 
                       <GridCol span={4}>
-                        <p className={classes.InformationType}>{t.Effectivedate}</p>
+                        <p className={classes.InformationType}>
+                          {t.Effectivedate}
+                        </p>
                         <p className={classes.InformationSale}>
-                          {new Date(contract.effective_date).toLocaleString()}
+                          {new Date(contract?.effective_date).toLocaleString()}
                         </p>
                       </GridCol>
 
@@ -630,23 +624,17 @@ function ContractDetailsMarketer() {
                           {t.Expirationdate}
                         </p>
                         <p className={classes.InformationSale}>
-                          {new Date(contract.expiration_date).toLocaleString()}
+                          {new Date(contract?.expiration_date).toLocaleString()}
                         </p>
                       </GridCol>
                     </>
-                  }
-
+                  )}
                 </Grid>
               </GridCol>
             </Grid>
             <Grid>
               <GridCol span={isMobile ? 12 : 10}>
-                <h4
-
-                  className={classes.Location}
-                >
-                  {t.Location}
-                </h4>
+                <h4 className={classes.Location}>{t.Location}</h4>
                 <div className={classes.LocationPrivado}>
                   <svg
                     width="24"
@@ -670,18 +658,12 @@ function ContractDetailsMarketer() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <span
-                    style={{
-
-                    }}
-                  >
-                    {contract.real_estate.location}
-                  </span>
+                  <span style={{}}>{contract?.real_estate?.location}</span>
                 </div>
                 <iframe
                   className={classes.locationMap}
                   src={`https://www.google.com/maps?q=${encodeURIComponent(
-                    contract.real_estate.location
+                    contract?.real_estate?.location
                   )}&output=embed`}
                   width="650"
                   height="450"
@@ -717,13 +699,12 @@ function ContractDetailsMarketer() {
           },
         }}
       >
-        {contract.real_estate.images &&
+        {contract?.real_estate.images &&
           contract.real_estate.images.length > 0 && (
             <div style={{ position: "relative", textAlign: "center" }}>
-              {/* Display the selected image */}
               <img
-                src={contract.real_estate.images[selectedImageIndex].url}
-                alt={contract.real_estate.title}
+                src={contract?.real_estate.images[selectedImageIndex].url}
+                alt={contract?.real_estate.title}
                 style={{
                   width: "100%",
                   height: "400px",
@@ -731,8 +712,6 @@ function ContractDetailsMarketer() {
                   borderRadius: "8px",
                 }}
               />
-
-              {/* Left arrow for navigation */}
               <button
                 onClick={() =>
                   setSelectedImageIndex(
@@ -758,7 +737,6 @@ function ContractDetailsMarketer() {
                 &#8249;
               </button>
 
-              {/* Right arrow for navigation */}
               <button
                 onClick={() =>
                   setSelectedImageIndex(
@@ -783,7 +761,6 @@ function ContractDetailsMarketer() {
                 &#8250;
               </button>
 
-              {/* Image count */}
               <div
                 style={{
                   position: "absolute",
@@ -797,7 +774,7 @@ function ContractDetailsMarketer() {
                   fontSize: "14px",
                 }}
               >
-                {selectedImageIndex + 1} / {contract.real_estate.images.length}
+                {selectedImageIndex + 1} / {contract?.real_estate.images.length}
               </div>
             </div>
           )}
@@ -855,7 +832,7 @@ function ContractDetailsMarketer() {
           <div style={{ marginTop: "20px" }}>
             {console.log(shareLink)}
 
-            <h4>Share on Social Media:  </h4>
+            <h4>Share on Social Media: </h4>
             <a href="">{shareLink}</a>
             <Group spacing="sm">
               {/* WhatsApp */}
@@ -903,6 +880,7 @@ function ContractDetailsMarketer() {
         contract={contract}
         onEditSuccess={fetchContract}
       />
+
     </>
   );
 }

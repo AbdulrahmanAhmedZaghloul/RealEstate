@@ -1,18 +1,8 @@
-import {
-  Card,
-  Center,
-  Loader,
-  Text,
-  Image,
-  Select,
-  GridCol,
-  Grid,
-} from "@mantine/core";
+import {Card,Center,Loader,Text,Image,Select,GridCol,Grid} from "@mantine/core";
 import classes from "../../styles/realEstates.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axiosInstance from "../../api/config";
-import { useAuth } from "../../context/authContext";
+ import { useAuth } from "../../context/authContext";
 import AddContractsModal from "../../components/modals/addContractsModal";
 import Notifications from "../../components/company/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
@@ -25,6 +15,7 @@ import { useContracts } from "../../hooks/queries/useContracts"; // ✅ تم إ�
 import FilterContractsModal from "../../components/modals/filterContractsModal";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
+import { useQueryClient } from "@tanstack/react-query";
 
 function Contracts() {
   const navigate = useNavigate();
@@ -53,6 +44,8 @@ function Contracts() {
         return {};
     }
   };
+    const queryClient = useQueryClient();
+  
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
   const [approvedListings, setApprovedListings] = useState([]);
   const [contractTypeFilter, setContractTypeFilter] = useState('all');
@@ -63,7 +56,8 @@ function Contracts() {
   const handleAddContract = (values) => {
     try {
       mutation.mutateAsync(values);
-      
+              queryClient.invalidateQueries(["contracts"]);
+
     } catch (error) {
       console.log(error);
     }
@@ -75,14 +69,7 @@ function Contracts() {
         (listing) => listing.selling_status === 0
       ) || []
     );
-  }, [listingsData]);
-
-  // const combinedFilters = {
-  //   ...filters,
-  //   search: searchQuery || undefined,
-  //   ...getSortParams(),
-  // };
-
+  }, [listingsData]); 
   const { sort_by, sort_dir } = getSortParams();
 
   const combinedFilters = {
@@ -106,6 +93,7 @@ function Contracts() {
   console.log(contracts);
 
   // ✅ اكتشاف نهاية الصفحة لتحميل المزيد
+
   useEffect(() => {
     const handleScroll = () => {
       if (

@@ -39,6 +39,7 @@ const fetchListings = async ({
   const params = {
     limit: 6,
     cursor,
+    // description:Next,
     sort_by,
     sort_dir,
     ...filters,

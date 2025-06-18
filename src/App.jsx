@@ -61,11 +61,14 @@ import ContractDetailsMarketer from "./components/Marketer/ContractDetailsMarket
 import AnalyticsMarketer from "./pages/dashboardMarketer/AnalyticsMarketer.jsx";
 import ProfileMarketer from "./pages/dashboardMarketer/ProfileMarketer.jsx";
 import ShareContracts from "./pages/ShareContracts.jsx";
+import { ShareUrlProvider } from "./context/ShareUrlContext.jsx";
 // import DashboardMarketerLayout from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
 
 function App() {
   return (
     <LanguageProvider>
+
+
       <AuthProvider>
         <SidebarProvider>
           <Routes>
@@ -82,7 +85,7 @@ function App() {
             {/* <Route path="/login" element={<Login />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-
+            <Route path="/ShareContracts" element={<ShareContracts />} />
             <Route
               path="/forgot-password"
               element={
@@ -115,7 +118,6 @@ function App() {
             />
             {/* <Route path="*" element={<h1>404111</h1>} /> */}
             <Route path="/subscription-plans" element={<SubscriptionPlans />} />
-            <Route path="/ShareContracts" element={<ShareContracts />} />
 
 
             {/* Company Manager Routes */}
@@ -206,6 +208,7 @@ function App() {
 
           </Routes>
         </SidebarProvider>
+
       </AuthProvider>
     </LanguageProvider>
 

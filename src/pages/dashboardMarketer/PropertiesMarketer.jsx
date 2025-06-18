@@ -1,30 +1,29 @@
-//Properties
-import { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
+
+
+// Properties.jsx
+import { useEffect, useRef, useState } from "react";
 import {
   Card,
   Center,
   Text,
-  Select,
-  Loader,
   Grid,
   GridCol,
+  Loader,
+  Select,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 
-//Local imports
+// Local imports
 import classes from "../../styles/realEstates.module.css";
 import { useAuth } from "../../context/authContext";
 import { useTranslation } from "../../context/LanguageContext";
 import { useQueryClient } from "@tanstack/react-query";
 
-//Component Imports
+// Component Imports
 import Notifications from "../../components/company/Notifications";
-// import FiltersModal from "../../components/modals/filterPropertiesModal";
 import AddPropertyModal from "../../components/modals/addPropertyModal";
 import { BurgerButton } from "../../components/buttons/burgerButton";
-// import { useProperties } from "../../hooks/queries/usePropertiesMarketer";
+import { usePropertiesMarketer } from "../../hooks/queries/usePropertiesMarketer";
 import { useEmployees } from "../../hooks/queries/useEmployees";
 import { useCategories } from "../../hooks/queries/useCategories";
 import { useAddProperty } from "../../hooks/mutations/useAddProperty";
@@ -32,50 +31,56 @@ import Rooms from "../../components/icons/rooms";
 import Bathrooms from "../../components/icons/bathrooms";
 import Area from "../../components/icons/area";
 import AddIcon from "../../components/icons/addIcon";
-import Dropdown from "../../components/icons/dropdown";
-import FilterIcon from "../../components/icons/filterIcon";
-import Search from "../../components/icons/search";
 import LazyImage from "../../components/LazyImage";
+import { useDisclosure } from "@mantine/hooks";
+import Dropdown from "../../components/icons/dropdown";
 import FiltersModal from "../dashboardCompany/FiltersModal";
-import { usePropertiesMarketer } from "../../hooks/queries/usePropertiesMarketer";
-// import { usePropertiesMarketer } from "../../hooks/queries/useProperties";
-// import FiltersModal from "./FiltersModal";
+import { useForm } from "@mantine/form";
+import Search from "../../components/icons/search";
+import { useInView } from "react-intersection-observer";
 
 function PropertiesMarketer() {
-  const [listingTypeFilter, setListingTypeFilter] = useState("all");
-
   const { user } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filters, setFilters] = useState({});
+  const [
+    openedFilterModal,
+    { open: openFilterModal, close: closeFilterModal },
+  ] = useDisclosure(false);
+  const [sortBy, setSortBy] = useState("newest");
+  const sortOptions = [
+    { value: "newest", label: "Newest" },
+    { value: "oldest", label: "Oldest" },
+    { value: "highest", label: "Highest price" },
+    { value: "lowest", label: "Lowest price" },
+  ];
   const [isSticky, setIsSticky] = useState(false);
-  const [filters, setFilters] = useState({
-    location: "",
-    rooms: "",
-    priceMin: "",
-    priceMax: "",
-    category: "",
-    subcategory: "",
-  });
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    usePropertiesMarketer(
-      listingTypeFilter === "all" ? "" : listingTypeFilter,
-      filters
-    ); 
-  const resetFilters = () => {
-    setFilters({
-      location: "",
-      rooms: "",
-      priceMin: "",
-      priceMax: "",
-      category: "",
-      subcategory: "",
-      // employee: "", // 👈 إعادة تعيين الموظف
-    });
-  };
+
+  const transactionOptions = [
+    { value: "all", label: "All" },
+    { value: "rent", label: "For Rent" },
+    { value: "buy", label: "For Sale" },
+    { value: "booking", label: "Booking" },
+  ];
+
+  const [transactionType, setTransactionType] = useState("all");
+  const listing_type = transactionType; // ✅ Define it first
+
   const {
-    data: employeesData,
-    isLoading: employeesLoading,
-    isError: isEmployeesError,
-    error: employeesError,
-  } = useEmployees();
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+  } = usePropertiesMarketer(listing_type, sortBy, filters, searchTerm); // 👈 تمرير الفلتر
+
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+ 
+
   const {
     data: categoriesData,
     isLoading: categoriesLoading,
@@ -83,82 +88,114 @@ function PropertiesMarketer() {
     error: categoriesError,
   } = useCategories();
 
-  const queryClient = useQueryClient();
+   const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
 
-  const isLoading =  categoriesLoading;
-  const isError =  isCategoriesError;
-  const error =  categoriesError;
-  const [saleFilter, setSaleFilter] = useState("all"); // all / for_sale / not_for_sale
-  const [listings, setListings] = useState([]); //Property listings state
-  const [employees, setEmployees] = useState([]); //Employees state
-  const [categories, setCategories] = useState([]); //Categories state
-  const [subcategories, setSubcategories] = useState([]); //Subcategories state
-  const [search, setSearch] = useState(""); //Search bar value state
-  const [filter, setFilter] = useState(""); //Filter overall value state
   const [opened, { open, close }] = useDisclosure(false);
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [filteredListings, setFilteredListings] = useState([]);
-  const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+  const { t } = useTranslation();
+  const filterForm = useForm({
+    initialValues: {
+      location: "",
+      rooms: "",
+      bathrooms: "",
+      areaMin: "",
+      areaMax: "",
+      priceMin: "",
+      priceMax: "",
+      category: "",
+      subcategory: "",
+    },
+  });
+  const loadMoreRef = useRef(null);
 
-  const allListings =
-    data?.pages.flatMap((page) =>
-      page.data.listings.filter((listing) => listing.status === "approved")
-    ) || [];
+  const mutation = useAddProperty(user.token, categories, close );
+
   const [ref, inView] = useInView();
 
   useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+    if (inView && hasNextPage && !fetchNextPage) {
       fetchNextPage();
     }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
-  // Form validation using Mantine's useForm
-
-  const handleAddProperty = (values) => {
-    // داخل أي كومبوننت
-    queryClient.invalidateQueries(["listingsRealEstate"]);
-    queryClient.invalidateQueries(["listingsRealEstate-marketer"]);
-    queryClient.invalidateQueries(["listings"]);
-
+  }, [inView, hasNextPage, fetchNextPage, fetchNextPage]);
+  const handleAddProperty = (values) => { 
+    queryClient.invalidateQueries(["listingsRealEstate-Marketer"]);
     mutation.mutate(values);
   };
-  const [
-    filterModalOpened,
-    { open: openFilterModal, close: closeFilterModal },
-  ] = useDisclosure(false);
-  const handleFilterProperties = (newFilters) => {
-    setFilters((prev) => ({ ...prev, ...newFilters }));
+
+  // 👇 Intersection Observer للتحميل اللانهائي
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isLoading) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: "0px 0px 200px 0px" }
+    );
+
+    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+
+    return () => {
+      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
+    };
+  }, [hasNextPage, isLoading, fetchNextPage]);
+
+  // 👇 تحديث بيانات الموظفين والتصنيفات
+  useEffect(() => {
+   
+    if (
+      !categoriesLoading &&
+      !isCategoriesError &&
+      categoriesData?.data?.categories
+    ) {
+      setCategories(categoriesData.data.categories);
+      setSubcategories(
+        categoriesData.data.categories.map((cat) => cat.subcategories).flat()
+      );
+    }
+  }, [ 
+    categoriesLoading,
+    isCategoriesError,
+    categoriesData,
+  ]);
+
+  const handleApplyFilters = (values) => {
+    // تحويل القيم الفارغة إلى undefined لتجنب إرسالها للـ API
+    const filteredValues = Object.fromEntries(
+      Object.entries(values).filter(([_, v]) => v != null && v !== "")
+    );
+    setFilters(filteredValues);
     closeFilterModal();
   };
 
-  useEffect(() => {
-     setCategories(categoriesData?.data?.categories || []);
-    setSubcategories(
-      categoriesData?.data?.categories
-        .map((category) => category.subcategories)
-        .flat() || []
+  const handleResetFilters = () => {
+    setFilters({});
+    form.reset();
+    setFilters({});
+    filterForm.reset(); // 👈 إعادة تعيين الحقول
+    closeFilterModal();
+    // إذا كنت تريد إعادة تعيين الحقول في المودال
+  };
+
+  if (  categoriesLoading) {
+    return (
+      <Center
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <Loader size="md" />
+      </Center>
     );
-  }, [  categoriesData]);
+  }
 
-  // Scroll-based pagination
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+  if (isError) {
+    return <p>Error: {error.message}</p>;
+  }
 
-      if (scrollBottom && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  const mutation = useAddProperty(user.token, categories, close);
-  const isAddPropertyLoading = mutation.isPending;
-
-isLoading 
   return (
     <>
       <Card className={classes.mainContainer} radius="lg">
@@ -167,6 +204,7 @@ isLoading
           <span className={classes.title}>{t.Properties}</span>
           <Notifications />
         </div>
+
         <header
           className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
         >
@@ -176,35 +214,39 @@ isLoading
                 <input
                   className={classes.search}
                   placeholder={t.Search}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <Search />
               </div>
-
-              <button
-                variant="default"
-                radius="md"
-                onClick={openFilterModal}
-                className={classes.filter}
-              >
-                <FilterIcon />
+              <button className={classes.add} onClick={openFilterModal}>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 7H19M5 12H19M5 17H19"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                &nbsp;
               </button>
-
             </div>
+
             <div className={classes.addAndSort}>
               <Select
-                mr={10}
-                placeholder={t.Sortby}
-                value={filter}
-                onChange={setFilter}
-                rightSection={<Dropdown />}
-                data={[
-                  { value: "newest", label: "Newest" },
-                  { value: "oldest", label: "Oldest" },
-                  { value: "highest", label: "Highest price" },
-                  { value: "lowest", label: "Lowest price" },
-                ]}
+                // label="Sort By"
+                placeholder="Choose sorting method"
+                data={sortOptions}
+                value={sortBy}
+                onChange={setSortBy}
+                radius="md"
+                size="sm"
                 styles={{
                   input: {
                     width: "132px",
@@ -236,19 +278,14 @@ isLoading
                   },
                 }}
               />
-              {/* New Sale Status Filter Select */}
               <Select
-                mr={10}
-                placeholder="For Sale"
-                value={listingTypeFilter}
-                onChange={setListingTypeFilter}
                 rightSection={<Dropdown />}
-                data={[
-                  { value: "all", label: "All" },
-                  { value: "rent", label: "For Rent" },
-                  { value: "buy", label: "For Sale" },
-                  { value: "booking", label: "Booking" },
-                ]}
+                value={transactionType}
+                onChange={setTransactionType}
+                data={transactionOptions}
+                placeholder="Select type"
+                radius="md"
+                size="sm"
                 styles={{
                   input: {
                     width: "132px",
@@ -280,10 +317,9 @@ isLoading
                   },
                 }}
               />
+
               <button
-                style={{
-                  cursor: "pointer",
-                }}
+                style={{ cursor: "pointer" }}
                 className={classes.add}
                 onClick={open}
               >
@@ -293,158 +329,154 @@ isLoading
           </div>
         </header>
 
-        {allListings.length === 0 && !isLoading ? (
+        {data?.pages.flatMap((page) => page.data.listings).length === 0 ? (
           <Center>
-            <Text>No listings found.</Text>
+            <Text>{t.NoListingsFound}</Text>
           </Center>
         ) : (
           <>
-            <Grid
-              className={classes.sty}
-              align="center"
-              spacing="xl"
-              // justify="center"
-            >
-              {allListings.map((listing) => (
-                <GridCol
-                  span={{ base: 12, lg: 4, md: 6, sm: 6 }}
-                  key={listing.id}
-                  onClick={() => {
-                    navigate(`/dashboard/Properties/${listing.id}`);
-                  }}
-                  style={{
-                    cursor: "pointer",
-                  }}
-                >
-                  <Card className={classes.card}>
-                    <Card.Section radius="md">
-                      <div className={classes.listingImage}>
-                        <LazyImage
-                          src={listing.picture_url}
-                          alt={listing.title}
-                          height={200}
-                          radius="md"
-                        />
-
-                        <p className={classes.listingfor}>
-                          {listing.listing_type}
-                        </p>
-                      </div>
-                    </Card.Section>
-
-                    <div
-                      style={{
-                        marginTop: "16px",
-                        display: "flex",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      <span className={classes.listingPrice}>
-                        <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                        {parseFloat(listing.price)?.toLocaleString()}
-                      </span>
-
-                      <div className={classes.downPaymentBadge}>
-                        {listing.down_payment} %{t.DownPayment}
-                      </div>
-                    </div>
-
-                    <div style={{ display: "block" }}>
-                      <div className={classes.listingTitle}>
-                        {listing.title}
-                      </div>
-                      <div className={classes.listingUtilities}>
-                        <div className={classes.listingUtility}>
-                          {listing.rooms === 0 ? null : (
-                            <>
-                              <div className={classes.utilityImage}>
-                                <Rooms />
-                              </div>
-                              {listing.rooms}
-                            </>
-                          )}
+            <Grid className={classes.sty} align="center" spacing="xl">
+              {data?.pages
+                .flatMap((page) => page.data.listings)
+                .map((listing) => (
+                  <GridCol
+                    span={{ base: 12, lg: 4, md: 6, sm: 6 }}
+                    key={listing.id}
+                    onClick={() =>
+                      navigate(`/dashboard-Marketer/PropertyDetailsMarketer/${listing.id}`)
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Card className={classes.card}>
+                      <Card.Section radius="md">
+                        <div className={classes.listingImage}>
+                          <LazyImage
+                            src={listing.picture_url}
+                            alt={listing.title}
+                            height={200}
+                            radius="md"
+                          />
+                          <p className={classes.listingfor}>
+                            {listing.selling_status === 1
+                              ? "sold"
+                              : listing.listing_type}
+                          </p>
                         </div>
-                        <div className={classes.listingUtility}>
-                          {listing.bathrooms === 0 ? null : (
-                            <>
-                              <div className={classes.utilityImage}>
-                                <Bathrooms />
-                              </div>
-                              {listing.bathrooms}
-                            </>
-                          )}
+                      </Card.Section>
+                      <div
+                        style={{
+                          marginTop: "16px",
+                          display: "flex",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <span className={classes.listingPrice}>
+                          <span className="icon-saudi_riyal">&#xea; </span>{" "}
+                          {parseFloat(listing.price)?.toLocaleString()}
+                        </span>
+                        <div className={classes.downPaymentBadge}>
+                          {listing.down_payment} %{t.DownPayment}
                         </div>
-                        <div className={classes.listingUtility}>
-                          <div className={classes.utilityImage}>
-                            <Area />
+                      </div>
+                      <div style={{ display: "block" }}>
+                        <div className={classes.listingTitle}>
+                          {listing.title}
+                        </div>
+                        <div className={classes.listingUtilities}>
+                          <div className={classes.listingUtility}>
+                            {listing.rooms > 0 && (
+                              <>
+                                <div className={classes.utilityImage}>
+                                  <Rooms />
+                                </div>
+                                {listing.rooms}
+                              </>
+                            )}
                           </div>
-                          {listing.area} sqm
+                          <div className={classes.listingUtility}>
+                            {listing.bathrooms > 0 && (
+                              <>
+                                <div className={classes.utilityImage}>
+                                  <Bathrooms />
+                                </div>
+                                {listing.bathrooms}
+                              </>
+                            )}
+                          </div>
+                          <div className={classes.listingUtility}>
+                            <div className={classes.utilityImage}>
+                              <Area />
+                            </div>
+                            {listing.area} sqm
+                          </div>
+                        </div>
+                        <div className={classes.listingEmployee}>
+                          {t.Category}: {listing.category} /{" "}
+                          {listing.subcategory.name}
+                        </div>
+                        <div className={classes.listingEmployee}>
+                          {t.Employee}: {listing.employee?.name}
+                        </div>
+                        <div className={classes.listingLocation}>
+                          {listing.location}
+                        </div>
+                        <div className={classes.listingDate}>
+                          {Math.floor(
+                            (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                          ) > 1
+                            ? `${Math.floor(
+                                (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              )} days ago`
+                            : Math.floor(
+                                (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              ) === 1
+                            ? "Yesterday"
+                            : "Today"}
                         </div>
                       </div>
-
-                      <div className={classes.listingEmployee}>
-                        {t.Category}: {listing.category} /{" "}
-                        {listing.subcategory.name}
-                      </div>
-                      <div className={classes.listingEmployee}>
-                        {t.Employee}: {listing.employee?.name}
-                      </div>
-                      <div className={classes.listingLocation}>
-                        {listing.location}
-                      </div>
-                      <div className={classes.listingDate}>
-                        {Math.floor(
-                          (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
-                        ) > 1
-                          ? `${Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                                (1000 * 60 * 60 * 24)
-                            )} days ago`
-                          : Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                                (1000 * 60 * 60 * 24)
-                            ) === 1
-                          ? "Yesterday"
-                          : "Today"}
-                      </div>
-                    </div>
-                  </Card>
-                </GridCol>
-              ))}
+                    </Card>
+                  </GridCol>
+                ))}
             </Grid>
-            <div ref={ref} style={{ height: 20 }}>
-              {isFetchingNextPage && (
+
+            {/* 👇 عنصر غير مرئي لتحفيز التحميل عند الوصول إليه */}
+            <div ref={loadMoreRef} style={{ height: "20px" }} />
+
+            {isFetching && (
+              <Center>
+                <Loader size="sm" />
+              </Center>
+            )}
+            {/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
+            {!isLoading &&
+              data?.pages.flatMap((page) => page.data.listings).length ===
+                0 && (
                 <Center>
-                  <Loader size="sm" />
+                  <Text>{t.NoListingsFound}</Text>
                 </Center>
               )}
-            </div>
           </>
         )}
       </Card>
-
+ 
       <AddPropertyModal
         opened={opened}
         onClose={close}
         categories={categories}
         subcategories={subcategories}
-        employees={employees}
         onAddProperty={handleAddProperty}
         loading={mutation.isPending}
       />
-
       <FiltersModal
-        opened={filterModalOpened}
+        opened={openedFilterModal}
         onClose={closeFilterModal}
         categories={categories}
-        subcategories={subcategories}
-        onFilter={handleFilterProperties}
-        onReset={() => {
-          setFilteredListings(allListings);
-          closeFilterModal();
-          resetFilters();
-        }}
+        onFilter={handleApplyFilters}
+        onReset={handleResetFilters}
+        form={filterForm} // 👈 إرسال النموذج للمودال
       />
     </>
   );
@@ -452,495 +484,4 @@ isLoading
 
 export default PropertiesMarketer;
 
-
-// //Properties
-// import { useEffect, useState } from "react";
-// import { useInView } from 'react-intersection-observer';
-// import {
-//   Card, Center, Group, Image, Text, Select, Loader,
-//   Grid,
-//   GridCol,
-// } from "@mantine/core";
-// import { useDisclosure } from "@mantine/hooks";
-// import { useNavigate } from "react-router-dom";
-// import { useMantineColorScheme } from "@mantine/core";
-
-// //Local imports
-// import classes from "../../styles/realEstates.module.css";
-// import { useAuth } from "../../context/authContext";
-
-// import { useTranslation } from "../../context/LanguageContext";
-// import { useQueryClient } from '@tanstack/react-query';
-
-// //Component Imports
-// import Notifications from "../../components/company/Notifications";
-// import FiltersModal from "../../components/modals/filterPropertiesModal";
-// import AddPropertyModal from "../../components/modals/addPropertyModal";
-// import { BurgerButton } from "../../components/buttons/burgerButton";
-// import { useProperties } from "../../hooks/queries/useProperties";
-// import { useEmployees } from "../../hooks/queries/useEmployees";
-// import { useCategories } from "../../hooks/queries/useCategories";
-// import { useAddProperty } from "../../hooks/mutations/useAddProperty";
-// import Rooms from "../../components/icons/rooms";
-// import Bathrooms from "../../components/icons/bathrooms";
-// import Area from "../../components/icons/area";
-// import AddIcon from "../../components/icons/addIcon";
-// import Dropdown from "../../components/icons/dropdown";
-// import FilterIcon from "../../components/icons/filterIcon";
-// import Search from "../../components/icons/search";
-// import CategoryIcon from "../../components/icons/CategoryIcon";
-// import LazyImage from "../../components/LazyImage";
-// function Properties() {
-//   const { user } = useAuth();
-//   const [isSticky, setIsSticky] = useState(false);
-
-//   // const {
-//   //   data: listingsData,
-//   //   isLoading: listingsLoading,
-//   //   isError: isListingsError,
-//   //   error: listingsError,
-//   // } = useProperties();
-//   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProperties();
-//   const {
-//     data: employeesData,
-//     isLoading: employeesLoading,
-//     isError: isEmployeesError,
-//     error: employeesError,
-//   } = useEmployees();
-//   const {
-//     data: categoriesData,
-//     isLoading: categoriesLoading,
-//     isError: isCategoriesError,
-//     error: categoriesError,
-//   } = useCategories();
-//   const queryClient = useQueryClient();
-
-//   const isLoading = employeesLoading || categoriesLoading;
-//   const isError = isEmployeesError || isCategoriesError;
-//   const error = employeesError || categoriesError;
-//   const [saleFilter, setSaleFilter] = useState("all"); // all / for_sale / not_for_sale
-//   const [listings, setListings] = useState([]); //Property listings state
-//   const [employees, setEmployees] = useState([]); //Employees state
-//   const [categories, setCategories] = useState([]); //Categories state
-//   const [subcategories, setSubcategories] = useState([]); //Subcategories state
-//   const [search, setSearch] = useState(""); //Search bar value state
-//   const [filter, setFilter] = useState(""); //Filter overall value state
-//   const [opened, { open, close }] = useDisclosure(false);
-//   const [
-//     filterModalOpened,
-//     { open: openFilterModal, close: closeFilterModal },
-//   ] = useDisclosure(false);
-//   const navigate = useNavigate();
-//   const [loading, setLoading] = useState(false);
-//   const [filteredListings, setFilteredListings] = useState([]);
-//   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
-
-//   // تحويل البيانات إلى array مفرد
-//   // const allListings = data?.pages.flatMap(page => page.listings || []) || [];
-//   const allListings = data?.pages.flatMap(page =>
-//     page.data.listings.filter(listing => listing.status === "approved")
-//   ) || [];
-//   const [ref, inView] = useInView();
-
-//   useEffect(() => {
-//     if (inView && hasNextPage && !isFetchingNextPage) {
-//       fetchNextPage();
-//     }
-//   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
-//   // Form validation using Mantine's useForm
-//   const searchedListings = allListings
-//     .filter((listing) =>
-//       listing.title.toLowerCase().includes(search.toLowerCase())
-//     ).filter((listing) => {
-//       if (saleFilter === "for_sale") return listing.selling_status === 0;
-//       if (saleFilter === "not_for_sale") return listing.selling_status === 1;
-//       return true; // all
-//     })
-//     .sort((a, b) => {
-//       if (filter === "newest")
-//         return new Date(b.created_at) - new Date(a.created_at);
-//       if (filter === "oldest")
-//         return new Date(a.created_at) - new Date(b.created_at);
-//       if (filter === "highest") return b.price - a.price;
-//       if (filter === "lowest") return a.price - b.price;
-//       return 0;
-//     });
-
-
-//   const handleAddProperty = (values) => {
-
-//     // داخل أي كومبوننت
-//     queryClient.invalidateQueries(['listings']);
-
-//     mutation.mutate(values);
-//   };
-
-//   const handleFilterProperties = (filters) => {
-//     const filtered = listings.filter((listing) => {
-//       return (
-//         (filters.location === "" ||
-//           (listing.location || "")
-//             .toLowerCase()
-//             .includes(filters.location.toLowerCase())) &&
-//         (filters.category_id === "any" ||
-//           listing.category_id === parseInt(filters.category_id)) &&
-//         (filters.subcategory_id === "any" ||
-//           listing.subcategory_id === parseInt(filters.subcategory_id)) &&
-//         (filters.down_payment === "Any" ||
-//           (listing.down_payment || "")
-//             .toLowerCase()
-//             .includes(filters.down_payment.toLowerCase())) &&
-//         (filters.price === "Any" ||
-//           (listing.price || "") == parseFloat(filters.price.toLowerCase())) &&
-//         (filters.area === "Any" ||
-//           (listing.area || "")
-//             .toLowerCase()
-//             .includes(filters.area.toLowerCase())) &&
-//         (filters.rooms === "Any" ||
-//           listing.rooms === parseInt(filters.rooms)) &&
-//         (filters.bathrooms === "Any" ||
-//           listing.bathrooms === parseInt(filters.bathrooms)) &&
-//         (filters.level === "Any" ||
-//           listing.floors === parseInt(filters.level)) &&
-//         (filters.employee === "Any" ||
-//           (listing.employee.name || "")
-//             .toLowerCase()
-//             .includes(filters.employee.toLowerCase()))
-//       );
-//     });
-
-//     setFilteredListings(filtered);
-//   };
-
-//   const { colorScheme } = useMantineColorScheme();
-
-//   useEffect(() => {
-
-//     setEmployees(employeesData?.data?.employees || []);
-//     setCategories(categoriesData?.data?.categories || []);
-//     setSubcategories(
-//       categoriesData?.data?.categories
-//         .map((category) => category.subcategories)
-//         .flat() || []
-//     );
-//   }, [employeesData, categoriesData]);
-
-//   useEffect(() => {
-//     setFilteredListings(listings);
-//   }, [listings]);
-
-//   useEffect(() => {
-//     const handleScroll = () => {
-//       if (window.scrollY >= 200) {
-//         setIsSticky(true);
-//       } else {
-//         setIsSticky(false);
-//       }
-//     };
-
-//     window.addEventListener("scroll", handleScroll);
-//     return () => window.removeEventListener("scroll", handleScroll);
-//   }, []);
-
-//   const mutation = useAddProperty(user.token, categories, close);
-//   const isAddPropertyLoading = mutation.isPending;
-
-//   if (isLoading) {
-//     return (
-//       <>
-//         <Center
-//           style={{
-//             position: "absolute",
-//             top: "50%",
-//             left: "50%",
-//             transform: "translate(-50%, -50%)",
-//             zIndex: 2,
-//           }}
-//         >
-//           <Loader size="xl" />
-//         </Center>
-//       </>
-//     );
-//   }
-//   if (isError) {
-//     return <p>Error: {error.message}</p>;
-//   }
-//   return (
-//     <>
-//       <Card className={classes.mainContainer} radius="lg">
-//         <div>
-//           <BurgerButton />
-//           <span className={classes.title}>{t.Properties}</span>
-//           <Notifications />
-//         </div>
-//         <header className={`${classes.header} ${isSticky ? classes.sticky : ""}`}>
-
-
-//           <div className={classes.controls}>
-//             <div className={classes.divSearch}>
-//               <input
-//                 className={classes.search}
-//                 placeholder={t.Search}
-//                 value={search}
-//                 onChange={(e) => setSearch(e.target.value)}
-//               />
-//               <Search />
-//             </div>
-
-//             <button
-//               variant="default"
-//               radius="md"
-//               onClick={openFilterModal}
-//               className={classes.filter}
-//             >
-//               <FilterIcon />
-//             </button>
-//             <div className={classes.addAndSort}>
-//               <Select
-//                 mr={10}
-//                 placeholder={t.Sortby}
-//                 value={filter}
-//                 onChange={setFilter}
-//                 rightSection={<Dropdown />}
-//                 data={[
-//                   { value: "newest", label: "Newest" },
-//                   { value: "oldest", label: "Oldest" },
-//                   { value: "highest", label: "Highest price" },
-//                   { value: "lowest", label: "Lowest price" },
-//                 ]}
-//                 styles={{
-//                   input: {
-//                     width: "132px",
-//                     height: "48px",
-//                     borderRadius: "15px",
-//                     border: "1px solid var(--color-border)",
-//                     padding: "14px 24px",
-//                     fontSize: "14px",
-//                     fontWeight: "500",
-//                     cursor: "pointer",
-//                     backgroundColor: "var(--color-7)",
-//                   },
-
-//                   dropdown: {
-//                     borderRadius: "15px", // Curved dropdown menu
-//                     border: "1.5px solid var(--color-border)",
-//                     backgroundColor: "var(--color-7)",
-//                   },
-//                   wrapper: {
-//                     width: "132px",
-//                   },
-//                   item: {
-//                     color: "var(--color-4)", // Dropdown option text color
-//                     "&[data-selected]": {
-//                       color: "white", // Selected option text color
-//                     },
-//                   },
-//                 }}
-
-//               />
-//               {/* New Sale Status Filter Select */}
-//               <Select
-//                 mr={10}
-//                 placeholder="For Sale"
-//                 value={saleFilter}
-//                 onChange={setSaleFilter}
-//                 rightSection={<Dropdown />}
-//                 data={[
-//                   { value: "all", label: "All" },
-//                   { value: "for_sale", label: "Sale" },
-//                   { value: "not_for_sale", label: "Not Sale" },
-//                 ]}
-//                 styles={{
-//                   input: {
-//                     width: "132px",
-//                     height: "48px",
-//                     borderRadius: "15px",
-//                     border: "1px solid var(--color-border)",
-//                     padding: "14px 24px",
-//                     fontSize: "14px",
-//                     fontWeight: "500",
-//                     cursor: "pointer",
-//                     backgroundColor: "var(--color-7)",
-//                   },
-
-//                   dropdown: {
-//                     borderRadius: "15px", // Curved dropdown menu
-//                     border: "1.5px solid var(--color-border)",
-//                     backgroundColor: "var(--color-7)",
-//                   },
-//                   wrapper: {
-//                     width: "132px",
-//                   },
-//                   item: {
-//                     color: "var(--color-4)", // Dropdown option text color
-//                     "&[data-selected]": {
-//                       color: "white", // Selected option text color
-//                     },
-//                   },
-//                 }} />
-//               <button style={{
-//                 cursor: "pointer",
-//               }} className={classes.add} onClick={open}>
-//                 <AddIcon /> {t.Add}
-//               </button>
-//             </div>
-//           </div>
-//         </header>
-
-
-//         {searchedListings.length === 0 && !isLoading ? (
-//           <Center>
-//             <Text>No listings found.</Text>
-//           </Center>
-//         ) : (
-//           <>
-
-//             <Grid className={classes.sty} align="center" spacing="xl">
-//               {console.log(searchedListings)}
-//               {searchedListings.map((listing) => (
-//                 <GridCol
-//                   span={4}
-//                   key={listing.id}
-//                   onClick={() => {
-//                     navigate(`/dashboard/Properties/${listing.id}`);
-//                   }}
-//                   style={{
-//                     cursor: "pointer",
-//                   }}
-//                 >
-//                   <Card className={classes.card}
-//                   >
-//                     <Card.Section radius="md">
-//                       <div className={classes.listingImage}>
-//                         {/* <Image
-//                           src={`${listing.picture_url}`}
-//                           alt={listing.title}
-//                           h="233px"
-//                           radius="md"
-//                         /> */}
-//                         <LazyImage src={listing.picture_url} alt={listing.title} height={200} radius="md" />
-
-//                         <p className={classes.listingfor}>
-//                           {listing.selling_status === 1
-//                             ? "Sold"
-//                             : listing.listing_type === "buy"
-//                               ? "For Sale"
-//                               : listing.listing_type === "rent"
-//                                 ? "For Rent"
-//                                 : listing.listing_type === "booking"
-//                                   ? "For Booking"
-//                                   : listing.listing_type}
-//                         </p>
-
-//                       </div>
-
-//                     </Card.Section>
-
-//                     <div style={{ marginTop: "16px", display: "flex", flexWrap: "wrap", }}>
-//                       <span className={classes.listingPrice}>
-//                         <span className="icon-saudi_riyal">&#xea; </span>{" "}
-//                         {parseFloat(listing.price)?.toLocaleString()}
-//                       </span>
-
-//                       <div className={classes.downPaymentBadge}>
-//                         {listing.down_payment} %
-//                         {t.DownPayment}
-//                       </div>
-//                     </div>
-
-//                     <div style={{ display: "block" }}>
-//                       <div className={classes.listingTitle}>{listing.title}</div>
-//                       <div className={classes.listingUtilities}>
-//                         <div className={classes.listingUtility}>
-//                           {listing.rooms === 0 ? null :
-//                             <>
-//                               <div className={classes.utilityImage}>
-//                                 <Rooms />
-//                               </div>
-//                               {listing.rooms}
-//                             </>
-
-//                           }
-
-//                         </div>
-//                         <div className={classes.listingUtility}>
-//                           {listing.bathrooms === 0 ? null : <>
-//                             <div className={classes.utilityImage}>
-//                               <Bathrooms />
-//                             </div>
-//                             {listing.bathrooms}
-//                           </>}
-
-//                         </div>
-//                         <div className={classes.listingUtility}>
-//                           <div className={classes.utilityImage}>
-//                             <Area />
-//                           </div>
-//                           {listing.area} sqm
-//                         </div>
-//                       </div>
-
-//                       <div className={classes.listingEmployee}>
-//                         {t.Category}: {listing.category}
-//                       </div>
-//                       <div className={classes.listingEmployee}>
-//                         {t.Employee}: {listing.employee?.name}
-//                       </div>
-//                       <div className={classes.listingLocation}>
-//                         {listing.location}
-//                       </div>
-//                       <div className={classes.listingDate}>
-//                         {Math.floor(
-//                           (new Date() - new Date(listing.created_at)) /
-//                           (1000 * 60 * 60 * 24)
-//                         ) > 1
-//                           ? `${Math.floor(
-//                             (new Date() - new Date(listing.created_at)) /
-//                             (1000 * 60 * 60 * 24)
-//                           )} days ago`
-//                           : Math.floor(
-//                             (new Date() - new Date(listing.created_at)) /
-//                             (1000 * 60 * 60 * 24)
-//                           ) === 1
-//                             ? "Yesterday"
-//                             : "Today"}
-//                       </div>
-//                     </div>
-//                   </Card>
-
-//                 </GridCol>
-//               ))}
-//             </Grid>
-//             <div ref={ref} style={{ height: 20 }}>
-//               {isFetchingNextPage && <Center><Loader size="sm" /></Center>}
-//             </div>
-//           </>
-//         )}
-//       </Card>
-
-//       <AddPropertyModal
-//         opened={opened}
-//         onClose={close}
-//         categories={categories}
-//         subcategories={subcategories}
-//         employees={employees}
-//         onAddProperty={handleAddProperty}
-//         loading={mutation.isPending}
-//       />
-
-//       <FiltersModal
-//         opened={filterModalOpened}
-//         onClose={closeFilterModal}
-//         categories={categories}
-//         subcategories={subcategories}
-//         onFilter={handleFilterProperties}
-//         onReset={() => {
-//           setFilteredListings(listings);
-//           closeFilterModal();
-//         }}
-//       />
-//     </>
-//   );
-// }
-
-// export default Properties;
+ 

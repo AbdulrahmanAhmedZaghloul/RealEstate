@@ -52,7 +52,7 @@ const AddPropertyModal = React.memo(
         floors: null,
         location: "",
         images: [],
-        employee_id: null,
+        // employee_id: null,
         category_id: null,
         subcategory_id: null,
         listing_type: "",

@@ -526,6 +526,7 @@ function SupervisorDetails() {
           Change Password
         </Button>
       </Modal>
+      
       <EditStaffModal
         opened={editModalOpened}
         onClose={closeEditModal}

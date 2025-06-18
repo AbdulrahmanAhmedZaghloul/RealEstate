@@ -1,5 +1,5 @@
 // components/CropModal.jsx
-import React, { useState, useCallback }  from 'react';
+import React, { useState, useCallback } from 'react';
 import Cropper from 'react-easy-crop';
 import { Modal, Button, Center } from '@mantine/core';
 import getCroppedImg from './utils/cropImage';
@@ -21,13 +21,15 @@ function CropModal({ imageSrc, opened, onClose, onCropComplete }) {
   }, []);
 
   return (
-    <Modal style={{ height: 300, position: 'relative' ,zIndex:"121312" }} opened={opened} onClose={onClose} size="lg" title="Crop Image" centered>
+    <Modal style={{ height: 300, position: 'relative', zIndex: "121312" }} opened={opened} onClose={onClose} size="lg" title="Crop Image" centered>
       <Center style={{ height: 300, position: 'relative' }}>
         <Cropper
           image={imageSrc}
           crop={crop}
           zoom={zoom}
           aspect={1}
+          cropShape="round"
+
           onCropChange={setCrop}
           onCropComplete={onCropCompleteCallback}
           onZoomChange={setZoom}

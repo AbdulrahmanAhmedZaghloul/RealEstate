@@ -75,25 +75,25 @@ export default function SidebarMarketer() {
   }, [location.pathname.split("/")[2]]);
 
   const navlist = [
-    // {
-    //   link: "/dashboard/Analytics",
-    //   label: t["Analytics"],
-    //   icon: (
-    //     <img
-    //       src={
-    //         active === "Analytics" && colorScheme === "light"
-    //           ? AnalyticsActive
-    //           : active === "Analytics" && colorScheme === "dark"
-    //             ? AnalyticsActiveDark
-    //             : Analytics
-    //       }
-    //       className={classes.linkIcon}
-    //       style={{
-    //         [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
-    //       }}
-    //     />
-    //   ),
-    // },
+    {
+      link: "/dashboard-Marketer/AnalyticsMarketer",
+      label: t["Analytics"],
+      icon: (
+        <img
+          src={
+            active === "Analytics" && colorScheme === "light"
+              ? AnalyticsActive
+              : active === "Analytics" && colorScheme === "dark"
+                ? AnalyticsActiveDark
+                : Analytics
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
 
     {
       link: "/dashboard-Marketer/PropertiesMarketer",
@@ -116,26 +116,26 @@ export default function SidebarMarketer() {
       ),
     },
     
-    // {
-    //   link: "/dashboard/Contracts",
-    //   label: t["Contracts"],
-    //   // label: "Contracts",
-    //   icon: (
-    //     <img
-    //       src={
-    //         active === "Contracts" && colorScheme === "light"
-    //           ? ContractsActive
-    //           : active === "Contracts" && colorScheme === "dark"
-    //             ? ContractsActiveDark
-    //             : Contracts
-    //       }
-    //       className={classes.linkIcon}
-    //       style={{
-    //         [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
-    //       }}
-    //     />
-    //   ),
-    // },
+    {
+      link: "/dashboard-Marketer/ContractsMarketer",
+      label: t["Contracts"],
+      // label: "Contracts",
+      icon: (
+        <img
+          src={
+            active === "Contracts" && colorScheme === "light"
+              ? ContractsActive
+              : active === "Contracts" && colorScheme === "dark"
+                ? ContractsActiveDark
+                : Contracts
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
 
     {
       link: "/dashboard-Marketer",

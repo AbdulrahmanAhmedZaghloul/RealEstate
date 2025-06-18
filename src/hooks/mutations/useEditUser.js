@@ -15,7 +15,7 @@ export const useEditUser = (userToken, closeModal) => {
         formData.append("address", editUser.address);
         formData.append("supervisor_id", editUser.supervisor_id);
 
-        formData.append("_method", "put");
+        formData.append("_method", "post");
         console.log(editUser.picture_url);
 
         if (editUser.picture_url instanceof File) {

@@ -35,11 +35,14 @@ import FloorsIcon from "../icons/FloorsIcon";
 import Area from "../icons/area";
 import BathsIcon from "../icons/BathsIcon";
 import BedsIcon from "../icons/BedsIcon";
+import DownloadIcon from "../icons/DownloadIcon";
+import ShareIcon from "../icons/ShareIcon";
+import { useShareUrl } from "../../context/ShareUrlContext";
 function ContractDetails() {
-const { id: idParam } = useParams();
-const id = Number(idParam);
+  const { id: idParam } = useParams();
+  const id = Number(idParam);
   const [contract, setContract] = useState(null);
-  const [shareLink, setShareLink] = useState("");
+  const [shareLink, setShareLink] = useState("http://localhost:5173/ShareContracts");
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] =
@@ -48,7 +51,7 @@ const id = Number(idParam);
   const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
   const [shareOpened, { open: openShare, close: closeShare }] =
     useDisclosure(false);
-
+  const { shareUrl, setShareUrl } = useShareUrl(); // استخدام الـ context
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // تتبع الصورة المختارة
 
   const navigate = useNavigate();
@@ -106,10 +109,10 @@ const id = Number(idParam);
     return regex.test(cleaned);
   }
 
- 
 
- 
-  const fetchContract = ( ) => {
+
+
+  const fetchContract = () => {
     console.log(id);
 
     setLoading(true);
@@ -121,7 +124,7 @@ const id = Number(idParam);
         console.log(res.data.data);
 
         setContract(res?.data?.data);
-        setShareLink(res?.data?.data?.share_url);
+        // setShareLink(res?.data?.data?.share_url);
         console.log(res?.data?.data?.share_url);
       })
       .catch((err) => {
@@ -132,8 +135,44 @@ const id = Number(idParam);
       });
   };
 
-                  {console.log(contract)
-                }
+  const handleShareContract = () => {
+    setLoading(true);
+    axiosInstance
+      .post(`contracts/${id}/share`, {}, { // {} body فارغ إذا لم يُطلب بيانات
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data.status === "success") {
+          console.log(res.data.data.share_url);
+     const share_url=  localStorage.setItem("share_url", res.data.data.share_url); // حفظ الـ share_url في localStorage
+          // const generatedUrl = res?.data?.data?.share_url;
+
+          setShareUrl(share_url); // حفظ الـ share_url في الـ context
+
+          //  (); // تحديث share_url في ال state
+          openShare(); // فتح المودال
+        }
+
+        notifications.show({
+          title: "Shared Successfully",
+          message: res.data.message,
+          color: "green",
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        notifications.show({
+          title: "Sharing Failed",
+          message: "Failed to share the contract.",
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const handleDownloadDocument = () => {
     setLoading(true);
@@ -199,37 +238,33 @@ const id = Number(idParam);
         setLoading(false);
       });
   };
-  // useEffect(() => {
-  //   fetchContract();
-  // }, []);
-
-    useEffect(() => {
+  useEffect(() => {
     fetchContract();
   }, []);
 
 
   useEffect(() => {
-      const handleKeyDown = (event) => {
-        if (!opened1) return; // لا نفذ إلا إذا كان المودال مفتوحًا
-  
-        if (event.key === "ArrowLeft") {
-          setSelectedImageIndex(
-            (prevIndex) =>
-              (prevIndex - 1 + contract?.real_estate.images.length) % contract?.real_estate.images.length
-          );
-        } else if (event.key === "ArrowRight") {
-          setSelectedImageIndex(
-            (prevIndex) => (prevIndex + 1) % contract?.real_estate.images.length
-          );
-        }
-      };
-  
-      window.addEventListener("keydown", handleKeyDown);
-      return () => {
-        window.removeEventListener("keydown", handleKeyDown);
-      };
-    }, [opened1, contract?.real_estate]);
-  
+    const handleKeyDown = (event) => {
+      if (!opened1) return; // لا نفذ إلا إذا كان المودال مفتوحًا
+
+      if (event.key === "ArrowLeft") {
+        setSelectedImageIndex(
+          (prevIndex) =>
+            (prevIndex - 1 + contract?.real_estate.images.length) % contract?.real_estate.images.length
+        );
+      } else if (event.key === "ArrowRight") {
+        setSelectedImageIndex(
+          (prevIndex) => (prevIndex + 1) % contract?.real_estate.images.length
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [opened1, contract?.real_estate]);
+
   useEffect(() => {
     if (contract) {
       form.setValues({
@@ -248,7 +283,7 @@ const id = Number(idParam);
       });
     }
   }, [contract]);
- 
+
 
   if (loading) {
     return (
@@ -275,7 +310,7 @@ const id = Number(idParam);
       </Center>
     );
   }
- 
+
 
   return (
     <>
@@ -371,20 +406,20 @@ const id = Number(idParam);
                         <p className={classes.time}>
                           {Math.floor(
                             (new Date() - new Date(contract?.creation_date)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() -
-                                  new Date(contract?.creation_date)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() -
+                                new Date(contract?.creation_date)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
                             : Math.floor(
-                                (new Date() -
-                                  new Date(contract?.creation_date)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() -
+                                new Date(contract?.creation_date)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                         </p>
                       </div>
                     </div>
@@ -466,7 +501,7 @@ const id = Number(idParam);
               </Grid.Col>
             </Grid>
 
-             <Grid>
+            <Grid>
               <Grid.Col
                 span={isMobile ? 12 : 8}
                 className={classes.ContractSection}
@@ -478,45 +513,11 @@ const id = Number(idParam);
                   </div>
                   <div className={classes.ContractText}>
                     <div className={classes.ContractButton}>
-                      <Button onClick={openShare}>
-                        <svg
-                          width="17"
-                          height="20"
-                          viewBox="0 0 17 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M6 10C6 10.663 5.73661 11.2989 5.26777 11.7678C4.79893 12.2366 4.16304 12.5 3.5 12.5C2.83696 12.5 2.20107 12.2366 1.73223 11.7678C1.26339 11.2989 1 10.663 1 10C1 9.33696 1.26339 8.70107 1.73223 8.23223C2.20107 7.76339 2.83696 7.5 3.5 7.5C4.16304 7.5 4.79893 7.76339 5.26777 8.23223C5.73661 8.70107 6 9.33696 6 10Z"
-                            stroke="#666666"
-                            strokeWidth="1.5"
-                          />
-                          <path
-                            d="M11 4.5L6 8M11 15.5L6 12"
-                            stroke="#666666"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                          <path
-                            d="M16 16.5C16 17.163 15.7366 17.7989 15.2678 18.2678C14.7989 18.7366 14.163 19 13.5 19C12.837 19 12.2011 18.7366 11.7322 18.2678C11.2634 17.7989 11 17.163 11 16.5C11 15.837 11.2634 15.2011 11.7322 14.7322C12.2011 14.2634 12.837 14 13.5 14C14.163 14 14.7989 14.2634 15.2678 14.7322C15.7366 15.2011 16 15.837 16 16.5ZM16 3.5C16 4.16304 15.7366 4.79893 15.2678 5.26777C14.7989 5.73661 14.163 6 13.5 6C12.837 6 12.2011 5.73661 11.7322 5.26777C11.2634 4.79893 11 4.16304 11 3.5C11 2.83696 11.2634 2.20107 11.7322 1.73223C12.2011 1.26339 12.837 1 13.5 1C14.163 1 14.7989 1.26339 15.2678 1.73223C15.7366 2.20107 16 2.83696 16 3.5Z"
-                            stroke="#666666"
-                            strokeWidth="1.5"
-                          />
-                        </svg>
+                      <Button onClick={handleShareContract}>
+                        <ShareIcon />
                       </Button>
                       <Button onClick={handleDownloadDocument}>
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M12 16L7 11L8.4 9.55L11 12.15V4H13V12.15L15.6 9.55L17 11L12 16ZM6 20C5.45 20 4.97933 19.8043 4.588 19.413C4.19667 19.0217 4.00067 18.5507 4 18V15H6V18H18V15H20V18C20 18.55 19.8043 19.021 19.413 19.413C19.0217 19.805 18.5507 20.0007 18 20H6Z"
-                            fill="#666666"
-                          />
-                        </svg>
+                        <DownloadIcon />
                       </Button>
                     </div>
                     <div className={classes.documents}>
@@ -527,7 +528,7 @@ const id = Number(idParam);
               </Grid.Col>
             </Grid>
 
-             <h4 className={classes.ContractsDescription}>
+            <h4 className={classes.ContractsDescription}>
               {t.ContractDescription}
             </h4>
             <p className={classes.ContractsDescriptionTag}>
@@ -829,10 +830,10 @@ const id = Number(idParam);
           {/* <p>Share this PageShareContract using the link below: </p> */}
 
           <div style={{ marginTop: "20px" }}>
-            {console.log(shareLink)}
+            {/* {console.log(shareLink)} */}
 
             <h4>Share on Social Media: </h4>
-            <a href="">{shareLink}</a>
+            <a href="http://localhost:5173/ShareContracts">{shareLink}</a>  
             <Group spacing="sm">
               {/* WhatsApp */}
               <Button
@@ -879,6 +880,7 @@ const id = Number(idParam);
         contract={contract}
         onEditSuccess={fetchContract}
       />
+
     </>
   );
 }

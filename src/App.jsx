@@ -85,7 +85,7 @@ function App() {
             {/* <Route path="/login" element={<Login />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/ShareContracts" element={<ShareContracts />} />
+            <Route path="/ShareContracts/:api" element={<ShareContracts />} />
             <Route
               path="/forgot-password"
               element={

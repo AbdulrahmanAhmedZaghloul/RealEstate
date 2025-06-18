@@ -483,7 +483,7 @@ function PropertyDetails() {
                         {console.log(listing.category.name)}
 
                         <span>
-                          {listing.category.name} / {listing.subcategory.name}{" "}
+                          {/* {listing.category.name} / {listing.subcategory.name}{" "} */}
                         </span>
                       </div>
                     </span>
@@ -560,12 +560,14 @@ function PropertyDetails() {
                     )
                   }
                 >
+                  {console.log(listing)
+                  }
                     <Box className={classes.BoxImage}>
                       <div className={classes.divImage}>
                         <Avatar
                           w={60}
                           h={60}
-                          src={listing.employee.picture_url}
+                          // src={listing.employee.picture_url}
                           alt={listing?.employee?.name}
                         />
                         <span className={classes.spanImage}>

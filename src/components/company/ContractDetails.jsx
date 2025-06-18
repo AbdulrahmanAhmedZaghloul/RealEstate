@@ -27,7 +27,6 @@ import Contract from "../../assets/contract/contract.png";
 import edit from "../../assets/edit.svg";
 import trash from "../../assets/trash.svg";
 import { useTranslation } from "../../context/LanguageContext";
-import { useContracts } from "../../hooks/queries/useContracts";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import EditContractModal from "../modals/EditContractModal";
 import CategoryIcon from "../icons/CategoryIcon";
@@ -42,7 +41,9 @@ function ContractDetails() {
   const { id: idParam } = useParams();
   const id = Number(idParam);
   const [contract, setContract] = useState(null);
-  const [shareLink, setShareLink] = useState("http://localhost:5173/ShareContracts");
+  const [shareLink, setShareLink] = useState(
+    "http://localhost:5173/ShareContracts"
+  );
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] =
@@ -51,9 +52,8 @@ function ContractDetails() {
   const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
   const [shareOpened, { open: openShare, close: closeShare }] =
     useDisclosure(false);
-  const { shareUrl, setShareUrl } = useShareUrl(); // استخدام الـ context
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // تتبع الصورة المختارة
-
+  const [api, setfApi] = useState(null);
   const navigate = useNavigate();
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   const queryClient = useQueryClient();
@@ -109,9 +109,6 @@ function ContractDetails() {
     return regex.test(cleaned);
   }
 
-
-
-
   const fetchContract = () => {
     console.log(id);
 
@@ -138,18 +135,24 @@ function ContractDetails() {
   const handleShareContract = () => {
     setLoading(true);
     axiosInstance
-      .post(`contracts/${id}/share`, {}, { // {} body فارغ إذا لم يُطلب بيانات
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
+      .post(
+        `contracts/${id}/share`,
+        {},
+        {
+          // {} body فارغ إذا لم يُطلب بيانات
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
+      )
       .then((res) => {
         console.log(res.data);
 
         if (res.data.status === "success") {
-          console.log(res.data.data.share_url);
-     const share_url=  localStorage.setItem("share_url", res.data.data.share_url); // حفظ الـ share_url في localStorage
-          // const generatedUrl = res?.data?.data?.share_url;
-
-          setShareUrl(share_url); // حفظ الـ share_url في الـ context
+          const fullShareUrl = `http://localhost:5173/ShareContracts/${encodeURIComponent(
+            res.data.data.share_url
+          )}`;
+          setShareLink(fullShareUrl);
+          openShare();
+console.log( res.data.data.share_url);
 
           //  (); // تحديث share_url في ال state
           openShare(); // فتح المودال
@@ -242,7 +245,6 @@ function ContractDetails() {
     fetchContract();
   }, []);
 
-
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (!opened1) return; // لا نفذ إلا إذا كان المودال مفتوحًا
@@ -250,7 +252,8 @@ function ContractDetails() {
       if (event.key === "ArrowLeft") {
         setSelectedImageIndex(
           (prevIndex) =>
-            (prevIndex - 1 + contract?.real_estate.images.length) % contract?.real_estate.images.length
+            (prevIndex - 1 + contract?.real_estate.images.length) %
+            contract?.real_estate.images.length
         );
       } else if (event.key === "ArrowRight") {
         setSelectedImageIndex(
@@ -284,7 +287,6 @@ function ContractDetails() {
     }
   }, [contract]);
 
-
   if (loading) {
     return (
       <>
@@ -311,7 +313,6 @@ function ContractDetails() {
     );
   }
 
-
   return (
     <>
       <Card shadow="sm" className={classes.card}>
@@ -328,7 +329,6 @@ function ContractDetails() {
                     setSelectedImageIndex(0); // لأنها تاني صورة في الـ array
                     open1();
                   }}
-
                 />
               )}
             </div>
@@ -406,20 +406,20 @@ function ContractDetails() {
                         <p className={classes.time}>
                           {Math.floor(
                             (new Date() - new Date(contract?.creation_date)) /
-                            (1000 * 60 * 60 * 24)
+                              (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                              (new Date() -
-                                new Date(contract?.creation_date)) /
-                              (1000 * 60 * 60 * 24)
-                            )} days ago`
+                                (new Date() -
+                                  new Date(contract?.creation_date)) /
+                                  (1000 * 60 * 60 * 24)
+                              )} days ago`
                             : Math.floor(
-                              (new Date() -
-                                new Date(contract?.creation_date)) /
-                              (1000 * 60 * 60 * 24)
-                            ) === 1
-                              ? "Yesterday"
-                              : "Today"}
+                                (new Date() -
+                                  new Date(contract?.creation_date)) /
+                                  (1000 * 60 * 60 * 24)
+                              ) === 1
+                            ? "Yesterday"
+                            : "Today"}
                         </p>
                       </div>
                     </div>
@@ -437,7 +437,9 @@ function ContractDetails() {
                         <span className={classes.svgSpan}>
                           <div>
                             <BathsIcon />
-                            <span>{contract?.real_estate?.bathrooms} Baths</span>
+                            <span>
+                              {contract?.real_estate?.bathrooms} Baths
+                            </span>
                           </div>
                         </span>
                       )}
@@ -596,7 +598,9 @@ function ContractDetails() {
 
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Status}</p>
-                    <p className={classes.InformationSale}>{contract?.status}</p>
+                    <p className={classes.InformationSale}>
+                      {contract?.status}
+                    </p>
                   </GridCol>
 
                   {contract?.contract_type === "sale" ? null : (
@@ -831,9 +835,10 @@ function ContractDetails() {
 
           <div style={{ marginTop: "20px" }}>
             {/* {console.log(shareLink)} */}
-
             <h4>Share on Social Media: </h4>
-            <a href="http://localhost:5173/ShareContracts">{shareLink}</a>  
+            <a href={shareLink} target="_blank" rel="noopener noreferrer">
+              {shareLink}
+            </a>
             <Group spacing="sm">
               {/* WhatsApp */}
               <Button
@@ -880,7 +885,6 @@ function ContractDetails() {
         contract={contract}
         onEditSuccess={fetchContract}
       />
-
     </>
   );
 }

@@ -1,0 +1,16 @@
+/* src/components/calendarStyles.css */
+.react-calendar {
+    width: 100%;
+    max-width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    font-family: sans-serif;
+}
+
+.react-calendar__navigation button {
+    color: #000;
+}
+
+.react-calendar__tile--now {
+    background-color: #f0f0f0;
+}

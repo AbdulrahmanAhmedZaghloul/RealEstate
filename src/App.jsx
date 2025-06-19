@@ -120,7 +120,7 @@ function App() {
                 <ResetPassword />
               }
             />
-            <Route path="*" element={<NotFound />} />
+            {/* <Route path="*" element={<NotFound />} /> */}
             <Route path="/subscription-plans" element={<SubscriptionPlans />} />
 
             {/* Company Manager Routes */}

@@ -112,7 +112,7 @@ function Properties() {
   });
   const loadMoreRef = useRef(null);
 
-  const mutation = useAddProperty(user.token, categories, close );
+  const mutation = useAddProperty(user.token, categories, close);
 
   const [ref, inView] = useInView();
 
@@ -193,7 +193,15 @@ function Properties() {
     closeFilterModal();
     // إذا كنت تريد إعادة تعيين الحقول في المودال
   };
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 150);
+    };
 
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   if (employeesLoading || categoriesLoading) {
     return (
       <Center
@@ -440,18 +448,18 @@ function Properties() {
                         <div className={classes.listingDate}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
                             : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                         </div>
                       </div>
                     </Card>
@@ -470,7 +478,7 @@ function Properties() {
             {/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
             {!isLoading &&
               data?.pages.flatMap((page) => page.data.listings).length ===
-                0 && (
+              0 && (
                 <Center>
                   <Text>{t.NoListingsFound}</Text>
                 </Center>
@@ -478,7 +486,7 @@ function Properties() {
           </>
         )}
       </Card>
- 
+
       <AddPropertyModal
         opened={opened}
         onClose={close}

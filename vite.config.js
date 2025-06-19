@@ -7,6 +7,5 @@ export default defineConfig({
   server: {
     host: '0.0.0.0'
   },
-  
   base: './' // 🔥 مهم لروابط الملفات والصور تشتغل صح على Netlify
 })

@@ -62,6 +62,7 @@ function Contracts() {
       console.log(error);
     }
   };
+  const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
     setApprovedListings(
@@ -96,6 +97,15 @@ function Contracts() {
 
   useEffect(() => {
     const handleScroll = () => {
+      setIsSticky(window.scrollY > 150);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  useEffect(() => {
+    const handleScroll = () => {
       if (
         window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
         hasNextPage &&
@@ -117,7 +127,11 @@ function Contracts() {
           <span className={classes.title}>{t.Contracts}</span>
           <Notifications />
         </div>
-        <div className={classes.controls}>
+        
+                <header
+                  className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
+                >
+                  <div className={classes.controls}>
           <div className={classes.flexSearch}>
             <div className={classes.divSearch}>
               <input
@@ -194,6 +208,8 @@ function Contracts() {
             </button>
           </div>
         </div>
+                </header>
+        
         <div className={classes.contractList}>
           {isLoading ? (
             <Center>

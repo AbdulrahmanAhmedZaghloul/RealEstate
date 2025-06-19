@@ -90,40 +90,7 @@ function SellingKpi() {
           <div className={classes.card}>
             <div className={classes.cardTitle}>
               {t.Renting}
-              <div style={{ display: "flex", gap: "0.4rem" }}>
-                <Select
-                  value={timeFrame}
-                  className={classes.SelectCardTitle}
-                  onChange={(value) => {
-                    setTimeFrame(value);
-                    setSelectedValue(""); // إعادة تعيين عند تغيير الفلتر
-                  }}
-                  data={[
-                    { value: "yearly", label: t.yearly },
-                    { value: "year", label: t.year },
-                    { value: "month", label: t.month },
-                  ]}
-                />
-                {timeFrame === "year" && (
-                  <Select
-                    className={classes.SelectCardTitle}
-                    value={selectedValue}
-                    onChange={setSelectedValue}
-                    data={years.map((year) => ({
-                      value: year,
-                      label: year,
-                    }))}
-                  />
-                )}
-                {timeFrame === "month" && (
-                  <Select
-                    className={classes.SelectCardTitle}
-                    value={selectedValue}
-                    onChange={setSelectedValue}
-                    data={months}
-                  />
-                )}
-              </div>
+         
             </div>
             <div className={classes.cardCount}>
               {data?.contracts?.total_rentals}
@@ -142,40 +109,7 @@ function SellingKpi() {
           <div className={classes.card}>
             <div className={classes.cardTitle}>
               {t.Booking}
-              <div style={{ display: "flex", gap: "0.4rem" }}>
-                <Select
-                  value={timeFrame}
-                  className={classes.SelectCardTitle}
-                  onChange={(value) => {
-                    setTimeFrame(value);
-                    setSelectedValue(""); // إعادة تعيين عند تغيير الفلتر
-                  }}
-                  data={[
-                    { value: "yearly", label: t.yearly },
-                    { value: "year", label: t.year },
-                    { value: "month", label: t.month },
-                  ]}
-                />
-                {timeFrame === "year" && (
-                  <Select
-                    className={classes.SelectCardTitle}
-                    value={selectedValue}
-                    onChange={setSelectedValue}
-                    data={years.map((year) => ({
-                      value: year,
-                      label: year,
-                    }))}
-                  />
-                )}
-                {timeFrame === "month" && (
-                  <Select
-                    className={classes.SelectCardTitle}
-                    value={selectedValue}
-                    onChange={setSelectedValue}
-                    data={months}
-                  />
-                )}
-              </div>
+            
             </div>
             <div className={classes.cardCount}>
               {data?.contracts?.total_bookings}

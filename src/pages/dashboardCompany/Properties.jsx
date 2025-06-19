@@ -478,8 +478,7 @@ function Properties() {
           </>
         )}
       </Card>
-              {console.log(employees)}
-
+ 
       <AddPropertyModal
         opened={opened}
         onClose={close}

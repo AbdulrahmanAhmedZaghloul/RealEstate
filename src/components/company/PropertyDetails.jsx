@@ -69,7 +69,7 @@ function PropertyDetails() {
   const fetchListing = async () => {
     setLoading(true);
     try {
-      const { data } = await axiosInstance.get(`marketer/listings/${id}`, {
+      const { data } = await axiosInstance.get(`listings/employee/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setListing(data?.data.listing);
@@ -261,8 +261,8 @@ function PropertyDetails() {
                           cursor: "pointer",
                         }}
                         src={`${
-                          listing.images.find((image) => image.is_primary)
-                            .image_url
+                          listing.images.find((image) => image?.is_primary)
+                            ?.image_url
                         }`}
                         alt={listing.title}
                         className={classes.mainImage}
@@ -289,7 +289,7 @@ function PropertyDetails() {
                           cursor: "pointer",
                         }}
                       >
-                        See {listing.images.length} Photos
+                        See {listing?.images?.length} Photos
                       </p>
                     </>
                   )}
@@ -306,7 +306,7 @@ function PropertyDetails() {
                           cursor: "pointer",
                         }}
                         key={image.id}
-                        src={`${image.image_url}`}
+                        src={`${image?.image_url}`}
                         alt={listing.title}
                         className={classes.mainImage}
                         onClick={() => {
@@ -336,13 +336,13 @@ function PropertyDetails() {
                         className={classes.price}
                       >
                         <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                        {parseFloat(listing.price)?.toLocaleString()}
+                        {parseFloat(listing?.price)?.toLocaleString()}
                       </Text>
                       <Text className={classes.Down}>
-                        {listing.down_payment}% {t.DownPayment}
+                        {listing?.down_payment}% {t.DownPayment}
                       </Text>
                       <div className={classes.UpdataShare}>
-                        {listing.selling_status === 0 && (
+                        {listing?.selling_status === 0 && (
                           <>
                             <svg
                               onClick={open}
@@ -409,13 +409,13 @@ function PropertyDetails() {
                     )}
                   </Grid.Col>
                   <Grid.Col span={12}>
-                    <Text className={classes.Fully}>{listing.title}</Text>
+                    <Text className={classes.Fully}>{listing?.title}</Text>
                   </Grid.Col>
                   <Grid.Col span={12}>
                     <Grid>
                       <Grid.Col span={6} className={classes.svgP}>
                         <LocationIcon />
-                        <p>{listing.location} </p>
+                        <p>{listing?.location} </p>
                       </Grid.Col>
                       <Grid.Col
                         span={isMobile ? 4 : 6}
@@ -423,15 +423,15 @@ function PropertyDetails() {
                       >
                         <Text className={classes.ago}>
                           {Math.floor(
-                            (new Date() - new Date(listing.created_at)) /
+                            (new Date() - new Date(listing?.created_at)) /
                               (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
+                                (new Date() - new Date(listing?.created_at)) /
                                   (1000 * 60 * 60 * 24)
                               )} days ago`
                             : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
+                                (new Date() - new Date(listing?.created_at)) /
                                   (1000 * 60 * 60 * 24)
                               ) === 1
                             ? "Yesterday"
@@ -443,19 +443,19 @@ function PropertyDetails() {
 
                   <Grid.Col span={12} className={classes.svgCol}>
                     <span className={classes.svgSpan}>
-                      {listing.rooms === 0 ? null : (
+                      {listing?.rooms === 0 ? null : (
                         <div>
                           <BedsIcon />
-                          <span>{listing.rooms} Beds</span>
+                          <span>{listing?.rooms} Beds</span>
                         </div>
                       )}
                     </span>
 
                     <span className={classes.svgSpan}>
-                      {listing.bathrooms === 0 ? null : (
+                      {listing?.bathrooms === 0 ? null : (
                         <div>
                           <BathsIcon />
-                          <span>{listing.bathrooms} Baths</span>
+                          <span>{listing?.bathrooms} Baths</span>
                         </div>
                       )}
                     </span>
@@ -464,15 +464,15 @@ function PropertyDetails() {
                       <div>
                         <Area />
 
-                        <span>{listing.area} sqm</span>
+                        <span>{listing?.area} sqm</span>
                       </div>
                     </span>
 
                     <span className={classes.svgSpan}>
-                      {listing.floors === 0 ? null : (
+                      {listing?.floors === 0 ? null : (
                         <div>
                           <FloorsIcon />
-                          <span>{listing.floors}</span>
+                          <span>{listing?.floors}</span>
                         </div>
                       )}
                     </span>
@@ -480,10 +480,10 @@ function PropertyDetails() {
                     <span className={classes.svgSpan}>
                       <div>
                         <CategoryIcon />
-                        {console.log(listing.category.name)}
+                        {console.log(listing?.category?.name)}
 
                         <span>
-                          {/* {listing.category.name} / {listing.subcategory.name}{" "} */}
+                          {listing?.category?.name} / {listing?.subcategory?.name}{" "}
                         </span>
                       </div>
                     </span>
@@ -495,7 +495,7 @@ function PropertyDetails() {
                     {t.Description}
                   </Text>
                   <Text className={classes.listing}>
-                    {expanded ? listing.description : previewText}
+                    {expanded ? listing?.description : previewText}
                     {words.length > 50 && (
                       <p
                         onClick={() => setExpanded(!expanded)}
@@ -518,9 +518,9 @@ function PropertyDetails() {
                     {t.Status}
                   </Text>
                   <Text className={classes.listing}>
-                    {listing.selling_status === 1
+                    {listing?.selling_status === 1
                       ? "Sold"
-                      : listing.listing_type}
+                      : listing?.listing_type}
                   </Text>
                 </Stack>
               </Grid.Col>
@@ -530,7 +530,7 @@ function PropertyDetails() {
                   position="apart"
                   mt={"lg"}
                 >
-                  {listing.status === "pending" ? (
+                  {listing?.status === "pending" ? (
                     <>
                       <Button
                         variant="filled"
@@ -556,7 +556,7 @@ function PropertyDetails() {
                   className={classes.colImage}
                   onClick={() =>
                     navigate(
-                      `/dashboard/employee/${listing.employee.employee_id}`
+                      `/dashboard/employee/${listing?.employee?.employee_id}`
                     )
                   }
                 >
@@ -567,7 +567,7 @@ function PropertyDetails() {
                         <Avatar
                           w={60}
                           h={60}
-                          // src={listing.employee.picture_url}
+                          src={listing?.employee?.picture_url}
                           alt={listing?.employee?.name}
                         />
                         <span className={classes.spanImage}>
@@ -621,7 +621,7 @@ function PropertyDetails() {
         ) : (
           ""
         )} */}
-        {listing.amenities.length === 0 ? null : (
+        {listing?.amenities?.length === 0 ? null : (
           <Text    className={classes.Description} fw={600}>
             {t.Amenities}
           </Text>
@@ -631,24 +631,24 @@ function PropertyDetails() {
            padding:"0px 10px"
         }} className={classes.Amenities}>
           <Grid>
-            {listing.amenities.length === 0 ? null : (
+            {listing?.amenities?.length === 0 ? null : (
               <>
                 <Grid.Col span={6}>
-                  {listing.amenities
+                  {listing?.amenities
                     .filter((_, index) => index % 2 === 0)
                     .map((amenity) => (
-                      <div key={amenity.category_id}>
-                        <Text>{amenity.name}</Text>
+                      <div key={amenity?.category_id}>
+                        <Text>{amenity?.name}</Text>
                       </div>
                     ))}
                 </Grid.Col>
 
                 <Grid.Col span={6}>
-                  {listing.amenities
+                  {listing?.amenities
                     .filter((_, index) => index % 2 === 1)
                     .map((amenity) => (
-                      <div key={amenity.category_id}>
-                        <Text>{amenity.name}</Text>
+                      <div key={amenity?.category_id}>
+                        <Text>{amenity?.name}</Text>
                       </div>
                     ))}
                 </Grid.Col>
@@ -657,13 +657,12 @@ function PropertyDetails() {
           </Grid>
         </Text>
         {/* <Divider my="sm" /> */}
-        <Stack gap="xs" style={{ marginTop: "20px" ,           padding:"0px 10px"
- }}>
+        <Stack gap="xs" style={{ marginTop: "20px" , padding:"0px 10px"}}>
           <Text className={classes.Locationpom}>{t.Location}</Text>
           <span className={classes.svgSpan}>
             <div>
               <LocationIcon></LocationIcon>
-              <span>{listing.location}</span>
+              <span>{listing?.location}</span>
             </div>
           </span>
 
@@ -672,7 +671,7 @@ function PropertyDetails() {
           <iframe
             className={classes.locationMap}
             src={`https://www.google.com/maps?q=${encodeURIComponent(
-              listing.location
+              listing?.location
             )}&output=embed`}
             width="600"
             height="450"

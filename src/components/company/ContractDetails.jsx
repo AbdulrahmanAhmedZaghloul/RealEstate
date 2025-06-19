@@ -36,7 +36,6 @@ import BathsIcon from "../icons/BathsIcon";
 import BedsIcon from "../icons/BedsIcon";
 import DownloadIcon from "../icons/DownloadIcon";
 import ShareIcon from "../icons/ShareIcon";
-import { useShareUrl } from "../../context/ShareUrlContext";
 function ContractDetails() {
   const { id: idParam } = useParams();
   const id = Number(idParam);
@@ -122,7 +121,6 @@ function ContractDetails() {
 
         setContract(res?.data?.data);
         // setShareLink(res?.data?.data?.share_url);
-        console.log(res?.data?.data?.share_url);
       })
       .catch((err) => {
         console.log(err);
@@ -147,13 +145,18 @@ function ContractDetails() {
         console.log(res.data);
 
         if (res.data.status === "success") {
-          const fullShareUrl = `http://localhost:5173/ShareContracts/${encodeURIComponent(
-            res.data.data.share_url
-          )}`;
-          setShareLink(fullShareUrl);
-          openShare();
-console.log( res.data.data.share_url);
+          // const fullShareUrl = res.data.data.share_url;
+          const shareUrl = res.data.data.share_url;
 
+          // ناخد الجزء بعد /contracts/
+          const fullPath = shareUrl.split("/api/v1/contracts/")[1];
+
+          // نعمل encode للرابط
+          const encodedPath = encodeURIComponent(fullPath);
+
+          const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareContracts/${encodedPath}`;
+          setShareLink(finalLink);
+          openShare(); // فتح المودال
           //  (); // تحديث share_url في ال state
           openShare(); // فتح المودال
         }
@@ -314,6 +317,7 @@ console.log( res.data.data.share_url);
   }
 
   return (
+
     <>
       <Card shadow="sm" className={classes.card}>
         <div className={classes.imageContainer}>
@@ -406,20 +410,20 @@ console.log( res.data.data.share_url);
                         <p className={classes.time}>
                           {Math.floor(
                             (new Date() - new Date(contract?.creation_date)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() -
-                                  new Date(contract?.creation_date)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() -
+                                new Date(contract?.creation_date)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
                             : Math.floor(
-                                (new Date() -
-                                  new Date(contract?.creation_date)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() -
+                                new Date(contract?.creation_date)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                         </p>
                       </div>
                     </div>
@@ -836,7 +840,7 @@ console.log( res.data.data.share_url);
           <div style={{ marginTop: "20px" }}>
             {/* {console.log(shareLink)} */}
             <h4>Share on Social Media: </h4>
-            <a href={shareLink} target="_blank" rel="noopener noreferrer">
+            <a href={shareLink} target="_blank"  >
               {shareLink}
             </a>
             <Group spacing="sm">
@@ -886,6 +890,7 @@ console.log( res.data.data.share_url);
         onEditSuccess={fetchContract}
       />
     </>
+
   );
 }
 

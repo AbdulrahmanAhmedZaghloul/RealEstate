@@ -2,7 +2,7 @@
 // App.jsx
 // Local dependencies imports
 import "@mantine/core/styles.css";
-import { Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/authContext.jsx";
 import { SidebarProvider } from "./context/sidebarContext.jsx";
 // import { LanguageProvider } from "./context/LanguageContext.jsx";
@@ -62,11 +62,15 @@ import AnalyticsMarketer from "./pages/dashboardMarketer/AnalyticsMarketer.jsx";
 import ProfileMarketer from "./pages/dashboardMarketer/ProfileMarketer.jsx";
 import ShareContracts from "./pages/ShareContracts.jsx";
 import { ShareUrlProvider } from "./context/ShareUrlContext.jsx";
+import NotFound from "./pages/NotFound.JSX";
+import PublicContractView from "./pages/PublicContractView.jsx";
+// import NotFound from "./pages/NotFound.JSX";
 // import DashboardMarketerLayout from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
 
 function App() {
   return (
     <LanguageProvider>
+
 
 
       <AuthProvider>
@@ -82,10 +86,10 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/Terms" element={<Terms />} />
             <Route path="/Privacy" element={<Privacy />} />
-            {/* <Route path="/login" element={<Login />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/ShareContracts/:api" element={<ShareContracts />} />
+
+            <Route path="/ShareContracts/:path" element={<PublicContractView />} />
             <Route
               path="/forgot-password"
               element={
@@ -116,9 +120,8 @@ function App() {
                 <ResetPassword />
               }
             />
-            {/* <Route path="*" element={<h1>404111</h1>} /> */}
+            <Route path="*" element={<NotFound />} />
             <Route path="/subscription-plans" element={<SubscriptionPlans />} />
-
 
             {/* Company Manager Routes */}
             <Route
@@ -205,10 +208,8 @@ function App() {
                 element={<PropertyDetailsEmployee />}
               />
             </Route>
-
           </Routes>
         </SidebarProvider>
-
       </AuthProvider>
     </LanguageProvider>
 

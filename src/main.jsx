@@ -4,13 +4,11 @@ import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import "./styles/variables.css";
-import {   HashRouter  } from "react-router-dom";
+import {   BrowserRouter, HashRouter  } from "react-router-dom";
 import App from "./App.jsx";
 import { LanguageProvider } from "./context/LanguageContext.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ShareContracts from "./pages/ShareContracts.jsx";
-import { ShareUrlProvider } from "./context/ShareUrlContext.jsx";
-
+ 
 function Main() {
   const [colorScheme, setColorScheme] = useState("light");
   const queryClient = new QueryClient();
@@ -42,15 +40,11 @@ function Main() {
       <QueryClientProvider client={queryClient}>
         
         <LanguageProvider>
-        <ShareUrlProvider>
-          <Notifications />
-          <HashRouter >
-          {/* <BrowserRouter > */}
-            <App />
-          {/* </BrowserRouter> */}
-          </HashRouter>
-        </ShareUrlProvider>
-        </LanguageProvider>
+           <Notifications />
+          <HashRouter> 
+             <App />
+           </HashRouter>
+         </LanguageProvider>
       </QueryClientProvider>
     </MantineProvider>
   );

@@ -11,6 +11,7 @@ import {
   Group,
   Button,
   Modal,
+  Textarea,
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 

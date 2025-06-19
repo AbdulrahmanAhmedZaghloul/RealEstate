@@ -1,8 +1,8 @@
-import {Card,Center,Loader,Text,Image,Select,GridCol,Grid} from "@mantine/core";
+import { Card, Center, Loader, Text, Image, Select, GridCol, Grid } from "@mantine/core";
 import classes from "../../styles/realEstates.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
- import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/authContext";
 import AddContractsModal from "../../components/modals/addContractsModal";
 import Notifications from "../../components/company/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
@@ -44,8 +44,8 @@ function Contracts() {
         return {};
     }
   };
-    const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient();
+
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
   const [approvedListings, setApprovedListings] = useState([]);
   const [contractTypeFilter, setContractTypeFilter] = useState('all');
@@ -56,7 +56,7 @@ function Contracts() {
   const handleAddContract = (values) => {
     try {
       mutation.mutateAsync(values);
-              queryClient.invalidateQueries(["contracts"]);
+      queryClient.invalidateQueries(["contracts"]);
 
     } catch (error) {
       console.log(error);
@@ -69,7 +69,7 @@ function Contracts() {
         (listing) => listing.selling_status === 0
       ) || []
     );
-  }, [listingsData]); 
+  }, [listingsData]);
   const { sort_by, sort_dir } = getSortParams();
 
   const combinedFilters = {
@@ -127,7 +127,7 @@ function Contracts() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               {/* <button type="button" className={classes.searchButton}> */}
-                <Search />
+              <Search />
               {/* </button> */}
             </div>
             <button className={classes.filter} onClick={openFilter}>

@@ -56,7 +56,7 @@ function PropertyDetailsMarketer() {
   const fetchListing = async () => {
     setLoading(true);
     try {
-      const { data } = await axiosInstance.get(`listings/employee/${id}`, {
+      const { data } = await axiosInstance.get(`marketer/listings/cursor/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setListing(data?.data.listing);

@@ -29,7 +29,8 @@ import { useCategoryPerformance } from "../../hooks/queries/5_useCategoryPerform
 import { useTrendsOverTime } from "../../hooks/queries/6_useTrendsOverTime";
 import { usePriceAdjustments } from "../../hooks/queries/7_usePriceAdjustments";
 import { useTranslation } from "../../context/LanguageContext";
-
+import SellingKpi from "./Kpis/SellingKpi";
+ 
 
 function Analytics() {
   const { user } = useAuth();
@@ -101,6 +102,7 @@ function Analytics() {
       });
     }
   };
+
   const fetchTerminationReasons = async () => {
     try {
       setTerminationReasons(terminationReasonsData?.data || []);
@@ -357,7 +359,10 @@ function Analytics() {
         </span>
         <Notifications />
       </div>
-      <div className={classes.summary}>
+
+<SellingKpi/>
+      {/* <div className={classes.summary}>
+        
         <div
           style={{
 
@@ -387,6 +392,7 @@ function Analytics() {
             {parseFloat(data?.revenue?.sales_revenue).toLocaleString("en-GB")}
           </div>
         </div>
+
         <div
           style={{
 
@@ -416,6 +422,7 @@ function Analytics() {
             {parseFloat(data?.revenue?.rental_revenue).toLocaleString("en-GB")}
           </div>
         </div>
+        
         <div
           style={{
 
@@ -446,7 +453,8 @@ function Analytics() {
             {parseFloat(data?.revenue?.booking_revenue).toLocaleString("en-GB")}
           </div>
         </div>
-      </div>
+
+      </div> */}
 
       <div className={classes.charts}>
         {/* Income Chart */}
@@ -566,88 +574,7 @@ function Analytics() {
             <Line dataKey="count" stroke="#8884d8" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
-      </div>
-      {/* Additional Metrics 
-
-      <div className={classes.summary}>
-        <div
-          style={{
-                          
-          }}
-          className={classes.card}
-        >
-          <div
-            style={{
-                           }}
-            className={classes.secondaryCardTitle}
-          >
-            {t.TotalContractsValue}
-          </div>
-
-          <div
-            style={{
-              color:   "var(--color-3)",
-            }}
-            className={classes.secondaryCardValue}
-          >
-            <span className="icon-saudi_riyal">&#xea; </span>
-            {parseFloat(data?.revenue?.total_revenue).toLocaleString("en-GB")}
-          </div>
-        </div>
-
-        <div
-          style={{
-                          
-          }}
-          className={classes.card}
-        >
-          <h4
-            style={{
-                           }}
-            className={classes.secondaryCardTitle}
-          >
-            {t.Averagetimeonmarket}
-          </h4>
-
-          <div
-            style={{
-              color:   "var(--color-3)",
-            }}
-            className={classes.secondaryCardValue}
-          >
-            {timeOnMarket?.reduce(
-              (acc, item) => acc + item.average_days_on_market,
-              0
-            ) / timeOnMarket.length}{" "}
-            {t.days}
-          </div>
-        </div>
-
-        <div
-          style={{
-                          
-            marginRight: "0px",
-          }}
-          className={classes.card}
-        >
-          <div
-            style={{
-                           }}
-            className={classes.secondaryCardTitle}
-          >
-            {t.TotalTerminatedTransactions}
-          </div>
-          <div
-            style={{
-              color:   "var(--color-3)",
-            }}
-            className={classes.secondaryCardValue}
-          >
-            {terminationData.reduce((acc, item) => acc + item.count, 0)}
-          </div>
-        </div>
-      </div>
-      */}
+      </div> 
 
       <div className={classes.summary}>
         <div

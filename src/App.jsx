@@ -2,16 +2,13 @@
 // App.jsx
 // Local dependencies imports
 import "@mantine/core/styles.css";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/authContext.jsx";
 import { SidebarProvider } from "./context/sidebarContext.jsx";
-// import { LanguageProvider } from "./context/LanguageContext.jsx";
 import Terms from "./pages/Terms.jsx";
 import Privacy from "./pages/Privacy.jsx";
 import About from "./pages/About.jsx";
 
-// Normal imports for all components
-// import Login from "./pages/Login.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
@@ -51,7 +48,6 @@ import PropertiesEmployee from "./pages/dashboardEmployee/PropertiesEmployee.jsx
 import RequestsEmployee from "./pages/dashboardEmployee/RequestsEmployee.jsx";
 import PropertyDetailsEmployee from "./components/employee/PropertyDetailsEmployee.jsx";
 import { LanguageProvider } from "./context/LanguageContext.jsx";
-import MatterOrCompany from "./pages/MatterOrCompany.jsx";
 import DashboardLayoutMarketer from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
 import PropertyDetailsMarketer from "./components/Marketer/PropertyDetailsMarketer.jsx";
 import ContractsMarketer from "./pages/dashboardMarketer/ContractsMarketer.jsx";
@@ -60,12 +56,7 @@ import PropertiesMarketer from "./pages/dashboardMarketer/PropertiesMarketer.jsx
 import ContractDetailsMarketer from "./components/Marketer/ContractDetailsMarketer.jsx";
 import AnalyticsMarketer from "./pages/dashboardMarketer/AnalyticsMarketer.jsx";
 import ProfileMarketer from "./pages/dashboardMarketer/ProfileMarketer.jsx";
-// import ShareContracts from "./pages/ShareContracts.jsx";
-// import { ShareUrlProvider } from "./context/ShareUrlContext.jsx";
-// import NotFound from "./pages/NotFound.JSX";
 import PublicContractView from "./pages/PublicContractView.jsx";
-// import NotFound from "./pages/NotFound.JSX";
-// import DashboardMarketerLayout from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";
 
 function App() {
   return (

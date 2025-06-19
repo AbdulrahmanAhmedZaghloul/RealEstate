@@ -60,9 +60,9 @@ import PropertiesMarketer from "./pages/dashboardMarketer/PropertiesMarketer.jsx
 import ContractDetailsMarketer from "./components/Marketer/ContractDetailsMarketer.jsx";
 import AnalyticsMarketer from "./pages/dashboardMarketer/AnalyticsMarketer.jsx";
 import ProfileMarketer from "./pages/dashboardMarketer/ProfileMarketer.jsx";
-import ShareContracts from "./pages/ShareContracts.jsx";
-import { ShareUrlProvider } from "./context/ShareUrlContext.jsx";
-import NotFound from "./pages/NotFound.JSX";
+// import ShareContracts from "./pages/ShareContracts.jsx";
+// import { ShareUrlProvider } from "./context/ShareUrlContext.jsx";
+// import NotFound from "./pages/NotFound.JSX";
 import PublicContractView from "./pages/PublicContractView.jsx";
 // import NotFound from "./pages/NotFound.JSX";
 // import DashboardMarketerLayout from "./pages/dashboardMarketer/DashboardLayoutMarketer.jsx";

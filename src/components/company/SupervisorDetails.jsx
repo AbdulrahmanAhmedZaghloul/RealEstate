@@ -1,9 +1,15 @@
-
-
 //Dependency imports
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Center, Grid, Loader, Modal, TextInput, useMantineColorScheme } from "@mantine/core";
+import {
+  Button,
+  Center,
+  Grid,
+  Loader,
+  Modal,
+  TextInput,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 
@@ -52,7 +58,7 @@ function SupervisorDetails() {
         message: "Supervisor deleted successfully!",
         color: "green",
       });
-      queryClient.invalidateQueries(['supervisors']);
+      queryClient.invalidateQueries(["supervisors"]);
 
       closeDeleteModal();
       // Redirect or refresh the page after deletion
@@ -82,6 +88,8 @@ function SupervisorDetails() {
     phone_number: "",
     address: "",
     supervisor_id: null,
+    image: null, // ستتم ملؤها لاحقًا من المودال
+    picture_url: user.picture_url || null, // للعرض فقط
   });
   const [errors, setErrors] = useState({
     name: "",
@@ -94,7 +102,10 @@ function SupervisorDetails() {
   });
   const [newUser, setNewUser] = useState({});
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
-  const [changePasswordModal, { open: openChangePasswordModal, close: closeChangePasswordModal }] = useDisclosure(false);
+  const [
+    changePasswordModal,
+    { open: openChangePasswordModal, close: closeChangePasswordModal },
+  ] = useDisclosure(false);
   const [passwordData, setPasswordData] = useState({
     password: "",
     supervisor_id: id,
@@ -102,9 +113,36 @@ function SupervisorDetails() {
 
   // const [passwordErrors, setPasswordErrors] = useState({});
   const handleFileChange = (file) => {
-    setNewUser((prev) => ({ ...prev, image: file }));
-  };
+    // setNewUser((prev) => ({ ...prev, image: file }));
+    if (!file) return;
 
+    const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
+    if (file.size > MAX_FILE_SIZE) {
+      notifications.show({
+        title: "Error",
+        message: "Image size should not exceed 2 MB.",
+        color: "red",
+      });
+      return;
+    }
+
+    new Compressor(file, {
+      quality: 0.6, // نسبة الضغط (0.1 إلى 1)
+      success: (compressedResult) => {
+        const compressedFile = new File([compressedResult], file.name, {
+          type: compressedResult.type,
+          lastModified: Date.now(),
+        });
+
+        setNewUser((prev) => ({ ...prev, image: compressedFile }));
+      },
+      error: (err) => {
+        console.error("Compression failed:", err);
+        setNewUser((prev) => ({ ...prev, image: file })); // استخدام الصورة الأصلية
+      },
+    });
+  };
   const handleUpdateUser = async () => {
     if (!validateForm(editUser, true)) return;
     const formData = new FormData();
@@ -126,7 +164,7 @@ function SupervisorDetails() {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      queryClient.invalidateQueries(['supervisors']);
+      queryClient.invalidateQueries(["supervisors"]);
 
       closeEditModal();
       notifications.show({
@@ -155,6 +193,9 @@ function SupervisorDetails() {
       position: user.position,
       phone_number: user.phone_number,
       address: user.address,
+        image: null, // ستتم ملؤها لاحقًا من المودال
+      picture_url: user.picture_url || null, // للعرض فقط
+
       supervisor_id: user.supervisor_id,
     });
     openEditModal();
@@ -244,11 +285,15 @@ function SupervisorDetails() {
 
     setLoading(true);
     try {
-      await axiosInstance.put(`supervisors/change-password/${id}`, passwordData, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      await axiosInstance.put(
+        `supervisors/change-password/${id}`,
+        passwordData,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       notifications.show({
         title: t.Success,
         message: "Password changed successfully!",
@@ -299,17 +344,10 @@ function SupervisorDetails() {
   }
 
   return (
-    <div
-
-      className={classes.container}
-    >
+    <div className={classes.container}>
       <div className={classes.header}>
         <BurgerButton />
-        <span
-          style={{
-          }}
-          className={classes.employePosition}
-        >
+        <span style={{}} className={classes.employePosition}>
           {t.Supervisor}
         </span>
         <Notifications />
@@ -318,25 +356,14 @@ function SupervisorDetails() {
         <div className={classes.profileImage}>
           <img src={supervisor.picture_url} alt="Profile" />
           <div className={classes.profileInfo}>
-            <h2
-              style={{
-              }}
-            >
-              {supervisor.name}
-            </h2>
-            <p
-              style={{
-              }}
-            >
-              {supervisor.email}
-            </p>
+            <h2 style={{}}>{supervisor.name}</h2>
+            <p style={{}}>{supervisor.email}</p>
           </div>
         </div>
         <span
           style={{
             cursor: "pointer",
           }}
-
           onClick={openDeleteModal}
           className={classes.deleteIcon}
         >
@@ -346,137 +373,65 @@ function SupervisorDetails() {
 
       <div className={classes.personalInfo}>
         <div>
-          <h3
+          <h3 style={{}}>{t.PersonalInfo}</h3>
+          <span
             style={{
+              cursor: "pointer",
             }}
-          >
-            {t.PersonalInfo}
-          </h3>
-          <span style={{
-            cursor: "pointer",
-          }}
             onClick={handleEditUser.bind(this, supervisor)}
           >
             <EditIcon />
-
           </span>
         </div>
         <Grid>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.FullName}
-            </h2>
+            <h2 style={{}}>{t.FullName}</h2>
             {/* <br /> */}
-            <h3
-              style={{
-              }}
-            >
-              {supervisor.name}
-            </h3>
+            <h3 style={{}}>{supervisor.name}</h3>
           </Grid.Col>
 
           <Grid.Col span={isMobile ? 10 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.Position}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
-              {supervisor.position}
-            </h3>
+            <h2 style={{}}>{t.Position}</h2>
+            <h3 style={{}}>{supervisor.position}</h3>
           </Grid.Col>
 
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.Phone}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
-              {supervisor.phone_number}
-            </h3>
+            <h2 style={{}}>{t.Phone}</h2>
+            <h3 style={{}}>{supervisor.phone_number}</h3>
           </Grid.Col>
 
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.address}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
-
-              {supervisor.address}
-            </h3>
+            <h2 style={{}}>{t.address}</h2>
+            <h3 style={{}}>{supervisor.address}</h3>
           </Grid.Col>
 
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.CreatedAt}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
+            <h2 style={{}}>{t.CreatedAt}</h2>
+            <h3 style={{}}>
               {new Date(supervisor.created_at).toLocaleDateString("en-GB")}{" "}
             </h3>
           </Grid.Col>
 
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.Noofemployees}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
-
-              {supervisor?.employees?.length}
-            </h3>
+            <h2 style={{}}>{t.Noofemployees}</h2>
+            <h3 style={{}}>{supervisor?.employees?.length}</h3>
           </Grid.Col>
 
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.Status}
-            </h2>
-            <h3
-              style={{
-              }}
-              className={classes.active}
-            >
-              {console.log(supervisor)
-              }
+            <h2 style={{}}>{t.Status}</h2>
+            <h3 style={{}} className={classes.active}>
+              {console.log(supervisor)}
               {supervisor.status}
             </h3>
           </Grid.Col>
         </Grid>
       </div>
       <Contracts />
-      <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
-
+      <Modal
+        opened={changePasswordModal}
+        onClose={closeChangePasswordModal}
+        title="Change Password"
+      >
         <TextInput
           label="New Password"
           type={showPassword ? "text" : "password"}
@@ -522,11 +477,16 @@ function SupervisorDetails() {
           }
           error={passwordErrors.password}
         /> */}
-        <Button loading={loading} onClick={handleChangePassword} mt="md" fullWidth>
+        <Button
+          loading={loading}
+          onClick={handleChangePassword}
+          mt="md"
+          fullWidth
+        >
           Change Password
         </Button>
       </Modal>
-      
+
       <EditStaffModal
         opened={editModalOpened}
         onClose={closeEditModal}
@@ -539,6 +499,20 @@ function SupervisorDetails() {
         handleFileChange={handleFileChange}
         handleOpenChangePassword={handleOpenChangePassword}
       />
+
+      {/* <EditStaffModal
+              opened={editModalOpened}
+              onClose={closeEditModal}
+              onEdit={handleUpdateUser}
+              loading={isEditUserLoading}
+              supervisors={supervisors}
+              editUser={editUser}
+              setEditUser={setEditUser}
+              errors={errors}
+              handleFileChange={handleFileChange}
+              currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
+            />
+             */}
       <DeleteEmployeeModal
         opened={deleteModalOpened}
         onClose={closeDeleteModal}

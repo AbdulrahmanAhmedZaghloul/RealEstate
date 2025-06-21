@@ -18,8 +18,8 @@ export const useEditUser = (userToken, closeModal) => {
         formData.append("_method", "post");
         console.log(editUser.picture_url);
 
-        if (editUser.picture_url instanceof File) {
-            formData.append("picture", editUser.picture_url);
+        if (editUser.image instanceof File) {
+            formData.append("picture", editUser.image);
         } const endpoint =
             editUser.id !== undefined
                 ? `employees/${editUser.id}`

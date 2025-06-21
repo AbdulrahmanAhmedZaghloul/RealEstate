@@ -1,5 +1,17 @@
 import {
-  ActionIcon, Anchor, Avatar, Badge, Group, Table, Text, Collapse, Box, Center, Loader, Card, Select,
+  ActionIcon,
+  Anchor,
+  Avatar,
+  Badge,
+  Group,
+  Table,
+  Text,
+  Collapse,
+  Box,
+  Center,
+  Loader,
+  Card,
+  Select,
   Modal,
   TextInput,
   Button,
@@ -15,7 +27,7 @@ import Notifications from "../../components/company/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { useTranslation } from "../../context/LanguageContext";
 
-// model 
+// model
 import DeleteEmployeeModal from "../../components/modals/deleteEmployeeModal";
 import AddStaffModal from "../../components/modals/addStaffModal";
 import EditStaffModal from "../../components/modals/editStaffModal";
@@ -27,7 +39,6 @@ import { useEmployeePerformance } from "../../hooks/queries/useEmployeePerforman
 import { useAddUser } from "../../hooks/mutations/useAddUser";
 import { useRemoveUser } from "../../hooks/mutations/useRemoveUser";
 import { useEditUser } from "../../hooks/mutations/useEditUser";
-
 
 // IconSvg
 import Dropdown from "../../components/icons/dropdown";
@@ -41,7 +52,7 @@ import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import InvalidateQuery from "../../InvalidateQuery/InvalidateQuery";
 import DeleteIcon from "../../components/icons/DeleteIcon";
 import { useQueryClient } from "@tanstack/react-query";
-import Compressor from 'compressorjs';
+import Compressor from "compressorjs";
 
 const jobColors = {
   supervisor: "orange",
@@ -187,19 +198,19 @@ function Staff() {
       query.trim() === ""
         ? supervisors
         : supervisors.filter(
-          (supervisor) =>
-            supervisor.name.toLowerCase().includes(query.toLowerCase()) ||
-            supervisor.position.toLowerCase().includes(query.toLowerCase())
-        )
+            (supervisor) =>
+              supervisor.name.toLowerCase().includes(query.toLowerCase()) ||
+              supervisor.position.toLowerCase().includes(query.toLowerCase())
+          )
     );
     setSearchedEmployees(
       query.trim() === ""
         ? employees
         : employees.filter(
-          (employee) =>
-            employee.name.toLowerCase().includes(query.toLowerCase()) ||
-            employee.position.toLowerCase().includes(query.toLowerCase())
-        )
+            (employee) =>
+              employee.name.toLowerCase().includes(query.toLowerCase()) ||
+              employee.position.toLowerCase().includes(query.toLowerCase())
+          )
     );
   };
 
@@ -215,7 +226,7 @@ function Staff() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
   const mutationAddUser = useAddUser(user.token, closeAddModal, setNewUser);
   const isAddUserLoading = mutationAddUser.isPending;
 
@@ -240,15 +251,17 @@ function Staff() {
     if (!employeeToDelete) return;
 
     // تنفيذ الحذف باستخدام useRemoveUser hook
-    mutationRemoveUser.mutate({ employeeToDelete }, {
-      onSuccess: () => {
-
-        queryClient.invalidateQueries(['listingsRealEstate']);
-        queryClient.invalidateQueries(['listings']);
-        closeDeleteModal();
-        setEmployeeToDelete(null);
-      },
-    });
+    mutationRemoveUser.mutate(
+      { employeeToDelete },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(["listingsRealEstate"]);
+          queryClient.invalidateQueries(["listings"]);
+          closeDeleteModal();
+          setEmployeeToDelete(null);
+        },
+      }
+    );
   };
 
   const mutationEditUser = useEditUser(user.token, closeEditModal);
@@ -274,8 +287,6 @@ function Staff() {
 
     mutationEditUser.mutate({ editUser });
   };
-
-
 
   const handleFileChange = (file) => {
     if (!file) return;
@@ -376,7 +387,6 @@ function Staff() {
     setSearchedSupervisors([]); // Clear supervisors from search results
   };
 
-
   useEffect(() => {
     if (!addModalOpened) {
       setPreviewImage(null); // إعادة تعيين الصورة عند إغلاق المودال
@@ -409,18 +419,10 @@ function Staff() {
 
   return (
     <>
-      <Card
-
-        className={classes.mainContainer}
-        radius="lg"
-      >
+      <Card className={classes.mainContainer} radius="lg">
         <div>
           <BurgerButton />
-          <span
-            style={{
-            }}
-            className={classes.title}
-          >
+          <span style={{}} className={classes.title}>
             {t.Staff}
           </span>
 
@@ -440,7 +442,6 @@ function Staff() {
               }}
             />
             <Search />
-
           </div>
 
           <div className={classes.addAndSort}>
@@ -449,9 +450,7 @@ function Staff() {
               value={filter}
               mr={10}
               onChange={handleFilterChange} // Call the sorting function here
-              rightSection={
-                <Dropdown />
-              }
+              rightSection={<Dropdown />}
               data={[
                 { value: "Most seller", label: "Most seller" },
                 { value: "Least seller", label: "Least seller" },
@@ -492,7 +491,7 @@ function Staff() {
                 border: "1px solid var(--color-border)",
               }}
             >
-              <span style={{ marginRight: "13px" }} >
+              <span style={{ marginRight: "13px" }}>
                 <AddIcon />
               </span>
               {t.Add}
@@ -537,14 +536,8 @@ function Staff() {
               >
                 {supervisors.map((supervisor) => (
                   <React.Fragment key={supervisor.supervisor_id}>
-                    <Table.Tr
-                      key={supervisor.supervisor_id}
-                    >
-                      <Table.Td
-
-                        className={classes.tablebody}
-                        w="20%"
-                      >
+                    <Table.Tr key={supervisor.supervisor_id}>
+                      <Table.Td className={classes.tablebody} w="20%">
                         <Group gap="md">
                           <ActionIcon
                             variant="subtle"
@@ -776,7 +769,6 @@ function Staff() {
                                           mr={24}
                                         >
                                           <EditIcon />
-
                                         </ActionIcon>
                                         <ActionIcon
                                           variant="subtle"
@@ -803,9 +795,7 @@ function Staff() {
                   </React.Fragment>
                 ))}
                 {groupedEmployees["unassigned"]?.map((employee) => (
-                  <Table.Tr
-                    key={employee.employee_id}
-                  >
+                  <Table.Tr key={employee.employee_id}>
                     <Table.Td className={classes.tablebody} w="20%">
                       <Group
                         gap="sm"
@@ -884,7 +874,6 @@ function Staff() {
                   border: "1px solid transparent",
                 }}
               >
-
                 {searchedEmployees?.map((employee) => (
                   <Table.Tr
                     style={{
@@ -953,7 +942,6 @@ function Staff() {
                           mr={24}
                         >
                           <EditIcon />
-
                         </ActionIcon>
                         <ActionIcon
                           variant="subtle"
@@ -1048,11 +1036,9 @@ function Staff() {
                     </Table.Td>
                   </Table.Tr>
                 ))}
-
               </Table.Tbody>
             )}
           </Table>
-
         </Table.ScrollContainer>
       </Card>
 
@@ -1067,7 +1053,6 @@ function Staff() {
         errors={errors}
         setErrors={setErrors}
         handleFileChange={handleFileChange}
-
         setPreviewImage={setPreviewImage}
         previewImage={previewImage}
       />

@@ -167,8 +167,9 @@ export default function SidebarSupervisor() {
           >
             <span style={{
             }} className={classes.profileName}>{profile.name}</span>
-            <span style={{
+            {/* <span style={{
             }} className={classes.profileEmail}>{profile.email}</span>
+           */}
           </div>
         </Group>
 

@@ -181,6 +181,16 @@ function PropertiesSupervisor() {
      // إذا كنت تريد إعادة تعيين الحقول في المودال
    };
    
+     useEffect(() => {
+       const handleScroll = () => {
+         setIsSticky(window.scrollY > 150);
+       };
+   
+       window.addEventListener("scroll", handleScroll);
+   
+       return () => window.removeEventListener("scroll", handleScroll);
+     }, []);
+   
    if (employeesLoading || categoriesLoading) {
      return (
        <Center

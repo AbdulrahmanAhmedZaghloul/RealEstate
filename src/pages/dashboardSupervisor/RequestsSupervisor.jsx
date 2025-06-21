@@ -274,6 +274,17 @@ function RequestsSupervisor() {
     queryClient.invalidateQueries(["listingsRealEstate-employee"]);
   };
 
+  
+    useEffect(() => {
+      const handleScroll = () => {
+        setIsSticky(window.scrollY > 150);
+      };
+  
+      window.addEventListener("scroll", handleScroll);
+  
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
   if (employeesLoading || categoriesLoading) {
     return (
       <Center

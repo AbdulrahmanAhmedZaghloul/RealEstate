@@ -20,7 +20,24 @@
 .summary {
   display: flex;
   justify-content: space-between;
+}
 
+
+.SelectCardTitle {
+  position: relative;
+  z-index: 75675675675;
+  width: 90px;
+}
+.divDatePickerInput {
+  position: absolute;
+  z-index: 5fsdf3;
+  right: 4%;
+  margin-top: 10px;
+}
+
+.divDatePickerInput .datePickerInput {
+  background-color: thistle;
+  margin-top: 20px;
 }
 
 .card {
@@ -31,31 +48,22 @@
   /* flex: 1;  */
   padding: 14px;
 }
-.cardGridCol{
-  
-}
 
 .cardTitle {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* margin-left:24px; */
   margin-top: 24px;
-  /* text-align: left; */
   font-weight: 600;
   font-size: 16px;
   color: var(--color-2);
 }
 
-.SelectCardTitle {
-  width: 90px;
-}
 
 .cardCount {
   margin-left: 24px;
   margin-right: 24px;
   margin-top: 10px;
-  ;
   font-size: 32px;
   font-weight: 700;
   color: var(--color-2);
@@ -110,7 +118,6 @@
   font-size: 16px;
   font-weight: 600;
   margin-top: 32px;
-  ;
 }
 
 .secondaryCardValue {
@@ -129,8 +136,6 @@
   font-weight: 600;
 }
 
-
-
 .cardDropdown,
 .dropdown {
   cursor: pointer;
@@ -147,7 +152,7 @@
   padding: 6px 24px 6px 10px;
 
   /* Consistent background positioning */
-  background: url('../assets/downArrow.svg') no-repeat right 0px center;
+  background: url("../assets/downArrow.svg") no-repeat right 0px center;
   background-size: 22px;
 }
 
@@ -200,6 +205,4 @@
   .secondaryCardValue {
     font-size: 16px;
   }
-
-
 }

@@ -1,81 +1,133 @@
-// components/TimeFilter.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { Select } from "@mantine/core";
 import classes from "../styles/analytics.module.css";
+import "react-datepicker/dist/react-datepicker.css";
 
-const TimeFilter = ({ initialTimeFrame = "yearly", onChange }) => {
-    const [timeFrame, setTimeFrame] = useState(initialTimeFrame);
-    const [selectedMonthYear, setSelectedMonthYear] = useState(null);
-    const [selectedYear, setSelectedYear] = useState("");
+const TimeFilter = ({ initialTimeFrame = "month", onChange }) => {
+  const [timeFrame, setTimeFrame] = useState(initialTimeFrame);
+  const [selectedMonthYear, setSelectedMonthYear] = useState(null);
 
-    // Generate years list from 2022 to 2333
-    const startYear = 2022;
-    const endYear = 2333;
-    const years = Array.from(
-        { length: endYear - startYear + 1 },
-        (_, i) => String(startYear + i)
-    );
+  // Set default to current month/year if timeFrame is 'month' and selectedMonthYear is null
+  useEffect(() => {
+    if (timeFrame === "month" && !selectedMonthYear) {
+      const today = new Date();
+      setSelectedMonthYear(today);
+      const month = String(today.getMonth() + 1); // months are 0-indexed
+      const year = String(today.getFullYear());
+      onChange({ timeFrame, month, year });
+    }
+  }, [timeFrame, onChange, selectedMonthYear]);
 
-    const handleTimeFrameChange = (value) => {
-        setTimeFrame(value);
-        setSelectedMonthYear(null);
-        setSelectedYear("");
-        onChange({ timeFrame: value, month: "", year: "" });
-    };
+  const handleTimeFrameChange = (value) => {
+    setTimeFrame(value);
+    setSelectedMonthYear(null);
+    if (value !== "month") {
+      onChange({ timeFrame: value, month: "", year: "" });
+    }
+  };
 
-    const handleYearChange = (year) => {
-        setSelectedYear(year);
-        onChange({ timeFrame, month: "", year });
-    };
+  const handleMonthYearChange = (date) => {
+    setSelectedMonthYear(date);
+    if (date) {
+      const month = String(date.getMonth() + 1);
+      const year = String(date.getFullYear());
+      onChange({ timeFrame, month, year });
+    } else {
+      onChange({ timeFrame, month: "", year: "" });
+    }
+  };
 
-    const handleMonthYearChange = (date) => {
-        setSelectedMonthYear(date);
-        if (date) {
-            const month = String(date.getMonth() + 1); // getMonth() starts at 0
-            const year = String(date.getFullYear());
-            onChange({ timeFrame, month, year });
-        } else {
-            onChange({ timeFrame, month: "", year: "" });
-        }
-    };
+  return (
+    <div>
+      <Select
+        value={timeFrame}
+        onChange={handleTimeFrameChange}
+        data={[
+          { value: "month", label: "Month" },
+          { value: "yearly", label: "Yearly" },
+        ]}
+        style={{ width: "150px" }}
+        className={classes.SelectCardTitle}
+      />
 
-    return (
-        <div style={{ marginBottom: "20px" }}>
-            <Select
-                value={timeFrame}
-                onChange={handleTimeFrameChange}
-                data={[
-                    { value: "yearly", label: "Yearly" },
-                    { value: "month", label: "By Month" },
-                ]}
-                className={classes.SelectCardTitle}
-            />
-
-            {/* {timeFrame === "yearly" && (
-                <Select
-                    value={selectedYear}
-                    onChange={handleYearChange}
-                    data={years.map((y) => ({ value: y, label: y }))}
-                    placeholder="Select Year"
-                    mt="md"
-                    className={classes.SelectCardTitle}
-                />
-            )} */}
-
-            {timeFrame === "month" && (
-                <DatePicker
-                    selected={selectedMonthYear}
-                    onChange={handleMonthYearChange}
-                    showMonthYearPicker
-                    dateFormat="MM/yyyy"
-                    className={classes.datePickerInput}
-                    placeholderText="اختر الشهر والسنة"
-                />
-            )}
+      {timeFrame === "month" && (
+        <div className={classes.divDatePickerInput}>
+          <DatePicker
+            selected={selectedMonthYear || new Date()}
+            onChange={handleMonthYearChange}
+            showMonthYearPicker
+            dateFormat="MM/yyyy"
+            className={classes.datePickerInput}
+            inline
+          />
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default TimeFilter;
+
+// // components/TimeFilter.jsx
+// import React, { useState } from "react";
+// import DatePicker from "react-datepicker";
+// // import "react-datepicker/dist/react-datepicker.css";
+// import { Select } from "@mantine/core";
+// import classes from "../styles/analytics.module.css";
+// import "react-datepicker/dist/react-datepicker.css";
+// const TimeFilter = ({ initialTimeFrame = "month", onChange }) => {
+//   const [timeFrame, setTimeFrame] = useState(initialTimeFrame);
+//   const [selectedMonthYear, setSelectedMonthYear] = useState(null);
+
+//   // Generate years list from 2022 to 2333
+
+//   const handleTimeFrameChange = (value) => {
+//     setTimeFrame(value);
+//     setSelectedMonthYear(null);
+//     onChange({ timeFrame: value, month: "", year: "" });
+//   };
+
+//   const handleMonthYearChange = (date) => {
+//     setSelectedMonthYear(date);
+//     if (date) {
+//       const month = String(date.getMonth() + 1); // getMonth() starts at 0
+//       const year = String(date.getFullYear());
+//       onChange({ timeFrame, month, year });
+//     } else {
+//       onChange({ timeFrame, month: "", year: "" });
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <Select
+//         value={timeFrame}
+//         onChange={handleTimeFrameChange}
+//         data={[
+//           { value: "month", label: "Month" },
+//           { value: "yearly", label: "Yearly" },
+//         ]}
+//         style={{
+//           width: "150px",
+//         }}
+//         className={classes.SelectCardTitle}
+//       />
+
+//       {timeFrame === "month" && (
+//         <div className={classes.divDatePickerInput}>
+//           <DatePicker
+//             selected={selectedMonthYear}
+//             onChange={handleMonthYearChange}
+//             showMonthYearPicker
+//             dateFormat="MM/yyyy"
+//             className={classes.datePickerInput}
+//             inline
+//           />
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default TimeFilter;

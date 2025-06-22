@@ -135,7 +135,11 @@ function PropertyDetails() {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       navigate("/dashboard/properties");
-      queryClient.invalidateQueries(['listings']);
+      
+    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+    queryClient.invalidateQueries(["listingsRealEstate"]);
+    queryClient.invalidateQueries(["listings"]);
+    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
 
       notifications.show({
         title: "Success",
@@ -161,8 +165,12 @@ function PropertyDetails() {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       notifications.show({ title: "Success", message: "Listing updated successfully!", color: "green" });
-      queryClient.invalidateQueries(['listings']);
-      closeEdit();
+
+    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+    queryClient.invalidateQueries(["listingsRealEstate"]);
+    queryClient.invalidateQueries(["listings"]);
+    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+          closeEdit();
     } catch (err) {
       notifications.show({ title: "Error", message: "Failed to update property", color: "red" });
     }

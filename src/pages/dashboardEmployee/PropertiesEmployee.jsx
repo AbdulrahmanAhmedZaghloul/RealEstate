@@ -344,7 +344,7 @@ function PropertiesEmployee() {
                   <GridCol
                     span={{ base: 12, lg: 4, md: 6, sm: 6 }}
                     key={listing.id}
-                    onClick={() => navigate(`/dashboard-supervisor/Properties/${listing.id}`)}
+                    onClick={() => navigate(`/dashboard-employee/Properties/${listing.id}`)}
                     style={{ cursor: "pointer" }}
                   >
                     <Card className={classes.card}>

@@ -102,12 +102,12 @@ function Properties() {
       location: "",
       rooms: "",
       bathrooms: "",
-      areaMin: "",
-      areaMax: "",
-      priceMin: "",
-      priceMax: "",
-      category: "",
-      subcategory: "",
+      area_min: "",
+      area_max: "",
+      price_min: "",
+      price_max: "",
+      category_id: "",
+      subcategory_id: "",
     },
   });
   const loadMoreRef = useRef(null);

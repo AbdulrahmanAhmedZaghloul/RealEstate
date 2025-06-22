@@ -30,7 +30,7 @@ import { useTrendsOverTime } from "../../hooks/queries/6_useTrendsOverTime";
 import { usePriceAdjustments } from "../../hooks/queries/7_usePriceAdjustments";
 import { useTranslation } from "../../context/LanguageContext";
 import SellingKpi from "./Kpis/SellingKpi";
- 
+
 
 function Analytics() {
   const { user } = useAuth();
@@ -360,105 +360,9 @@ function Analytics() {
         <Notifications />
       </div>
 
-<SellingKpi/>
-      {/* <div className={classes.summary}>
-        
-        <div
-          style={{
-
-          }}
-          className={classes.card}
-        >
-          <div
-            style={{
-            }}
-            className={classes.cardTitle}
-          >
-            {t.Selling}
-          </div>
-          <div
-            style={{
-            }}
-            className={classes.cardCount}
-          >
-            {data?.contracts?.total_sales}
-          </div>
-          <div
-            style={{
-            }}
-            className={classes.cardRevenue}
-          >
-            <span className="icon-saudi_riyal">&#xea; </span>
-            {parseFloat(data?.revenue?.sales_revenue).toLocaleString("en-GB")}
-          </div>
-        </div>
-
-        <div
-          style={{
-
-          }}
-          className={classes.card}
-        >
-          <div
-            style={{
-            }}
-            className={classes.cardTitle}
-          >
-            {t.Renting}
-          </div>
-          <div
-            style={{
-            }}
-            className={classes.cardCount}
-          >
-            {data?.contracts?.total_rentals}
-          </div>
-          <div
-            style={{
-            }}
-            className={classes.cardRevenue}
-          >
-            <span className="icon-saudi_riyal">&#xea; </span>
-            {parseFloat(data?.revenue?.rental_revenue).toLocaleString("en-GB")}
-          </div>
-        </div>
-        
-        <div
-          style={{
-
-            marginRight: "0px",
-          }}
-          className={classes.card}
-        >
-          <div
-            style={{
-            }}
-            className={classes.cardTitle}
-          >
-            {t.Booking}
-          </div>
-          <div
-            style={{
-            }}
-            className={classes.cardCount}
-          >
-            {data?.contracts?.total_bookings}
-          </div>
-          <div
-            style={{
-            }}
-            className={classes.cardRevenue}
-          >
-            <span className="icon-saudi_riyal">&#xea; </span>
-            {parseFloat(data?.revenue?.booking_revenue).toLocaleString("en-GB")}
-          </div>
-        </div>
-
-      </div> */}
-
-      <div className={classes.charts}>
-        {/* Income Chart */}
-        <div
+      <SellingKpi />
+      {/* <div className={classes.charts}>
+         <div
           style={{
 
           }}
@@ -490,13 +394,13 @@ function Analytics() {
                     fill={COLORS[index % COLORS.length]}
                   />
                 ))}
+                
               </Pie>
               <Legend />
             </PieChart>
           </ResponsiveContainer>
         </div>
-        {/* Revenue Chart */}
-        <div
+         <div
           style={{
 
           }}
@@ -533,7 +437,7 @@ function Analytics() {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </div> */}
       {/* Newly Listed Properties */}
       <div
         style={{
@@ -574,7 +478,7 @@ function Analytics() {
             <Line dataKey="count" stroke="#8884d8" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
-      </div> 
+      </div>
 
       <div className={classes.summary}>
         <div

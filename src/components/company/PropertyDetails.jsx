@@ -165,8 +165,12 @@ function PropertyDetails() {
         { status: newStatus, rejection_reason: reason },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
-      queryClient.invalidateQueries(["listings"]);
-      notifications.show({
+
+    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+    queryClient.invalidateQueries(["listingsRealEstate"]);
+    queryClient.invalidateQueries(["listings"]);
+    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+          notifications.show({
         title: "Success",
         message: "Listing status updated successfully",
         color: "green",
@@ -224,7 +228,7 @@ function PropertyDetails() {
     };
   }, [opened1, listing?.images]);
 
-  
+
   if (loading) {
     return (
       <Center style={{ height: "80vh" }}>
@@ -255,44 +259,43 @@ function PropertyDetails() {
                 <div className={classes.ImageContainerBig}>
                   {listing.images?.find((image) => image.is_primary)
                     ?.image_url && (
-                    <>
-                      <img
-                        style={{
-                          cursor: "pointer",
-                        }}
-                        src={`${
-                          listing.images.find((image) => image?.is_primary)
-                            ?.image_url
-                        }`}
-                        alt={listing.title}
-                        className={classes.mainImage}
-                        onClick={() => {
-                          setSelectedImageIndex(
-                            listing.images.findIndex(
-                              (image) => image.is_primary
-                            )
-                          );
-                          open1();
-                        }}
-                      />
-                      <p
-                        onClick={() => {
-                          setSelectedImageIndex(
-                            listing.images.findIndex(
-                              (image) => image.is_primary
-                            )
-                          );
-                          open1();
-                        }}
-                        style={{
-                          color: "#23262A",
-                          cursor: "pointer",
-                        }}
-                      >
-                        See {listing?.images?.length} Photos
-                      </p>
-                    </>
-                  )}
+                      <>
+                        <img
+                          style={{
+                            cursor: "pointer",
+                          }}
+                          src={`${listing.images.find((image) => image?.is_primary)
+                              ?.image_url
+                            }`}
+                          alt={listing.title}
+                          className={classes.mainImage}
+                          onClick={() => {
+                            setSelectedImageIndex(
+                              listing.images.findIndex(
+                                (image) => image.is_primary
+                              )
+                            );
+                            open1();
+                          }}
+                        />
+                        <p
+                          onClick={() => {
+                            setSelectedImageIndex(
+                              listing.images.findIndex(
+                                (image) => image.is_primary
+                              )
+                            );
+                            open1();
+                          }}
+                          style={{
+                            color: "#23262A",
+                            cursor: "pointer",
+                          }}
+                        >
+                          See {listing?.images?.length} Photos
+                        </p>
+                      </>
+                    )}
                 </div>
 
                 {/* حاوية الصور الإضافية */}
@@ -424,18 +427,18 @@ function PropertyDetails() {
                         <Text className={classes.ago}>
                           {Math.floor(
                             (new Date() - new Date(listing?.created_at)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() - new Date(listing?.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() - new Date(listing?.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
                             : Math.floor(
-                                (new Date() - new Date(listing?.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() - new Date(listing?.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                         </Text>
                       </Grid.Col>
                     </Grid>
@@ -562,73 +565,44 @@ function PropertyDetails() {
                 >
                   {console.log(listing)
                   }
-                    <Box className={classes.BoxImage}>
-                      <div className={classes.divImage}>
-                        <Avatar
-                          w={60}
-                          h={60}
-                          src={listing?.employee?.picture_url}
-                          alt={listing?.employee?.name}
-                        />
-                        <span className={classes.spanImage}>
-                          {listing?.employee?.name}
-                        </span>
-                      </div>
+                  <Box className={classes.BoxImage}>
+                    <div className={classes.divImage}>
+                      <Avatar
+                        w={60}
+                        h={60}
+                        src={listing?.employee?.picture_url}
+                        alt={listing?.employee?.name}
+                      />
+                      <span className={classes.spanImage}>
+                        {listing?.employee?.name}
+                      </span>
+                    </div>
 
-                      <div className={classes.TextView}>
-                        <Text
-                          style={{
-                            color: "var(--color-1)",
-                          }}
-                          className={classes.View}
-                        >
-                          View
-                        </Text>
-                      </div>
-                    </Box>
-                 </Box>
+                    <div className={classes.TextView}>
+                      <Text
+                        style={{
+                          color: "var(--color-1)",
+                        }}
+                        className={classes.View}
+                      >
+                        View
+                      </Text>
+                    </div>
+                  </Box>
+                </Box>
               </Grid.Col>
             </Grid>
           </Grid.Col>
         </Grid>
 
-        {/* {isMobile ? (
-          <Box
-            className={classes.BoxImage}
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/dashboard/employee/${listing.employee.employee_id}`);
-            }}
-          >
-            {console.log(listing)}
-
-            <div className={classes.divImage}>
-              <Avatar
-                src={listing.employee?.picture_url}
-                w={80}
-                h={80}
-                alt=""
-              />
-              <span className={classes.spanImage}>
-                {listing.employee?.name}
-              </span>
-            </div>
-
-            <div className={classes.TextView}>
-              <Text className={classes.View}>View</Text>
-            </div>
-          </Box>
-        ) : (
-          ""
-        )} */}
         {listing?.amenities?.length === 0 ? null : (
-          <Text    className={classes.Description} fw={600}>
+          <Text className={classes.Description} fw={600}>
             {t.Amenities}
           </Text>
         )}
 
-        <Text    style={{
-           padding:"0px 10px"
+        <Text style={{
+          padding: "0px 10px"
         }} className={classes.Amenities}>
           <Grid>
             {listing?.amenities?.length === 0 ? null : (
@@ -657,7 +631,7 @@ function PropertyDetails() {
           </Grid>
         </Text>
         {/* <Divider my="sm" /> */}
-        <Stack gap="xs" style={{ marginTop: "20px" , padding:"0px 10px"}}>
+        <Stack gap="xs" style={{ marginTop: "20px", padding: "0px 10px" }}>
           <Text className={classes.Locationpom}>{t.Location}</Text>
           <span className={classes.svgSpan}>
             <div>

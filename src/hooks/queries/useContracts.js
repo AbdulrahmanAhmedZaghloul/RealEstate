@@ -54,43 +54,4 @@ export const useContracts = (filters) => {
     enabled: !!token,
   });
 };
-
-
-// import { useInfiniteQuery } from '@tanstack/react-query';
-// import axiosInstance from '../../api/config';
-// import { useAuth } from '../../context/authContext';
-
-// const fetchContracts = (token, cursor, contractType, sortBy, sortDir) => async () => {
-//   const response = await axiosInstance.get('contracts', {
-//     headers: { Authorization: `Bearer ${token}` },
-//     params: {
-//       limit: 6,
-//       cursor: cursor || 0,
-//       contract_type: contractType !== 'all' ? contractType : undefined,
-//       sort_by: sortBy || undefined,
-//       sort_dir: sortDir || undefined,
-//     },
-//   });
-//   return response.data;
-// };
-
-// export const useContracts = (contractType, sortBy, sortDir) => {
-//   const { user } = useAuth();
-//   const token = user?.token;
-
-//   return useInfiniteQuery({
-//     queryKey: ['contracts', contractType, sortBy, sortDir],
-//     queryFn: ({ pageParam = 0 }) => fetchContracts(token, pageParam, contractType, sortBy, sortDir)(),
-//     initialPageParam: 0,
-//     getNextPageParam: (lastPage) => {
-//       const pagination = lastPage?.data?.pagination;
-//       if (pagination && pagination.has_more) {
-//         return pagination.next_cursor;
-//       }
-//       return undefined;
-//     },
-//     staleTime: 0,
-//     cacheTime: 1000 * 60 * 5,
-//     enabled: !!token,
-//   });
-// };
+ 

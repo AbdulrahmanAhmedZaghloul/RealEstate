@@ -39,8 +39,7 @@ const fetchListings = async ({
   const params = {
     limit: 6,
     cursor,
-    // description:Next,
-    sort_by,
+     sort_by,
     sort_dir,
     ...filters,
   };
@@ -53,7 +52,7 @@ const fetchListings = async ({
     params.search = searchTerm; // 👈 إرسال مصطلح البحث إلى الـ API
   }
 
-  const { data } = await axiosInstance.get("listings/cursor", {
+  const { data } = await axiosInstance.get("listings/cursor?direction=next", {
     headers: { Authorization: `Bearer ${token}` },
     params,
   });

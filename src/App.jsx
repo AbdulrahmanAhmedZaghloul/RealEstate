@@ -199,6 +199,7 @@ function App() {
                 element={<PropertyDetailsEmployee />}
               />
             </Route>
+            
           </Routes>
         </SidebarProvider>
       </AuthProvider>

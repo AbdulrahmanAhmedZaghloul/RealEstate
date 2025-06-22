@@ -1,4 +1,4 @@
- 
+
 
 // hooks/queries/useContracts.js
 
@@ -54,4 +54,3 @@ export const useContracts = (filters) => {
     enabled: !!token,
   });
 };
- 

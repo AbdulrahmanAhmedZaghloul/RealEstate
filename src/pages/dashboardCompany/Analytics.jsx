@@ -1,5 +1,113 @@
 import { use, useEffect, useState } from "react";
 import classes from "../../styles/analytics.module.css";
+import Notifications from "../../components/company/Notifications";
+import { BurgerButton } from "../../components/buttons/burgerButton";
+import { useTranslation } from "../../context/LanguageContext";
+import SellingKpi from "./Kpis/SellingKpi";
+import TimeFilter from "../../components/TimeFilter";
+import ListedProperties from "./Kpis/ListedProperties";
+import ClosedDeals from "./Kpis/ClosedDeals";
+import MarketChart from "./Kpis/MarketChart";
+import PriceAdjustments from "./Kpis/PriceAdjustments";
+
+
+function Analytics() {
+  const [filter, setFilter] = useState({
+    timeFrame: "yearly",
+    month: "",
+    year: "",
+  });
+
+  const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+
+
+  // Filter data based on interval
+
+
+
+  return (
+    <div className={classes.analyticsContainer}>
+      <div style={
+        {
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          justifyContent: "space-between",
+        }
+      }>
+        <BurgerButton />
+        <span
+          style={{
+            color: "var(--color-3)",
+          }}
+          className={classes.title}
+        >
+          {t.Analytics}
+        </span>
+        <div style={
+          {
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            justifyContent: "space-between",
+          }
+        }>
+          <TimeFilter
+            initialTimeFrame={filter.timeFrame}
+            onChange={({ timeFrame, month, year }) => {
+              setFilter({ timeFrame, month, year });
+            }}
+          />
+          <Notifications />
+        </div>
+      </div>
+
+      <SellingKpi
+        timeFrame={filter.timeFrame}
+        month={filter.month}
+        year={filter.year}
+      />
+
+      <ClosedDeals
+        timeFrame={filter.timeFrame}
+        month={filter.month}
+        year={filter.year}
+      />
+      <MarketChart
+        timeFrame={filter.timeFrame}
+        month={filter.month}
+        year={filter.year}
+
+      />
+      <PriceAdjustments
+      
+        timeFrame={filter.timeFrame}
+        month={filter.month}
+        year={filter.year}
+      />
+      <ListedProperties
+        timeFrame={filter.timeFrame}
+        month={filter.month}
+        year={filter.year}
+      />
+
+    </div>
+  );
+}
+export default Analytics;
+
+
+
+
+
+
+
+/**
+ * 
+ * 
+ * 
+ * import { use, useEffect, useState } from "react";
+import classes from "../../styles/analytics.module.css";
 import {
   BarChart,
   Bar,
@@ -437,9 +545,8 @@ function Analytics() {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div> */}
-      {/* Newly Listed Properties */}
-      <div
+      </div> 
+       <div
         style={{
 
         }}
@@ -574,8 +681,7 @@ function Analytics() {
       </div>
 
       <div className={classes.charts}>
-        {/* Time on Market Chart */}
-        <div
+         <div
           style={{
 
           }}
@@ -605,8 +711,7 @@ function Analytics() {
           </ResponsiveContainer>
         </div>
 
-        {/* Category Performance */}
-        <div
+         <div
           style={{
 
           }}
@@ -639,17 +744,13 @@ function Analytics() {
                   />
                 ))}
               </Pie>
-              <Legend
-                wrapperStyle={{
-                  paddingTop: "30px" /* Additional padding if needed */,
-                }}
+              <Legend 
               />
             </PieChart>
           </ResponsiveContainer>
         </div>
       </div>
-      {/* Price Adjustments */}
-      <div
+       <div
         style={{
 
         }}
@@ -694,8 +795,7 @@ function Analytics() {
           </LineChart>
         </ResponsiveContainer>
       </div>
-      {/* Trends over time  */}
-      <div
+       <div
         style={{
 
         }}
@@ -723,3 +823,4 @@ function Analytics() {
   );
 }
 export default Analytics;
+ */

@@ -46,10 +46,13 @@ function SellingKpi({ timeFrame, month, year }) {
         { label: "Sales", revenue: data?.revenue?.sales_revenue },
         { label: "Rentals", revenue: data?.revenue?.rental_revenue },
         { label: "Bookings", revenue: data?.revenue?.booking_revenue },
-        { label: "Total", revenue: data?.revenue?.total_revenue },
+        // { label: "Total", revenue: data?.revenue?.total_revenue },
     ];
 
     const revenueValues = revenueData.map((item) => item.revenue || 0);
+    const revenueTotal = revenueData.map((item) => item?.revenue);
+    console.log(revenueTotal);
+
     const maxRevenue = Math.max(...revenueValues);
     const minRevenue = Math.min(...revenueValues);
     return (
@@ -123,6 +126,10 @@ function SellingKpi({ timeFrame, month, year }) {
                 <GridCol span={{ base: 12, lg: 8, md: 6, sm: 6 }} className={classes.chart}>
                     <div className={classes.GridChart}>
                         <span className={classes.chartTitle}>{t.Revenue}</span>
+                        <div className={classes.cardRevenue}>
+                            <span className="icon-saudi_riyal">&#xea;</span>
+                            {parseFloat(data?.revenue?.total_revenue || 0).toLocaleString("en-GB")}
+                        </div>
                         <ResponsiveContainer width="100%" height={300} style={{
                             padding: "10px",
                         }}>
@@ -132,8 +139,8 @@ function SellingKpi({ timeFrame, month, year }) {
                                 <YAxis
                                     width={100}
                                     scale="log"
-                                    domain={[1, maxRevenue]} 
-                                    tickCount={10} 
+                                    domain={[1, maxRevenue]}
+                                    tickCount={10}
                                     tickFormatter={(value) =>
                                         `${parseFloat(value).toLocaleString("en-GB")}`
                                     }
@@ -150,14 +157,7 @@ function SellingKpi({ timeFrame, month, year }) {
                             </BarChart>
                         </ResponsiveContainer>
 
-                        {/* Note for user */}
-                        <p style={{
-                            fontSize: "0.8rem",
-                            color: "#888",
-                            marginTop: "10px"
-                        }}>
-                            ⚠️ Note: Using logarithmic scale to show all values clearly.
-                        </p>
+
                     </div>
                 </GridCol>
 
@@ -222,7 +222,7 @@ export default SellingKpi;
 //     console.log(incomePieData);
 //     console.log(data);
 //     const revenueValues = revenueData.map((item) => item.revenue || 0);
-    // const minRevenue = Math.min(...revenueValues);
+// const minRevenue = Math.min(...revenueValues);
 //     const maxRevenue = Math.max(...revenueValues);
 
 //     return (

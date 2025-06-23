@@ -1,0 +1,214 @@
+:root {
+  font-family: Inter;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--color-3);
+  margin-top: 24px;
+}
+
+.analyticsContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.SelectCardTitle {
+  position: relative;
+  z-index: 75675675675;
+  width: 90px;
+}
+
+.divDatePickerInput {
+  position: absolute;
+  z-index: 5fsdf3;
+  right: 4%;
+  margin-top: 10px;
+}
+
+.divDatePickerInput .datePickerInput {
+  background-color: thistle;
+  margin-top: 20px;
+}
+
+.card {
+  background-color: var(--color-7);
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  /* flex: 1;  */
+  padding: 14px;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--color-2);
+}
+
+
+.cardCount {
+  margin-left: 24px;
+  margin-right: 24px;
+  margin-top: 10px;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-2);
+  border-bottom: #e3e7ec 1px solid;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.cardRevenue {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-2);
+  margin-top: 5px;
+  text-align: center;
+}
+ 
+
+
+.GridChart {
+   border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+  
+
+.chartTitle {
+  padding: 10px;
+  margin-right: auto;
+}
+
+.metrics {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.metrics .card {
+  flex: 0 0 48%;
+  padding: 15px;
+}
+
+.metrics h3 {
+  margin-bottom: 10px;
+}
+
+.metrics small {
+  color: #666;
+  font-size: 0.8em;
+}
+
+.secondaryCardTitle {
+  color: var(--color-4);
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 32px;
+}
+
+.secondaryCardValue {
+  color: var(--color-2);
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 5px;
+  margin-top: 24px;
+  margin-bottom: 32px;
+}
+
+.chartTitle {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: var(--color-2);
+  font-weight: 600;
+}
+
+.cardDropdown,
+.dropdown {
+  cursor: pointer;
+
+  border: 0px;
+  font-size: 14px;
+  color: var(--color-4);
+  float: right;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* Consistent padding */
+  padding: 6px 24px 6px 10px;
+
+  /* Consistent background positioning */
+  background: url("../assets/downArrow.svg") no-repeat right 0px center;
+  background-size: 22px;
+}
+
+/* Specific styles for cardDropdown */
+.cardDropdown {
+  margin-top: 24px;
+  margin-right: 8px;
+  max-width: 95px;
+}
+
+/* Specific styles for regular dropdown */
+.dropdown {
+  margin-bottom: 20px;
+  max-width: 95px;
+}
+
+@media (max-width: 991px) {
+  .mainContainer {
+    background-color: var(--color-5);
+  }
+
+  .title {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .analyticsContainer {
+    grid-template-columns: 1fr;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .charts {
+    grid-template-columns: 1fr;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .card {
+    width: 100%;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+
+  .cardTitle,
+  .cardCount,
+  .cardRevenue,
+  .secondaryCardTitle,
+  .secondaryCardValue {
+    font-size: 16px;
+  }
+}

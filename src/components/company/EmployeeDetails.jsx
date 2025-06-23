@@ -23,7 +23,8 @@ import EditIcon from "../icons/edit";
 import { useQueryClient } from "@tanstack/react-query";
 import { validateField } from "../../hooks/Validation/validation";
 import DeleteIcon from "../icons/DeleteIcon";
- 
+import EmployeeAnalytics from "./EmployeeAnalytics";
+
 function EmployeeDetails() {
   const [employee, setEmployee] = useState(null);
   const [employeeListings, setEmployeeListings] = useState([]);
@@ -44,8 +45,7 @@ function EmployeeDetails() {
     password: "",
     employee_id: id,
   });
-  console.log(id);
-
+ 
   const [showPassword, setShowPassword] = useState(false);
 
   //delete modal data
@@ -284,14 +284,11 @@ function EmployeeDetails() {
       });
     }
   }, [editModalOpened, employee]);
-  
+
   const handleOpenChangePassword = () => {
     closeEditModal();
     openChangePasswordModal();
   };
-
-  // let supervisor_id = ;
-  console.log(employee);
 
 
   const handleChangePassword = async () => {
@@ -306,7 +303,7 @@ function EmployeeDetails() {
 
     setLoading(true);
     try {
-     const  res =  await axiosInstance.post(`employees/change-password/${id}?_method=PUT`,
+      const res = await axiosInstance.post(`employees/change-password/${id}?_method=PUT`,
         passwordData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -314,7 +311,7 @@ function EmployeeDetails() {
         },
       });
       console.log(res);
-      
+
       console.log(passwordData);
 
       notifications.show({
@@ -335,7 +332,7 @@ function EmployeeDetails() {
       setLoading(false);
     }
   };
-  
+
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -503,7 +500,7 @@ function EmployeeDetails() {
             <h3 style={{
             }}>{new Date(employee.created_at).toLocaleDateString("en-GB")}</h3>
           </Grid.Col>
-          <Grid.Col span={isMobile ?12 : 3} className={classes.gridCol}>
+          <Grid.Col span={isMobile ? 12 : 3} className={classes.gridCol}>
             <h2 style={{
             }}>{t.address}</h2>
             <h3 style={{
@@ -517,16 +514,18 @@ function EmployeeDetails() {
         </Grid>
       </div>
 
-      <div className={classes.summary}>
+      {/* EmployeeAnalytics.jsx */}
+      <EmployeeAnalytics id={id} />
+      {/* <div className={classes.summary}>
         <div style={{
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
         }}
           className={classes.card}
-          >
-          <div  
+        >
+          <div
             className={classes.cardTitle}>
-              
-              {t.Selling}</div>
+
+            {t.Selling}</div>
           <div style={{
           }} className={classes.cardCount}>
             {kpiData?.performance_metrics?.sales?.count}
@@ -640,7 +639,7 @@ function EmployeeDetails() {
             />
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </div> */}
 
       <div className={classes.properties}>
         <div className={classes.propertyList}>

@@ -13,6 +13,7 @@ import {
   Image,
   useMantineColorScheme,
   Text,
+  TextInput,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Updated import
@@ -35,11 +36,14 @@ import FloorsIcon from "../icons/FloorsIcon";
 import Area from "../icons/area";
 import BathsIcon from "../icons/BathsIcon";
 import BedsIcon from "../icons/BedsIcon";
+import ShareIcon from "../icons/ShareIcon";
 function ContractDetailsMarketer() {
   const { id: idParam } = useParams();
   const id = Number(idParam);
   const [contract, setContract] = useState(null);
-  const [shareLink, setShareLink] = useState("");
+  const [shareLink, setShareLink] = useState(
+    "http://localhost:5173/ShareContracts"
+  );
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] =
@@ -106,9 +110,6 @@ function ContractDetailsMarketer() {
     return regex.test(cleaned);
   }
 
-
-
-
   const fetchContract = () => {
     console.log(id);
 
@@ -121,7 +122,7 @@ function ContractDetailsMarketer() {
         console.log(res.data.data);
 
         setContract(res?.data?.data);
-        setShareLink(res?.data?.data?.share_url);
+        // setShareLink(res?.data?.data?.share_url);
         console.log(res?.data?.data?.share_url);
       })
       .catch((err) => {
@@ -132,9 +133,50 @@ function ContractDetailsMarketer() {
       });
   };
 
-  {
-    console.log(contract)
-  }
+  const handleShareContract = () => {
+    setLoading(true);
+    axiosInstance
+      .post(`contracts/${id}/share`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data.status === "success") {
+          // const fullShareUrl = res.data.data.share_url;
+          const shareUrl = res.data.data.share_url;
+
+          // ناخد الجزء بعد /contracts/
+          const fullPath = shareUrl.split("/api/v1/contracts/")[1];
+
+          // نعمل encode للرابط
+          const encodedPath = encodeURIComponent(fullPath);
+
+          const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareContracts/${encodedPath}`;
+          setShareLink(finalLink);
+          openShare(); // فتح المودال
+          //  (); // تحديث share_url في ال state
+          openShare(); // فتح المودال
+        }
+
+        notifications.show({
+          title: "Shared Successfully",
+          message: res.data.message,
+          color: "green",
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        notifications.show({
+          title: "Sharing Failed",
+          message: "Failed to share the contract.",
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const handleDownloadDocument = () => {
     setLoading(true);
@@ -200,14 +242,10 @@ function ContractDetailsMarketer() {
         setLoading(false);
       });
   };
-  // useEffect(() => {
-  //   fetchContract();
-  // }, []);
 
   useEffect(() => {
     fetchContract();
   }, []);
-
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -216,7 +254,8 @@ function ContractDetailsMarketer() {
       if (event.key === "ArrowLeft") {
         setSelectedImageIndex(
           (prevIndex) =>
-            (prevIndex - 1 + contract?.real_estate.images.length) % contract?.real_estate.images.length
+            (prevIndex - 1 + contract?.real_estate.images.length) %
+            contract?.real_estate.images.length
         );
       } else if (event.key === "ArrowRight") {
         setSelectedImageIndex(
@@ -250,7 +289,6 @@ function ContractDetailsMarketer() {
     }
   }, [contract]);
 
-
   if (loading) {
     return (
       <>
@@ -277,7 +315,6 @@ function ContractDetailsMarketer() {
     );
   }
 
-
   return (
     <>
       <Card shadow="sm" className={classes.card}>
@@ -294,7 +331,6 @@ function ContractDetailsMarketer() {
                     setSelectedImageIndex(0); // لأنها تاني صورة في الـ array
                     open1();
                   }}
-
                 />
               )}
             </div>
@@ -372,20 +408,20 @@ function ContractDetailsMarketer() {
                         <p className={classes.time}>
                           {Math.floor(
                             (new Date() - new Date(contract?.creation_date)) /
-                            (1000 * 60 * 60 * 24)
+                              (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                              (new Date() -
-                                new Date(contract?.creation_date)) /
-                              (1000 * 60 * 60 * 24)
-                            )} days ago`
+                                (new Date() -
+                                  new Date(contract?.creation_date)) /
+                                  (1000 * 60 * 60 * 24)
+                              )} days ago`
                             : Math.floor(
-                              (new Date() -
-                                new Date(contract?.creation_date)) /
-                              (1000 * 60 * 60 * 24)
-                            ) === 1
-                              ? "Yesterday"
-                              : "Today"}
+                                (new Date() -
+                                  new Date(contract?.creation_date)) /
+                                  (1000 * 60 * 60 * 24)
+                              ) === 1
+                            ? "Yesterday"
+                            : "Today"}
                         </p>
                       </div>
                     </div>
@@ -403,7 +439,9 @@ function ContractDetailsMarketer() {
                         <span className={classes.svgSpan}>
                           <div>
                             <BathsIcon />
-                            <span>{contract?.real_estate?.bathrooms} Baths</span>
+                            <span>
+                              {contract?.real_estate?.bathrooms} Baths
+                            </span>
                           </div>
                         </span>
                       )}
@@ -479,31 +517,8 @@ function ContractDetailsMarketer() {
                   </div>
                   <div className={classes.ContractText}>
                     <div className={classes.ContractButton}>
-                      <Button onClick={openShare}>
-                        <svg
-                          width="17"
-                          height="20"
-                          viewBox="0 0 17 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M6 10C6 10.663 5.73661 11.2989 5.26777 11.7678C4.79893 12.2366 4.16304 12.5 3.5 12.5C2.83696 12.5 2.20107 12.2366 1.73223 11.7678C1.26339 11.2989 1 10.663 1 10C1 9.33696 1.26339 8.70107 1.73223 8.23223C2.20107 7.76339 2.83696 7.5 3.5 7.5C4.16304 7.5 4.79893 7.76339 5.26777 8.23223C5.73661 8.70107 6 9.33696 6 10Z"
-                            stroke="#666666"
-                            strokeWidth="1.5"
-                          />
-                          <path
-                            d="M11 4.5L6 8M11 15.5L6 12"
-                            stroke="#666666"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                          <path
-                            d="M16 16.5C16 17.163 15.7366 17.7989 15.2678 18.2678C14.7989 18.7366 14.163 19 13.5 19C12.837 19 12.2011 18.7366 11.7322 18.2678C11.2634 17.7989 11 17.163 11 16.5C11 15.837 11.2634 15.2011 11.7322 14.7322C12.2011 14.2634 12.837 14 13.5 14C14.163 14 14.7989 14.2634 15.2678 14.7322C15.7366 15.2011 16 15.837 16 16.5ZM16 3.5C16 4.16304 15.7366 4.79893 15.2678 5.26777C14.7989 5.73661 14.163 6 13.5 6C12.837 6 12.2011 5.73661 11.7322 5.26777C11.2634 4.79893 11 4.16304 11 3.5C11 2.83696 11.2634 2.20107 11.7322 1.73223C12.2011 1.26339 12.837 1 13.5 1C14.163 1 14.7989 1.26339 15.2678 1.73223C15.7366 2.20107 16 2.83696 16 3.5Z"
-                            stroke="#666666"
-                            strokeWidth="1.5"
-                          />
-                        </svg>
+                      <Button onClick={handleShareContract}>
+                        <ShareIcon />
                       </Button>
                       <Button onClick={handleDownloadDocument}>
                         <svg
@@ -596,7 +611,9 @@ function ContractDetailsMarketer() {
 
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Status}</p>
-                    <p className={classes.InformationSale}>{contract?.status}</p>
+                    <p className={classes.InformationSale}>
+                      {contract?.status}
+                    </p>
                   </GridCol>
 
                   {contract?.contract_type === "sale" ? null : (
@@ -833,7 +850,27 @@ function ContractDetailsMarketer() {
             {console.log(shareLink)}
 
             <h4>Share on Social Media: </h4>
-            <a href="">{shareLink}</a>
+            {/* <a href={shareLink} target="_blank">
+              {shareLink}
+            </a> */}
+            <TextInput
+              value={shareLink}
+              readOnly
+              rightSection={
+                <i
+                  onClick={() => {
+                    navigator.clipboard.writeText(shareLink);
+                    notifications.show({
+                      title: "Copied!",
+                      message: "Link copied to clipboard.",
+                      color: "green",
+                    });
+                  }}
+                  style={{ cursor: "pointer" }}
+                  className="fa fa-copy"
+                ></i>
+              }
+            />
             <Group spacing="sm">
               {/* WhatsApp */}
               <Button
@@ -880,7 +917,6 @@ function ContractDetailsMarketer() {
         contract={contract}
         onEditSuccess={fetchContract}
       />
-
     </>
   );
 }

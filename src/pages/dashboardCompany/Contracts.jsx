@@ -1,4 +1,13 @@
-import { Card, Center, Loader, Text, Image, Select, GridCol, Grid } from "@mantine/core";
+import {
+  Card,
+  Center,
+  Loader,
+  Text,
+  Image,
+  Select,
+  GridCol,
+  Grid,
+} from "@mantine/core";
 import classes from "../../styles/realEstates.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -16,13 +25,14 @@ import FilterContractsModal from "../../components/modals/filterContractsModal";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
 import { useQueryClient } from "@tanstack/react-query";
+import  imageContract   from "../../assets/contract/contract.png";
 
 function Contracts() {
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState('newest');
+  const [sortOption, setSortOption] = useState("newest");
   const [filters, setFilters] = useState({
     search: "",
     customer_name: "",
@@ -32,14 +42,14 @@ function Contracts() {
   });
   const getSortParams = () => {
     switch (sortOption) {
-      case 'newest':
-        return { sort_by: 'created_at', sort_dir: 'desc' };
-      case 'oldest':
-        return { sort_by: 'created_at', sort_dir: 'asc' };
-      case 'highest':
-        return { sort_by: 'price', sort_dir: 'desc' };
-      case 'lowest':
-        return { sort_by: 'price', sort_dir: 'asc' };
+      case "newest":
+        return { sort_by: "created_at", sort_dir: "desc" };
+      case "oldest":
+        return { sort_by: "created_at", sort_dir: "asc" };
+      case "highest":
+        return { sort_by: "price", sort_dir: "desc" };
+      case "lowest":
+        return { sort_by: "price", sort_dir: "asc" };
       default:
         return {};
     }
@@ -48,16 +58,16 @@ function Contracts() {
 
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
   const [approvedListings, setApprovedListings] = useState([]);
-  const [contractTypeFilter, setContractTypeFilter] = useState('all');
+  const [contractTypeFilter, setContractTypeFilter] = useState("all");
   const { data: listingsData } = usePropertiesContracts();
-  const [openedFilterModal, { open: openFilter, close: closeFilter }] = useDisclosure(false);
+  const [openedFilterModal, { open: openFilter, close: closeFilter }] =
+    useDisclosure(false);
   // Mutation for adding contract
   const mutation = useAddContract(user.token, close);
   const handleAddContract = (values) => {
     try {
       mutation.mutateAsync(values);
       queryClient.invalidateQueries(["contracts"]);
-
     } catch (error) {
       console.log(error);
     }
@@ -81,13 +91,8 @@ function Contracts() {
     ...getSortParams(),
   };
   // ✨ استخدام hook الجديد للـ pagination بالـ cursor
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-  } = useContracts(contractTypeFilter, sort_by, sort_dir);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useContracts(contractTypeFilter, sort_by, sort_dir);
 
   // ✅ تجميع جميع العقود من الصفحات المختلفة
   const contracts = data?.pages.flatMap((page) => page.data.data.data) || [];
@@ -107,7 +112,8 @@ function Contracts() {
   useEffect(() => {
     const handleScroll = () => {
       if (
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
+        window.innerHeight + window.scrollY >=
+          document.body.offsetHeight - 500 &&
         hasNextPage &&
         !isFetchingNextPage
       ) {
@@ -127,89 +133,85 @@ function Contracts() {
           <span className={classes.title}>{t.Contracts}</span>
           <Notifications />
         </div>
-        
-                <header
-                  className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
-                >
-                  <div className={classes.controls}>
-          <div className={classes.flexSearch}>
-            <div className={classes.divSearch}>
-              <input
-                className={classes.search}
-                placeholder={t.Search}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {/* <button type="button" className={classes.searchButton}> */}
-              <Search />
-              {/* </button> */}
+
+        <header
+          className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
+        >
+          <div className={classes.controls}>
+            <div className={classes.flexSearch}>
+              <div className={classes.divSearch}>
+                <input
+                  className={classes.search}
+                  placeholder={t.Search}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <Search />
+              </div>
+              <button className={classes.filter} onClick={openFilter}>
+                <FilterIcon />
+              </button>
             </div>
-            <button className={classes.filter} onClick={openFilter}>
-              <FilterIcon />
-            </button>
+
+            <div className={classes.addAndSort}>
+              <Select
+                label={t["Sort By"]}
+                placeholder="Choose sorting"
+                value={sortOption}
+                onChange={setSortOption}
+                data={[
+                  { value: "newest", label: "Newest" },
+                  { value: "oldest", label: "Oldest" },
+                  { value: "highest", label: "HighestPrice" },
+                  { value: "lowest", label: "LowestPrice" },
+                ]}
+                styles={{
+                  input: {
+                    width: "132px",
+                    height: "48px",
+                    borderRadius: "15px",
+                    border: "1px solid var(--color-border)",
+                    padding: "14px 24px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    backgroundColor: "var(--color-7)",
+                  },
+                }}
+                className={classes.select}
+              />
+
+              <Select
+                label={t["Contract Type"]}
+                placeholder="Choose type"
+                value={contractTypeFilter}
+                onChange={setContractTypeFilter}
+                data={[
+                  { value: "all", label: "All" },
+                  { value: "rent", label: "ForRent" },
+                  { value: "sale", label: "ForSale" },
+                  { value: "booking", label: "Booking" },
+                ]}
+                styles={{
+                  input: {
+                    width: "132px",
+                    height: "48px",
+                    borderRadius: "15px",
+                    border: "1px solid var(--color-border)",
+                    padding: "14px 24px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    backgroundColor: "var(--color-7)",
+                  },
+                }}
+                className={classes.select}
+              />
+              <button className={classes.add} onClick={open}>
+                <AddIcon /> {t.Add}
+              </button>
+            </div>
           </div>
+        </header>
 
-          <div className={classes.addAndSort}>
-
-            <Select
-              label={t["Sort By"]}
-              placeholder="Choose sorting"
-              value={sortOption}
-              onChange={setSortOption}
-              data={[
-                { value: "newest", label: "Newest" },
-                { value: "oldest", label: "Oldest" },
-                { value: "highest", label: "HighestPrice" },
-                { value: "lowest", label: "LowestPrice" },
-              ]}
-
-              styles={{
-                input: {
-                  width: "132px",
-                  height: "48px",
-                  borderRadius: "15px",
-                  border: "1px solid var(--color-border)",
-                  padding: "14px 24px",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  backgroundColor: "var(--color-7)",
-                },
-              }}
-              className={classes.select}
-            />
-
-            <Select
-              label={t["Contract Type"]}
-              placeholder="Choose type"
-              value={contractTypeFilter}
-              onChange={setContractTypeFilter}
-              data={[
-                { value: "all", label: "All" },
-                { value: "rent", label: "ForRent" },
-                { value: "sale", label: "ForSale" },
-                { value: "booking", label: "Booking" },
-              ]}
-              styles={{
-                input: {
-                  width: "132px",
-                  height: "48px",
-                  borderRadius: "15px",
-                  border: "1px solid var(--color-border)",
-                  padding: "14px 24px",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  backgroundColor: "var(--color-7)",
-                },
-              }}
-              className={classes.select}
-            />
-            <button className={classes.add} onClick={open}>
-              <AddIcon /> {t.Add}
-            </button>
-          </div>
-        </div>
-                </header>
-        
         <div className={classes.contractList}>
           {isLoading ? (
             <Center>
@@ -236,6 +238,7 @@ function Contracts() {
                   className={classes.contractImage}
                 >
                   <div className={classes.listingImage}>
+                    <img src={imageContract} alt="" />
                     <p className={classes.listingfor}>
                       {contract.contract_type}
                     </p>
@@ -271,18 +274,18 @@ function Contracts() {
                   <div className={classes.contractDate}>
                     {Math.floor(
                       (new Date() - new Date(contract.creation_date)) /
-                      (1000 * 60 * 60 * 24)
+                        (1000 * 60 * 60 * 24)
                     ) > 1
                       ? `${Math.floor(
-                        (new Date() - new Date(contract.creation_date)) /
-                        (1000 * 60 * 60 * 24)
-                      )} days ago`
+                          (new Date() - new Date(contract.creation_date)) /
+                            (1000 * 60 * 60 * 24)
+                        )} days ago`
                       : Math.floor(
-                        (new Date() - new Date(contract.creation_date)) /
-                        (1000 * 60 * 60 * 24)
-                      ) === 1
-                        ? "Yesterday"
-                        : "Today"}
+                          (new Date() - new Date(contract.creation_date)) /
+                            (1000 * 60 * 60 * 24)
+                        ) === 1
+                      ? "Yesterday"
+                      : "Today"}
                   </div>
                 </GridCol>
               </Grid>
@@ -308,17 +311,19 @@ function Contracts() {
         opened={openedFilterModal}
         onClose={closeFilter}
         onFilter={(values) => setFilters(values)}
-        onReset={() => setFilters({
-          search: "",
-          customer_name: "",
-          location: "",
-          status: "all",
-          contract_type: "all",
-        })}
+        onReset={() =>
+          setFilters({
+            search: "",
+            customer_name: "",
+            location: "",
+            status: "all",
+            contract_type: "all",
+          })
+        }
         initialFilters={filters}
       />
     </>
   );
 }
 
-export default Contracts; 
+export default Contracts;

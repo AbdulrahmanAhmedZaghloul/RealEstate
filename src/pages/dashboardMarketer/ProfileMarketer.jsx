@@ -1,4 +1,3 @@
-
 import {
   Avatar,
   Button,
@@ -143,7 +142,6 @@ function ProfileMarketer() {
                 <Text fz="lg" fw={600} className={classes.name}>
                   {formName}
                 </Text>
-
               </div>
 
               <div onClick={openFormModal} style={{ cursor: "pointer" }}>
@@ -153,22 +151,30 @@ function ProfileMarketer() {
             {/* <Button variant="subtle" onClick={openFormModal}>
               تعديل
             </Button> */}
-
           </Group>
 
           <div>
             <Grid>
-              <GridCol span={isMobile ? 6 : 4} className={classes.AvatarProfile}>
+              <GridCol
+                span={isMobile ? 6 : 4}
+                className={classes.AvatarProfile}
+              >
                 <h3>{t.Email}</h3>
                 <Text truncate="end">{data?.data?.profile?.user?.email}</Text>
               </GridCol>
 
-              <GridCol span={isMobile ? 6 : 4} className={classes.AvatarProfile}>
+              <GridCol
+                span={isMobile ? 6 : 4}
+                className={classes.AvatarProfile}
+              >
                 <h3>{t.contactNumber}</h3>
                 <Text truncate="end">{formPhone}</Text>
               </GridCol>
 
-              <GridCol span={isMobile ? 6 : 4} className={classes.AvatarProfile}>
+              <GridCol
+                span={isMobile ? 6 : 4}
+                className={classes.AvatarProfile}
+              >
                 <h3>{t.address}</h3>
                 <Text truncate="end">{formAddress}</Text>
               </GridCol>
@@ -176,15 +182,23 @@ function ProfileMarketer() {
               <GridCol span={12} className={classes.AvatarProfile}>
                 {/* <h3>{t.bio}</h3>
                 <Text>{formBio}</Text> */}
-                <h3 style={{
-                  textAlign: "start",
-                  padding: "0px 10px"
-
-                }}>{t.bio}</h3>
-                <Text style={{
-                  textAlign: "start",
-                  padding: "0px 20px"
-                }} truncate="end">{formBio}</Text>
+                <h3
+                  style={{
+                    textAlign: "start",
+                    padding: "0px 10px",
+                  }}
+                >
+                  {t.bio}
+                </h3>
+                <Text
+                  style={{
+                    textAlign: "start",
+                    padding: "0px 20px",
+                  }}
+                  truncate="end"
+                >
+                  {formBio}
+                </Text>
               </GridCol>
             </Grid>
           </div>
@@ -192,11 +206,21 @@ function ProfileMarketer() {
       </Card>
 
       {/* Edit Modal */}
-      <Modal opened={formModalOpened} onClose={closeFormModal} title="تعديل الملف الشخصي" centered>
-        <TextInput label="الاسم" value={formName} onChange={(e) => setFormName(e.target.value)} mb="md" />
+      <Modal
+        opened={formModalOpened}
+        onClose={closeFormModal}
+        title="تعديل الملف الشخصي"
+        centered
+      >
+        <TextInput
+          label="Name"
+          value={formName}
+          onChange={(e) => setFormName(e.target.value)}
+          mb="md"
+        />
 
         <TextInput
-          label="رقم الهاتف"
+          label="Number"
           placeholder="+9665xxxxxxxx"
           value={formPhone}
           onChange={(e) => {
@@ -211,12 +235,27 @@ function ProfileMarketer() {
           mb="md"
         />
 
-        <TextInput label="العنوان" value={formAddress} onChange={(e) => setFormAddress(e.target.value)} mb="md" />
+        <TextInput
+          label="Address"
+          value={formAddress}
+          onChange={(e) => setFormAddress(e.target.value)}
+          mb="md"
+        />
 
-        <Textarea label="السيرة الذاتية" value={formBio} onChange={(e) => setFormBio(e.target.value)} mb="md" />
+        <Textarea
+          label="Bio"
+          value={formBio}
+          onChange={(e) => setFormBio(e.target.value)}
+          mb="md"
+        />
 
-        <Button fullWidth onClick={handleUpdateProfile} loading={mutation.isLoading} disabled={!hasChanges()}>
-          حفظ التغييرات
+        <Button
+          fullWidth
+          onClick={handleUpdateProfile}
+          loading={mutation.isLoading}
+          disabled={!hasChanges()}
+        >
+          Save
         </Button>
       </Modal>
     </>

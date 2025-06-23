@@ -18,8 +18,6 @@ export default function ProfilePlane() {
   const { data, isLoading, isError, error } = useCurrentSubscription();
 
    
-
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {

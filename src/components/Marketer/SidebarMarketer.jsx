@@ -48,8 +48,9 @@ export default function SidebarMarketer() {
           },
         })
         .then((response) => {
+            console.log(response)
           setProfile({
-            name: response.data.data.profile.name,
+            name: response.data.data.profile.user.name,
             email: response.data.data.profile.user.email,
             image: response.data.data.profile.user.picture,
           });
@@ -197,9 +198,13 @@ export default function SidebarMarketer() {
             <span style={{}} className={classes.profileName}>
               {profile.name}
             </span>
-            <span style={{}} className={classes.profileEmail}>
+            {
+              console.log(profile)
+              
+            }
+            {/* <span style={{}} className={classes.profileEmail}>
               {profile.email}
-            </span>
+            </span> */}
           </div>
         </Group>
 

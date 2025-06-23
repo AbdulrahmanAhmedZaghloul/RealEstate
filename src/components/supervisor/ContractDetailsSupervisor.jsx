@@ -33,10 +33,14 @@ import trash from "../../assets/trash.svg";
 import { useTranslation } from "../../context/LanguageContext";
 import { useQueryClient } from "@tanstack/react-query";
 import EditContractModal from "../modals/EditContractModal";
+import ShareIcon from "../icons/ShareIcon";
 function ContractDetailsSupervisor() {
-  const { id } = useParams();
+  const { id: idParam } = useParams();
+  const id = Number(idParam);
   const [contract, setContract] = useState(null);
-  const [shareLink, setShareLink] = useState("");
+  const [shareLink, setShareLink] = useState(
+    "http://localhost:5173/ShareContracts"
+  );
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -47,7 +51,6 @@ function ContractDetailsSupervisor() {
 
   const { colorScheme } = useMantineColorScheme();
   const { t } = useTranslation(); // 👈 استدعاء اللغة
-
 
   const [opened, { open, close }] = useDisclosure(false);
   const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
@@ -62,10 +65,10 @@ function ContractDetailsSupervisor() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data.data);
 
-        setContract(res.data.contract);
-        setShareLink(res.data.contract.share_url);
+        setContract(res.data.data);
+        // setShareLink(res.data.contract.share_url);
       })
       .catch((err) => {
         console.log(err);
@@ -75,9 +78,6 @@ function ContractDetailsSupervisor() {
       });
   };
 
-  useEffect(() => {
-    fetchContract();
-  }, []);
   const form = useForm({
     initialValues: {
       listing_id: "",
@@ -110,26 +110,55 @@ function ContractDetailsSupervisor() {
     enableReinitialize: true,
   });
 
-  useEffect(() => {
-    if (contract) {
-      form.setValues({
-        listing_id: contract.real_estate.id,
-        title: contract.title,
-        description: contract.description,
-        price: contract.price,
-        down_payment: contract.down_payment,
-        contract_type: contract.contract_type,
-        customer_name: contract.customer_name,
-        customer_phone: contract.customer_phone,
-        creation_date: contract.creation_date?.split("T")[0] || "",
-        effective_date: contract.effective_date?.split("T")[0] || "",
-        expiration_date: contract.expiration_date?.split("T")[0] || "",
-        release_date: contract.release_date?.split("T")[0] || "",
-        location: contract.location,
-      });
-    }
-  }, [contract]);
+  const handleShareContract = () => {
+    setLoading(true);
+    axiosInstance
+      .post(
+        `contracts/${id}/share`,
+        {},
+        {
+          // {} body فارغ إذا لم يُطلب بيانات
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
 
+        if (res.data.status === "success") {
+          // const fullShareUrl = res.data.data.share_url;
+          const shareUrl = res.data.data.share_url;
+
+          // ناخد الجزء بعد /contracts/
+          const fullPath = shareUrl.split("/api/v1/contracts/")[1];
+
+          // نعمل encode للرابط
+          const encodedPath = encodeURIComponent(fullPath);
+
+          const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareContracts/${encodedPath}`;
+          setShareLink(finalLink);
+          openShare(); // فتح المودال
+          //  (); // تحديث share_url في ال state
+          openShare(); // فتح المودال
+        }
+
+        notifications.show({
+          title: "Shared Successfully",
+          message: res.data.message,
+          color: "green",
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        notifications.show({
+          title: "Sharing Failed",
+          message: "Failed to share the contract.",
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   const handleEditContract = (values) => {
     const formData = new FormData();
     Object.keys(values).forEach((key) => {
@@ -149,7 +178,7 @@ function ContractDetailsSupervisor() {
         },
       })
       .then(() => {
-        queryClient.invalidateQueries(['contracts']);
+        queryClient.invalidateQueries(["contracts"]);
 
         fetchContract(); // Re-fetch the contract data
         closeEditModal();
@@ -215,7 +244,7 @@ function ContractDetailsSupervisor() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(() => {
-        queryClient.invalidateQueries(['contracts']);
+        queryClient.invalidateQueries(["contracts"]);
 
         notifications.show({
           title: "Contract Deleted", // Updated notification message
@@ -238,16 +267,40 @@ function ContractDetailsSupervisor() {
   };
 
   useEffect(() => {
+    fetchContract();
+  }, []);
+  useEffect(() => {
+    if (contract) {
+      form.setValues({
+        listing_id: contract.real_estate.id,
+        title: contract.title,
+        description: contract.description,
+        price: contract.price,
+        down_payment: contract.down_payment,
+        contract_type: contract.contract_type,
+        customer_name: contract.customer_name,
+        customer_phone: contract.customer_phone,
+        creation_date: contract.creation_date?.split("T")[0] || "",
+        effective_date: contract.effective_date?.split("T")[0] || "",
+        expiration_date: contract.expiration_date?.split("T")[0] || "",
+        release_date: contract.release_date?.split("T")[0] || "",
+        location: contract.location,
+      });
+    }
+  }, [contract]);
+  useEffect(() => {
     const handleKeyDown = (event) => {
       if (!opened1) return; // لا نفذ إلا إذا كان المودال مفتوحًا
 
       if (event.key === "ArrowLeft") {
-        setSelectedImageIndex((prevIndex) =>
-          (prevIndex - 1 + contract.real_estate.images.length) % contract.real_estate.images.length
+        setSelectedImageIndex(
+          (prevIndex) =>
+            (prevIndex - 1 + contract.real_estate.images.length) %
+            contract.real_estate.images.length
         );
       } else if (event.key === "ArrowRight") {
-        setSelectedImageIndex((prevIndex) =>
-          (prevIndex + 1) % contract.real_estate.images.length
+        setSelectedImageIndex(
+          (prevIndex) => (prevIndex + 1) % contract.real_estate.images.length
         );
       }
     };
@@ -284,13 +337,13 @@ function ContractDetailsSupervisor() {
     );
   }
 
-  if (!contract) {
-    return (
-      <Center>
-        <span>Contract does not exist.</span>
-      </Center>
-    );
-  }
+  // if (!contract) {
+  //   return (
+  //     <Center>
+  //       <span>Contract does not exist.</span>
+  //     </Center>
+  //   );
+  // }
 
   return (
     <>
@@ -298,7 +351,6 @@ function ContractDetailsSupervisor() {
         <Card
           style={{
             backgroundColor: "var(--color-5)",
-
           }}
           shadow="sm"
           className={classes.card}
@@ -332,14 +384,13 @@ function ContractDetailsSupervisor() {
                         }}
                         style={{
                           color: "#23262A",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
                       >
                         See {contract.real_estate.images.length} Photos
                       </p>
                     </>
                   )}
-
                 </div>
 
                 {/* حاوية الصور الإضافية */}
@@ -373,28 +424,16 @@ function ContractDetailsSupervisor() {
                   <Grid>
                     <Grid.Col span={isMobile ? 12 : 10}>
                       <div className={classes.priceContainer}>
-                        <span
-
-                          className={classes.price}
-                        >
+                        <span className={classes.price}>
                           <span className="icon-saudi_riyal">&#xea; </span>{" "}
                           {parseFloat(contract.price).toLocaleString()}
                         </span>
-                        <span
-
-                          className={classes.downPayment}
-                        >
-                          {contract.down_payment}
-                          % {t.DownPayment}
+                        <span className={classes.downPayment}>
+                          {contract.down_payment}% {t.DownPayment}
                         </span>
                       </div>
 
-                      <h3
-
-                        className={classes.title}
-                      >
-                        {contract.title}
-                      </h3>
+                      <h3 className={classes.title}>{contract.title}</h3>
 
                       <div className={classes.flexLocation}>
                         <div className={classes.svgLocation}>
@@ -420,46 +459,34 @@ function ContractDetailsSupervisor() {
                               stroke-linejoin="round"
                             />
                           </svg>
-                          <p
-                            className={classes.location}
-                          >
+                          <p className={classes.location}>
                             {contract.real_estate.location}
                           </p>
                         </div>
                         <div>
-                          <p
-                            className={classes.time}
-                          >
+                          <p className={classes.time}>
                             {Math.floor(
                               (new Date() - new Date(contract.creation_date)) /
-                              (1000 * 60 * 60 * 24)
+                                (1000 * 60 * 60 * 24)
                             ) > 1
                               ? `${Math.floor(
-                                (new Date() -
-                                  new Date(contract.creation_date)) /
-                                (1000 * 60 * 60 * 24)
-                              )} days ago`
+                                  (new Date() -
+                                    new Date(contract.creation_date)) /
+                                    (1000 * 60 * 60 * 24)
+                                )} days ago`
                               : Math.floor(
-                                (new Date() -
-                                  new Date(contract.creation_date)) /
-                                (1000 * 60 * 60 * 24)
-                              ) === 1
-                                ? "Yesterday"
-                                : "Today"}
+                                  (new Date() -
+                                    new Date(contract.creation_date)) /
+                                    (1000 * 60 * 60 * 24)
+                                ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                           </p>
                         </div>
                       </div>
                       <div className={classes.description}>
-                        <h4
-
-                        >
-                          {t.Description}
-                        </h4>
-                        <p
-
-                        >
-                          {contract.description}
-                        </p>
+                        <h4>{t.Description}</h4>
+                        <p>{contract.description}</p>
                       </div>
                     </Grid.Col>
                   </Grid>
@@ -482,16 +509,9 @@ function ContractDetailsSupervisor() {
                         mr={10}
                         alt="nameImage"
                       />
-                      <span
-
-                      >
-                        {contract.listed_by.name}
-                      </span>
+                      <span>{contract.listed_by.name}</span>
                     </div>
-                    <div
-
-                      className={classes.viewText}
-                    >
+                    <div className={classes.viewText}>
                       <span>View</span>
                     </div>
                   </div>
@@ -504,44 +524,15 @@ function ContractDetailsSupervisor() {
                   span={isMobile ? 12 : 8}
                   className={classes.ContractSection}
                 >
-                  <h4
-                    style={{
-                    }}
-                  >
-
-                    {t.Contract}
-                  </h4>
+                  <h4 style={{}}>{t.Contract}</h4>
                   <div className={classes.ContractImage}>
                     <div>
                       <img src={Contract} alt="ContractImage" />
                     </div>
                     <div className={classes.ContractText}>
                       <div className={classes.ContractButton}>
-                        <Button onClick={openShare}>
-                          <svg
-                            width="17"
-                            height="20"
-                            viewBox="0 0 17 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M6 10C6 10.663 5.73661 11.2989 5.26777 11.7678C4.79893 12.2366 4.16304 12.5 3.5 12.5C2.83696 12.5 2.20107 12.2366 1.73223 11.7678C1.26339 11.2989 1 10.663 1 10C1 9.33696 1.26339 8.70107 1.73223 8.23223C2.20107 7.76339 2.83696 7.5 3.5 7.5C4.16304 7.5 4.79893 7.76339 5.26777 8.23223C5.73661 8.70107 6 9.33696 6 10Z"
-                              stroke="#666666"
-                              strokeWidth="1.5"
-                            />
-                            <path
-                              d="M11 4.5L6 8M11 15.5L6 12"
-                              stroke="#666666"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                            <path
-                              d="M16 16.5C16 17.163 15.7366 17.7989 15.2678 18.2678C14.7989 18.7366 14.163 19 13.5 19C12.837 19 12.2011 18.7366 11.7322 18.2678C11.2634 17.7989 11 17.163 11 16.5C11 15.837 11.2634 15.2011 11.7322 14.7322C12.2011 14.2634 12.837 14 13.5 14C14.163 14 14.7989 14.2634 15.2678 14.7322C15.7366 15.2011 16 15.837 16 16.5ZM16 3.5C16 4.16304 15.7366 4.79893 15.2678 5.26777C14.7989 5.73661 14.163 6 13.5 6C12.837 6 12.2011 5.73661 11.7322 5.26777C11.2634 4.79893 11 4.16304 11 3.5C11 2.83696 11.2634 2.20107 11.7322 1.73223C12.2011 1.26339 12.837 1 13.5 1C14.163 1 14.7989 1.26339 15.2678 1.73223C15.7366 2.20107 16 2.83696 16 3.5Z"
-                              stroke="#666666"
-                              strokeWidth="1.5"
-                            />
-                          </svg>
+                        <Button onClick={handleShareContract}>
+                          <ShareIcon />
                         </Button>
                         <Button onClick={handleDownloadDocument}>
                           <svg
@@ -558,12 +549,7 @@ function ContractDetailsSupervisor() {
                           </svg>
                         </Button>
                       </div>
-                      <div
-                        style={{
-
-                        }}
-                        className={classes.documents}
-                      >
+                      <div style={{}} className={classes.documents}>
                         <p>View Documents</p>
                       </div>
                     </div>
@@ -577,11 +563,7 @@ function ContractDetailsSupervisor() {
                   className={classes.InformationGrid}
                 >
                   <div className={classes.InformationButton}>
-                    <h3
-                    >
-
-                      {t.ContractsInformation}
-                    </h3>
+                    <h3>{t.ContractsInformation}</h3>
                     <div>
                       <button onClick={() => open()}>
                         <Image p={5} src={trash} />
@@ -594,29 +576,17 @@ function ContractDetailsSupervisor() {
 
                   <Grid>
                     <GridCol span={4}>
-                      <p
-                        className={classes.InformationType}
-                      >
-
+                      <p className={classes.InformationType}>
                         {t.Contracttype}
                       </p>
-                      <p
-                        className={classes.InformationSale}
-                      >
+                      <p className={classes.InformationSale}>
                         {contract.contract_type}{" "}
                       </p>
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p
-                        className={classes.InformationType}
-                      >
-
-                        {t.Releasedate}
-                      </p>
-                      <p
-                        className={classes.InformationSale}
-                      >
+                      <p className={classes.InformationType}>{t.Releasedate}</p>
+                      <p className={classes.InformationSale}>
                         {new Date(contract.release_date).toLocaleDateString(
                           "en-GB"
                         )}
@@ -624,108 +594,65 @@ function ContractDetailsSupervisor() {
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p
-                        style={{
-
-                        }}
-                        className={classes.InformationType}
-                      >
-
+                      <p style={{}} className={classes.InformationType}>
                         {t.DownPayment}
                       </p>
-                      <p
-                        style={{
-
-                        }}
-                        className={classes.InformationSale}
-                      >
+                      <p style={{}} className={classes.InformationSale}>
                         <span className="icon-saudi_riyal">&#xea; </span>{" "}
                         {parseFloat(contract.down_payment).toLocaleString()}{" "}
                       </p>
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p
-                        className={classes.InformationType}
-                      >
+                      <p className={classes.InformationType}>
                         {t.Customername}
                       </p>
-                      <p
-                        className={classes.InformationSale}
-                      >
+                      <p className={classes.InformationSale}>
                         {contract.customer_name}
                       </p>
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p
-                        className={classes.InformationType}
-                      >
+                      <p className={classes.InformationType}>
                         {t.Customerphone}
                       </p>
-                      <p
-                        className={classes.InformationSale}
-                      >
+                      <p className={classes.InformationSale}>
                         {contract.customer_phone}
                       </p>
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p
-                        style={{
-
-                        }}
-                        className={classes.InformationType}
-                      >
-
+                      <p style={{}} className={classes.InformationType}>
                         {t.Status}
                       </p>
-                      <p
-                        style={{
-
-                        }}
-                        className={classes.InformationSale}
-                      >
+                      <p style={{}} className={classes.InformationSale}>
                         {contract.status}
                       </p>
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p
-                        className={classes.InformationType}
-                      >
-
+                      <p className={classes.InformationType}>
                         {t.Creationdate}
                       </p>
-                      <p
-                        className={classes.InformationSale}
-                      >
+                      <p className={classes.InformationSale}>
                         {new Date(contract.expiration_date).toLocaleString()}
                       </p>
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p
-                        className={classes.InformationType}
-                      >
+                      <p className={classes.InformationType}>
                         {t.Effectivedate}
                       </p>
-                      <p
-                        className={classes.InformationSale}
-                      >
+                      <p className={classes.InformationSale}>
                         {new Date(contract.effective_date).toLocaleString()}
                       </p>
                     </GridCol>
 
                     <GridCol span={4}>
-                      <p
-                        className={classes.InformationType}
-                      >
+                      <p className={classes.InformationType}>
                         {t.Expirationdate}
                       </p>
-                      <p
-                        className={classes.InformationSale}
-                      >
+                      <p className={classes.InformationSale}>
                         {new Date(contract.expiration_date).toLocaleString()}
                       </p>
                     </GridCol>
@@ -734,11 +661,7 @@ function ContractDetailsSupervisor() {
               </Grid>
               <Grid>
                 <GridCol span={isMobile ? 12 : 10}>
-                  <h4
-                    style={{
-                    }}
-                    className={classes.Location}
-                  >
+                  <h4 style={{}} className={classes.Location}>
                     {t.Location}
                   </h4>
                   <div className={classes.LocationPrivado}>
@@ -764,12 +687,7 @@ function ContractDetailsSupervisor() {
                         stroke-linejoin="round"
                       />
                     </svg>
-                    <span
-                      style={{
-                      }}
-                    >
-                      {contract.real_estate.location}
-                    </span>
+                    <span style={{}}>{contract.real_estate.location}</span>
                   </div>
                   <iframe
                     className={classes.locationMap}
@@ -911,7 +829,7 @@ function ContractDetailsSupervisor() {
         <Group position="right" mt="md">
           <Button variant="outline" color="gray" onClick={close}>
             Cancel
-          </Button>{" "}
+          </Button>
           <Button color="red" onClick={handleDeleteContract}>
             Delete
           </Button>
@@ -924,7 +842,7 @@ function ContractDetailsSupervisor() {
         onClose={closeShare}
         title="Share Contract"
         centered
-        size={"lg"}
+        size="lg"
         radius="lg"
         overlayOpacity={0.55}
         overlayBlur={3}
@@ -938,6 +856,11 @@ function ContractDetailsSupervisor() {
       >
         <div>
           <p>Share this contract using the link below: </p>
+          {/* <a href={shareLink} style={{
+            width:"100%"
+          }} target="_blank">
+            {shareLink}
+          </a> */}
           <TextInput
             value={shareLink}
             readOnly
@@ -958,6 +881,7 @@ function ContractDetailsSupervisor() {
           />
           <div style={{ marginTop: "20px" }}>
             <h4>Share on Social Media:</h4>
+
             <Group spacing="sm">
               {/* WhatsApp */}
               <Button

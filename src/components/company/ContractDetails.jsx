@@ -13,6 +13,7 @@ import {
   Image,
   useMantineColorScheme,
   Text,
+  TextInput,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Updated import
@@ -56,8 +57,7 @@ function ContractDetails() {
   const navigate = useNavigate();
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   const queryClient = useQueryClient();
-  const { colorScheme } = useMantineColorScheme();
-  const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
   const form = useForm({
     initialValues: {
@@ -840,9 +840,27 @@ function ContractDetails() {
           <div style={{ marginTop: "20px" }}>
             {/* {console.log(shareLink)} */}
             <h4>Share on Social Media: </h4>
-            <a href={shareLink} target="_blank"  >
+            {/* <a href={shareLink} target="_blank"  >
               {shareLink}
-            </a>
+            </a> */}
+              <TextInput
+                        value={shareLink}
+                        readOnly
+                        rightSection={
+                          <i
+                            onClick={() => {
+                              navigator.clipboard.writeText(shareLink);
+                              notifications.show({
+                                title: "Copied!",
+                                message: "Link copied to clipboard.",
+                                color: "green",
+                              });
+                            }}
+                            style={{ cursor: "pointer" }}
+                            className="fa fa-copy"
+                          ></i>
+                        }
+                      />
             <Group spacing="sm">
               {/* WhatsApp */}
               <Button

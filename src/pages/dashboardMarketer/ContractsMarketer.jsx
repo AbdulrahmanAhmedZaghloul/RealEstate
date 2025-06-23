@@ -15,6 +15,7 @@ import { useContracts } from "../../hooks/queries/useContracts"; // ✅ تم إ�
 import FilterContractsModal from "../../components/modals/filterContractsModal";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
+import  imageContract   from "../../assets/contract/contract.png";
 
 function Contracts() {
   const navigate = useNavigate();
@@ -222,6 +223,8 @@ function Contracts() {
                     className={classes.contractImage}
                   >
                     <div className={classes.listingImage}>
+                                          <img src={imageContract} alt="" />
+
                       <p className={classes.listingfor}>
                         {contract.contract_type}
                       </p>

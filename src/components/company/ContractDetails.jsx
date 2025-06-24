@@ -154,6 +154,7 @@ function ContractDetails() {
           // نعمل encode للرابط
           const encodedPath = encodeURIComponent(fullPath);
 
+          // const finalLink = `http://localhost:5173/#/ShareContracts/${encodedPath}`;
           const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareContracts/${encodedPath}`;
           setShareLink(finalLink);
           openShare(); // فتح المودال
@@ -512,7 +513,7 @@ function ContractDetails() {
                 span={isMobile ? 12 : 8}
                 className={classes.ContractSection}
               >
-                <h4 style={{}}>{t.Contract}</h4>
+                <h4>{t.Contract}</h4>
                 <div className={classes.ContractImage}>
                   <div>
                     <img src={Contract} alt="ContractImage" />
@@ -563,7 +564,7 @@ function ContractDetails() {
                 <Grid>
                   <GridCol span={4}>
                     <p className={classes.InformationType}>{t.Contracttype}</p>
-                    <h4>{t.description}</h4>
+                    {/* <h4>{t.description}dasd</h4> */}
                     <p className={classes.InformationSale}>
                       {contract?.contract_type}
                     </p>

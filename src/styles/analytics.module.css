@@ -25,12 +25,12 @@
 
 .SelectCardTitle {
   position: relative;
-  z-index: 75675675675;
+  z-index: 5;
   width: 90px;
 }
 .divDatePickerInput {
   position: absolute;
-  z-index: 5fsdf3;
+  z-index: 53;
   right: 4%;
   margin-top: 10px;
 }

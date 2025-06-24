@@ -55,6 +55,7 @@ function Analytics() {
               setFilter({ timeFrame, month, year });
             }}
           />
+          
           <Notifications />
         </div>
       </div>

@@ -1,6 +1,19 @@
-
-import { Avatar, Button, Group, Text, TextInput, Modal, PasswordInput, Textarea, Card, Center, Loader, Grid, GridCol, } from "@mantine/core";
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import {
+  Avatar,
+  Button,
+  Group,
+  Text,
+  TextInput,
+  Modal,
+  PasswordInput,
+  Textarea,
+  Card,
+  Center,
+  Loader,
+  Grid,
+  GridCol,
+} from "@mantine/core";
+import { useState, useRef, useEffect, useCallback, useMemo, useContext } from "react";
 import classes from "../../styles/profile.module.css";
 import { useDisclosure } from "@mantine/hooks";
 import axiosInstance from "../../api/config";
@@ -15,6 +28,7 @@ import { useProfile } from "../../hooks/queries/useProfile";
 import { useEditProfile } from "../../hooks/mutations/useEditProfile";
 import EditIcon from "../../components/icons/edit";
 import CropModal from "../../components/CropModal";
+import { EmployeeContext } from "../../context/EmployeeContext";
 
 function Profile() {
   // State hooks
@@ -40,17 +54,22 @@ function Profile() {
   const [formAddress, setFormAddress] = useState("");
   const [formImage, setFormImage] = useState("");
   const [formBio, setFormBio] = useState("");
-  const [imageModalOpen, { open: openImageModal, close: closeImageModal }] = useDisclosure(false);
+  const [imageModalOpen, { open: openImageModal, close: closeImageModal }] =
+    useDisclosure(false);
   // Refs and hooks
   const fileInputRef = useRef(null);
   const [opened, { open, close }] = useDisclosure(false);
   const [formModalOpened, { open: openFormModal, close: closeFormModal }] =
     useDisclosure(false);
-  const { user, isSubscribed } = useAuth();
+  const { user } = useAuth();
   const isMobile = window.matchMedia("(max-width: 991px)").matches;
   const { t } = useTranslation();
   const { data, isLoading } = useProfile();
-
+  // console.log(data);
+  const idNot = data?.data?.user?.id; 
+  const { employeeId, setEmployeeId } = useContext(EmployeeContext);
+setEmployeeId(idNot)
+  const pomid = localStorage.setItem("id", idNot);
 
   // Fetch and initialize profile data
   const fetchProfileData = useCallback(() => {
@@ -110,11 +129,19 @@ function Profile() {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (!file || !file.type.startsWith("image/")) {
-      notifications.show({ title: "Invalid File", message: "Please upload an image file only.", color: "red" });
+      notifications.show({
+        title: "Invalid File",
+        message: "Please upload an image file only.",
+        color: "red",
+      });
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      notifications.show({ title: "File Too Large", message: "The image must be less than 2 MB in size.", color: "red" });
+      notifications.show({
+        title: "File Too Large",
+        message: "The image must be less than 2 MB in size.",
+        color: "red",
+      });
       return;
     }
 
@@ -129,40 +156,9 @@ function Profile() {
     setFormImage(url);
   };
 
-  // const handleImageUpload = (event) => {
-  //   const file = event.target.files[0];
-
-  //   // التحقق من أن الملف هو صورة فقط
-  //   if (!file || !file.type.startsWith("image/")) {
-  //     notifications.show({
-  //       title: "Invalid File",
-  //       message: "Please upload an image file only.",
-  //       color: "red",
-  //     });
-  //     return;
-  //   }
-
-  //   // التحقق من الحجم (أقل من 2 ميجا)
-  //   if (file.size > 2 * 1024 * 1024) {
-  //     notifications.show({
-  //       title: "File Too Large",
-  //       message: "The image must be less than 2 MB in size.",
-  //       color: "red",
-  //     });
-  //     return;
-  //   }
-
-  //   // إذا كانت الصورة صحيحة، نكمل
-  //   setImageFile(file);
-  //   const imageUrl = URL.createObjectURL(file);
-  //   setImage(imageUrl);
-  //   setFormImage(imageUrl);
-  // };
-
   const validatePassword = (value) => {
     if (!value.trim()) return "Password is required";
-    if (value.length < 8)
-      return "Password must be at least 8 characters long";
+    if (value.length < 8) return "Password must be at least 8 characters long";
     if (!/[a-z]/.test(value))
       return "Password must contain at least one lowercase letter";
     if (!/[0-9]/.test(value))
@@ -218,7 +214,6 @@ function Profile() {
     const regex = /^9665\d{8}$/; // 9665 + 8 أرقام
     return regex.test(cleaned);
   }
-
 
   const handleUpdateProfile = async () => {
     const cleanedPhone = formPhone.replace(/\s+/g, "");
@@ -317,27 +312,38 @@ function Profile() {
                   {name}
                 </Text>
               </div>
-              <div className={classes.Edit} onClick={openFormModal} style={{ cursor: "pointer" }}>
+              <div
+                className={classes.Edit}
+                onClick={openFormModal}
+                style={{ cursor: "pointer" }}
+              >
                 <EditIcon />
               </div>
             </div>
           </Group>
           <div>
             <Grid>
-              <GridCol span={isMobile ? 6 : 4} className={classes.AvatarProfile}>
+              <GridCol
+                span={isMobile ? 6 : 4}
+                className={classes.AvatarProfile}
+              >
                 <h3>{t.Email}</h3>
                 <Text truncate="end">{email}</Text>
               </GridCol>
               {phone ? (
-                <GridCol span={isMobile ? 6 : 4} className={classes.AvatarProfile}>
-
+                <GridCol
+                  span={isMobile ? 6 : 4}
+                  className={classes.AvatarProfile}
+                >
                   <h3>{t.contactNumber}</h3>
-                  <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                  }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                    }}
+                  >
                     <img
                       src="https://flagcdn.com/w20/sa.png "
                       alt="Saudi Arabia"
@@ -348,12 +354,14 @@ function Profile() {
                       {formatSaudiPhoneNumberForDisplay(phone)}
                     </Text>
                   </div>
-
                 </GridCol>
               ) : (
                 ""
               )}
-              <GridCol span={isMobile ? 6 : 4} className={classes.AvatarProfile}>
+              <GridCol
+                span={isMobile ? 6 : 4}
+                className={classes.AvatarProfile}
+              >
                 <h3>{t.address}</h3>
                 <Text truncate="end">{address}</Text>
               </GridCol>
@@ -380,12 +388,11 @@ function Profile() {
               <img
                 src={image}
                 alt=" enlarged avatar"
-
                 className={classes.imgModal}
               />
             </Center>
           </Modal>
-          
+
           <CropModal
             imageSrc={rawImage}
             opened={cropModalOpen}
@@ -393,8 +400,13 @@ function Profile() {
             onCropComplete={handleCropComplete}
           />
 
-
-          <Modal opened={formModalOpened} onClose={closeFormModal} centered radius="lg" className={classes.Modal}>
+          <Modal
+            opened={formModalOpened}
+            onClose={closeFormModal}
+            centered
+            radius="lg"
+            className={classes.Modal}
+          >
             <div className={classes.ModalAvatar}>
               <div style={{ position: "relative", width: "fit-content" }}>
                 <Avatar
@@ -430,7 +442,13 @@ function Profile() {
               />
             </div>
 
-            <TextInput label="Name" mt="md" w="100%" value={formName} onChange={(e) => setFormName(e.target.value)} />
+            <TextInput
+              label="Name"
+              mt="md"
+              w="100%"
+              value={formName}
+              onChange={(e) => setFormName(e.target.value)}
+            />
 
             <TextInput
               label="Address"
@@ -440,7 +458,13 @@ function Profile() {
               onChange={(e) => setFormAddress(e.target.value)}
             />
 
-            <TextInput label="Email" mt="md" w="100%" value={email} disabled={true} />
+            <TextInput
+              label="Email"
+              mt="md"
+              w="100%"
+              value={email}
+              disabled={true}
+            />
 
             <TextInput
               label="Contact Number"
@@ -511,7 +535,13 @@ function Profile() {
               ""
             )}
 
-            <Textarea label="Bio" mt="md" resize="vertical" value={bio} onChange={(e) => setBio(e.target.value)} />
+            <Textarea
+              label="Bio"
+              mt="md"
+              resize="vertical"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+            />
 
             <Button mt="xl" w="100%" variant="light" onClick={open}>
               Change Password
@@ -527,7 +557,12 @@ function Profile() {
               {mutationEditProfile.isPending ? "Saving..." : "Save"}
             </Button>
 
-            <Modal opened={opened} onClose={close} title="Change password" centered>
+            <Modal
+              opened={opened}
+              onClose={close}
+              title="Change password"
+              centered
+            >
               <PasswordInput
                 label="Old Password"
                 value={oldPass}
@@ -549,7 +584,11 @@ function Profile() {
                 error={passErr}
                 mb="md"
               />
-              <Button onClick={changePassword} loading={loading} disabled={isChangingPassword}>
+              <Button
+                onClick={changePassword}
+                loading={loading}
+                disabled={isChangingPassword}
+              >
                 {isChangingPassword ? "Saving..." : "Save"}
               </Button>
             </Modal>

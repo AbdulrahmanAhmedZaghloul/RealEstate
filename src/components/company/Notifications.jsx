@@ -1,6 +1,9 @@
 
+// Notifications.jsx
+
+
 import { Popover, Button, Box } from "@mantine/core";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import classes from "../../styles/notificationBell.module.css";
 import NotificationBell from "../icons/notificationBell";
 import { useAuth } from "../../context/authContext";
@@ -8,12 +11,14 @@ import { useNotifications } from "../../hooks/queries/Notifications/useNotificat
 import { useNavigate } from "react-router-dom";
 import NotificationDeleteModal from "../modals/Notification/NotificationDeleteModal";
 import useNotificationSocket from "../../hooks/useNotificationSocket";
+import { EmployeeContext } from "../../context/EmployeeContext";
 // import useNotificationSocket from "../../hooks/useNotificationSocket"; // ✅ أضفنا الهوك الجديد
 
 function Notifications() {
   const [opened, setOpened] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [notificationToDelete, setNotificationToDelete] = useState(null);
+  const { employeeId, setEmployeeId } = useContext(EmployeeContext);
 
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -26,9 +31,9 @@ function Notifications() {
   } = useNotifications();
 
   const notifications = data?.data?.notifications?.data || [];
-
-  // ✅ تفعيل الاتصال بـ Pusher للمستخدم الحالي
-  useNotificationSocket(user.token);
+ 
+  
+  useNotificationSocket(employeeId);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

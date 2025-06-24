@@ -1,4 +1,3 @@
-
 // App.jsx
 // Local dependencies imports
 import "@mantine/core/styles.css";
@@ -57,156 +56,177 @@ import ContractDetailsMarketer from "./components/Marketer/ContractDetailsMarket
 import AnalyticsMarketer from "./pages/dashboardMarketer/AnalyticsMarketer.jsx";
 import ProfileMarketer from "./pages/dashboardMarketer/ProfileMarketer.jsx";
 import PublicContractView from "./pages/PublicContractView.jsx";
+import { EmployeeProvider } from "./context/EmployeeContext.jsx";
 
 function App() {
   return (
     <LanguageProvider>
-
-
-
       <AuthProvider>
         <SidebarProvider>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/MakePayment" element={<MakePayment />} />
-            {/* <Route path="/MatterOrCompany" element={<MatterOrCompany />} /> */}
-            <Route path="/choosePlan" element={<ChoosePlan />} />
-            <Route path="/StartAccount" element={<StartAccount />} />
+          <EmployeeProvider>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/MakePayment" element={<MakePayment />} />
+              {/* <Route path="/MatterOrCompany" element={<MatterOrCompany />} /> */}
+              <Route path="/choosePlan" element={<ChoosePlan />} />
+              <Route path="/StartAccount" element={<StartAccount />} />
 
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/Terms" element={<Terms />} />
-            <Route path="/Privacy" element={<Privacy />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/Terms" element={<Terms />} />
+              <Route path="/Privacy" element={<Privacy />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-            <Route path="/ShareContracts/:path" element={<PublicContractView />} />
-            <Route
-              path="/forgot-password"
-              element={
-                // <ProtectedRoute allowedRoles={[]}>
-                <ForgotPassword />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/verify-otp-create-account"
-              element={
-                // <ProtectedRoute allowedRoles={[]}>
-                <VerifyOTPCreateAccount />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/verify-otp-forgot-password"
-              element={
-                // <ProtectedRoute allowedRoles={[]}>
-                <VerifyOTPForgotPassword />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/ResetPassword"
-              element={
-                <ResetPassword />
-              }
-            />
-            {/* <Route path="*" element={<NotFound />} /> */}
-            <Route path="/subscription-plans" element={<SubscriptionPlans />} />
-
-            {/* Company Manager Routes */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute allowedRoles={["company"]}>
-                  <DashboardLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Profile />} />
-              <Route path="Team" element={<Staff />} />
-              <Route path="Contracts" element={<Contracts />} />
-              <Route path="Analytics" element={<Analytics />} />
-              <Route path="Categories" element={<Categories />} />
-              <Route path="Transactions" element={<Transactions />} />
-              <Route path="employee/:id" element={<EmployeeDetails />} />
-              <Route path="supervisor/:id" element={<SupervisorDetails />} />
-              <Route path="Properties/:id" element={<PropertyDetails />} />
-              <Route path="Properties" element={<Properties />} />
-              <Route path="Contracts/:id" element={<ContractDetails />} />
-            </Route>
-
-            {/* Marketer Manager Routes */}
-            <Route
-              path="/dashboard-Marketer"
-              element={
-                <ProtectedRoute allowedRoles={["marketer"]}>
-                  <DashboardLayoutMarketer />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<ProfileMarketer />} />
-              <Route path="ContractsMarketer" element={<ContractsMarketer />} />
-              <Route path="AnalyticsMarketer" element={<AnalyticsMarketer />} />
-              <Route path="CategoriesMarketer" element={<CategoriesMarketer />} />
-              <Route path="PropertyDetailsMarketer/:id" element={<PropertyDetailsMarketer />} />
-              <Route path="PropertiesMarketer" element={<PropertiesMarketer />} />
-              <Route path="ContractDetailsMarketer/:id" element={<ContractDetailsMarketer />} />
-            </Route>
-
-            {/* Supervisor Routes */}
-            <Route
-              path="/dashboard-supervisor"
-              element={
-                <ProtectedRoute allowedRoles={["supervisor"]}>
-                  <DashboardSupervisorLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<ProfileSupervisor />} />
-              <Route path="Properties" element={<PropertiesSupervisor />} />
-              <Route path="Requests" element={<RequestsSupervisor />} />
-              <Route path="Team" element={<StaffSupervisor />} />
               <Route
-                path="Contracts"
-                element={<ContractsSupervisor role="supervisor" />}
-              />
-              <Route path="Team/:id" element={<EmployeeDetailsSupervisor />} />
-              <Route
-                path="Contracts/:id"
-                element={<ContractDetailsSupervisor />}
+                path="/ShareContracts/:path"
+                element={<PublicContractView />}
               />
               <Route
-                path="Properties/:id"
-                element={<PropertyDetailsSupervisor />}
+                path="/forgot-password"
+                element={
+                  // <ProtectedRoute allowedRoles={[]}>
+                  <ForgotPassword />
+                  // </ProtectedRoute>
+                }
               />
-            </Route>
-
-            {/* Employee Routes */}
-            <Route
-              path="/dashboard-employee"
-              element={
-                <ProtectedRoute allowedRoles={["employee"]}>
-                  <DashboardEmployeeLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<ProfileEmployee />} />
-              <Route path="Properties" element={<PropertiesEmployee />} />
-              <Route path="Requests" element={<RequestsEmployee />} />
               <Route
-                path="Properties/:id"
-                element={<PropertyDetailsEmployee />}
+                path="/verify-otp-create-account"
+                element={
+                  // <ProtectedRoute allowedRoles={[]}>
+                  <VerifyOTPCreateAccount />
+                  // </ProtectedRoute>
+                }
               />
-            </Route>
-            
-          </Routes>
+              <Route
+                path="/verify-otp-forgot-password"
+                element={
+                  // <ProtectedRoute allowedRoles={[]}>
+                  <VerifyOTPForgotPassword />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route path="/ResetPassword" element={<ResetPassword />} />
+              {/* <Route path="*" element={<NotFound />} /> */}
+              <Route
+                path="/subscription-plans"
+                element={<SubscriptionPlans />}
+              />
+
+              {/* Company Manager Routes */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute allowedRoles={["company"]}>
+                    <DashboardLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Profile />} />
+                <Route path="Team" element={<Staff />} />
+                <Route path="Contracts" element={<Contracts />} />
+                <Route path="Analytics" element={<Analytics />} />
+                <Route path="Categories" element={<Categories />} />
+                <Route path="Transactions" element={<Transactions />} />
+                <Route path="employee/:id" element={<EmployeeDetails />} />
+                <Route path="supervisor/:id" element={<SupervisorDetails />} />
+                <Route path="Properties/:id" element={<PropertyDetails />} />
+                <Route path="Properties" element={<Properties />} />
+                <Route path="Contracts/:id" element={<ContractDetails />} />
+              </Route>
+
+              {/* Marketer Manager Routes */}
+              <Route
+                path="/dashboard-Marketer"
+                element={
+                  <ProtectedRoute allowedRoles={["marketer"]}>
+                    <DashboardLayoutMarketer />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<ProfileMarketer />} />
+                <Route
+                  path="ContractsMarketer"
+                  element={<ContractsMarketer />}
+                />
+                <Route
+                  path="AnalyticsMarketer"
+                  element={<AnalyticsMarketer />}
+                />
+                <Route
+                  path="CategoriesMarketer"
+                  element={<CategoriesMarketer />}
+                />
+                <Route
+                  path="PropertyDetailsMarketer/:id"
+                  element={<PropertyDetailsMarketer />}
+                />
+                <Route
+                  path="PropertiesMarketer"
+                  element={<PropertiesMarketer />}
+                />
+                <Route
+                  path="ContractDetailsMarketer/:id"
+                  element={<ContractDetailsMarketer />}
+                />
+              </Route>
+
+              {/* Supervisor Routes */}
+              <Route
+                path="/dashboard-supervisor"
+                element={
+                  <ProtectedRoute allowedRoles={["supervisor"]}>
+                    <DashboardSupervisorLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<ProfileSupervisor />} />
+                <Route path="Properties" element={<PropertiesSupervisor />} />
+                <Route path="Requests" element={<RequestsSupervisor />} />
+                <Route path="Team" element={<StaffSupervisor />} />
+                <Route
+                  path="Contracts"
+                  element={<ContractsSupervisor role="supervisor" />}
+                />
+                <Route
+                  path="Team/:id"
+                  element={<EmployeeDetailsSupervisor />}
+                />
+                <Route
+                  path="Contracts/:id"
+                  element={<ContractDetailsSupervisor />}
+                />
+                <Route
+                  path="Properties/:id"
+                  element={<PropertyDetailsSupervisor />}
+                />
+              </Route>
+
+              {/* Employee Routes */}
+              <Route
+                path="/dashboard-employee"
+                element={
+                  <ProtectedRoute allowedRoles={["employee"]}>
+                    <DashboardEmployeeLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<ProfileEmployee />} />
+                <Route path="Properties" element={<PropertiesEmployee />} />
+                <Route path="Requests" element={<RequestsEmployee />} />
+                <Route
+                  path="Properties/:id"
+                  element={<PropertyDetailsEmployee />}
+                />
+              </Route>
+            </Routes>
+          </EmployeeProvider>
         </SidebarProvider>
       </AuthProvider>
     </LanguageProvider>
 
     //
-  )
+  );
 }
 
 export default App;

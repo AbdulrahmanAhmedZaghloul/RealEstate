@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import classes from "../../styles/EmployeeDetails.module.css";
 import axiosInstance, { apiUrl } from "../../api/config";
 import { useAuth } from "../../context/authContext";
@@ -26,6 +26,7 @@ import Notifications from "../../components/company/Notifications";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import { ThemeToggle } from "../../Settings/ThemeToggle";
+import { EmployeeContext } from "../../context/EmployeeContext";
 
 function ProfileEmployee() {
   const [employee, setEmployee] = useState(null);
@@ -36,15 +37,16 @@ function ProfileEmployee() {
 
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   const { t } = useTranslation(); // 👈 استدعاء اللغة
-
+  const { employeeId, setEmployeeId } = useContext(EmployeeContext);
   const fetchEmployee = async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`employees`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      console.log(response.data.data.employee)
+      // console.log(response.data.data.employee.employee_id)
       setEmployee(response.data.data.employee);
+      setEmployeeId(response?.data?.data?.employee?.employee_id);
     } catch (error) {
       console.error(error);
     } finally {
@@ -66,7 +68,6 @@ function ProfileEmployee() {
 
       // Map API data to state
       setKpiData(apiData);
-
     } catch (error) {
       console.error("Error fetching KPI data:", error);
       notifications.show({
@@ -161,19 +162,12 @@ function ProfileEmployee() {
     <div
       style={{
         backgroundColor: "#fff",
-
       }}
       className={classes.container}
     >
-
       <div className={classes.mainThemeToggle}>
         <BurgerButton />
-        <span
-          style={{
-
-          }}
-          className={classes.title}
-        >
+        <span style={{}} className={classes.title}>
           {t.profile}
         </span>
 
@@ -185,140 +179,50 @@ function ProfileEmployee() {
       </div>
       <div className={classes.profile}>
         <div className={classes.profileImage}>
-           <img src={`${employee.picture_url}`} alt="Profile" />
+          <img src={`${employee.picture_url}`} alt="Profile" />
           <div className={classes.profileInfo}>
-            <h2
-              style={{
-              }}
-            >
-              {employee.name}
-            </h2>
-            <p
-              style={{
-              }}
-            >
-              {employee.email}
-            </p>
+            <h2>{employee.name}</h2>
+            <p>{employee.email}</p>
           </div>
         </div>
       </div>
 
-      <div
-        style={{
-
-
-        }}
-        className={classes.personalInfo}
-      >
+      <div style={{}} className={classes.personalInfo}>
         <div>
-          <h3
-            style={{
-            }}
-          >
-            {t.PersonalInfo}
-          </h3>
+          <h3 style={{}}>{t.PersonalInfo}</h3>
         </div>
         <Grid>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.FullName}
-            </h2>
+            <h2 style={{}}>{t.FullName}</h2>
             {/* <br /> */}
-            <h3
-              style={{
-              }}
-            >
-
-              {employee.name}
-            </h3>
+            <h3 style={{}}>{employee.name}</h3>
           </Grid.Col>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.Position}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
-              {employee.position}
-            </h3>
+            <h2 style={{}}>{t.Position}</h2>
+            <h3 style={{}}>{employee.position}</h3>
           </Grid.Col>
 
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.Supervisor}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
-              {employee.supervisor.name}
-            </h3>
+            <h2 style={{}}>{t.Supervisor}</h2>
+            <h3 style={{}}>{employee.supervisor.name}</h3>
           </Grid.Col>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.Phone}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
-
-              {employee.phone_number}
-            </h3>
+            <h2 style={{}}>{t.Phone}</h2>
+            <h3 style={{}}>{employee.phone_number}</h3>
           </Grid.Col>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.CreatedAt}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
+            <h2 style={{}}>{t.CreatedAt}</h2>
+            <h3 style={{}}>
               {new Date(employee.created_at).toLocaleDateString("en-GB")}
             </h3>
           </Grid.Col>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.address}
-            </h2>
-            <h3
-              style={{
-              }}
-            >
-              {employee.address}
-            </h3>
+            <h2 style={{}}>{t.address}</h2>
+            <h3 style={{}}>{employee.address}</h3>
           </Grid.Col>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
-            <h2
-              style={{
-              }}
-            >
-              {t.Status}
-            </h2>
-            <h3
-              style={{
-              }}
-              className={classes.active}
-            >
+            <h2 style={{}}>{t.Status}</h2>
+            <h3 style={{}} className={classes.active}>
               {" "}
               {employee.status}{" "}
             </h3>
@@ -327,96 +231,42 @@ function ProfileEmployee() {
       </div>
 
       <div className={classes.summary}>
-        <div
-          style={{
-
-
-          }}
-          className={classes.card}
-        >
-          <div
-            style={{
-            }}
-            className={classes.cardTitle}
-          >
+        <div style={{}} className={classes.card}>
+          <div style={{}} className={classes.cardTitle}>
             {t.Selling}
           </div>
-          <div
-            style={{
-            }}
-            className={classes.cardCount}
-          >
+          <div style={{}} className={classes.cardCount}>
             {kpiData?.performance_metrics?.sales?.count}
           </div>
-          <div
-            style={{
-            }}
-            className={classes.cardRevenue}
-          >
+          <div style={{}} className={classes.cardRevenue}>
             $
             {kpiData?.performance_metrics?.sales?.total_amount.toLocaleString(
               "en-GB"
             )}
           </div>
         </div>
-        <div
-          style={{
-
-
-          }}
-          className={classes.card}
-        >
-          <div
-            style={{
-            }}
-            className={classes.cardTitle}
-          >
+        <div style={{}} className={classes.card}>
+          <div style={{}} className={classes.cardTitle}>
             {t.Renting}
           </div>
-          <div
-            style={{
-            }}
-            className={classes.cardCount}
-          >
+          <div style={{}} className={classes.cardCount}>
             {kpiData?.performance_metrics?.rentals?.count}
           </div>
-          <div
-            style={{
-            }}
-            className={classes.cardRevenue}
-          >
+          <div style={{}} className={classes.cardRevenue}>
             $
             {kpiData?.performance_metrics?.rentals?.total_amount.toLocaleString(
               "en-GB"
             )}
           </div>
         </div>
-        <div
-          style={{
-
-
-          }}
-          className={classes.card}
-        >
-          <div
-            style={{
-            }}
-            className={classes.cardTitle}
-          >
+        <div style={{}} className={classes.card}>
+          <div style={{}} className={classes.cardTitle}>
             {t.Contracts}
           </div>
-          <div
-            style={{
-            }}
-            className={classes.cardCount}
-          >
+          <div style={{}} className={classes.cardCount}>
             {kpiData?.performance_metrics?.contracts.length}
           </div>
-          <div
-            style={{
-            }}
-            className={classes.cardRevenue}
-          >
+          <div style={{}} className={classes.cardRevenue}>
             $
             {kpiData?.performance_metrics?.contracts
               .reduce(
@@ -428,13 +278,7 @@ function ProfileEmployee() {
         </div>
       </div>
 
-      <div
-        style={{
-
-
-        }}
-        className={classes.chart}
-      >
+      <div className={classes.chart}>
         <span style={{ fontSize: "20px", fontWeight: "bold" }}>
           {t.YearlyPerformance} <br />
         </span>

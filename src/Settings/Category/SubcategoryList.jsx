@@ -23,6 +23,9 @@ function SubcategoryList({ category, onAddClick }) {
                 <Text
                     fz="md"
                     fw={500}
+                    style={{
+                        cursor:"pointer"
+                    }}
                     onClick={() => onAddClick(category.id)}>+
                 </Text>
             </div>

@@ -19,17 +19,14 @@ import { useTranslation } from "../../context/LanguageContext";
 import { useQueryClient } from "@tanstack/react-query";
 
 // Component Imports
-import Notifications from "../../components/company/Notifications";
-import AddPropertyModal from "../../components/modals/addPropertyModal";
+import Notifications from "../../components/company/Notifications"; 
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { useProperties } from "../../hooks/queries/useProperties";
 import { useEmployees } from "../../hooks/queries/useEmployees";
-import { useCategories } from "../../hooks/queries/useCategories";
-import { useAddProperty } from "../../hooks/mutations/useAddProperty";
+import { useCategories } from "../../hooks/queries/useCategories"; 
 import Rooms from "../../components/icons/rooms";
 import Bathrooms from "../../components/icons/bathrooms";
-import Area from "../../components/icons/area";
-import AddIcon from "../../components/icons/addIcon";
+import Area from "../../components/icons/area"; 
 import LazyImage from "../../components/LazyImage";
 import { useDisclosure } from "@mantine/hooks";
 import Dropdown from "../../components/icons/dropdown";
@@ -37,8 +34,7 @@ import Dropdown from "../../components/icons/dropdown";
 import Search from "../../components/icons/search";
 import { useInView } from "react-intersection-observer";
 
-import FiltersModal from "../dashboardCompany/FiltersModal";
-// import FiltersModal from "../dashboardCompany/FiltersModal";
+import FiltersModal from "../dashboardCompany/FiltersModal"; 
 
 function PropertiesSupervisor() {
    const { user } = useAuth();

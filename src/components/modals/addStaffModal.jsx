@@ -280,7 +280,7 @@ const AddStaffModal = ({
             mb={24}
           />
 
-          {!location.pathname.includes("/dashboard/supervisor/team") ? null : (
+          {/* {!location.pathname.includes("/dashboard/supervisor/team") ? null : ( */}
             <>
               <Select
                 label="Position"
@@ -323,7 +323,7 @@ const AddStaffModal = ({
                 />
               )}
             </>
-          )}
+          {/* // )} */}
           <Button
             fullWidth
             disabled={loading}

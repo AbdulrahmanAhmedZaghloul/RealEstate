@@ -5,6 +5,7 @@
 }
 
 
+
 .positionBox {
     background-color: var(--color-5);
     width: 378px !important;
@@ -38,8 +39,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
-    /* background-color: crimson; */
+    margin-top: 10px;
+    border-bottom: 1px solid rgb(212, 212, 212);
 }
 
 .divImage img {
@@ -71,14 +72,11 @@
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0%;
-    color:var(--color-2);
-}
-
-.data {
-    /* background-color: chartreuse; */
+    color: var(--color-2);
 }
 
 .data p {
     color: var(--color-2);
+    font-size: 0.8rem;
     /* background-color: chartreuse; */
 }

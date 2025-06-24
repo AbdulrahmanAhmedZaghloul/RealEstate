@@ -555,7 +555,7 @@ function Profile() {
             </Modal>
           </Modal>
         </Card>
-        <ProfilePlane />
+        {/* <ProfilePlane /> */}
       </Card>
     </>
   );

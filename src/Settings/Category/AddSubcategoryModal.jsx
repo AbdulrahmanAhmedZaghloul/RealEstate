@@ -43,7 +43,7 @@ export default function AddSubcategoryModal({ opened, onClose, categories, selec
         setLoading(true);
         try {
             await axiosInstance.post(
-                `/api/categories/${newSubcategory.category_id}/subcategories`,
+                `categories/${newSubcategory.category_id}/subcategories`,
                 newSubcategory,
                 { headers: { Authorization: `Bearer ${user.token}` } }
             );

@@ -121,11 +121,14 @@ function Properties() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage, fetchNextPage]);
+  
   const handleAddProperty = (values) => {
-    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
-    queryClient.invalidateQueries(["listingsRealEstate"]);
-    queryClient.invalidateQueries(["listings"]);
-    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      queryClient.invalidateQueries(['notifications']);
+      queryClient.invalidateQueries(["contracts"]);
     mutation.mutate(values);
   };
 

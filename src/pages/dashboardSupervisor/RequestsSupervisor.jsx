@@ -67,7 +67,7 @@ function RequestsSupervisor() {
   ] = useDisclosure(false);
 
   const [sortBy, setSortBy] = useState("newest");
-  
+
   const sortOptions = [
     { value: "newest", label: "Newest" },
     { value: "oldest", label: "Oldest" },
@@ -75,11 +75,11 @@ function RequestsSupervisor() {
     { value: "lowest", label: "Lowest price" },
   ];
   const [rejectionReason, setRejectionReason] = useState("");
-  
+
   const [otherReason, setOtherReason] = useState("");
-  
+
   const [modalOpened, setModalOpened] = useState(false);
-  
+
   const [isSticky, setIsSticky] = useState(false);
 
   const transactionOptions = [
@@ -90,7 +90,7 @@ function RequestsSupervisor() {
   ];
 
   const [transactionType, setTransactionType] = useState("all");
-  
+
   const listing_type = transactionType; // ✅ Define it first
 
   const {
@@ -214,6 +214,8 @@ function RequestsSupervisor() {
     queryClient.invalidateQueries(["listingsRealEstate"]);
     queryClient.invalidateQueries(["listings"]);
     queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+
+    queryClient.invalidateQueries(['notifications']);
     setFilters({});
     form.reset();
     setFilters({});
@@ -239,10 +241,12 @@ function RequestsSupervisor() {
         color: "green",
       });
 
-    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
-    queryClient.invalidateQueries(["listingsRealEstate"]);
-    queryClient.invalidateQueries(["listings"]);
-    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+
+      queryClient.invalidateQueries(['notifications']);
     } catch (err) {
       notifications.show({
         title: "Error",
@@ -272,18 +276,20 @@ function RequestsSupervisor() {
     queryClient.invalidateQueries(["listingsRealEstate"]);
     queryClient.invalidateQueries(["listings"]);
     queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+
+    queryClient.invalidateQueries(['notifications']);
   };
 
-  
-    useEffect(() => {
-      const handleScroll = () => {
-        setIsSticky(window.scrollY > 150);
-      };
-  
-      window.addEventListener("scroll", handleScroll);
-  
-      return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 150);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   if (employeesLoading || categoriesLoading) {
     return (
@@ -525,18 +531,18 @@ function RequestsSupervisor() {
                         <div className={classes.listingDate}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
                             : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                         </div>
                       </div>
 
@@ -578,7 +584,7 @@ function RequestsSupervisor() {
             {/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
             {!isLoading &&
               data?.pages.flatMap((page) => page.data.listings).length ===
-                0 && (
+              0 && (
                 <Center>
                   <Text>{t.NoListingsFound}</Text>
                 </Center>
@@ -631,7 +637,7 @@ function RequestsSupervisor() {
         </Group>
       </Modal>
 
-      
+
       <FiltersModal
         opened={openedFilterModal}
         onClose={closeFilterModal}
@@ -641,7 +647,7 @@ function RequestsSupervisor() {
         form={filterForm} // 👈 إرسال النموذج للمودال
       />
     </>
-  
+
   );
 }
 

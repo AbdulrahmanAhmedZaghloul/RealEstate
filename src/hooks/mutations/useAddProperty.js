@@ -7,16 +7,16 @@ import { useLocation } from 'react-router-dom'; // 🟢 جديد
 export const useAddProperty = (userToken, categories, closeModal) => {
   const queryClient = useQueryClient();
   const { pathname } = useLocation(); // 🟢 نجيب المسار الحالي
-let endpoint = 'listings/company';
+  let endpoint = 'listings/company';
 
-if (pathname.includes('dashboard-employee')) {
-  endpoint = 'listings';
-} else if (pathname.includes('dashboard-Marketer')) {
-  endpoint = 'marketer/listings';
-}
+  if (pathname.includes('dashboard-employee')) {
+    endpoint = 'listings';
+  } else if (pathname.includes('dashboard-Marketer')) {
+    endpoint = 'marketer/listings';
+  }
 
 
-console.log(`Endpoint: ${endpoint}`); // 🟢 نطبع المسار للتحقق
+  console.log(`Endpoint: ${endpoint}`); // 🟢 نطبع المسار للتحقق
 
   const addProperty = async (values) => {
     const formData = new FormData();
@@ -40,9 +40,9 @@ console.log(`Endpoint: ${endpoint}`); // 🟢 نطبع المسار للتحقق
         formData.append(key, values[key]);
       }
     });
-  for (let [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
     formData.append('primary_image_index', 0);
     formData.append(
       'category',
@@ -62,9 +62,12 @@ console.log(`Endpoint: ${endpoint}`); // 🟢 نطبع المسار للتحقق
   return useMutation({
     mutationFn: addProperty,
     onSuccess: () => {
-    
-        // queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
-        // queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      queryClient.invalidateQueries(['notifications']);
       closeModal?.();
       notifications.show({
         title: 'Property Added',

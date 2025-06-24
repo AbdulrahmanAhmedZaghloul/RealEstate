@@ -454,29 +454,7 @@ function SupervisorDetails() {
           }
           error={passwordErrors.password}
         />
-        {/* <TextInput
-          label="New Password"
-          type={showPassword ? "text" : "password"}
-          value={passwordData.password}
-          maxLength={50}
-          onChange={(e) =>
-            setPasswordData({ ...passwordData, password: e.target.value })
-          }
-          rightSection={
-            <button
-              type="button"
-              style={{ background: "none", border: "none", cursor: "pointer" }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <IconEyeOff size={16} />
-              ) : (
-                <IconEye size={16} />
-              )}
-            </button>
-          }
-          error={passwordErrors.password}
-        /> */}
+        
         <Button
           loading={loading}
           onClick={handleChangePassword}

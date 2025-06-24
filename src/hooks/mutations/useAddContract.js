@@ -35,10 +35,11 @@ export const useAddContract = (userToken, closeModal) => {
     mutationFn: addContract,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contracts'] });
-    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
-    queryClient.invalidateQueries(["listingsRealEstate"]);
-    queryClient.invalidateQueries(["listings"]);
-    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      queryClient.invalidateQueries(['notifications']);
       closeModal?.();
       // form.reset()
       notifications.show({

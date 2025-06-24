@@ -25,7 +25,7 @@ import FilterContractsModal from "../../components/modals/filterContractsModal";
 import FilterIcon from "../../components/icons/filterIcon";
 import Search from "../../components/icons/search";
 import { useQueryClient } from "@tanstack/react-query";
-import  imageContract   from "../../assets/contract/contract.png";
+import imageContract from "../../assets/contract/contract.png";
 
 function Contracts() {
   const navigate = useNavigate();
@@ -67,6 +67,12 @@ function Contracts() {
   const handleAddContract = (values) => {
     try {
       mutation.mutateAsync(values);
+
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      queryClient.invalidateQueries(['notifications']);
       queryClient.invalidateQueries(["contracts"]);
     } catch (error) {
       console.log(error);
@@ -96,7 +102,6 @@ function Contracts() {
 
   // ✅ تجميع جميع العقود من الصفحات المختلفة
   const contracts = data?.pages.flatMap((page) => page.data.data.data) || [];
-  console.log(contracts);
 
   // ✅ اكتشاف نهاية الصفحة لتحميل المزيد
 
@@ -109,11 +114,12 @@ function Contracts() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 500 &&
+        document.body.offsetHeight - 500 &&
         hasNextPage &&
         !isFetchingNextPage
       ) {
@@ -274,18 +280,18 @@ function Contracts() {
                   <div className={classes.contractDate}>
                     {Math.floor(
                       (new Date() - new Date(contract.creation_date)) /
-                        (1000 * 60 * 60 * 24)
+                      (1000 * 60 * 60 * 24)
                     ) > 1
                       ? `${Math.floor(
-                          (new Date() - new Date(contract.creation_date)) /
-                            (1000 * 60 * 60 * 24)
-                        )} days ago`
+                        (new Date() - new Date(contract.creation_date)) /
+                        (1000 * 60 * 60 * 24)
+                      )} days ago`
                       : Math.floor(
-                          (new Date() - new Date(contract.creation_date)) /
-                            (1000 * 60 * 60 * 24)
-                        ) === 1
-                      ? "Yesterday"
-                      : "Today"}
+                        (new Date() - new Date(contract.creation_date)) /
+                        (1000 * 60 * 60 * 24)
+                      ) === 1
+                        ? "Yesterday"
+                        : "Today"}
                   </div>
                 </GridCol>
               </Grid>

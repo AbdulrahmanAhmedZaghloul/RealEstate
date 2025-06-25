@@ -1,9 +1,13 @@
 
+
+
+
+// useNotificationSocket
 import { useEffect } from "react";
 import Pusher from "pusher-js";
 import { useQueryClient } from "@tanstack/react-query";
 
-const useNotificationSocket = (employeeId) => {
+const useNotificationSocket = (employeeId,token) => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -18,7 +22,7 @@ const useNotificationSocket = (employeeId) => {
       authEndpoint: "/broadcasting/auth",
       auth: {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       },
     });

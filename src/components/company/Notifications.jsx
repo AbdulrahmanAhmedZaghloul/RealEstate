@@ -36,7 +36,7 @@ function Notifications() {
   (notif) => notif.data.type 
 );
 
-  useNotificationSocket(employeeId, newListingNotifications);
+  useNotificationSocket(employeeId, token);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

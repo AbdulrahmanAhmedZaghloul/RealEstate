@@ -36,6 +36,7 @@ import FiltersModal from "./FiltersModal";
 import { useForm } from "@mantine/form";
 import Search from "../../components/icons/search";
 import { useInView } from "react-intersection-observer";
+import FilterIcon from "../../components/icons/filterIcon";
 
 function Properties() {
   const { user } = useAuth();
@@ -121,14 +122,14 @@ function Properties() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage, fetchNextPage]);
-  
+
   const handleAddProperty = (values) => {
-      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
-      queryClient.invalidateQueries(["listingsRealEstate"]);
-      queryClient.invalidateQueries(["listings"]);
-      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
-      queryClient.invalidateQueries(['notifications']);
-      queryClient.invalidateQueries(["contracts"]);
+    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+    queryClient.invalidateQueries(["listingsRealEstate"]);
+    queryClient.invalidateQueries(["listings"]);
+    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+    queryClient.invalidateQueries(['notifications']);
+    queryClient.invalidateQueries(["contracts"]);
     mutation.mutate(values);
   };
 
@@ -247,23 +248,15 @@ function Properties() {
                 />
                 <Search />
               </div>
-              <button className={classes.add} onClick={openFilterModal}>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5 7H19M5 12H19M5 17H19"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                &nbsp;
-              </button>
+              <span className={classes.add} onClick={openFilterModal}>
+
+                <FilterIcon />
+
+
+
+
+
+              </span>
             </div>
 
             <div className={classes.addAndSort}>
@@ -384,6 +377,7 @@ function Properties() {
                             height={200}
                             radius="md"
                           />
+
                           <p className={classes.listingfor}>
                             {listing.selling_status === 1
                               ? "sold"

@@ -19,196 +19,197 @@ import { useTranslation } from "../../context/LanguageContext";
 import { useQueryClient } from "@tanstack/react-query";
 
 // Component Imports
-import Notifications from "../../components/company/Notifications"; 
+import Notifications from "../../components/company/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { useProperties } from "../../hooks/queries/useProperties";
 import { useEmployees } from "../../hooks/queries/useEmployees";
-import { useCategories } from "../../hooks/queries/useCategories"; 
+import { useCategories } from "../../hooks/queries/useCategories";
 import Rooms from "../../components/icons/rooms";
 import Bathrooms from "../../components/icons/bathrooms";
-import Area from "../../components/icons/area"; 
+import Area from "../../components/icons/area";
 import LazyImage from "../../components/LazyImage";
 import { useDisclosure } from "@mantine/hooks";
 import Dropdown from "../../components/icons/dropdown";
- import { useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import Search from "../../components/icons/search";
 import { useInView } from "react-intersection-observer";
 
-import FiltersModal from "../dashboardCompany/FiltersModal"; 
+import FiltersModal from "../dashboardCompany/FiltersModal";
+import FilterIcon from "../../components/icons/filterIcon";
 
 function PropertiesSupervisor() {
-   const { user } = useAuth();
-   const [searchTerm, setSearchTerm] = useState("");
-   const [filters, setFilters] = useState({});
-   const [openedFilterModal, { open: openFilterModal, close: closeFilterModal }] = useDisclosure(false);
-   const [sortBy, setSortBy] = useState("newest");
-   const sortOptions = [
-     { value: "newest", label: "Newest" },
-     { value: "oldest", label: "Oldest" },
-     { value: "highest", label: "Highest price" },
-     { value: "lowest", label: "Lowest price" },
-   ];
-   const [isSticky, setIsSticky] = useState(false);
- 
-   const transactionOptions = [
-     { value: "all", label: "All" },
-     { value: "rent", label: "For Rent" },
-     { value: "buy", label: "For Sale" },
-     { value: "booking", label: "Booking" }
-   ];
- 
-   const [transactionType, setTransactionType] = useState("all");
-   const listing_type = transactionType; // ✅ Define it first
- 
-   const {
-     data,
-     isLoading,
-     isError,
-     error,
-     fetchNextPage,
-     hasNextPage,
-     isFetching
-   } = useProperties(listing_type, sortBy, filters, searchTerm); // 👈 تمرير الفلتر
- 
-   const navigate = useNavigate();
-   const queryClient = useQueryClient();
- 
-   const {
-     data: employeesData,
-     isLoading: employeesLoading,
-     isError: isEmployeesError,
-     error: employeesError,
-   } = useEmployees();
- 
-   const {
-     data: categoriesData,
-     isLoading: categoriesLoading,
-     isError: isCategoriesError,
-     error: categoriesError,
-   } = useCategories();
- 
-   const [employees, setEmployees] = useState([]);
-   const [categories, setCategories] = useState([]);
-   const [subcategories, setSubcategories] = useState([]);
- 
-   const [opened, { open, close }] = useDisclosure(false);
-   const { t } = useTranslation();
-   const filterForm = useForm({
-     initialValues: {
-       location: "",
-       rooms: "",
-       bathrooms: "",
-       areaMin: "",
-       areaMax: "",
-       priceMin: "",
-       priceMax: "",
-       category: "",
-       subcategory: "",
-     },
-   });
-   const loadMoreRef = useRef(null);
- 
-  
- 
-   const [ref, inView] = useInView();
- 
-   useEffect(() => {
-     if (inView && hasNextPage && !fetchNextPage) {
-       fetchNextPage();
-     }
-   }, [inView, hasNextPage, fetchNextPage, fetchNextPage]);
- 
- 
-   // 👇 Intersection Observer للتحميل اللانهائي
-   useEffect(() => {
-     const observer = new IntersectionObserver(
-       (entries) => {
-         if (entries[0].isIntersecting && hasNextPage && !isLoading) {
-           fetchNextPage();
-         }
-       },
-       { rootMargin: "0px 0px 200px 0px" }
-     );
- 
-     if (loadMoreRef.current) observer.observe(loadMoreRef.current);
- 
-     return () => {
-       if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
-     };
-   }, [hasNextPage, isLoading, fetchNextPage]);
- 
-   // 👇 تحديث بيانات الموظفين والتصنيفات
-   useEffect(() => {
-     if (!employeesLoading && !isEmployeesError && employeesData?.data?.employees) {
-       setEmployees(employeesData.data.employees);
-     }
- 
-     if (!categoriesLoading && !isCategoriesError && categoriesData?.data?.categories) {
-       setCategories(categoriesData.data.categories);
-       setSubcategories(
-         categoriesData.data.categories.map((cat) => cat.subcategories).flat()
-       );
-     }
-   }, [
-     employeesLoading,
-     isEmployeesError,
-     employeesData,
-     categoriesLoading,
-     isCategoriesError,
-     categoriesData,
-   ]);
- 
- 
-   const handleApplyFilters = (values) => {
-     // تحويل القيم الفارغة إلى undefined لتجنب إرسالها للـ API
-     const filteredValues = Object.fromEntries(
-       Object.entries(values).filter(([_, v]) => v != null && v !== "")
-     );
-     setFilters(filteredValues);
-     closeFilterModal();
-   };
- 
-   const handleResetFilters = () => {
-     setFilters({});
-     form.reset();
-     setFilters({});
-     filterForm.reset();         // 👈 إعادة تعيين الحقول
-     closeFilterModal();
-     // إذا كنت تريد إعادة تعيين الحقول في المودال
-   };
-   
-     useEffect(() => {
-       const handleScroll = () => {
-         setIsSticky(window.scrollY > 150);
-       };
-   
-       window.addEventListener("scroll", handleScroll);
-   
-       return () => window.removeEventListener("scroll", handleScroll);
-     }, []);
-   
-   if (employeesLoading || categoriesLoading) {
-     return (
-       <Center
-         style={{
-           position: "absolute",
-           top: "50%",
-           left: "50%",
-           transform: "translate(-50%, -50%)",
-         }}
-       >
-         <Loader size="md" />
-       </Center>
-     );
-   }
- 
-   if (isError) {
-     return <p>Error: {error.message}</p>;
-   }
- 
+  const { user } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filters, setFilters] = useState({});
+  const [openedFilterModal, { open: openFilterModal, close: closeFilterModal }] = useDisclosure(false);
+  const [sortBy, setSortBy] = useState("newest");
+  const sortOptions = [
+    { value: "newest", label: "Newest" },
+    { value: "oldest", label: "Oldest" },
+    { value: "highest", label: "Highest price" },
+    { value: "lowest", label: "Lowest price" },
+  ];
+  const [isSticky, setIsSticky] = useState(false);
+
+  const transactionOptions = [
+    { value: "all", label: "All" },
+    { value: "rent", label: "For Rent" },
+    { value: "buy", label: "For Sale" },
+    { value: "booking", label: "Booking" }
+  ];
+
+  const [transactionType, setTransactionType] = useState("all");
+  const listing_type = transactionType; // ✅ Define it first
+
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching
+  } = useProperties(listing_type, sortBy, filters, searchTerm); // 👈 تمرير الفلتر
+
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const {
+    data: employeesData,
+    isLoading: employeesLoading,
+    isError: isEmployeesError,
+    error: employeesError,
+  } = useEmployees();
+
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    isError: isCategoriesError,
+    error: categoriesError,
+  } = useCategories();
+
+  const [employees, setEmployees] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+
+  const [opened, { open, close }] = useDisclosure(false);
+  const { t } = useTranslation();
+  const filterForm = useForm({
+    initialValues: {
+      location: "",
+      rooms: "",
+      bathrooms: "",
+      areaMin: "",
+      areaMax: "",
+      priceMin: "",
+      priceMax: "",
+      category: "",
+      subcategory: "",
+    },
+  });
+  const loadMoreRef = useRef(null);
+
+
+
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !fetchNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage, fetchNextPage]);
+
+
+  // 👇 Intersection Observer للتحميل اللانهائي
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isLoading) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: "0px 0px 200px 0px" }
+    );
+
+    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+
+    return () => {
+      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
+    };
+  }, [hasNextPage, isLoading, fetchNextPage]);
+
+  // 👇 تحديث بيانات الموظفين والتصنيفات
+  useEffect(() => {
+    if (!employeesLoading && !isEmployeesError && employeesData?.data?.employees) {
+      setEmployees(employeesData.data.employees);
+    }
+
+    if (!categoriesLoading && !isCategoriesError && categoriesData?.data?.categories) {
+      setCategories(categoriesData.data.categories);
+      setSubcategories(
+        categoriesData.data.categories.map((cat) => cat.subcategories).flat()
+      );
+    }
+  }, [
+    employeesLoading,
+    isEmployeesError,
+    employeesData,
+    categoriesLoading,
+    isCategoriesError,
+    categoriesData,
+  ]);
+
+
+  const handleApplyFilters = (values) => {
+    // تحويل القيم الفارغة إلى undefined لتجنب إرسالها للـ API
+    const filteredValues = Object.fromEntries(
+      Object.entries(values).filter(([_, v]) => v != null && v !== "")
+    );
+    setFilters(filteredValues);
+    closeFilterModal();
+  };
+
+  const handleResetFilters = () => {
+    setFilters({});
+    form.reset();
+    setFilters({});
+    filterForm.reset();         // 👈 إعادة تعيين الحقول
+    closeFilterModal();
+    // إذا كنت تريد إعادة تعيين الحقول في المودال
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 150);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  if (employeesLoading || categoriesLoading) {
+    return (
+      <Center
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <Loader size="md" />
+      </Center>
+    );
+  }
+
+  if (isError) {
+    return <p>Error: {error.message}</p>;
+  }
+
   return (
 
-    
+
     <>
       <Card className={classes.mainContainer} radius="lg">
         <div>
@@ -229,12 +230,9 @@ function PropertiesSupervisor() {
                 />
                 <Search />
               </div>
-              <button className={classes.add} onClick={openFilterModal}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 7H19M5 12H19M5 17H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-                &nbsp;
-              </button>
+              <span className={classes.add} onClick={openFilterModal}>
+                <FilterIcon />
+              </span>
             </div>
 
 
@@ -318,7 +316,7 @@ function PropertiesSupervisor() {
                     },
                   },
                 }}
-              /> 
+              />
             </div>
           </div>
         </header>
@@ -469,7 +467,7 @@ function PropertiesSupervisor() {
 
       />
     </>
-  
+
 
 
   );

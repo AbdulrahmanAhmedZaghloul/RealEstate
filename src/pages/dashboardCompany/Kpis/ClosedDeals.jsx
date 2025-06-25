@@ -32,6 +32,8 @@ function ClosedDeals({ timeFrame, month, year }) {
     }, [
         companyKPIsData,
     ]);
+    console.log(data);
+    
     return (
         <>
 
@@ -48,9 +50,7 @@ function ClosedDeals({ timeFrame, month, year }) {
                         <div
                             className={classes.cardCount}
                         >
-                            {data?.contracts?.total_sales +
-                                data?.contracts?.total_rentals +
-                                data?.contracts?.total_bookings}
+                            {data?.total_contracts}
                         </div>
                         <div
                             className={classes.cardRevenue}

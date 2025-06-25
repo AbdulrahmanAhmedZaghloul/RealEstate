@@ -12,11 +12,13 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import axiosInstance from "../../api/config";
 import { useState } from "react";
+import { useAuth } from "../../context/authContext";
 // import { validateSaudiPhoneNumber } from "../../utils/saudiPhoneNumberVaبlidator";
 
 export default function EditContractModal({ opened, onClose, contract, onEditSuccess }) {
     const [loading, setLoading] = useState(false);
 
+    const { user } = useAuth();
     const form = useForm({
         initialValues: {
             title: contract?.title || "",
@@ -77,9 +79,13 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
             setLoading(true);
             try {
                 await axiosInstance.post(`contracts/${contract.id}`, formData, {
+                    // headers: {
+                    //     "Content-Type": "multipart/form-data",
+                    //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    // },
                     headers: {
                         "Content-Type": "multipart/form-data",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        Authorization: `Bearer ${user.token}`
                     },
                 });
                 notifications.show({
@@ -126,7 +132,7 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
 
                     {/* Down Payment */}
                     <NumberInput label="Down Payment"
-                     {...form.getInputProps("down_payment")}
+                        {...form.getInputProps("down_payment")}
 
 
                         placeholder="Enter the down payment of the contract"
@@ -229,7 +235,7 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
                     {form.values.contract_type === "sale" ? (
                         // عرض فقط Release Date في حالة البيع
                         <>
-                     
+
                             <TextInput
                                 type="date"
                                 label="Release Date"

@@ -18,11 +18,11 @@ function Notifications() {
   const [opened, setOpened] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [notificationToDelete, setNotificationToDelete] = useState(null);
-  const { employeeId, setEmployeeId } = useContext(EmployeeContext);
+  const { employeeId } = useContext(EmployeeContext);
 
   const { user } = useAuth();
   const navigate = useNavigate();
-
+  const token = user.token
   const {
     data,
     isLoading,
@@ -31,9 +31,12 @@ function Notifications() {
   } = useNotifications();
 
   const notifications = data?.data?.notifications?.data || [];
- 
-  
-  useNotificationSocket(employeeId);
+  // console.log(notifications);
+ const newListingNotifications = notifications.filter(
+  (notif) => notif.data.type 
+);
+
+  useNotificationSocket(employeeId, newListingNotifications);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -116,4 +119,6 @@ function Notifications() {
 }
 
 export default Notifications;
- 
+
+
+

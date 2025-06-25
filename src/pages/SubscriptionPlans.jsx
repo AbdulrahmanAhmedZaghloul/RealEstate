@@ -1,6 +1,6 @@
 // SubscriptionPlans.jsx
 import {
-  Card, Button, Group, Text, Badge, Center, Switch, Modal, Grid, GridCol,
+  Card, Button, Group, Text,   Center, Switch, Modal, Grid, GridCol,
 } from "@mantine/core";
 import { useState, useEffect } from "react";
 import axiosInstance from "../api/config";

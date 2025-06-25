@@ -280,6 +280,7 @@ setEmployeeId(idNot)
   return (
     <>
       <Card className={classes.mainContainer} radius="lg">
+        
         <div className={classes.mainThemeToggle}>
           <BurgerButton />
           <span className={classes.title}>{t.profile}</span>
@@ -288,7 +289,9 @@ setEmployeeId(idNot)
             <Notifications />
           </div>
         </div>
+        
         <Card radius="lg" mt="16px" className={classes.profileContainer}>
+
           <Group>
             <div className={classes.AvatarBox}>
               <div className={classes.Avatardiv}>
@@ -321,6 +324,7 @@ setEmployeeId(idNot)
               </div>
             </div>
           </Group>
+          
           <div>
             <Grid>
               <GridCol
@@ -593,6 +597,7 @@ setEmployeeId(idNot)
               </Button>
             </Modal>
           </Modal>
+
         </Card>
         {/* <ProfilePlane /> */}
       </Card>

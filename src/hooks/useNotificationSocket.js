@@ -9,6 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const useNotificationSocket = (employeeId,token) => {
   const queryClient = useQueryClient();
+console.log(token);
 
   useEffect(() => {
     if (!employeeId) return;

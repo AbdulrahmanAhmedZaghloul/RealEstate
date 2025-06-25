@@ -59,6 +59,7 @@ const EditStaffModal = ({
           },
         }}
       >
+        
         <div style={{ padding: "10px" }}>
 
           {/* Image Upload with Preview */}
@@ -107,45 +108,6 @@ const EditStaffModal = ({
                 };
                 reader.readAsDataURL(file);
               }}
-
-              // onChange={(e) => {
-              //   const file = e.target.files[0];
-              //   if (!file) return;
-
-              //   // التحقق من أن الملف هو صورة فقط
-              //   if (!file.type.startsWith("image/")) {
-              //     notifications.show({
-              //       title: "Error",
-              //       message: "Only image files are allowed.",
-              //       color: "red",
-              //     });
-              //     return;
-              //   }
-
-              //   // التحقق من الحجم - لا يزيد عن 2 ميجا بايت
-              //   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-              //   if (file.size > MAX_FILE_SIZE) {
-              //     notifications.show({
-              //       title: "Error",
-              //       message: "Image size should not exceed 2 MB.",
-              //       color: "red",
-              //     });
-              //     return;
-              //   }
-
-              //   // تحديث حالة المستخدم بإضافة الصورة الجديدة
-              //   setEditUser({ ...editUser, image: file });
-
-              //   // قراءة الصورة وإظهارها كـ preview
-              //   const reader = new FileReader();
-              //   reader.onload = (e) => {
-              //     setEditUser((prev) => ({
-              //       ...prev,
-              //       picture_url: e.target.result, // نستخدم picture_url لعرض الصورة
-              //     }));
-              //   };
-              //   reader.readAsDataURL(file);
-              // }}
 
               style={{
                 opacity: 0,

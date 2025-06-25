@@ -419,7 +419,45 @@ function Staff() {
 
   return (
     <>
-      <Card className={classes.mainContainer} radius="lg">
+    <AddStaffModal
+          opened={addModalOpened}
+          onClose={closeAddModal}
+          onAdd={handleAddUser}
+          loading={isAddUserLoading}
+          supervisors={supervisors}
+          newUser={newUser}
+          setNewUser={setNewUser}
+          errors={errors}
+          setErrors={setErrors}
+          handleFileChange={handleFileChange}
+          setPreviewImage={setPreviewImage}
+          previewImage={previewImage}
+        />
+
+        <EditStaffModal
+          opened={editModalOpened}
+          onClose={closeEditModal}
+          onEdit={handleUpdateUser}
+          loading={isEditUserLoading}
+          supervisors={supervisors}
+          editUser={editUser}
+          setEditUser={setEditUser}
+          errors={errors}
+          handleFileChange={handleFileChange}
+          currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
+        />
+
+        <DeleteEmployeeModal
+          opened={deleteModalOpened}
+          onClose={() => {
+            closeDeleteModal();
+            setEmployeeToDelete(null); // Clear the selected employee if modal is closed
+          }}
+          onDelete={confirmDeleteUser} // Call the new confirmDeleteUser function
+          loading={isRemoveUserLoading}
+        />
+        
+      <Card radius="lg">
         <div>
           <BurgerButton />
           <span style={{}} className={classes.title}>
@@ -1040,45 +1078,9 @@ function Staff() {
             )}
           </Table>
         </Table.ScrollContainer>
+
+        
       </Card>
-
-      <AddStaffModal
-        opened={addModalOpened}
-        onClose={closeAddModal}
-        onAdd={handleAddUser}
-        loading={isAddUserLoading}
-        supervisors={supervisors}
-        newUser={newUser}
-        setNewUser={setNewUser}
-        errors={errors}
-        setErrors={setErrors}
-        handleFileChange={handleFileChange}
-        setPreviewImage={setPreviewImage}
-        previewImage={previewImage}
-      />
-
-      <EditStaffModal
-        opened={editModalOpened}
-        onClose={closeEditModal}
-        onEdit={handleUpdateUser}
-        loading={isEditUserLoading}
-        supervisors={supervisors}
-        editUser={editUser}
-        setEditUser={setEditUser}
-        errors={errors}
-        handleFileChange={handleFileChange}
-        currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
-      />
-
-      <DeleteEmployeeModal
-        opened={deleteModalOpened}
-        onClose={() => {
-          closeDeleteModal();
-          setEmployeeToDelete(null); // Clear the selected employee if modal is closed
-        }}
-        onDelete={confirmDeleteUser} // Call the new confirmDeleteUser function
-        loading={isRemoveUserLoading}
-      />
     </>
   );
 }

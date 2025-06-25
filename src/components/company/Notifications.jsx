@@ -12,8 +12,7 @@ import { useNavigate } from "react-router-dom";
 import NotificationDeleteModal from "../modals/Notification/NotificationDeleteModal";
 import useNotificationSocket from "../../hooks/useNotificationSocket";
 import { EmployeeContext } from "../../context/EmployeeContext";
-// import useNotificationSocket from "../../hooks/useNotificationSocket"; // ✅ أضفنا الهوك الجديد
-
+ 
 function Notifications() {
   const [opened, setOpened] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);

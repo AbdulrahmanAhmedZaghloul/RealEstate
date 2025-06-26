@@ -6,16 +6,18 @@
   padding: 1rem;
   border-bottom: 1px solid gainsboro;
 }
-.divhidden{ 
-overflow-x: hidden;
+
+.divhidden {
+  overflow-x: hidden;
 }
-.login {  
+
+.login {
   z-index: 989;
   display: flex;
   justify-content: end;
 }
 
-.login button { 
+.login button {
   padding-top: 8px;
   padding-right: 20px;
   padding-bottom: 8px;
@@ -32,6 +34,7 @@ overflow-x: hidden;
   background-color: transparent !important;
   z-index: 989;
 }
+
 .Choose {
   font-family: Inter;
   font-weight: 600;
@@ -80,16 +83,17 @@ overflow-x: hidden;
   position: absolute;
   top: 120px;
   right: 0px;
-  z-index: 321;
+  z-index: 1;
   border-radius: 100%;
   overflow: hidden;
   width: 500px;
   height: 500px;
 }
+
 .positionleft img {
-  
+
   position: absolute;
-   right: -50px;
+  right: -50px;
   border-radius: 100%;
   width: 500px;
   height: 500px;
@@ -105,11 +109,11 @@ overflow-x: hidden;
   position: absolute;
   top: 190px;
   left: -250px;
-  z-index: 321;
+  z-index: 1;
   border-radius: 100%;
 }
 
-.zIndex{
+.zIndex {
   position: relative;
   z-index: 123123123131232;
 }

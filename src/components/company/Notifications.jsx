@@ -62,7 +62,7 @@ function Notifications() {
               cursor:"pointer",
               padding:"10px"
             }} onClick={() => setOpened(false)}>
-        
+              {/* SVG Close */}
               x
             </span>
           </Box>

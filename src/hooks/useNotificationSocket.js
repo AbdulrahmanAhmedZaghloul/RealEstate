@@ -7,9 +7,9 @@ import { useEffect } from "react";
 import Pusher from "pusher-js";
 import { useQueryClient } from "@tanstack/react-query";
 
-const useNotificationSocket = (employeeId, token) => {
+const useNotificationSocket = (employeeId,token) => {
   const queryClient = useQueryClient();
-  console.log(token);
+console.log(token);
 
   useEffect(() => {
     if (!employeeId) return;
@@ -29,15 +29,12 @@ const useNotificationSocket = (employeeId, token) => {
     });
 
     // ✅ Laravel default private channel format
-    const channel = pusher.subscribe(`private-App.Models.User.${employeeId}`);
-    console.log(channel);
+    const channel = pusher.subscribe(`chummy-flower-127.${employeeId}`);
 
     // ✅ Listen to notification broadcast event
-    channel.bind("Illuminate\\Notifications\\Events\\BroadcastNotificationCreated", (data) => {
+    channel.bind("new_listing", (data) => {
       console.log("📨 Real-time notification received:", data);
-  if (data.type === 'new_listing') {
-        queryClient.invalidateQueries(["notifications"]);
-    }
+
       // 🔁 Re-fetch notifications list
       queryClient.invalidateQueries(["notifications"]);
     });
@@ -47,8 +44,6 @@ const useNotificationSocket = (employeeId, token) => {
     });
 
     return () => {
-      // pusher.leave();
-
       channel.unbind_all();
       channel.unsubscribe();
       pusher.disconnect();
@@ -57,3 +52,54 @@ const useNotificationSocket = (employeeId, token) => {
 };
 
 export default useNotificationSocket;
+
+
+// // useNotificationSocket.js
+
+// import { useEffect } from "react";
+// import Pusher from "pusher-js";
+// import { useQueryClient } from "@tanstack/react-query";
+
+// const useNotificationSocket = (employeeId, newListingNotifications) => {
+//   const queryClient = useQueryClient();
+
+//   useEffect(() => {
+//     if (!employeeId) return;
+
+//     Pusher.logToConsole = true;
+//     const pusher = new Pusher("4552575846fabb786946", {
+//       cluster: "eu",
+//       encrypted: true,
+//     });
+//     const channel = pusher.subscribe(`chummy-flower-127.${employeeId}`);
+//     // console.log(notifications.data);
+
+//     channel.bind(`${newListingNotifications}`, (data) => {
+//       console.log("📨 New notification received!", data);
+//     });
+
+//     pusher.connection.bind("error", (err) => {
+//       console.error("🚨 Pusher connection error", err);
+//     });
+//     //  channel.bind_global((eventName, data) => {
+//     //   console.group("📬 New Event Received");
+//     //   console.log("Event Name:", eventName);
+//     //   console.log("Data:", data);
+//     //   console.groupEnd();
+
+//     //   // 🔁 تحديث قائمة الإشعارات إذا كان هذا حدث إشعار حقيقي
+//     //   if (data && data.notification) {
+//     //     queryClient.invalidateQueries(["notifications"]);
+//     //   }
+//     // });
+
+//     return () => {
+//       channel.unbind_all();
+//       channel.unsubscribe();
+//       pusher.disconnect();
+//     };
+//   }, [employeeId, queryClient]);
+// };
+
+// export default useNotificationSocket;
+

@@ -300,6 +300,43 @@ function Properties() {
                 }}
               />
               <Select
+  // label="Selling Status"
+  placeholder="Filter by selling status"
+  data={[
+    { value: "", label: "All" },
+    { value: "0", label: "Not Sold" },
+    { value: "1", label: "Sold" },
+  ]}
+  value={filters.selling_status || ""}
+  onChange={(value) => setFilters((prev) => ({ ...prev, selling_status: value }))}
+  radius="md"
+  size="sm"
+  styles={{
+    input: {
+      width: "150px",
+      height: "48px",
+      borderRadius: "15px",
+      border: "1px solid var(--color-border)",
+      padding: "14px 24px",
+      fontSize: "14px",
+      fontWeight: "500",
+      cursor: "pointer",
+      backgroundColor: "var(--color-7)",
+    },
+    dropdown: {
+      borderRadius: "15px",
+      border: "1.5px solid var(--color-border)",
+      backgroundColor: "var(--color-7)",
+    },
+    item: {
+      color: "var(--color-4)",
+      "&[data-selected]": {
+        color: "white",
+      },
+    },
+  }}
+/>
+              <Select
                 rightSection={<Dropdown />}
                 value={transactionType}
                 onChange={setTransactionType}

@@ -1,7 +1,7 @@
 
 
   // useNotifications.js
-  import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+  import {  useQuery } from "@tanstack/react-query";
   import axiosInstance from "../../../api/config"; 
   import { useAuth } from "../../../context/authContext";
 

@@ -58,9 +58,13 @@ function Notifications() {
         <Popover.Dropdown className={classes.positionBox}>
           <Box className={classes.positionFlex}>
             <span>Notifications</span>
-            <Button size="xxl" variant="subtle" onClick={() => setOpened(false)}>
-              {/* SVG Close */}
-            </Button>
+            <span style={{
+              cursor:"pointer",
+              padding:"10px"
+            }} onClick={() => setOpened(false)}>
+        
+              x
+            </span>
           </Box>
 
           {isLoading && <p>Loading...</p>}

@@ -28,6 +28,7 @@ import downArrow from "../../assets/downArrow.svg";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 import { useLocation } from "react-router-dom";
+import Dropdown from "../icons/dropdown";
 
 const AddPropertyModal = React.memo(
   ({
@@ -127,12 +128,12 @@ const AddPropertyModal = React.memo(
           }
           return null;
         },
-          employee_id: (value) =>
-      user.role === "employee" || isMarketerPropertiesPage
-        ? null
-        : value
-        ? null
-        : "Employee is required",
+        employee_id: (value) =>
+          user.role === "employee" || isMarketerPropertiesPage
+            ? null
+            : value
+              ? null
+              : "Employee is required",
         category_id: (value) =>
           value ? null : "Property category is required",
         subcategory_id: (value) => (value ? null : "Property type is required"),
@@ -173,38 +174,38 @@ const AddPropertyModal = React.memo(
       };
     }, []);
 
-    const getCurrentLocation = () => {
-      if (!navigator.geolocation) {
-        setError("Geolocation is not supported by your browser");
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          try {
-            const response = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-            );
-            const data = await response.json();
-            const address = data.address;
-            const formattedLocation = `${address.suburb || address.neighbourhood || ""
-              }, ${address.city || address.town || address.village || ""}, ${address.state || ""
-              }`;
-            setSearchValue(formattedLocation);
-            form.setFieldValue("location", formattedLocation);
-            setRegion(address.state || "");
-            setCity(address.city || address.town || address.village || "");
-            setDistrict(address.suburb || address.neighbourhood || "");
-            setError("");
-          } catch (err) {
-            setError("Could not fetch location data");
-          }
-        },
-        () => {
-          setError("Location access denied by user");
-        }
-      );
-    };
+    // const getCurrentLocation = () => {
+    //   if (!navigator.geolocation) {
+    //     setError("Geolocation is not supported by your browser");
+    //     return;
+    //   }
+    //   navigator.geolocation.getCurrentPosition(
+    //     async (position) => {
+    //       const { latitude, longitude } = position.coords;
+    //       try {
+    //         const response = await fetch(
+    //           `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+    //         );
+    //         const data = await response.json();
+    //         const address = data.address;
+    //         const formattedLocation = `${address.suburb || address.neighbourhood || ""
+    //           }, ${address.city || address.town || address.village || ""}, ${address.state || ""
+    //           }`;
+    //         setSearchValue(formattedLocation);
+    //         form.setFieldValue("location", formattedLocation);
+    //         setRegion(address.state || "");
+    //         setCity(address.city || address.town || address.village || "");
+    //         setDistrict(address.suburb || address.neighbourhood || "");
+    //         setError("");
+    //       } catch (err) {
+    //         setError("Could not fetch location data");
+    //       }
+    //     },
+    //     () => {
+    //       setError("Location access denied by user");
+    //     }
+    //   );
+    // };
 
     const handleSubmit = (values) => {
       const selectedAmenities = [
@@ -237,7 +238,7 @@ const AddPropertyModal = React.memo(
           { name, category_id: categoryId },
           { headers: { Authorization: `Bearer ${user.token}` } }
         );
-response        
+        response
         return response.data;
       } catch (error) {
         console.error("Failed to add amenity:", error);
@@ -252,7 +253,7 @@ response
           headers: { Authorization: `Bearer ${user.token}` },
         });
         console.log(response);
-        
+
         return response.data;
       } catch (error) {
         console.error("Failed to fetch amenities:", error);
@@ -779,7 +780,52 @@ response
 
             <Grid.Col span={6}>
               {/* Location */}
-              <Autocomplete
+
+              <Select
+
+                rightSection={<Dropdown />}
+                label="Location"
+                placeholder="Enter property location"
+                data={locationOptions.map((loc) => ({
+                  value: loc.value,
+                  label: loc.value,
+                }))}
+                value={searchValue}
+                onChange={setSearchValue}
+                onBlur={() => {
+                  const isValidLocation = locationOptions.some(
+                    (loc) => loc.value === searchValue
+                  );
+                  if (isValidLocation) {
+                    const selected = locationOptions.find(
+                      (loc) => loc.value === searchValue
+                    );
+                    if (selected) {
+                      setRegion(selected.region);
+                      setCity(selected.city);
+                      setDistrict(selected.district);
+                    }
+                    form.setFieldValue("location", searchValue);
+                    setLocationError("");
+                  } else {
+                    setSearchValue("");
+                    form.setFieldValue("location", "");
+                    setLocationError("Please select a valid location from the list");
+                    form.setFieldError("location", "Please select a valid location");
+                  }
+                }}
+                error={locationError || form.errors.location}
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
+                }}
+                mb={24}
+                limit={15}
+              />
+
+
+
+              {/* <Autocomplete
                 label="Location"
                 placeholder="Enter property location"
                 data={[
@@ -840,7 +886,7 @@ response
                 }}
                 mb={24}
                 limit={15}
-              />
+              /> */}
 
               {/* Property Category */}
               <Select
@@ -860,7 +906,7 @@ response
                   input: { width: 289, height: 48 },
                   wrapper: { width: 289 },
                 }}
-                rightSection={<img src={downArrow} />}
+                rightSection={<Dropdown />}
                 mb={24}
               />
 
@@ -885,7 +931,7 @@ response
                   input: { width: 289, height: 48 },
                   wrapper: { width: 289 },
                 }}
-                rightSection={<img src={downArrow} />}
+                rightSection={<Dropdown />}
                 mb={24}
               />
 
@@ -904,17 +950,16 @@ response
                   input: { width: 289, height: 48 },
                   wrapper: { width: 289 },
                 }}
-                rightSection={<img src={downArrow} />}
+                rightSection={<Dropdown />}
                 mb={24}
               />
-
-              {console.log(employees)}
-              
 
               {/* Assign Employee */}
               {/* Assign Employee - Only show if user is not an employee */}
               {user.role === "employee" || isMarketerPropertiesPage ? null : (
                 <Select
+
+                  rightSection={<Dropdown />}
                   label="Assign Employee"
                   placeholder="Select an employee"
                   data={employees
@@ -929,31 +974,9 @@ response
                     input: { width: 289, height: 48 },
                     wrapper: { width: 289 },
                   }}
-                  rightSection={<img src={downArrow} />}
                   mb={24}
                 />
               )}
-
-              {/* {user.role === "employee" ? null : (
-                <Select
-                  label="Assign Employee"
-                  placeholder="Select an employee"
-                  data={employees
-                    .filter((employee) => employee.employee_id !== undefined)
-                    .map((employee) => ({
-                      value: String(employee.employee_id),
-                      label: employee.name,
-                    }))}
-                  {...form.getInputProps("employee_id")}
-                  error={form.errors.employee_id}
-                  styles={{
-                    input: { width: 289, height: 48 },
-                    wrapper: { width: 289 },
-                  }}
-                  rightSection={<img src={downArrow} />}
-                  mb={24}
-                />
-              )} */}
 
               {/* Amenities */}
               <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 24 }}>

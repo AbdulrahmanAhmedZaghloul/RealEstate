@@ -37,6 +37,8 @@ import { useForm } from "@mantine/form";
 import Search from "../../components/icons/search";
 import { useInView } from "react-intersection-observer";
 import FilterIcon from "../../components/icons/filterIcon";
+import { useCallback } from "react";
+import FloorsIcon from "../../components/icons/FloorsIcon";
 
 function Properties() {
   const { user } = useAuth();
@@ -105,12 +107,15 @@ function Properties() {
       bathrooms: "",
       area_min: "",
       area_max: "",
+      floors: "",
       price_min: "",
       price_max: "",
       category_id: "",
       subcategory_id: "",
     },
+
   });
+
   const loadMoreRef = useRef(null);
 
   const mutation = useAddProperty(user.token, categories, close);
@@ -180,23 +185,37 @@ function Properties() {
     categoriesData,
   ]);
 
-  const handleApplyFilters = (values) => {
-    // تحويل القيم الفارغة إلى undefined لتجنب إرسالها للـ API
+  // const handleApplyFilters = (values) => {
+  //    const filteredValues = Object.fromEntries(
+  //     Object.entries(values).filter(([_, v]) => v != null && v !== "")
+  //   );
+  //   setFilters(filteredValues);
+  //   closeFilterModal();
+  // };
+  const handleApplyFilters = useCallback((values) => {
     const filteredValues = Object.fromEntries(
       Object.entries(values).filter(([_, v]) => v != null && v !== "")
     );
     setFilters(filteredValues);
     closeFilterModal();
-  };
+  }, [closeFilterModal]);
 
-  const handleResetFilters = () => {
+  // const handleResetFilters = () => {
+  //   setFilters({});
+  //   form.reset();
+  //   setFilters({});
+  //   filterForm.reset(); // 👈 إعادة تعيين الحقول
+  //   closeFilterModal();
+  //   // إذا كنت تريد إعادة تعيين الحقول في المودال
+  // };
+
+
+  const handleResetFilters = useCallback(() => {
     setFilters({});
-    form.reset();
-    setFilters({});
-    filterForm.reset(); // 👈 إعادة تعيين الحقول
+    filterForm.reset();
     closeFilterModal();
-    // إذا كنت تريد إعادة تعيين الحقول في المودال
-  };
+  }, [filterForm, closeFilterModal]);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 150);
@@ -248,20 +267,15 @@ function Properties() {
                 />
                 <Search />
               </div>
-              <span className={classes.add} onClick={openFilterModal}>
-
+              <span className={classes.FilterIcon} onClick={openFilterModal}>
                 <FilterIcon />
-
-
-
-
-
               </span>
             </div>
 
             <div className={classes.addAndSort}>
+
+
               <Select
-                // label="Sort By"
                 placeholder="Choose sorting method"
                 data={sortOptions}
                 value={sortBy}
@@ -299,43 +313,46 @@ function Properties() {
                   },
                 }}
               />
+
               <Select
-  // label="Selling Status"
-  placeholder="Filter by selling status"
-  data={[
-    { value: "", label: "All" },
-    { value: "0", label: "Not Sold" },
-    { value: "1", label: "Sold" },
-  ]}
-  value={filters.selling_status || ""}
-  onChange={(value) => setFilters((prev) => ({ ...prev, selling_status: value }))}
-  radius="md"
-  size="sm"
-  styles={{
-    input: {
-      width: "150px",
-      height: "48px",
-      borderRadius: "15px",
-      border: "1px solid var(--color-border)",
-      padding: "14px 24px",
-      fontSize: "14px",
-      fontWeight: "500",
-      cursor: "pointer",
-      backgroundColor: "var(--color-7)",
-    },
-    dropdown: {
-      borderRadius: "15px",
-      border: "1.5px solid var(--color-border)",
-      backgroundColor: "var(--color-7)",
-    },
-    item: {
-      color: "var(--color-4)",
-      "&[data-selected]": {
-        color: "white",
-      },
-    },
-  }}
-/>
+                rightSection={<Dropdown />}
+                placeholder="Filter by selling status"
+                data={[
+                  { value: "", label: "All" },
+                  { value: "0", label: "Not Sold" },
+                  { value: "1", label: "Sold" },
+                ]}
+                value={filters.selling_status || ""}
+                onChange={(value) => setFilters((prev) => ({ ...prev, selling_status: value }))}
+                radius="md"
+                size="sm"
+                styles={{
+                  input: {
+                    width: "110px",
+                    height: "45px",
+                    borderRadius: "10px",
+                    border: "1px solid var(--color-border)",
+                    padding: "14px",
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    backgroundColor: "var(--color-7)",
+                  },
+                  dropdown: {
+                    borderRadius: "15px",
+                    border: "1.5px solid var(--color-border)",
+                    backgroundColor: "var(--color-7)",
+                  },
+                  item: {
+                    color: "var(--color-4)",
+                    "&[data-selected]": {
+                      color: "white",
+                    },
+                  },
+                }}
+              />
+
               <Select
                 rightSection={<Dropdown />}
                 value={transactionType}
@@ -346,31 +363,25 @@ function Properties() {
                 size="sm"
                 styles={{
                   input: {
-                    width: "132px",
-                    height: "48px",
-                    borderRadius: "15px",
+                    width: "110px",
+                    height: "45px",
+                    borderRadius: "10px",
                     border: "1px solid var(--color-border)",
-                    padding: "14px 24px",
+                    padding: "14px",
                     fontSize: "14px",
                     fontWeight: "500",
                     cursor: "pointer",
                     backgroundColor: "var(--color-7)",
                   },
-
                   dropdown: {
-                    borderRadius: "15px", // Curved dropdown menu
+                    borderRadius: "15px",
                     border: "1.5px solid var(--color-border)",
                     backgroundColor: "var(--color-7)",
                   },
-
-                  wrapper: {
-                    width: "132px",
-                  },
-
                   item: {
-                    color: "var(--color-4)", // Dropdown option text color
+                    color: "var(--color-4)",
                     "&[data-selected]": {
-                      color: "white", // Selected option text color
+                      color: "white",
                     },
                   },
                 }}
@@ -381,7 +392,7 @@ function Properties() {
                 className={classes.add}
                 onClick={open}
               >
-                <AddIcon /> {t.Add}
+                <AddIcon /> {" "} {t.Add}
               </button>
             </div>
           </div>
@@ -417,7 +428,7 @@ function Properties() {
 
                           <p className={classes.listingfor}>
                             {listing.selling_status === 1
-                              ? "sold"
+                              ? `${listing.listing_type} / sold`
                               : listing.listing_type}
                           </p>
                         </div>
@@ -463,6 +474,16 @@ function Properties() {
                             )}
                           </div>
                           <div className={classes.listingUtility}>
+                            {listing.floors > 0 && (
+                              <>
+                                <div className={classes.utilityImage}>
+                                  <FloorsIcon />
+                                </div>
+                                {listing.floors}
+                              </>
+                            )}
+                          </div>
+                          <div className={classes.listingUtility}>
                             <div className={classes.utilityImage}>
                               <Area />
                             </div>
@@ -470,7 +491,7 @@ function Properties() {
                           </div>
                         </div>
                         <div className={classes.listingEmployee}>
-                          {t.Category}: {listing.category} /{" "}
+                          {t.Category}: {listing.category} / {" "}
                           {listing.subcategory.name}
                         </div>
                         <div className={classes.listingEmployee}>

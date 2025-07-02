@@ -98,17 +98,32 @@
   gap: 10px;
 }
 
-.add { 
-  background-color: var(--color-5);
-  border-radius: 15px;
+.add {
+  border-radius: 10px;
   border: 1.5px solid var(--color-border);
   color: var(--color-4);
   font-size: 14px;
-  padding: 12px; 
+  padding: 10px;
+  width: 80px;
   background-color: var(--color-7);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.FilterIcon {
+  border-radius: 10px;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-4);
+  font-size: 14px;
+  padding: 10px;
+  /* width: 80px; */
+  background-color: var(--color-7);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   line-height: 20px;
   font-weight: 500;
 }
@@ -229,7 +244,7 @@ justify-content: center; */
   top: 8px;
   right: 20px;
   background-color: #ffffff;
-  color: var(--color-2);
+  color: var(--color-4);
   font-size: 12px;
   line-height: 20px;
   font-weight: 400;
@@ -303,19 +318,25 @@ justify-content: center; */
 
 .listingUtilities {
   display: flex;
+  gap: 10px;
+  /* justify-content: space-between; */
+  align-items: center;
+  flex-wrap: wrap;
   margin-top: 8px;
 }
 
-.listingUtility {
-  margin-right: 8px;
+.listingUtility { 
   color: #8f9bba;
-  justify-content: center;
-  display: flex;
+  /* display: flex; */
   font-size: 14px;
+
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .utilityImage {
-  margin-right: 8px;
   vertical-align: middle;
   width: auto;
   height: 24px;

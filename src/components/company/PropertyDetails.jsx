@@ -94,7 +94,11 @@ function PropertyDetails() {
         message: "Listing updated successfully!",
         color: "green",
       });
+      fetchListing()
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
       queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
       closeEdit();
     } catch (err) {
       notifications.show({
@@ -139,8 +143,13 @@ function PropertyDetails() {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       navigate("/dashboard/properties");
-      queryClient.invalidateQueries(["listings"]);
 
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      
+      fetchListing()
       notifications.show({
         title: "Success",
         message: "Property deleted successfully!",
@@ -166,11 +175,13 @@ function PropertyDetails() {
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
 
-    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
-    queryClient.invalidateQueries(["listingsRealEstate"]);
-    queryClient.invalidateQueries(["listings"]);
-    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
-          notifications.show({
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      
+      fetchListing()
+      notifications.show({
         title: "Success",
         message: "Listing status updated successfully",
         color: "green",
@@ -265,7 +276,7 @@ function PropertyDetails() {
                             cursor: "pointer",
                           }}
                           src={`${listing.images.find((image) => image?.is_primary)
-                              ?.image_url
+                            ?.image_url
                             }`}
                           alt={listing.title}
                           className={classes.mainImage}

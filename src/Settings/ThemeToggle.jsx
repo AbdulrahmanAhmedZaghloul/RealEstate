@@ -12,13 +12,12 @@ import DarkIcon from "../components/icons/darkIcon";
 import LightIcon from "../components/icons/lightIcon";
 
 export function ThemeToggle() {
-  const { lang, setLang } = useTranslation();
+  const { t, lang, setLang } = useTranslation();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   const [opened, setOpened] = useState(false);
 
-  const location = useLocation(); //  تحديد الصفحة الحالية
-  // console.log(location.pathname);
+  const location = useLocation();
 
   return (
     <>
@@ -33,12 +32,12 @@ export function ThemeToggle() {
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title="Settings"
+        title={t['Settings']}
         centered
         size="xl"
       >
         <Text style={{}} fw={600} mb="xs">
-          Themes
+          {t.Themes}
         </Text>
 
         <Radio.Group value={colorScheme} orientation="vertical">
@@ -50,7 +49,7 @@ export function ThemeToggle() {
                   <Radio
                     color="var(--color-1)"
                     value="light"
-                    label="Light Mode"
+                    label={t['LightMode']}
                   />
                 </div>
               </div>
@@ -63,7 +62,8 @@ export function ThemeToggle() {
                   <Radio
                     color="var(--color-1)"
                     value="dark"
-                    label="Dark Mode"
+                    label={t['DarkMode']}
+
                   />
                 </div>
               </div>
@@ -71,7 +71,7 @@ export function ThemeToggle() {
           </Group>
         </Radio.Group>
         <Text style={{}} fw={600} mb="xs">
-          Language
+          {t.Language}
         </Text>
         <Group mb="lg">
           <button
@@ -83,7 +83,7 @@ export function ThemeToggle() {
             className={classes.languageButton}
             onClick={() => setLang("en")}
           >
-            English
+            {t.English}
           </button>
 
           <button
@@ -95,10 +95,10 @@ export function ThemeToggle() {
             className={classes.languageButton}
             onClick={() => setLang("ar")}
           >
-            العربية
+            {t.Arabic}
           </button>
         </Group>
-        <Text
+        {/* <Text
           style={{}}
           fw={600}
           mb="xs"
@@ -108,7 +108,8 @@ export function ThemeToggle() {
         >
           Categories 
         </Text>
-        <SettingsCategory />
+        <SettingsCategory /> */}
+
       </Modal>
     </>
   );

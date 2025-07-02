@@ -599,7 +599,10 @@ setEmployeeId(idNot)
           </Modal>
 
         </Card>
-        {/* <ProfilePlane /> */}
+
+
+        <ProfilePlane />
+      
       </Card>
     </>
   );

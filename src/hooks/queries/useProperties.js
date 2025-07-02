@@ -39,7 +39,7 @@ const fetchListings = async ({
   const params = {
     limit: 6,
     cursor,
-     sort_by,
+    sort_by,
     sort_dir,
     ...filters,
   };
@@ -58,7 +58,7 @@ const fetchListings = async ({
   });
 
   return data;
-}; 
+};
 
 
 
@@ -91,4 +91,3 @@ export const useProperties = (
     refetchOnWindowFocus: false,
   });
 };
- 

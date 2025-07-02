@@ -1,4 +1,12 @@
 {
+
+  "Settings": "Settings",
+  "Themes": "Themes",
+  "LightMode": "Light Mode",
+  "DarkMode": "Dark Mode",
+  "Language": "Language",
+  "English": "English",
+  "Arabic": "Arabic",
   "profile": "Profile",
   "Email": "Email",
   "contactNumber": "Contact Number",

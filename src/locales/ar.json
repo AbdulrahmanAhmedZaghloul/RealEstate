@@ -1,4 +1,11 @@
 {
+  "Settings": "إعدادات",
+  "Themes": "الوضع الحالى",
+  "LightMode": "الوضع الفاتح",
+  "DarkMode": "الوضع الداكن",
+  "Language": "اللغه",
+  "English": "الانجليزى",
+  "Arabic": "العربية",
   "profile": "الملف الشخصي",
   "Email": "البريد الإلكتروني",
   "contactNumber": "رقم الهاتف ",
@@ -46,7 +53,6 @@
   "Averagetimeonmarket": "متوسط مدة التواجد في السوق",
   "days": "أيام",
   "Location": "الموقع",
-   
   "Category": "الفئه",
   "CategoryPerformance": "أداء الفئات",
   "TrendsOverTime": "الاتجاهات على مر الزمن",

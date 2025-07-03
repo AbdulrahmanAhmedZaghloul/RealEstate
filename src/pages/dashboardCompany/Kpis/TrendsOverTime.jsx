@@ -9,8 +9,8 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import { notifications } from "@mantine/notifications"; 
-import { useTrendsOverTime } from "../../../hooks/queries/6_useTrendsOverTime"; 
+import { notifications } from "@mantine/notifications";
+import { useTrendsOverTime } from "../../../hooks/queries/6_useTrendsOverTime";
 import { useTranslation } from "../../../context/LanguageContext";
 
 function TrendsOverTime({ timeFrame, month, year }) {
@@ -82,7 +82,14 @@ function TrendsOverTime({ timeFrame, month, year }) {
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={processedTrendsData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+            <XAxis
+              dataKey="month"
+              tick={{ fontSize: 10 }}
+              tickFormatter={(value) => {
+                // استخراج رقم الشهر من "2025-04" -> "04" -> 4
+                return parseInt(value.split("-")[1], 10); // مثلاً: 2025-04 → 4
+              }}
+            />
             <YAxis />
             <Tooltip />
             <Line dataKey="total_contracts" stroke="#82ca9d" strokeWidth={2} />

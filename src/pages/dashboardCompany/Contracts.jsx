@@ -28,6 +28,10 @@ import Search from "../../components/icons/search";
 import Dropdown from "../../components/icons/dropdown";
 import FilterContractsModal from "../../components/modals/filterContractsModal";
 import FilterIcon from "../../components/icons/filterIcon";
+import Area from "../../components/icons/area";
+import FloorsIcon from "../../components/icons/FloorsIcon";
+import Bathrooms from "../../components/icons/bathrooms";
+import Rooms from "../../components/icons/rooms";
 
 function Contracts() {
   const navigate = useNavigate();
@@ -188,14 +192,11 @@ function Contracts() {
               /> */}
 
               <Select
-              value={filters.contract_type}
-                // value={filters.contract_type} //filterscontract_type
-                // onChange={(e) =>
-                //   setFilters((prev) => ({ ...prev, contract_type: e.target.value }))
-                // }
-                  onChange={(value) =>
-    setFilters((prev) => ({ ...prev, contract_type: value }))
-  }
+                value={filters.contract_type}
+
+                onChange={(value) =>
+                  setFilters((prev) => ({ ...prev, contract_type: value }))
+                }
                 rightSection={<Dropdown />}
 
                 radius="sm"
@@ -247,7 +248,7 @@ function Contracts() {
 
         <div className={classes.contractList}>
           {isLoading ? (
-            <Center>
+            <Center className={classes.notFound}>
               <Loader size="xl" />
             </Center>
           ) : contracts.length === 0 ? (
@@ -280,6 +281,7 @@ function Contracts() {
                     </p>
                   </div>
                 </GridCol>
+
                 <GridCol
                   span={{ base: 12, lg: 8, md: 6, sm: 12 }}
                   className={classes.contractDetails}
@@ -296,14 +298,66 @@ function Contracts() {
                         <span className="icon-saudi_riyal">&#xea; </span>{" "}
                         {parseFloat(contract.price)?.toLocaleString()}
                       </span>
+
+                      <div className={classes.downPaymentBadge}>
+                        {contract.down_payment} % {t.DownPayment}
+                      </div>
                     </div>
                   </div>
+
                   <div className={classes.contractTitle}>{contract.title}</div>
+
+                        <div className={classes.listingUtilities}>
+                          <div className={classes.listingUtility}>
+                            {contract.real_estate.rooms > 0 && (
+                              <>
+                                <div className={classes.utilityImage}>
+                                  <Rooms />
+                                </div>
+                                {contract.real_estate.rooms}
+                              </>
+                            )}
+                          </div>
+                          <div className={classes.listingUtility}>
+                            {contract.real_estate.bathrooms > 0 && (
+                              <>
+                                <div className={classes.utilityImage}>
+                                  <Bathrooms />
+                                </div>
+                                {contract.real_estate.bathrooms}
+                              </>
+                             )} 
+                          </div>
+                          {/* <div className={classes.listingUtility}>
+                            {contract.real_estate.floors > 0 && (
+                              <>
+                                <div className={classes.utilityImage}>
+                                  <FloorsIcon />
+                                </div>
+                                {contract.real_estate.floors}
+                              </>
+                             )} 
+                          </div> */}
+                          <div className={classes.listingUtility}>
+                            <div className={classes.utilityImage}>
+                              <Area />
+                            </div>
+                            {contract.real_estate.area} sqm
+                          </div>
+                        </div>
                   <div className={classes.contractEmployee}>
                     <span>
                       {t.Customer}: {contract.customer_name}
                     </span>
                   </div>
+                  
+
+                  <div className={classes.contractEmployee}>
+                    <span>
+                    {contract.real_estate.location}
+                    </span>
+                  </div>
+                  
                   <div className={classes.contractDate}>
                     {Math.floor(
                       (new Date() - new Date(contract.creation_date)) /

@@ -44,11 +44,20 @@ function SellingKpi({ timeFrame, month, year }) {
     "#A4036F",
   ];
 
+  console.log(data);
+  
   // Pie Chart Data
-  const incomePieData = [
-    { name: "Selling", value: data?.income?.selling },
-    { name: "Renting", value: data?.income?.renting },
-    { name: "Booking", value: data?.income?.booking },
+  // const incomePieData = [
+  //   { name: "Selling", value: data?.income?.selling },
+  //   { name: "Renting", value: data?.income?.renting },
+  //   { name: "Booking", value: data?.income?.booking },
+  // ];
+
+  
+    const incomePieData = [
+    { name: "Selling", value: data?.revenue?.sales_revenue },
+    { name: "Renting", value: data?.revenue?.rental_revenue },
+    { name: "Booking", value: data?.revenue?.booking_revenue },
   ];
 
   // Revenue Data

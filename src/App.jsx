@@ -57,6 +57,7 @@ import AnalyticsMarketer from "./pages/dashboardMarketer/AnalyticsMarketer.jsx";
 import ProfileMarketer from "./pages/dashboardMarketer/ProfileMarketer.jsx";
 import PublicContractView from "./pages/PublicContractView.jsx";
 import { EmployeeProvider } from "./context/EmployeeContext.jsx";
+import ShareRealEstate from "./pages/ShareRealEstate.jsx";
 
 function App() {
   return (
@@ -81,6 +82,11 @@ function App() {
               <Route
                 path="/ShareContracts/:path"
                 element={<PublicContractView />}
+              />
+
+              <Route
+                path="/ShareRealEstate/:path"
+                element={<ShareRealEstate />}
               />
               <Route
                 path="/forgot-password"

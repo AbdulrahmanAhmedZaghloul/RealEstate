@@ -1,158 +1,192 @@
-// FilterContractsModal.jsx
+import { Modal, TextInput, Select, Button, Group, Divider, Stack } from '@mantine/core';
+// import { DateRangePicker } from '@mantine/dates';
+// import { IconCalendar } from '@ftabler/icons-react';
+import React from 'react';
 
-import { Modal, Grid, TextInput, Select, Button, Group } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import classes from "../../styles/modals.module.css";
-import { useMediaQuery } from "@mantine/hooks";
-
-const FilterContractsModal = ({
-  opened,
-  onClose,
-  onFilter,
-  onReset,
-  initialFilters = {},
-}) => {
-  const filterForm = useForm({
-    initialValues: {
-      search: initialFilters.search || "",
-      title: initialFilters.title || "",
-      customer_name: initialFilters.customer_name || "",
-      employee_name: initialFilters.employee_name || "",
-      location: initialFilters.location || "",
-      status: initialFilters.status || "all",
-      contract_type: initialFilters.contract_type || "all",
-      creation_date: initialFilters.creation_date || "",
-      effective_date: initialFilters.effective_date || "",
-      expiration_date: initialFilters.expiration_date || "",
-    },
+const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilters }) => {
+  const [filters, setFilters] = React.useState({
+    search: '',
+    title: '',
+    customer_name: '',
+    location: '',
+    contract_type: 'all',
+    employee_name: '',
+    category_id: '',
+    date_from: null,
+    date_to: null,
+    status: 'all',
+    ...initialFilters,
   });
 
-  const handleSubmit = (values) => {
-    onFilter(values);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleDateChange = (dates) => {
+    const [startDate, endDate] = dates;
+    setFilters((prev) => ({
+      ...prev,
+      date_from: startDate ? startDate.toISOString().split('T')[0] : null,
+      date_to: endDate ? endDate.toISOString().split('T')[0] : null,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onFilter(filters);
     onClose();
   };
 
   const handleReset = () => {
-    filterForm.reset();
     onReset();
+    setFilters({
+      search: '',
+      title: '',
+      customer_name: '',
+      location: '',
+      contract_type: 'all',
+      employee_name: '',
+      category_id: '',
+      date_from: null,
+      date_to: null,
+      status: 'all',
+    });
   };
-
-  const isMobile = useMediaQuery(`(max-width: 991px)`);
 
   return (
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Advanced Filters"
-      size="md"
-      radius="lg"
-      styles={{
-        title: {
-          fontSize: 20,
-          fontWeight: 600,
-          color: "var(--color-3)",
-        },
-      }}
+      title="Contract Filters"
+      centered
+      size="lg"
+      padding="xl"
     >
-      <form onSubmit={filterForm.onSubmit(handleSubmit)} style={{ padding: isMobile ? "20px" : "20px 48px" }}>
-        <Grid>
-          {/* Search */}
-          <Grid.Col span={12}>
-            <TextInput
-              label="General Search"
-              placeholder="Search by title, name or phone"
-              {...filterForm.getInputProps("search")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col>
+      <form onSubmit={handleSubmit}>
+        <Stack gap="md">
+          {/* General Search */}
+          {/* <TextInput
+            label="Search"
+            placeholder="Search by any field"
+            name="search"
+            value={filters.search}
+            onChange={handleInputChange}
+          /> */}
 
-          {/* Title */}
-          {/* <Grid.Col span={12}>
-            <TextInput
-              label="Title"
-              placeholder="Enter contract title"
-              {...filterForm.getInputProps("title")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col> */}
+          {/* Contract Title */}
+          <TextInput
+            label="Contract Title"
+            placeholder="Enter contract title"
+            name="title"
+            value={filters.title}
+            onChange={handleInputChange}
+          />
 
           {/* Customer Name */}
-          <Grid.Col span={12}>
-            <TextInput
-              label="Customer Name"
-              placeholder="Enter customer name"
-              {...filterForm.getInputProps("customer_name")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col>
-
-          {/* Employee Name */}
-          {/* <Grid.Col span={12}>
-            <TextInput
-              label="Employee Name"
-              placeholder="Enter employee name"
-              {...filterForm.getInputProps("employee_name")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col> */}
+          <TextInput
+            label="Customer Name"
+            placeholder="Enter customer name"
+            name="customer_name"
+            value={filters.customer_name}
+            onChange={handleInputChange}
+          />
 
           {/* Location */}
-          <Grid.Col span={12}>
-            <TextInput
-              label="Location"
-              placeholder="Enter property location"
-              {...filterForm.getInputProps("location")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col>
+          <TextInput
+            label="Location"
+            placeholder="Enter location"
+            name="location"
+            value={filters.location}
+            onChange={handleInputChange}
+          />
 
           {/* Contract Type */}
-          {/* <Grid.Col span={12}>
-            <Select
-              label="Contract Type"
-              placeholder="Select type"
-              data={[
-                { value: "all", label: "All" },
-                { value: "sale", label: "Sale" },
-                { value: "rental", label: "Rental" },
-                { value: "booking", label: "Booking" },
-              ]}
-              {...filterForm.getInputProps("contract_type")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col> */}
+          <Select
+            label="Contract Type"
+            data={[
+              { value: 'all', label: 'All' },
+              { value: 'sale', label: 'Sale' },
+              { value: 'rental', label: 'Rental' },
+              { value: 'booking', label: 'Booking' },
+            ]}
+            name="contract_type"
+            value={filters.contract_type}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, contract_type: value }))
+            }
+          />
+
+          {/* Employee Name */}
+          <TextInput
+            label="Employee Name"
+            placeholder="Enter employee name"
+            name="employee_name"
+            value={filters.employee_name}
+            onChange={handleInputChange}
+          />
+
+          {/* Category ID */}
+          <Select
+            label="Category"
+            data={[
+              { value: '', label: 'All Categories' },
+              { value: '1', label: 'Residential' },
+              { value: '2', label: 'Commercial' },
+              { value: '3', label: 'Land' },
+            ]}
+            name="category_id"
+            value={filters.category_id || ''}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, category_id: value }))
+            }
+          />
+
+          {/* Date Range */}
+          {/* <DateRangePicker
+            icon={<IconCalendar size={16} />}
+            label="Select Date Range"
+            placeholder="Pick dates range"
+            value={[
+              filters.date_from ? new Date(filters.date_from) : null,
+              filters.date_to ? new Date(filters.date_to) : null,
+            ]}
+            onChange={handleDateChange}
+          /> */}
 
           {/* Status */}
-          <Grid.Col span={12}>
-            <Select
-              label="Status"
-              placeholder="Select status"
-              data={[
-                { value: "all", label: "All" },
-                { value: "active", label: "Active" },
-                { value: "expired", label: "Expired" },
-                { value: "terminated", label: "Terminated" },
-              ]}
-              {...filterForm.getInputProps("status")}
-              styles={{ input: { width: "100%", height: 48 } }}
-            />
-          </Grid.Col>
- 
+          <Select
+            label="Status"
+            data={[
+              { value: 'all', label: 'All Statuses' },
+              { value: 'active', label: 'Active' },
+              { value: 'expired', label: 'Expired' },
+              { value: 'pending', label: 'Pending' },
+              { value: 'completed', label: 'Completed' },
+            ]}
+            name="status"
+            value={filters.status}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, status: value }))
+            }
+          />
+
+          <Divider mt="sm" />
+
           {/* Buttons */}
-          <Grid.Col span={12} mt="md">
-            <Group justify="center">
-              <Button type="button" variant="default" onClick={handleReset} className={classes.resetButton}>
-                Reset
-              </Button>
-              <Button type="submit" variant="light" className={classes.doneButton}>
-                Apply Filters
-              </Button>
-            </Group>
-          </Grid.Col>
-        </Grid>
+          <Group justify="space-between">
+            <Button variant="subtle" color="red" onClick={handleReset}>
+              Reset Filters
+            </Button>
+            <Button type="submit">Apply Filters</Button>
+          </Group>
+        </Stack>
       </form>
     </Modal>
   );
 };
 
-export default FilterContractsModal; 
+export default FilterContractsModal;

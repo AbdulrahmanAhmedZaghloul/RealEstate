@@ -11,10 +11,7 @@ import {
   Center,
   Loader,
   Card,
-  Select,
-  Modal,
-  TextInput,
-  Button,
+  Select,   
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
@@ -677,7 +674,7 @@ function Staff() {
                           >
                             <EditIcon />
                           </ActionIcon>
-                          <ActionIcon
+                          {/* <ActionIcon
                             variant="subtle"
                             color="red"
                             onClick={() =>
@@ -685,7 +682,7 @@ function Staff() {
                             }
                           >
                             <DeleteIcon />
-                          </ActionIcon>
+                          </ActionIcon> */}
                         </Group>
                       </Table.Td>
                     </Table.Tr>
@@ -808,7 +805,7 @@ function Staff() {
                                         >
                                           <EditIcon />
                                         </ActionIcon>
-                                        <ActionIcon
+                                        {/* <ActionIcon
                                           variant="subtle"
                                           color="red"
                                           onClick={() =>
@@ -819,7 +816,7 @@ function Staff() {
                                           }
                                         >
                                           <DeleteIcon />
-                                        </ActionIcon>
+                                        </ActionIcon> */}
                                       </Group>
                                     </Table.Td>
                                   </Table.Tr>
@@ -891,7 +888,7 @@ function Staff() {
                         >
                           <EditIcon />
                         </ActionIcon>
-                        <ActionIcon
+                        {/* <ActionIcon
                           variant="subtle"
                           color="red"
                           onClick={() =>
@@ -899,7 +896,7 @@ function Staff() {
                           }
                         >
                           <DeleteIcon />
-                        </ActionIcon>
+                        </ActionIcon> */}
                       </Group>
                     </Table.Td>
                   </Table.Tr>
@@ -981,7 +978,7 @@ function Staff() {
                         >
                           <EditIcon />
                         </ActionIcon>
-                        <ActionIcon
+                        {/* <ActionIcon
                           variant="subtle"
                           color="red"
                           onClick={() =>
@@ -989,7 +986,7 @@ function Staff() {
                           }
                         >
                           <DeleteIcon />
-                        </ActionIcon>
+                        </ActionIcon> */}
                       </Group>
                     </Table.Td>
                   </Table.Tr>
@@ -1061,7 +1058,7 @@ function Staff() {
                         >
                           <EditIcon />
                         </ActionIcon>
-                        <ActionIcon
+                        {/* <ActionIcon
                           variant="subtle"
                           color="red"
                           onClick={() =>
@@ -1069,7 +1066,7 @@ function Staff() {
                           }
                         >
                           <DeleteIcon />
-                        </ActionIcon>
+                        </ActionIcon> */}
                       </Group>
                     </Table.Td>
                   </Table.Tr>

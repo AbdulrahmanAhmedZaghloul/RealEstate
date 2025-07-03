@@ -39,6 +39,7 @@ export default function EditPropertyModal({ opened, onClose, listing, onUpdate }
             setSelectedCategoryType(categoriesMap[listing.category_id] || "");
         }
     }, [listing]);
+    console.log(listing);
 
     // استخدام القيم المتوفرة أو القيم الافتراضية
     const initialValues = {
@@ -154,51 +155,24 @@ export default function EditPropertyModal({ opened, onClose, listing, onUpdate }
                     <NumberInput label="Area (sqm)" min={1} {...form.getInputProps("area")} />
 
                     {/* Rooms */}
-                    <NumberInput label="Rooms" min={0} {...form.getInputProps("rooms")} />
+                    <NumberInput label="Rooms" min={1} {...form.getInputProps("rooms")} />
 
                     {/* Bathrooms */}
-                    <NumberInput label="Bathrooms" min={0} {...form.getInputProps("bathrooms")} />
+                    <NumberInput label="Bathrooms" min={1} {...form.getInputProps("bathrooms")} />
 
                     {/* Location */}
-                    {/* <TextInput label="Location" {...form.getInputProps("location")} /> */}
 
                     <Select
                         rightSection={<Dropdown />}
                         label="Location"
                         placeholder="Enter property location"
-                        
+
                         data={locationOptions.map((loc) => ({
                             value: loc.value,
                             label: loc.value,
                         }))}
-                        {...form.getInputProps("location")}
-                        // value={searchValue}
-                        // onChange={setSearchValue}
-                        // onBlur={() => {
-                        //     const isValidLocation = locationOptions.some(
-                        //         (loc) => loc.value === searchValue
-                        //     );
-                        //     if (isValidLocation) {
-                        //         const selected = locationOptions.find(
-                        //             (loc) => loc.value === searchValue
-                        //         );
-                        //         if (selected) {
-                        //             setRegion(selected.region);
-                        //             setCity(selected.city);
-                        //             setDistrict(selected.district);
-                        //         }
-                        //         form.setFieldValue("location", searchValue);
-                        //         setLocationError("");
-                        //     } else {
-                        //         setSearchValue("");
-                        //         form.setFieldValue("location", "");
-                        //         setLocationError("Please select a valid location from the list");
-                        //         form.setFieldError("location", "Please select a valid location");
-                        //     }
-                        // }}
-                        // error={locationError || form.errors.location}
-                        styles={{
-                            input: { width: 289, height: 48 },
+                        {...form.getInputProps("location")} styles={{
+                            input: { width: 100, height: 48 },
                             wrapper: { width: 289 },
                         }}
                         mb={24}
@@ -216,26 +190,7 @@ export default function EditPropertyModal({ opened, onClose, listing, onUpdate }
                         {...form.getInputProps("listing_type")}
                     />
 
-                    {/* Amenities (إذا كانت موجودة) */}
-                    {selectedCategoryType === "residential" && (
-                        <>
-                            <Divider label="Residential Amenities" labelPosition="center" />
-                            {Array.isArray(form.values.amenities.residential) &&
-                                form.values.amenities.residential.map((amenity, index) => (
-                                    <Text key={index}>{amenity.name}</Text>
-                                ))}
-                        </>
-                    )}
-
-                    {selectedCategoryType === "commercial" && (
-                        <>
-                            <Divider label="Commercial Amenities" labelPosition="center" />
-                            {Array.isArray(form.values.amenities.commercial) &&
-                                form.values.amenities.commercial.map((amenity, index) => (
-                                    <Text key={index}>{amenity.name}</Text>
-                                ))}
-                        </>
-                    )}
+                  
 
                     {/* Submit Buttons */}
                     <Group position="right">

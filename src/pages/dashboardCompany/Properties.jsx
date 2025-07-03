@@ -39,6 +39,7 @@ import { useInView } from "react-intersection-observer";
 import FilterIcon from "../../components/icons/filterIcon";
 import { useCallback } from "react";
 import FloorsIcon from "../../components/icons/FloorsIcon";
+import notFound from "../../assets/Not Found.png";
 
 function Properties() {
   const { user } = useAuth();
@@ -399,8 +400,14 @@ function Properties() {
         </header>
 
         {data?.pages.flatMap((page) => page.data.listings).length === 0 ? (
-          <Center>
-            <Text>{t.NoListingsFound}</Text>
+          <Center className={classes.notFound}>
+            <img src={notFound} alt="" />
+
+            <Text style={{
+              color: "var(--color-9)"
+            }}>
+              {t.Nolistingsfound}
+            </Text>
           </Center>
         ) : (
           <>

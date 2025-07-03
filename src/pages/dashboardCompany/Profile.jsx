@@ -61,7 +61,7 @@ function Profile() {
   const [opened, { open, close }] = useDisclosure(false);
   const [formModalOpened, { open: openFormModal, close: closeFormModal }] =
     useDisclosure(false);
-  const { user } = useAuth();
+  const { user,logout} = useAuth();
   const isMobile = window.matchMedia("(max-width: 991px)").matches;
   const { t } = useTranslation();
   const { data, isLoading } = useProfile();
@@ -192,6 +192,7 @@ setEmployeeId(idNot)
         title: "Password changed successfully.",
         color: "green",
       });
+      logout()
       setOldPass("");
       setNewPass("");
       close();

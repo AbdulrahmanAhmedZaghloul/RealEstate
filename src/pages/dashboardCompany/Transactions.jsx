@@ -43,6 +43,8 @@ import { usePropertiesTransactions } from "../../hooks/queries/usePropertiesTran
 import { notifications } from "@mantine/notifications";
 import axiosInstance from "../../api/config";
 
+import notFound from "../../assets/Not Found.png";
+
 const rejectionReasons = [
   {
     value: "completion",
@@ -67,7 +69,7 @@ function Transactions() {
   ] = useDisclosure(false);
 
   const [sortBy, setSortBy] = useState("newest");
-  
+
   const sortOptions = [
     { value: "newest", label: "Newest" },
     { value: "oldest", label: "Oldest" },
@@ -75,11 +77,11 @@ function Transactions() {
     { value: "lowest", label: "Lowest price" },
   ];
   const [rejectionReason, setRejectionReason] = useState("");
-  
+
   const [otherReason, setOtherReason] = useState("");
-  
+
   const [modalOpened, setModalOpened] = useState(false);
-  
+
   const [isSticky, setIsSticky] = useState(false);
 
   const transactionOptions = [
@@ -90,7 +92,7 @@ function Transactions() {
   ];
 
   const [transactionType, setTransactionType] = useState("all");
-  
+
   const listing_type = transactionType; // ✅ Define it first
 
   const {
@@ -238,10 +240,10 @@ function Transactions() {
         color: "green",
       });
 
-    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
-    queryClient.invalidateQueries(["listingsRealEstate"]);
-    queryClient.invalidateQueries(["listings"]);
-    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
     } catch (err) {
       notifications.show({
         title: "Error",
@@ -429,8 +431,14 @@ function Transactions() {
         </header>
 
         {data?.pages.flatMap((page) => page.data.listings).length === 0 ? (
-          <Center>
-            <Text>{t.NoListingsFound}</Text>
+          <Center className={classes.notFound}>
+            <img src={notFound} alt="" />
+
+            <Text style={{
+              color: "var(--color-9)"
+            }}>
+              {t.Nolistingsfound}
+            </Text>
           </Center>
         ) : (
           <>
@@ -522,18 +530,18 @@ function Transactions() {
                         <div className={classes.listingDate}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            )} days ago`
                             : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? "Yesterday"
+                              : "Today"}
                         </div>
                       </div>
 
@@ -575,7 +583,7 @@ function Transactions() {
             {/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
             {!isLoading &&
               data?.pages.flatMap((page) => page.data.listings).length ===
-                0 && (
+              0 && (
                 <Center>
                   <Text>{t.NoListingsFound}</Text>
                 </Center>
@@ -628,7 +636,7 @@ function Transactions() {
         </Group>
       </Modal>
 
-      
+
       <FiltersModal
         opened={openedFilterModal}
         onClose={closeFilterModal}
@@ -638,8 +646,8 @@ function Transactions() {
         form={filterForm} // 👈 إرسال النموذج للمودال
       />
     </>
-  
-);
+
+  );
 }
 
 export default Transactions;

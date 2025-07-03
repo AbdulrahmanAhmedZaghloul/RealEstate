@@ -21,14 +21,17 @@ import downArrow from "../../assets/downArrow.svg";
 import classes from "../../styles/modals.module.css";
 import { useEffect, useState } from "react";
 import CameraUpload from "../CameraUpload";
+import { useTranslation } from "../../context/LanguageContext";
 
 const AddContractsModal = ({
   opened,
   onClose,
   onAdd,
   approvedListings,
+  t
 }) => {
   const [loading, setLoading] = useState(false);
+  // const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
   const form = useForm({
     initialValues: {
@@ -362,12 +365,10 @@ const AddContractsModal = ({
                 type="submit"
                 variant="light"
                 radius="md"
-                disabled={form.isValid() === false || loading} // <-- التعديل هنا
-                loading={loading}
+                 loading={loading}
                 className={classes.addButton}
-
               >
-                Add Contract
+                {t.AddContract}
               </Button>
 
             </Center>

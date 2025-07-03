@@ -653,60 +653,72 @@ const AddPropertyModal = React.memo(
                 maxLength={20}
               />
 
-              {/* Price */}
-              <NumberInput
-                label="Price"
-                placeholder="Enter property price"
-                min={0}
-                {...form.getInputProps("price")}
-                error={form.errors.price}
-                hideControls
+
+              {/* Property Category */}
+              <Select
+                label="Property Category"
+                placeholder="Select category of property"
+                data={categories
+                  .filter((category) => category.id !== undefined)
+                  .map((category) => ({
+                    value: String(category.id),
+                    label: category.name,
+                  }))}
+                {...form.getInputProps("category_id")}
+                value={form.values.category_id}
+                onChange={(value) => handleCategoryChange(value)}
+                error={form.errors.category_id}
                 styles={{
                   input: { width: 289, height: 48 },
                   wrapper: { width: 289 },
                 }}
+                rightSection={<Dropdown />}
                 mb={24}
-                maxLength={16}
+                mt={24}
               />
 
-              {/* Down Payment */}
-              <NumberInput
+              {/* Property Subcategory */}
+              <Select
+                label="Property Subcategory"
+                placeholder="Select type of property"
+                data={subcategories
+                  .filter(
+                    (subcategory) =>
+                      subcategory.id !== undefined &&
+                      subcategory.category_id ===
+                      parseInt(form.values.category_id)
+                  )
+                  .map((subcategory) => ({
+                    value: String(subcategory.id),
+                    label: subcategory.name,
+                  }))}
+                {...form.getInputProps("subcategory_id")}
+                error={form.errors.subcategory_id}
                 styles={{
                   input: { width: 289, height: 48 },
                   wrapper: { width: 289 },
                 }}
-                label="Down Payment"
-                placeholder="Enter the down payment (e.g., 25.5%)"
-                hideControls
-                min={1}
-                max={100}
-                maxLength={7}
-                decimalSeparator="."
-                precision={2}
-                step={0.1}
-                clampBehavior="strict"
-                error={
-                  form.values.down_payment !== null &&
-                    (form.values.down_payment < 0 ||
-                      form.values.down_payment > 100)
-                    ? "Down payment must be between 0 and 100%"
-                    : form.errors.down_payment
-                }
-                value={form.values.down_payment}
-                onChange={(value) => {
-                  const numericValue = Number(value);
-                  if (numericValue < 0) {
-                    form.setFieldValue("down_payment", 0);
-                  } else if (numericValue > 100) {
-                    form.setFieldValue("down_payment", 100);
-                  } else {
-                    form.setFieldValue("down_payment", numericValue);
-                  }
-                  if (form.errors.down_payment) {
-                    form.setFieldError("down_payment", "");
-                  }
+                rightSection={<Dropdown />}
+                mb={24}
+              />
+
+              {/* Property Type */}
+              <Select
+                label="Property Type"
+                placeholder="Select type of property"
+                data={[
+                  { value: "rent", label: "For Rent" },
+                  { value: "buy", label: "For Sale" },
+                  { value: "booking", label: "For Booking" },
+                ]}
+                {...form.getInputProps("listing_type")}
+                error={form.errors.type}
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
                 }}
-                suffix="%"
+                rightSection={<Dropdown />}
+                mb={24}
               />
 
               {!(
@@ -779,6 +791,62 @@ const AddPropertyModal = React.memo(
             </Grid.Col>
 
             <Grid.Col span={6}>
+              {/* Price */}
+              <NumberInput
+                label="Price"
+                placeholder="Enter property price"
+                min={0}
+                {...form.getInputProps("price")}
+                error={form.errors.price}
+                hideControls
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
+                }}
+                mb={24}
+                maxLength={16}
+              />
+
+              {/* Down Payment */}
+              <NumberInput
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
+                }}
+                label="Down Payment"
+                placeholder="Enter the down payment (e.g., 25.5%)"
+                hideControls
+                min={1}
+                max={100}
+                maxLength={7}
+                decimalSeparator="."
+                precision={2}
+                step={0.1}
+                clampBehavior="strict"
+                error={
+                  form.values.down_payment !== null &&
+                    (form.values.down_payment < 0 ||
+                      form.values.down_payment > 100)
+                    ? "Down payment must be between 0 and 100%"
+                    : form.errors.down_payment
+                }
+                value={form.values.down_payment}
+                onChange={(value) => {
+                  const numericValue = Number(value);
+                  if (numericValue < 0) {
+                    form.setFieldValue("down_payment", 0);
+                  } else if (numericValue > 100) {
+                    form.setFieldValue("down_payment", 100);
+                  } else {
+                    form.setFieldValue("down_payment", numericValue);
+                  }
+                  if (form.errors.down_payment) {
+                    form.setFieldError("down_payment", "");
+                  }
+                }}
+                suffix="%"
+              />
+
               {/* Location */}
 
               <Select
@@ -821,6 +889,8 @@ const AddPropertyModal = React.memo(
                 }}
                 mb={24}
                 limit={15}
+
+                mt={10}
               />
 
 
@@ -888,71 +958,6 @@ const AddPropertyModal = React.memo(
                 limit={15}
               /> */}
 
-              {/* Property Category */}
-              <Select
-                label="Property Category"
-                placeholder="Select category of property"
-                data={categories
-                  .filter((category) => category.id !== undefined)
-                  .map((category) => ({
-                    value: String(category.id),
-                    label: category.name,
-                  }))}
-                {...form.getInputProps("category_id")}
-                value={form.values.category_id}
-                onChange={(value) => handleCategoryChange(value)}
-                error={form.errors.category_id}
-                styles={{
-                  input: { width: 289, height: 48 },
-                  wrapper: { width: 289 },
-                }}
-                rightSection={<Dropdown />}
-                mb={24}
-              />
-
-              {/* Property Subcategory */}
-              <Select
-                label="Property Subcategory"
-                placeholder="Select type of property"
-                data={subcategories
-                  .filter(
-                    (subcategory) =>
-                      subcategory.id !== undefined &&
-                      subcategory.category_id ===
-                      parseInt(form.values.category_id)
-                  )
-                  .map((subcategory) => ({
-                    value: String(subcategory.id),
-                    label: subcategory.name,
-                  }))}
-                {...form.getInputProps("subcategory_id")}
-                error={form.errors.subcategory_id}
-                styles={{
-                  input: { width: 289, height: 48 },
-                  wrapper: { width: 289 },
-                }}
-                rightSection={<Dropdown />}
-                mb={24}
-              />
-
-              {/* Property Type */}
-              <Select
-                label="Property Type"
-                placeholder="Select type of property"
-                data={[
-                  { value: "rent", label: "For Rent" },
-                  { value: "buy", label: "For Sale" },
-                  { value: "booking", label: "For Booking" },
-                ]}
-                {...form.getInputProps("listing_type")}
-                error={form.errors.type}
-                styles={{
-                  input: { width: 289, height: 48 },
-                  wrapper: { width: 289 },
-                }}
-                rightSection={<Dropdown />}
-                mb={24}
-              />
 
               {/* Assign Employee */}
               {/* Assign Employee - Only show if user is not an employee */}
@@ -975,6 +980,7 @@ const AddPropertyModal = React.memo(
                     wrapper: { width: 289 },
                   }}
                   mb={24}
+                  mt={10}
                 />
               )}
 

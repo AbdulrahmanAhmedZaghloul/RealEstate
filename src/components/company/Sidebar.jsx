@@ -231,14 +231,14 @@ export default function Sidebar() {
             className={classes.profileContainer}
             onClick={() => navigate("/dashboard")}
           >
-            <span style={{}} className={classes.profileName}>
+            <span  className={classes.profileName}>
               {profile.name}
             </span>
           
           </div>
         </Group>
 
-        <div style={{}} className={classes.linksContainer}>
+        <div   className={classes.linksContainer}>
           {links}
         </div>
       </div>

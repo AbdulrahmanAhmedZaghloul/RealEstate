@@ -50,6 +50,8 @@ export const AuthProvider = ({ children }) => {
           ? (sessionStorage.removeItem("token"),
             sessionStorage.removeItem("role"))
           : (localStorage.removeItem("token"), localStorage.removeItem("role"));
+        // localStorage.clear()
+        // sessionStorage.clear()
         setUser(null);
         navigate("/");
         notifications.show({

@@ -76,6 +76,15 @@
   background-color: var(--color-7);
 }
 
+
+.notFound{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 80vh;
+  gap: 20px;
+}
 .filter {
   width: 48px;
   height: 48px;

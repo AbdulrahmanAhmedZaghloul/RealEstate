@@ -55,17 +55,6 @@ function EmployeeAnalytics({ timeFrame, month, year }) {
                 2,
         },
 
-        // {
-        //     label: "Total Commissions",
-        //     value: kpiData?.performance_metrics?.commissions,
-        // },
-
-        // {
-        //     label: "Avg Commissions",
-        //     value:
-        //         kpiData?.performance_metrics?.commissions /
-        //         kpiData?.performance_metrics?.contracts.length,
-        // },
     ];
 
     if (isLoading) {
@@ -127,6 +116,7 @@ function EmployeeAnalytics({ timeFrame, month, year }) {
                 }} className={classes.card}>
 
                     <div className={classes.cardTitle}>{t.Booking}</div>
+
                     <div className={classes.cardCount}>
                         {kpiData?.performance_metrics?.contracts.length}
                     </div>
@@ -139,7 +129,6 @@ function EmployeeAnalytics({ timeFrame, month, year }) {
                             )
                             .toLocaleString("en-GB")}
                     </div>
-
                 </div>
             </div>
 
@@ -150,10 +139,6 @@ function EmployeeAnalytics({ timeFrame, month, year }) {
                 <span style={{ fontSize: "20px", fontWeight: "bold"  }}>
                     {t.YearlyPerformance} <br />
                 </span>
-                {/* <span style={{ fontSize: 14, color: "#666" }}>
-                    {kpiData?.period?.start_date} – {kpiData?.period?.end_date} <br />
-                    <br />
-                </span> */}
                 <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={performanceData}
                         style={{

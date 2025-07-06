@@ -17,6 +17,8 @@ const fetchCompanyKPIs = async (token , timeFrame, month, year) => {
     const { data } = await axiosInstance.get(`kpi/allProperties?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
+    console.log(data);
+    
     return data;
 };
 

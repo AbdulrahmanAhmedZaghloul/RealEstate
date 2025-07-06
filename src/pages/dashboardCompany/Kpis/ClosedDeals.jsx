@@ -6,6 +6,7 @@ import { Grid, GridCol } from '@mantine/core';
 function ClosedDeals({ timeFrame, month, year }) {
   const { data: apiData } = useClosedDeals(timeFrame, month, year);
   const [data, setData] = useState({});
+console.log(data);
 
   useEffect(() => {
     setData(apiData?.data || {});
@@ -40,8 +41,9 @@ function ClosedDeals({ timeFrame, month, year }) {
       {/* Card 3: Properties Sold */}
       <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
         <div className={classes.card}>
-          <div className={classes.cardTitle}>Properties Sold</div>
-          <div className={classes.cardCount}>{data?.total_properties_sold ?? 0}</div>
+          {console.log(data)}
+          <div className={classes.cardTitle}>Marketplace Properties</div>
+          <div className={classes.cardCount}>{data?.total_properties_sold}</div>
           <div className={classes.cardRevenue}>
             {/* ممكن تضيف رقم تانى هنا لو عندك قيمة للربح من المبيعات */}
             <span className="icon-saudi_riyal">&#xea; </span>

@@ -53,13 +53,7 @@ function SellingKpi({ timeFrame, month, year }) {
     { name: "Booking", value: data?.income?.booking },
   ];
 
-  
-  //   const incomePieData = [
-  //   { name: "Selling", value: data?.revenue?.sales_revenue },
-  //   { name: "Renting", value: data?.revenue?.rental_revenue },
-  //   { name: "Booking", value: data?.revenue?.booking_revenue },
-  // ];
-
+   
   // Revenue Data
   const revenueData = [
     { label: "Sales", revenue: data?.revenue?.sales_revenue },

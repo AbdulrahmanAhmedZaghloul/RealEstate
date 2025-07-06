@@ -22,6 +22,7 @@ import DeleteIcon from "../icons/DeleteIcon";
 // import EmployeeAnalytics from "./EmployeeAnalytics";
 import TimeFilter from "../TimeFilter";
 import EmployeeAnalytics from "./Kpi/EmployeeAnalytics";
+import YearlyPerformance from "./Kpi/YearlyPerformance";
 
 function EmployeeDetails() {
   const [employee, setEmployee] = useState(null);
@@ -33,12 +34,6 @@ function EmployeeDetails() {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  const [filter, setFilter] = useState({
-    timeFrame: "yearly",
-    month: "",
-    year: "",
-  });
 
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   const [changePasswordModal, { open: openChangePasswordModal, close: closeChangePasswordModal }] = useDisclosure(false);
@@ -516,30 +511,11 @@ function EmployeeDetails() {
         </Grid>
       </div>
 
-      <div style={{
-        display: "flex",
-        justifyContent: "end",
-        position: "relative",
-        zIndex: "7687",
-        marginBottom: "20px",
-        marginRight: "15px"
-      }}>
-        <TimeFilter
-          initialTimeFrame={filter.timeFrame}
-          onChange={({ timeFrame, month, year }) => {
-            setFilter({ timeFrame, month, year });
-          }}
-        />
-      </div>
 
-      {/* EmployeeAnalytics.jsx */}
-      <EmployeeAnalytics
-        // id={id} 
-        timeFrame={filter.timeFrame}
-        month={filter.month}
-        year={filter.year} />
+      <EmployeeAnalytics />
 
 
+      <YearlyPerformance />
       <div className={classes.properties}>
         <div className={classes.propertyList}>
           <EmployeeProperties id={id} />

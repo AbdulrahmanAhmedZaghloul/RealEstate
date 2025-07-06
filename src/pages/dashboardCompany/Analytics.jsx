@@ -13,7 +13,7 @@ import TrendsOverTime from "./Kpis/TrendsOverTime";
 
 function Analytics() {
   const [filter, setFilter] = useState({
-    timeFrame: "yearly",
+    timeFrame: "month",
     month: "",
     year: "",
   });

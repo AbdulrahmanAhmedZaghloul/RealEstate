@@ -1,63 +1,26 @@
 import { Center, Loader } from '@mantine/core';
-import React, { useState, useEffect } from 'react'
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import classes from "../../styles/EmployeeDetails.module.css";
-import { useTranslation } from '../../context/LanguageContext';
-import axiosInstance from '../../api/config';
-import { notifications } from '@mantine/notifications';
-import { useParams } from 'react-router-dom';
-import { useAuth } from '../../context/authContext';
+import classes from "../../../styles/EmployeeDetails.module.css";
+import { useTranslation } from '../../../context/LanguageContext'; 
+import { useParams } from 'react-router-dom'; 
+import { useEmployeeKpi } from '../../../hooks/queries/QueriesAnalytics/CompanyKpi/useEmployeeKpi';
 
-function EmployeeAnalytics() {
+function EmployeeAnalytics({ timeFrame, month, year }) {
+
     const { id } = useParams();
-    const { user } = useAuth();
 
     const { t } = useTranslation();
-    const [kpiData, setKpiData] = useState({});
 
-    const [loading, setLoading] = useState(false);
-    const fetchDataKPIs = async () => {
-        setLoading(true);
-        console.log(id);
-
-        try {
-            const response = await axiosInstance.get(
-                `kpi/employee/${id}/performance`,
-                {
-                    headers: { Authorization: `Bearer ${user.token}` },
-                }
-            );
-
-            const apiData = response.data.data;
-
-            // Map API data to state
-            console.log(apiData);
-            setKpiData(apiData);
-
-        } catch (error) {
-            console.error("Error fetching KPI data:", error);
-            notifications.show({
-                title: "Error",
-                message: "Failed to fetch KPI data",
-                color: "red",
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchDataKPIs();
-    }, []);
+    const { data: kpiData, isLoading } = useEmployeeKpi(id ,timeFrame, month, year);
 
     const performanceData = [
-
         {
             label: "Total Selling",
             value: kpiData?.performance_metrics?.sales?.total_amount,
         },
+
         {
             label: "Avg Selling",
             value:
@@ -65,11 +28,11 @@ function EmployeeAnalytics() {
                 kpiData?.performance_metrics?.sales?.count,
         },
 
-
         {
             label: "Total Rental",
             value: kpiData?.performance_metrics?.rentals?.total_amount,
         },
+
         {
             label: "Avg Rental",
             value:
@@ -83,6 +46,7 @@ function EmployeeAnalytics() {
                 kpiData?.performance_metrics?.rentals?.total_amount +
                 kpiData?.performance_metrics?.sales?.total_amount,
         },
+
         {
             label: "Avg Booking",
             value:
@@ -90,19 +54,21 @@ function EmployeeAnalytics() {
                     kpiData?.performance_metrics?.sales?.total_amount) /
                 2,
         },
-        {
-            label: "Total Commissions",
-            value: kpiData?.performance_metrics?.commissions,
-        },
-        {
-            label: "Avg Commissions",
-            value:
-                kpiData?.performance_metrics?.commissions /
-                kpiData?.performance_metrics?.contracts.length,
-        },
+
+        // {
+        //     label: "Total Commissions",
+        //     value: kpiData?.performance_metrics?.commissions,
+        // },
+
+        // {
+        //     label: "Avg Commissions",
+        //     value:
+        //         kpiData?.performance_metrics?.commissions /
+        //         kpiData?.performance_metrics?.contracts.length,
+        // },
     ];
 
-    if (loading) {
+    if (isLoading) {
         return (
             <>
                 <Center
@@ -122,7 +88,6 @@ function EmployeeAnalytics() {
 
     return (
         <>
-
             {/* EmployeeAnalytics.jsx */}
             <div className={classes.summary}>
                 <div style={{
@@ -132,58 +97,41 @@ function EmployeeAnalytics() {
                 >
                     <div
                         className={classes.cardTitle}>
-
                         {t.Selling}</div>
-                    <div style={{
-                    }} className={classes.cardCount}>
+                    <div className={classes.cardCount}>
                         {kpiData?.performance_metrics?.sales?.count}
                     </div>
-                    <div style={{
-                    }} className={classes.cardRevenue}>
-                        <span style={{
-                        }} className="icon-saudi_riyal">&#xea; </span>
+                    <div className={classes.cardRevenue}>
+                        <span className="icon-saudi_riyal">&#xea; </span>
                         {kpiData?.performance_metrics?.sales?.total_amount.toLocaleString(
                             "en-GB"
                         )}
                     </div>
                 </div>
                 <div style={{
-
-
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 }} className={classes.card}>
-
-                    <div style={{
-                    }} className={classes.cardTitle}>{t.Renting}</div>
-                    <div style={{
-                    }} className={classes.cardCount}>
+                    <div className={classes.cardTitle}>{t.Renting}</div>
+                    <div className={classes.cardCount}>
                         {kpiData?.performance_metrics?.rentals?.count}
                     </div>
-                    <div style={{
-                    }} className={classes.cardRevenue}>
-                        <span style={{
-                        }} className="icon-saudi_riyal">&#xea; </span>
+                    <div className={classes.cardRevenue}>
+                        <span className="icon-saudi_riyal">&#xea; </span>
                         {kpiData?.performance_metrics?.rentals?.total_amount.toLocaleString(
                             "en-GB"
                         )}
                     </div>
                 </div>
                 <div style={{
-
-
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 }} className={classes.card}>
 
-                    <div style={{
-                    }} className={classes.cardTitle}>{t.Booking}</div>
-                    <div style={{
-                    }} className={classes.cardCount}>
+                    <div className={classes.cardTitle}>{t.Booking}</div>
+                    <div className={classes.cardCount}>
                         {kpiData?.performance_metrics?.contracts.length}
                     </div>
-                    <div style={{
-                    }} className={classes.cardRevenue}>
-                        <span style={{
-                        }} className="icon-saudi_riyal">&#xea; </span>
+                    <div className={classes.cardRevenue}>
+                        <span className="icon-saudi_riyal">&#xea; </span>
                         {kpiData?.performance_metrics?.contracts
                             .reduce(
                                 (total, contract) => total + parseFloat(contract.price),
@@ -191,6 +139,7 @@ function EmployeeAnalytics() {
                             )
                             .toLocaleString("en-GB")}
                     </div>
+
                 </div>
             </div>
 
@@ -198,15 +147,18 @@ function EmployeeAnalytics() {
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
             }}
                 className={classes.chart}>
-                <span style={{ fontSize: "20px", fontWeight: "bold" }}>
+                <span style={{ fontSize: "20px", fontWeight: "bold"  }}>
                     {t.YearlyPerformance} <br />
                 </span>
-                <span style={{ fontSize: 14, color: "#666" }}>
+                {/* <span style={{ fontSize: 14, color: "#666" }}>
                     {kpiData?.period?.start_date} – {kpiData?.period?.end_date} <br />
                     <br />
-                </span>
+                </span> */}
                 <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={performanceData}>
+                    <BarChart data={performanceData}
+                        style={{
+                            padding: "10px",
+                        }}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis
                             dataKey="label"

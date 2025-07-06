@@ -3,11 +3,12 @@ import classes from "../../../styles/analytics.module.css";
 
 import { useCompanyKPIs } from '../../../hooks/queries/1_useCompanyKPIs';
 import { Grid, GridCol } from '@mantine/core';
+import { useClosedDeals } from '../../../hooks/queries/QueriesAnalytics/CompanyKpi/ClosedDeals';
 
 function ClosedDeals({ timeFrame, month, year }) {
     const {
         data: companyKPIsData,
-    } = useCompanyKPIs(
+    } = useClosedDeals(
         timeFrame, month, year
     );
     const [data, setData] = useState({});

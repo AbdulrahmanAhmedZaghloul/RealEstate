@@ -1,9 +1,9 @@
- 
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { Button, Center, Grid, Loader, Modal, TextInput, useMantineColorScheme, Text } from "@mantine/core"; 
+import { Button, Center, Grid, Loader, Modal, TextInput, useMantineColorScheme, Text } from "@mantine/core";
 
 import classes from "../../styles/EmployeeDetails.module.css";
 import axiosInstance from "../../api/config";
@@ -19,19 +19,26 @@ import EditIcon from "../icons/edit";
 import { useQueryClient } from "@tanstack/react-query";
 import { validateField } from "../../hooks/Validation/validation";
 import DeleteIcon from "../icons/DeleteIcon";
-import EmployeeAnalytics from "./EmployeeAnalytics";
+// import EmployeeAnalytics from "./EmployeeAnalytics";
+import TimeFilter from "../TimeFilter";
+import EmployeeAnalytics from "./Kpi/EmployeeAnalytics";
 
 function EmployeeDetails() {
   const [employee, setEmployee] = useState(null);
   const [employeeListings, setEmployeeListings] = useState([]);
   const queryClient = useQueryClient();
 
-  const [kpiData, setKpiData] = useState({});
 
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  const [filter, setFilter] = useState({
+    timeFrame: "yearly",
+    month: "",
+    year: "",
+  });
 
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   const [changePasswordModal, { open: openChangePasswordModal, close: closeChangePasswordModal }] = useDisclosure(false);
@@ -41,7 +48,7 @@ function EmployeeDetails() {
     password: "",
     employee_id: id,
   });
- 
+
   const [showPassword, setShowPassword] = useState(false);
 
   //delete modal data
@@ -119,7 +126,6 @@ function EmployeeDetails() {
     image: "",
   });
   const [newUser, setNewUser] = useState({});
-  const { colorScheme } = useMantineColorScheme();
 
 
   const handleFileChange = (file) => {
@@ -510,9 +516,29 @@ function EmployeeDetails() {
         </Grid>
       </div>
 
+      <div style={{
+        display: "flex",
+        justifyContent: "end",
+        position: "relative",
+        zIndex: "7687",
+        marginBottom: "20px",
+        marginRight: "15px"
+      }}>
+        <TimeFilter
+          initialTimeFrame={filter.timeFrame}
+          onChange={({ timeFrame, month, year }) => {
+            setFilter({ timeFrame, month, year });
+          }}
+        />
+      </div>
+
       {/* EmployeeAnalytics.jsx */}
-      <EmployeeAnalytics id={id} />
- 
+      <EmployeeAnalytics
+        // id={id} 
+        timeFrame={filter.timeFrame}
+        month={filter.month}
+        year={filter.year} />
+
 
       <div className={classes.properties}>
         <div className={classes.propertyList}>

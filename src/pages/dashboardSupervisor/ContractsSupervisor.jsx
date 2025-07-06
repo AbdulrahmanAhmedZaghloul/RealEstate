@@ -297,6 +297,7 @@ function ContractsSupervisor() {
         onAdd={handleAddContract}
         approvedListings={approvedListings}
         loading={mutation.isPending}
+        t={t}
       />
 
       <FilterContractsModal

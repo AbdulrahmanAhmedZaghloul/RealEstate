@@ -138,22 +138,28 @@ function ListedProperties({ timeFrame, month, year }) {
         <>
             {/* Newly ListedProperties */}
             <div className={classes.chart}>
-                <span className={classes.chartTitle}>{t.NewlyListedProperties}</span>
-                <select
-                    value={selectedSubcategoryNL}
-                    onChange={handleSelectedCategoryNLChange}
-                    className={classes.dropdown}
-                    style={{
-                        maxWidth: "130px",
-                        color: "var(--color-3)",
-                    }}
-                >
-                    {subcategories.map((subcategory) => (
-                        <option key={subcategory} value={subcategory}>
-                            {subcategory}
-                        </option>
-                    ))}
-                </select>
+                <div className={classes.chartFlex}>
+
+                    <span className={classes.chartTitle}>{t.NewlyListedProperties}</span>
+
+                    <select
+                        value={selectedSubcategoryNL}
+                        onChange={handleSelectedCategoryNLChange}
+                        className={classes.dropdown}
+                        style={{
+                            maxWidth: "130px",
+                            color: "var(--color-3)",
+                        }}
+                    >
+                        {subcategories.map((subcategory) => (
+                            <option key={subcategory} value={subcategory}>
+                                {subcategory}
+                            </option>
+                        ))}
+                    </select>
+
+                </div>
+
                 <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={processedNewListingsData}>
                         <CartesianGrid strokeDasharray="3 3" />

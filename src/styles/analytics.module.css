@@ -128,7 +128,11 @@
   margin-top: 24px;
   margin-bottom: 32px;
 }
-
+.chartFlex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .chartTitle {
   font-size: 20px;
   margin-bottom: 10px;
@@ -140,20 +144,23 @@
 .dropdown {
   cursor: pointer;
 
-  border: 0px;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  border: 1px solid var(--color-border);
   font-size: 14px;
   color: var(--color-4);
-  float: right;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  /* float: right; */
+  /* appearance: none; */
+  /* -webkit-appearance: none;
+  -moz-appearance: none; */
 
   /* Consistent padding */
   padding: 6px 24px 6px 10px;
 
   /* Consistent background positioning */
-  background: url("../assets/downArrow.svg") no-repeat right 0px center;
-  background-size: 22px;
+  /* background: url("../assets/downArrow.svg") no-repeat right 0px center; */
+  /* background-size: 22px; */
 }
 
 /* Specific styles for cardDropdown */
@@ -165,8 +172,10 @@
 
 /* Specific styles for regular dropdown */
 .dropdown {
-  margin-bottom: 20px;
-  max-width: 95px;
+  padding: 5px 10px;
+  width: 9% ;
+  /* margin-bottom: 20px; */
+  /* max-width: 95px; */
 }
 
 @media (max-width: 991px) {

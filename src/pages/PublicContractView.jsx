@@ -25,27 +25,25 @@ import { useTranslation } from "../context/LanguageContext";
 
 export default function PublicContractView() {
   const { path } = useParams();
+  console.log(path);
+
   const [contract, setContract] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [opened, { open, close }] = useDisclosure(false); // Delete modal
-  const [shareOpened, { open: openShare, close: closeShare }] =
-    useDisclosure(false);
-  const [shareLink, setShareLink] = useState("");
   const isMobile = useMediaQuery(`(max-width: 991px)`);
 
   useEffect(() => {
     const fetchContract = async () => {
       const decodedPath = decodeURIComponent(path);
+      console.log(decodedPath);
+
       setLoading(true);
       try {
         const response = await axiosInstance.get(
-          `https://sienna-woodpecker-844567.hostingersite.com/api/v1/listings/${decodedPath}`
+          `https://sienna-woodpecker-844567.hostingersite.com/api/v1/contracts/${decodedPath}`
         );
         console.log(response);
-        
+
         setContract(response.data.data);
-        const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareRealEstate/${decodedPath}`;
-        setShareLink(finalLink);
       } catch (error) {
         console.error("Error fetching contract:", error);
       } finally {
@@ -58,9 +56,9 @@ export default function PublicContractView() {
     }
   }, [path]);
 
- 
-    const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
-  
+
+  const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+
   if (loading) {
     return (
       <Center h="100vh">
@@ -100,8 +98,8 @@ export default function PublicContractView() {
               alt={contract.title}
               className={classes.mainImage}
             /> */}
-            <img src={iamge} alt="" 
-              className={classes.mainImage}/>
+            <img src={iamge} alt=""
+              className={classes.mainImage} />
           </div>
           <div className={classes.widthImageContainer}>
             {/* {contract.real_estate?.images?.slice(1, 3).map((img, index) => (
@@ -112,8 +110,8 @@ export default function PublicContractView() {
                 className={classes.mainImage}
               />
             ))} */}
-            <img src={iamge} alt="" className={classes.mainImage}/>
-            <img src={iamge} alt="" className={classes.mainImage}/>
+            <img src={iamge} alt="" className={classes.mainImage} />
+            <img src={iamge} alt="" className={classes.mainImage} />
           </div>
         </div>
 
@@ -191,7 +189,7 @@ export default function PublicContractView() {
                   </div>
                 </Grid.Col>
               </Grid>
-            </Grid.Col> 
+            </Grid.Col>
           </Grid>
 
           {/* Contract Info */}
@@ -203,10 +201,10 @@ export default function PublicContractView() {
               <h4>{t.Contract}</h4>
               <div className={classes.ContractImage}>
                 <div>
-                  <img src={iamge}   alt="Contract" />
+                  <img src={iamge} alt="Contract" />
                 </div>
                 <div className={classes.ContractText}>
-                  
+
                 </div>
               </div>
             </Grid.Col>
@@ -223,7 +221,7 @@ export default function PublicContractView() {
               <div className={classes.InformationButton}>
                 <div>
                   <h3>{t.ContractsInformation}</h3>
-                </div> 
+                </div>
               </div>
               <Grid>
                 <GridCol span={4}>
@@ -297,10 +295,9 @@ export default function PublicContractView() {
           </Grid>
         </div>
       </Card>
- 
-    </>
-  
 
-);
+    </>
+
+
+  );
 }
- 

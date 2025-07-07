@@ -155,8 +155,8 @@ function ContractDetails() {
           // نعمل encode للرابط
           const encodedPath = encodeURIComponent(fullPath);
 
-          // const finalLink = `http://localhost:5173/#/ShareContracts/${encodedPath}`;
-          const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareRealEstate/${encodedPath}`;
+          const finalLink = `http://localhost:5173/#/ShareContracts/${encodedPath}`;
+          // const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareRealEstate/${encodedPath}`;
           setShareLink(finalLink);
           openShare(); // فتح المودال
           //  (); // تحديث share_url في ال state

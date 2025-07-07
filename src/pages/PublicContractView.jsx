@@ -1,20 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/config";
-import {
-  Card,
-  Center,
-  Text,
-  Grid,
-  Group,
-  Button,
-  Avatar,
-  Loader,
-  Modal,
-  TextInput,
-  GridCol,
-} from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { Card, Center, Text, Grid, Loader, GridCol } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import classes from "../styles/contractDetails.module.css"; // استخدم نفس ملف CSS
 import Area from "../components/icons/area";
 import BathsIcon from "../components/icons/BathsIcon";
@@ -297,7 +285,6 @@ export default function PublicContractView() {
       </Card>
 
     </>
-
 
   );
 }

@@ -107,7 +107,7 @@
 
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
-import { Select } from "@mantine/core";
+import { Input, Select } from "@mantine/core";
 import classes from "../styles/analytics.module.css";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -158,43 +158,75 @@ const TimeFilter = ({ initialTimeFrame = "month", onChange }) => {
 
   return (
     <div>
-      <Select
-        value={timeFrame}
-        onChange={handleTimeFrameChange}
-        data={[
-          { value: "month", label: "Month" },
-          { value: "year", label: "Year" },
-          { value: "yearly", label: "All Years" },
-        ]}
-        style={{ width: "150px", marginBottom: "8px" }}
-        className={classes.SelectCardTitle}
-      />
+      <div className={classes.SelectCardTitle}
+      >
 
-      {timeFrame === "month" && (
-        <div className={classes.divDatePickerInput}>
-          <DatePicker
+        <Select
+          value={timeFrame}
+          onChange={handleTimeFrameChange}
+          data={[
+            { value: "month", label: "Month" },
+            { value: "year", label: "Year" },
+            { value: "yearly", label: "All Years" },
+          ]}
+        // style={{ width: "150px", marginBottom: "8px" }}
+
+        />
+
+        {timeFrame === "month" && (
+          <div className={classes.divDatePickerInput}>
+            {/* <DatePicker
             selected={selectedDate || new Date()}
             onChange={handleDateChange}
             showMonthYearPicker
             dateFormat="MM/yyyy"
             className={classes.datePickerInput}
             inline
-          />
-        </div>
-      )}
+          /> */}
 
-      {timeFrame === "year" && (
-        <div className={classes.divDatePickerInput}>
-          <DatePicker
-            selected={selectedDate || new Date()}
-            onChange={handleDateChange}
-            showYearPicker
-            dateFormat="yyyy"
-            className={classes.datePickerInput}
-            inline
-          />
-        </div>
-      )}
+            <DatePicker
+              selected={selectedDate}
+              onChange={handleDateChange}
+              showMonthYearPicker
+              dateFormat="MM/yyyy"
+              customInput={
+                <Input
+                  placeholder="Select month"
+                  // readOnly
+                  style={{
+                    cursor: "pointer",
+                    width: "150px"
+                  }}
+                />
+              }
+            />
+          </div>
+        )}
+
+        {timeFrame === "year" && (
+          <div className={classes.divDatePickerInput}>
+            <DatePicker
+              selected={selectedDate || new Date()}
+              onChange={handleDateChange}
+              showYearPicker
+              dateFormat="yyyy"
+              // className={classes.datePickerInput}
+              customInput={
+                <Input
+                  placeholder="Select month"
+                  // readOnly
+                  style={{
+                    cursor: "pointer",
+                    width: "150px"
+                  }}
+                />
+              }
+            />
+          </div>
+        )}
+      </div>
+
+
     </div>
   );
 };

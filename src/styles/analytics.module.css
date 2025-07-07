@@ -9,6 +9,20 @@
   margin-top: 24px;
 }
 
+.SelectCardTitle {
+  position: relative;
+  z-index: 5;
+  width: 190px;
+}
+
+.divDatePickerInput {
+  position: absolute;
+  top: -10px;
+  border: none;
+  width: 150px;
+  left: 0;
+}
+
 .analyticsContainer {
   display: grid;
   grid-template-columns: 1fr;
@@ -23,11 +37,6 @@
 }
 
 
-.SelectCardTitle {
-  position: relative;
-  z-index: 5;
-  width: 90px;
-}
 .divDatePickerInput {
   position: absolute;
   z-index: 53;
@@ -128,11 +137,13 @@
   margin-top: 24px;
   margin-bottom: 32px;
 }
-.chartFlex{
+
+.chartFlex {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .chartTitle {
   font-size: 20px;
   margin-bottom: 10px;
@@ -145,7 +156,7 @@
   cursor: pointer;
 
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   border: 1px solid var(--color-border);
   font-size: 14px;
@@ -173,7 +184,7 @@
 /* Specific styles for regular dropdown */
 .dropdown {
   padding: 5px 10px;
-  width: 9% ;
+  width: 9%;
   /* margin-bottom: 20px; */
   /* max-width: 95px; */
 }

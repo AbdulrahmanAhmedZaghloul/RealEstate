@@ -41,6 +41,8 @@ export default function PublicContractView() {
         const response = await axiosInstance.get(
           `https://sienna-woodpecker-844567.hostingersite.com/api/v1/listings/${decodedPath}`
         );
+        console.log(response);
+        
         setContract(response.data.data);
         const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareRealEstate/${decodedPath}`;
         setShareLink(finalLink);

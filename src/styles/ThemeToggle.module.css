@@ -1,3 +1,48 @@
+.wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.iconButton1 {
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  padding: 0;
+  color: #272727;
+  border: none;
+  box-shadow: 1px 1px 1px 1px rgb(219, 219, 219, 0.6);
+  background-color: transparent;
+}
+
+.iconButton {
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0;
+  color: var(--color-10);
+  border: none;
+  box-shadow: 2px 2px 2px rgb(219, 219, 219, 0.6);
+  background-color: transparent;
+}
+
+/* .iconButton:hover {
+ } */
+
 .Group {
   display: flex;
   justify-content: center;

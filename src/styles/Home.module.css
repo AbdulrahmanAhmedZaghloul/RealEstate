@@ -1,6 +1,6 @@
 .header {
   height: 120vh;
-  background: linear-gradient(to bottom, #000000 15%, #6E62E5 57%, #FFFFFF 100%);
+  /* background: linear-gradient(to bottom, #000000 15%, #6E62E5 57%, #FFFFFF 100%); */
   color: #fff;
   display: flex;
   align-items: start;
@@ -29,28 +29,27 @@
 
 .text h1 {
   font-size: 3rem;
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 1.5px;
-  background: linear-gradient(to bottom, var(--color-5), #B8B8B8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 10px;
-
+  /* margin-bottom: px; */
+  margin: 0;
+  color: var(--color-10);
 }
 
 .text p {
   font-size: 20px;
   font-weight: 400;
   color: #B8B8B8;
+  /* margin: 0; */
   margin-bottom: 10px;
 }
 
 .buttonText {
-  background-color: var(--color-5);
-  color: var(--color-1);
-  border-radius: 20px;
-  font-size: 16px;
-  font-weight: 400;
+  background-color: var(--color-10);
+  color: var(--color-6);
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
   border: none;
   width: auto;
   height: auto;
@@ -59,7 +58,6 @@
   padding-left: 15px;
   padding-right: 15px;
   line-height: 150%;
-  /* padding: 5px 10px;     */
 }
 
 .image {
@@ -81,39 +79,81 @@
   border: none;
 }
 
-.imagepostion {
-  position: absolute;
-  border: none;
-  top: 8%;
-  left: 30%;
-  height: 100%;
-  width: 100%;
-  object-fit: contain;
-}
-
-.Join {
+.Built {
   width: 90%;
   margin: auto;
-  margin-top: 9rem;
 }
 
-
-.Join h2 {
-  font-family: Poppins;
-  font-size: 33px;
-  font-weight: 700;
-  margin: 0;
-  margin-top: 20px;
+.Built h2 {
+  font-family: inherit;
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 0.5%;
+  text-align: center;
+  color: var(--color-10);
 }
 
-.Joindiv {
+.Built p {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.5%;
+  line-height: 24px;
+  text-align: center;
+  color: var(--color-9);
+}
+
+.BuiltGrid {
+  display: flex;
   padding: 30px;
 }
 
-.Joindivsvg {
-  padding: 40px 30px;
-  border: 1px solid rgb(217, 217, 217);
-  border-radius: 20px;
+.BuiltGrid img {
+  width: 40%;
+  object-fit: contain;
+}
+
+.BuiltGridFlex {
+  padding-right: 20px;
+  text-align: start;
+}
+
+.BuiltGridFlex h3 {
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.BuiltGridFlex p {
+  text-align: start;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 30px;
+}
+
+
+.BuiltGride {
+  padding: 30px;
+}
+
+.BuiltGride img{
+  margin-left:auto ; 
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.BuiltGridCol h3{
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.BuiltGridCol p{
+  text-align: start;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 30px;
 }
 
 .backgroundColorSvg {
@@ -700,43 +740,6 @@
     border: none;
   }
 
-  .imagepostion {
-    position: absolute;
-    border: none;
-    top: 8%;
-    left: 30%;
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-  }
-
-  .Join {
-    width: 100%;
-    padding: 10px;
-  }
-
-
-  .Join h3 {
-    font-family: Poppins;
-    font-size: 14px;
-    font-weight: 700;
-    margin: 0;
-    margin-top: 20px;
-  }
-
-  .Join span {
-    font-size: 13px;
-  }
-
-  .Joindiv {
-    border: 1px solid rgb(217, 217, 217);
-    border-radius: 20px;
-  }
-
-  .Joindivsvg {
-    padding: 20px 10px;
-    border: none;
-  }
 
   .w901 {
     background-color: var(--color-6);

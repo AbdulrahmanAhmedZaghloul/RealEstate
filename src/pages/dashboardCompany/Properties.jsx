@@ -558,6 +558,7 @@ function Properties() {
         onAddProperty={handleAddProperty}
         loading={mutation.isPending}
       />
+      
       <FiltersModal
         opened={openedFilterModal}
         onClose={closeFilterModal}

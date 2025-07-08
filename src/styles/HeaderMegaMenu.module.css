@@ -46,10 +46,19 @@
 
 .SignButtons {
   font-family: Poppins;
-  font-weight: 600;
-  font-size: 18px;
-  border-radius: 10px;
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 5px;
   cursor: pointer;
+  width: 94px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0;
+  color: var(--color-10);
+  border: none;
+  box-shadow: 1px 1px 1px 0.8px rgb(219, 219, 219, 0.4);
   background-color: transparent;
 }
 
@@ -72,13 +81,15 @@
   font-size: 18px;
   line-height: 150%;
   letter-spacing: 0%;
-  color: var(--color-2);
+  color: var(--color-10);
   ;
 }
 
-.links .navLinks:hover {
-  color: #848485 ;
+
+.alinks {
+  color: var(--color-10);
 }
+
 
 /* Responsive */
 @media (max-width: 990px) {
@@ -98,22 +109,18 @@
   }
 
   .linksMobile a {
-    color: var(--color-8);
+    color: var(--color-10);
     text-decoration: none;
     font-weight: 500;
     cursor: pointer;
 
   }
 
-  .linksMobile a:hover {
-    color: #1c7ed6;
-  }
-
   .burger {
     display: block;
     /* color: #fff !important;
      */
-     cursor: pointer;
+    cursor: pointer;
   }
 
   .drawerLinks .navLinks {
@@ -122,13 +129,10 @@
     font-size: 18px;
     line-height: 150%;
     letter-spacing: 0%;
-    color: var(--color-2);
-    ;
+    color: var(--color-10);
+
     list-style-type: none;
     text-decoration: none;
   }
 
-  .drawerLinks .navLinks:hover {
-    color: #848485 !important;
-  }
 }

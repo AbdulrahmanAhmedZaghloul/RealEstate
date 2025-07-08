@@ -6,6 +6,10 @@ import { Button, Burger, Drawer, ScrollArea } from "@mantine/core";
 //Local imports
 import classes from "../../styles/HeaderMegaMenu.module.css";
 import Logo from "../../assets/header/logo-43.png";
+import { HomeThemeToggle } from "../../pages/Home/HomeThemeToggle";
+import { useTranslation } from "../../context/LanguageContext";
+// import { HomeThemeToggle } from "../../pages/Home/HomeThemeToggle";
+// import { HomeThemeToggle } from "../../pages/Home/HomeThemeToggle";
 
 export function HeaderMegaMenu() {
   const [opened, setOpened] = useState(false);
@@ -13,6 +17,7 @@ export function HeaderMegaMenu() {
   const location = useLocation(); //  تحديد الصفحة الحالية
   location.pathname === "/";
   const hiddenLogoPages = ["/", "/about", "/privacy", "/Terms"];
+  const { t } = useTranslation();
 
   return (
     <>
@@ -29,8 +34,8 @@ export function HeaderMegaMenu() {
       {hiddenLogoPages.includes(location.pathname) && (
         <header
           style={{
-            backgroundColor: location.pathname === "/" ? "#000" : "#fff",
-            borderBottom: location.pathname === "/" ? "none" : "1px solid #eee",
+            // backgroundColor: location.pathname === "/" ? "#000" : "#fff",
+            // borderBottom: location.pathname === "/" ? "none" : "1px solid #eee",
           }}
           className={classes.header}
         >
@@ -52,33 +57,25 @@ export function HeaderMegaMenu() {
             <div>
               <nav className={classes.links}>
                 <Link
-                  style={{
-                    color: location.pathname === "/" ? "#fff" : "#5e5e5e",
-                  }}
                   to="/"
+                  className={classes.alinks}
                 >
                   Home
                 </Link>
                 <Link
-                  style={{
-                    color: location.pathname === "/" ? "#fff" : "#5e5e5e",
-                  }}
+                  className={classes.alinks}
                   to="/Terms"
                 >
                   Terms
                 </Link>
                 <Link
-                  style={{
-                    color: location.pathname === "/" ? "#fff" : "#5e5e5e",
-                  }}
+                  className={classes.alinks}
                   to="/privacy"
                 >
                   Privacy
                 </Link>
                 <Link
-                  style={{
-                    color: location.pathname === "/" ? "#fff" : "#5e5e5e",
-                  }}
+                  className={classes.alinks}
                   to="/about"
                 >
                   about
@@ -95,20 +92,21 @@ export function HeaderMegaMenu() {
                   Get Started
                 </Button>
               )}
+              <HomeThemeToggle />
 
-              <Button
-                style={{
-                  color: location.pathname === "/" ? "#fff" : "var(--color-1)",
-                  border:
-                    location.pathname === "/"
-                      ? "1px solid #fff"
-                      : "1px solid var(--color-1)",
-                }}
+              <button
+                // style={{
+                //   color: location.pathname === "/" ? "#fff" : "var(--color-1)",
+                //   border:
+                //     location.pathname === "/"
+                //       ? "1px solid #fff"
+                //       : "1px solid var(--color-1)",
+                // }}
                 className={classes.SignButtons}
                 onClick={() => navigate("/login")}
               >
                 Sign In
-              </Button>
+              </button>
             </div>
 
             {/* Burger Icon - Visible only on mobile */}
@@ -127,13 +125,13 @@ export function HeaderMegaMenu() {
               onClick={() => setOpened((o) => !o)}
               className={classes.burger}
               style={{
-                color: location.pathname === "/" ? "#fff" : "#000", // يتغير حسب الصفحة
+                // color: location.pathname === "/" ? "#fff" : "#000", // يتغير حسب الصفحة
               }}
             >
               <svg
-                 style={{
-                color: location.pathname === "/" ? "#fff" : "#000", // يتغير حسب الصفحة
-              }}
+                style={{
+                  // color: location.pathname === "/" ? "#fff" : "#000", // يتغير حسب الصفحة
+                }}
                 width="32"
                 height="32"
                 viewBox="0 0 32 32"
@@ -176,6 +174,8 @@ export function HeaderMegaMenu() {
                   <Link style={{}} to="/about">
                     about
                   </Link>
+
+
                 </nav>
                 <Button
                   fullWidth

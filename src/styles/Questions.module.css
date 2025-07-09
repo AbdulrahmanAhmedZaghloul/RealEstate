@@ -1,0 +1,91 @@
+/* أساسي */
+.questionsContainer {
+
+  /* background-color: var(--color-9); */
+  padding: 40px;
+  font-family: Arial, sans-serif;
+}
+
+/* الجزء العلوي */
+.topSection 
+{
+  padding: 20px;
+  width: 50%;
+  margin: auto;
+  background-color:  var(--color-5);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.Avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.AvatarPosition {
+  position: absolute;
+
+}
+
+.avatars {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.avatars img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.questionText {
+  font-size: 20px;
+  margin-top: 10px;
+  color: var(--color-10);
+}
+
+.getintouchbtn {
+  background-color: #7c53e4;
+  /* لون الزر */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+/* الجزء السفلي */
+.bottomSection {
+  padding: 30px 0;
+  text-align: center;
+}
+
+.mainTitle {
+  color: var(--color-5);
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.getstartedbtn {
+  background-color: #7c53e4;
+  /* لون الزر */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}

@@ -58,6 +58,7 @@ import ProfileMarketer from "./pages/dashboardMarketer/ProfileMarketer.jsx";
 import PublicContractView from "./pages/PublicContractView.jsx";
 import { EmployeeProvider } from "./context/EmployeeContext.jsx";
 import ShareRealEstate from "./pages/ShareRealEstate.jsx";
+import ContactUs from "./pages/ContactUs .jsx";
 
 function App() {
   return (
@@ -73,6 +74,7 @@ function App() {
               <Route path="/StartAccount" element={<StartAccount />} />
 
               <Route path="/" element={<Home />} />
+              <Route path="/ContactUs" element={<ContactUs />} />
               <Route path="/about" element={<About />} />
               <Route path="/Terms" element={<Terms />} />
               <Route path="/Privacy" element={<Privacy />} />

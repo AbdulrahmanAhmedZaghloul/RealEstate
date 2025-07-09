@@ -5,25 +5,28 @@ import Footer from "../components/Footer";
 import Header from "./Home/Header";
 import BuiltTo from "./Home/BuiltTo";
 import Pricing from "./Home/Pricing";
+import Frequently from "./Home/Frequently";
+import Questions from "./Home/Questions";
 
 function Home() {
 
   return (
     <>
-       {/* <body
+      <body
         style={{
           backgroundColor: " var(--color-11)"
-        }}> */}
+        }}>
 
 
-        <HeaderMegaMenu />
+      <HeaderMegaMenu />
 
-        <Header />
-        <BuiltTo />
-        <Pricing />
-
-        <Footer></Footer>
-      {/* </body> */}
+      <Header />
+      <BuiltTo />
+      <Pricing />
+      <Frequently />
+      <Questions/>
+      <Footer/> 
+      </body>
 
     </>
   );

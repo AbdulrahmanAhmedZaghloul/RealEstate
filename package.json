@@ -4,7 +4,7 @@
     "@hookform/resolvers": "^5.1.1",
     "@mantine/core": "^7.17.7",
     "@mantine/form": "^7.17.8",
-    "@mantine/hooks": "^7.17.7",
+    "@mantine/hooks": "^7.17.8",
     "@mantine/notifications": "^7.17.7",
     "@react-google-maps/api": "^2.20.7",
     "@tabler/icons-react": "^3.33.0",

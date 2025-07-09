@@ -74,6 +74,12 @@ export function HeaderMegaMenu() {
                 >
                   about
                 </Link>
+                <Link
+                  className={classes.alinks}
+                  to="/ContactUs"
+                >
+                  ContactUs
+                </Link>
               </nav>
             </div>
             {/* Auth Buttons - Hidden on mobile */}

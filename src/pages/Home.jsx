@@ -64,32 +64,32 @@ function Home() {
             <div className={classes.BuiltGridFlex}>
               <h3>Smart Property Management</h3>
               <p>
-                View, search, and manage all your property listings in one place.  Add new properties, update statuses, and filter with ease.
+                View, search, and manage all your property listings in one place. Add new properties, update statuses, and filter with ease.
                 Whether you're managing 10 or 1,000 listings  it's always simple.
               </p>
             </div>
             <img src={ChartLight} alt=" image" />
           </GridCol>
 
-          
+
 
           <GridCol className={classes.BuiltGrid} span={{ base: 6, md: 6, sm: 12, lg: 6 }}>
-             <div className={classes.BuiltGridFlex}>
-            <h3>Built-In Team Chat</h3>
-          <p>
-          Communicate directly with your team without leaving the platform.
-                       </p>
-        </div>
-        <img src={ChartLight} alt=" image" />
-    </GridCol>
-      
+            <div className={classes.BuiltGridFlex}>
+              <h3>Built-In Team Chat</h3>
+              <p>
+                Communicate directly with your team without leaving the platform.
+              </p>
+            </div>
+            <img src={ChartLight} alt=" image" />
+          </GridCol>
 
-                
-        </Grid>    
+
+
+        </Grid>
       </section>
 
 
-    {/* <Footer></Footer> */ }
+      <Footer></Footer>
     </>
   );
 }

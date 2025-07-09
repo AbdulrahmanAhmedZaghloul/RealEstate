@@ -2,7 +2,7 @@
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
 
 import Footer from "../components/Footer";
-import Header from "./Home/header";
+import Header from "./Home/Header";
 import BuiltTo from "./Home/BuiltTo";
 import Pricing from "./Home/Pricing";
 

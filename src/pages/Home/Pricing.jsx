@@ -9,7 +9,7 @@ import {
     Grid,
 } from "@mantine/core";
 import { useState } from "react";
-import classes from "../../styles/SubscriptionPlans.module.css";
+import classes from "../../styles/Pricing.module.css";
 import { useMediaQuery } from "@mantine/hooks";
 import { useHomeSubscription } from "../../hooks/queries/Home/useHomeSubscription";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,12 @@ function Pricing() {
         <>
             <Card style={{ zIndex: "10", backgroundColor: "transparent" }}>
                 <div style={{ padding: "20px", textAlign: "center" }}>
-                    <Text fz={50} className={classes.Choose}>Pricing</Text>
+                    <h2 className={classes.Choose}>Pricing</h2>
+                    <p>
+                        Join as a Company or Marketer. Upgrade your plan to access branded <br />
+                        listings, lead tracking tools, and full property management features.
+                    </p>
+
                     <Center style={{ marginTop: "30px" }}>
                         <Text fz={18} fw={600} mr={20}>monthly</Text>
                         <Switch
@@ -48,17 +53,7 @@ function Pricing() {
                         {data?.data.map((plan) => (
                             <Grid.Col key={plan.id} span={isMobile ? 12 : 4}>
                                 <div
-                                    style={{
-                                        // backgroundColor: plan.name === "Pro Plan" ? "var(--color-1)" : "transparent",
-                                        padding: "30px",
-                                        borderRadius: "10px",
-                                        width: "320px",
-                                        // border:
-                                        //     plan.name === "Pro Plan"
-                                        //         ? "var(--color-5)"
-                                        //         : "1px solid rgb(191, 190, 190)",
-                                    }
-                                }
+                                    className={classes.PricingGrid}
                                 >
                                     <Group position="apart" mb={5}>
                                         <Text>{plan.name}</Text>
@@ -84,20 +79,32 @@ function Pricing() {
                                             justifyContent: "start",
                                             flexDirection: "column",
                                             gap: "10px",
+
                                         }}
                                     >
-                                        <li>
-                                            <span style={{ color: "green" }}>✔</span>
+                                        <li
+                                            style={{
+                                                padding: "10px 0"
+                                            }}
+
+                                        >
+                                            <span style={{ color: "green", marginRight: "10px" }}>✔</span>
                                             <span>Limit RealState</span> {" : "}
                                             {plan.features.listings_limit}
                                         </li>
-                                        <li>
-                                            <span style={{ color: "green" }}>✔</span>
+                                        <li style={{
+                                            padding: "10px 0"
+                                        }}
+                                        >
+                                            <span style={{ color: "green", marginRight: "10px" }}>✔</span>
                                             <span>Limit employees</span> {" : "}
                                             {plan.features.employees_limit}
                                         </li>
-                                        <li>
-                                            <span style={{ color: "green" }}>✔</span>
+                                        <li style={{
+                                            padding: "10px 0"
+                                        }}
+                                        >
+                                            <span style={{ color: "green", marginRight: "10px" }}>✔</span>
                                             <span>Limit supervisors</span> {" : "}
                                             {plan.features.supervisors_limit}
                                         </li>
@@ -106,7 +113,7 @@ function Pricing() {
                                         fullWidth
                                         onClick={() => {
                                             navigate("/register")
-                                         }}
+                                        }}
                                         style={{
                                             // backgroundColor: plan.name === "Pro Plan" ? "#fff" : "var(--color-1)",
                                             // color: plan.name === "Pro Plan" ? "var(--color-1)" : "#f1f1f1",

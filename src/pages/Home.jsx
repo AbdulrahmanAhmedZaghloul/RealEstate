@@ -10,11 +10,10 @@ function Home() {
 
   return (
     <>
-      {/* <HeaderMegaMenu /> */}
-      <body
+       {/* <body
         style={{
           backgroundColor: " var(--color-11)"
-        }}>
+        }}> */}
 
 
         <HeaderMegaMenu />
@@ -24,7 +23,7 @@ function Home() {
         <Pricing />
 
         <Footer></Footer>
-      </body>
+      {/* </body> */}
 
     </>
   );

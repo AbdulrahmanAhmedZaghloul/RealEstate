@@ -109,10 +109,7 @@
 }
 
 
-.BuiltGrid {}
-
 .BuiltGrid .shadow {
-
   background-color: var(--color-5);
   display: flex;
   align-items: start;
@@ -136,10 +133,10 @@
 .BuiltGridSmartImage {
   width: 100%;
   object-fit: contain;
-  padding-top: 5rem; 
+  padding-top: 5rem;
 }
 
-.BuiltGride .shadow{
+.BuiltGride .shadow {
 
   background-color: var(--color-5);
 }
@@ -163,7 +160,7 @@
 .BuiltGridFlex h3 {
   font-size: 21px;
   font-weight: 500;
-    color: var(--color-10);
+  color: var(--color-10);
 
 }
 
@@ -191,7 +188,7 @@
 .BuiltGridSmartFlex h3 {
   font-size: 21px;
   font-weight: 500;
-    color: var(--color-10);
+  color: var(--color-10);
 
 }
 
@@ -220,7 +217,7 @@
 .BuiltGridCol h4 {
   /* font-size: 21px; */
   font-weight: 500;
-    color: var(--color-10);
+  color: var(--color-10);
 
 }
 

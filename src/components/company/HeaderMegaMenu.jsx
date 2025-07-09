@@ -7,9 +7,7 @@ import { Button, Burger, Drawer, ScrollArea } from "@mantine/core";
 import classes from "../../styles/HeaderMegaMenu.module.css";
 import Logo from "../../assets/header/logo-43.png";
 import { HomeThemeToggle } from "../../pages/Home/HomeThemeToggle";
-import { useTranslation } from "../../context/LanguageContext";
-// import { HomeThemeToggle } from "../../pages/Home/HomeThemeToggle";
-// import { HomeThemeToggle } from "../../pages/Home/HomeThemeToggle";
+import { useTranslation } from "../../context/LanguageContext"; 
 
 export function HeaderMegaMenu() {
   const [opened, setOpened] = useState(false);
@@ -32,11 +30,7 @@ export function HeaderMegaMenu() {
         </div>
       )}
       {hiddenLogoPages.includes(location.pathname) && (
-        <header
-          style={{
-            // backgroundColor: location.pathname === "/" ? "#000" : "#fff",
-            // borderBottom: location.pathname === "/" ? "none" : "1px solid #eee",
-          }}
+        <header 
           className={classes.header}
         >
           {/* Drawer for laptop menu */}

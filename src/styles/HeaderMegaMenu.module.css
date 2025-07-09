@@ -1,5 +1,6 @@
 .header {
   padding: 1rem 2rem;
+  background-color: var(--color-nav);
 }
 
 .inner {
@@ -58,7 +59,7 @@
   padding: 0;
   color: var(--color-10);
   border: none;
-  box-shadow: 1px 1px 1px 0.8px rgb(219, 219, 219, 0.4);
+  box-shadow: 1px 1px 1px 0.8px var(--color-shadow);
   background-color: transparent;
 }
 

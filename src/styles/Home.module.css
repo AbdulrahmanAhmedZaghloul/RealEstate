@@ -81,7 +81,7 @@
 
 .Built {
   width: 90%;
-  margin: auto;
+  margin: 2rem auto;
 }
 
 .Built h2 {
@@ -103,15 +103,57 @@
   color: var(--color-9);
 }
 
-.BuiltGrid {
-  display: flex;
-  padding: 30px;
+.shadow {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
 }
 
-.BuiltGrid img {
-  width: 40%;
+
+.BuiltGrid {}
+
+.BuiltGrid .shadow {
+
+  background-color: var(--color-5);
+  display: flex;
+  align-items: start;
+}
+
+.BuiltGridImage {
+  width: 100%;
+  object-fit: contain;
+  padding-top: 5rem;
+  padding-bottom: 2.2rem;
+  padding-right: 2.2rem;
+}
+
+.BuiltGridSmart .shadow {
+  display: flex;
+  align-items: start;
+  background-color: var(--color-5);
+}
+
+
+.BuiltGridSmartImage {
+  width: 100%;
+  object-fit: contain;
+  padding-top: 5rem; 
+}
+
+.BuiltGride .shadow{
+
+  background-color: var(--color-5);
+}
+
+.BuiltGrideImage {
+  width: 50%;
   object-fit: contain;
 }
+
+
+.BuiltGridFlex {
+  padding: 20px;
+}
+
 
 .BuiltGridFlex {
   padding-right: 20px;
@@ -121,6 +163,8 @@
 .BuiltGridFlex h3 {
   font-size: 21px;
   font-weight: 500;
+    color: var(--color-10);
+
 }
 
 .BuiltGridFlex p {
@@ -131,24 +175,27 @@
   line-height: 30px;
 }
 
-
-.BuiltGride {
-  padding: 30px;
+.iphoneImage {
+  padding-top: 2.2rem;
 }
 
-.BuiltGride img{
-  margin-left:auto ; 
-  display: flex;
-  align-items: center;
-  justify-content: start;
+.BuiltGridSmartFlex {
+  padding: 20px;
 }
 
-.BuiltGridCol h3{
+.BuiltGridSmartFlex {
+  padding-right: 20px;
+  text-align: start;
+}
+
+.BuiltGridSmartFlex h3 {
   font-size: 21px;
   font-weight: 500;
+    color: var(--color-10);
+
 }
 
-.BuiltGridCol p{
+.BuiltGridSmartFlex p {
   text-align: start;
   margin: 0;
   font-size: 14px;
@@ -156,40 +203,37 @@
   line-height: 30px;
 }
 
-.backgroundColorSvg {
-  z-index: -13;
-  width: 70px;
-  height: 70px;
-  border-radius: 20px;
-  background-color: var(--color-6);
+
+
+
+.BuiltGride img {
+  margin-left: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
 }
 
-.backgroundColorSvg svg {
-  z-index: 123;
-  position: relative;
+.BuiltGridCol {
+  padding: 20px;
 }
 
-.backgroundColorSvg h3 {
-  color: #343434;
-  font-size: 24px;
-  font-family: Poppins;
-  font-weight: 600;
+.BuiltGridCol h4 {
+  /* font-size: 21px; */
+  font-weight: 500;
+    color: var(--color-10);
+
 }
 
-.backgroundColorSvg span {
-  color: #969696;
+.BuiltGridCol p {
+  text-align: start;
+  margin: 0;
   font-size: 14px;
-  font-family: Poppins;
-  font-weight: 400;
+  font-weight: 300;
+  line-height: 30px;
 }
 
-
-.GridColUnlockImage1 {
-  position: relative;
-  width: 100%;
+.mtb {
+  margin: 2rem 0;
 }
 
 .w901 {

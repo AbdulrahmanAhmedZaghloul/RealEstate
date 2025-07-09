@@ -12,8 +12,11 @@
   --color-8: #0d0f11;
   --color-9: #B8C0CC;
   --color-10: #1A1A1A;
+  --color-11: ##FCFCFC;
+  --color-nav: #ffff;
 
   --color-border: #f4f6f9;
+  --color-shadow: rgb(219, 219, 219, 0.4);
   --color-select: #F1EFFC;
 
 
@@ -41,7 +44,9 @@
   --color-6: #0d0f11;
   --color-7: #191d23;
   --color-10: #FFFFFF;
-
+  --color-11: #0a0a0a;
+  --color-nav: #000;
+  --color-shadow: #000;
   --color-border: #191d23;
   --color-select: #F1EFFC;
   --color-9: #B8C0CC;

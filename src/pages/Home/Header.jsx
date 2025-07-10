@@ -5,7 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import classes from "../../styles/Home.module.css";
 import lapLight from "../../assets/Home/SystemLight.png";
 import lapDark from "../../assets/Home/SystemDark.png";
+import { useTranslation } from '../../context/LanguageContext';
 function Header() {
+      const { t } = useTranslation();
     
       const navigate = useNavigate();
       const { colorScheme } = useMantineColorScheme(); // Get the current theme
@@ -21,19 +23,18 @@ function Header() {
      
                <div className={classes.text}>
                  <h1>
-                   Manage Your
+                   {t.Manage}
                    <span style={{
                      color: "var(--color-1)"
                    }}>
-                     Real Estate
+                    {" "}
+                     {t.RealEstate}
                    </span>
-                   <br /> Business with Ease
+                   <br /> {t.Business}
                  </h1>
      
                  <p>
-                   Track properties, analyze trends, and <br />
-                   make smarter decisions with our intuitive <br />
-                   real estate dashboard.
+                   {t.Track}
                  </p>
      
                  <button style={{
@@ -41,7 +42,7 @@ function Header() {
                  }} onClick={
                    () => navigate('/StartAccount')
                  } className={classes.buttonText}>
-                   Get started
+                   {t.GetStarted}
                  </button>
                </div>
      

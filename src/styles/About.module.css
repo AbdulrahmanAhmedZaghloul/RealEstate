@@ -1,4 +1,3 @@
-
 .about {
     width: 80%;
     margin: auto;
@@ -12,6 +11,7 @@
     letter-spacing: 1.5px;
     line-height: 115%;
 }
+
 .about p {
     font-size: 18px;
     font-weight: 300;

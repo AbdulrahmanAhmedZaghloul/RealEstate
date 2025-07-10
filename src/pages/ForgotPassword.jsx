@@ -1,4 +1,5 @@
 import {
+  Anchor,
   Box,
   Button,
   Center,
@@ -62,58 +63,60 @@ export default function ForgotPassword() {
 
   return (
     <>
-    
-    <header style={{
+      <div style={{
+        backgroundColor: "var(--color-11)",
+        height: "100vh"
+      }}>
 
-      padding: " 20px",
-    }}>
-      <HeaderMegaMenu />
+        <HeaderMegaMenu />
 
-    </header>
-    <Container size={460} my={30}>
-      <Title className={classes.title} ta="center">
-        Forgot your password?
-      </Title>
-      <Text c="dimmed" fz="sm" ta="center">
-        Enter your email to get a reset link
-      </Text>
 
-      <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-        <TextInput
-          label="Your email"
-          placeholder="you@website.com"
-          value={account.email}
-          onChange={(e) => {
-            const email = e.target.value;
-            setAccount({ ...account, email });
-            setErrors({ email: validateField("email", email) });
-          }}
-          // onChange={(e) => {
-          //   setAccount({ ...account, email: e.target.value });
-          //   setErrors({ ...errors, email: "" });
-          // }}
-          error={errors.email}
-          required
-        />
-        <Group justify="space-between" mt="lg" className={classes.controls}>
-          <Center inline>
-            <Link to="/login" ml={5}>
-              Back to the login page
-            </Link>
-          </Center>
-          <Button
-            className={classes.control}
-            onClick={handleForgotPassword}
-                 disabled={
-                loading || Object.values(errors).some((error) => error !== "")
-              }
-            // loading={loading}
-          >
-            Reset password
-          </Button>
-        </Group>
-      </Paper>
-    </Container>
+        <Container size={460} my={30}>
+          <Title className={classes.title} ta="center">
+            Forgot your password?
+          </Title>
+          <Text c="dimmed" fz="sm" ta="center">
+            Enter your email to get a reset link
+          </Text>
+
+          <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
+            <TextInput
+              label="Your email"
+              placeholder="you@website.com"
+              value={account.email}
+              onChange={(e) => {
+                const email = e.target.value;
+                setAccount({ ...account, email });
+                setErrors({ email: validateField("email", email) });
+              }}
+              error={errors.email}
+              required
+            />
+            <Group justify="space-between" mt="lg" className={classes.controls}>
+              <Center inline>
+                <Link to="/login" ml={5} style={{ textDecoration: "inherit", color: "inherit" }} >
+                  <Anchor size="sm" c="var(--color-1)">
+                    Back to the login page
+                  </Anchor>
+                </Link>
+              </Center>
+              <Button
+                className={classes.control}
+                onClick={handleForgotPassword}
+                disabled={
+                  loading || Object.values(errors).some((error) => error !== "")
+                }
+              // loading={loading}
+              >
+                Reset password
+              </Button>
+            </Group>
+          </Paper>
+          
+        </Container>
+
+      </div>
+
     </>
   );
 }

@@ -7,30 +7,41 @@ import { Button, Burger, Drawer, ScrollArea } from "@mantine/core";
 import classes from "../../styles/HeaderMegaMenu.module.css";
 import Logo from "../../assets/header/logo-43.png";
 import { HomeThemeToggle } from "../../pages/Home/HomeThemeToggle";
-import { useTranslation } from "../../context/LanguageContext"; 
+import { useTranslation } from "../../context/LanguageContext";
 
 export function HeaderMegaMenu() {
   const [opened, setOpened] = useState(false);
   const navigate = useNavigate();
   const location = useLocation(); //  تحديد الصفحة الحالية
-  location.pathname === "/" || "/about", "/privacy", "/Terms" ,"/ContactUs";
-  const hiddenLogoPages = ["/", "/about", "/privacy", "/Terms"];
+  location.pathname === "/", "/about", "/privacy", "/Terms", "/ContactUs";
+  const hiddenLogoPages = ["/", "/about", "/privacy", "/Terms", "/ContactUs"];
   const { t } = useTranslation();
 
   return (
     <>
-      {/* {!hiddenLogoPages.includes(location.pathname) && (
-        <div className={classes.logo}>
-          <img
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/")}
-            src={Logo}
-            alt=""
-          />
-        </div>
-      )} */}
-      {/* {hiddenLogoPages.includes(location.pathname) && ( */}
-        <header 
+      {!hiddenLogoPages.includes(location.pathname) && (
+        <header
+          className={classes.header}
+        >
+          {/* Drawer for laptop menu */}
+          <div className={classes.inner}>
+            {/* Logo Section */}
+            <div className={classes.logo}>
+              <img
+                style={{
+                  cursor: "pointer",
+                }}
+                onClick={() => navigate("/")}
+                src={Logo}
+                alt=""
+              />
+            </div>
+          </div>
+
+        </header>
+      )}
+      {hiddenLogoPages.includes(location.pathname) && (
+        <header
           className={classes.header}
         >
           {/* Drawer for laptop menu */}
@@ -162,16 +173,16 @@ export function HeaderMegaMenu() {
             <ScrollArea style={{ height: "calc(100vh - 60px)" }}>
               <nav className={classes.drawerLinks}>
                 <nav className={classes.linksMobile}>
-                  <Link  to="/">
+                  <Link to="/">
                     Home
                   </Link>
-                  <Link  to="/Terms">
+                  <Link to="/Terms">
                     Terms
                   </Link>
-                  <Link  to="/privacy">
+                  <Link to="/privacy">
                     Privacy
                   </Link>
-                  <Link  to="/about">
+                  <Link to="/about">
                     about
                   </Link>
 
@@ -196,7 +207,7 @@ export function HeaderMegaMenu() {
             </ScrollArea>
           </Drawer>
         </header>
-      {/* )} */}
+      )}
     </>
   );
 }

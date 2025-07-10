@@ -1,4 +1,6 @@
-import {Anchor,Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title,Loader,Center,GridCol,Grid,
+import {
+  Button, Checkbox, Group, Paper, PasswordInput, Text, TextInput, Title, Loader, Center, GridCol, Grid,
+  Anchor,
 } from "@mantine/core";
 import classes from "../styles/login.module.css";
 import { useEffect, useState } from "react";
@@ -94,16 +96,16 @@ export default function Login() {
               } else {
                 navigate("/subscription-plans", { replace: true });
               }
-            } 
+            }
 
             else if (role === "supervisor") {
               navigate("/dashboard-supervisor", { replace: true });
             }
-            
+
             else if (role === "employee") {
               navigate("/dashboard-employee", { replace: true });
             }
-            
+
             else if (role === "Marketer") {
               navigate("/dashboard-Marketer", { replace: true });
             }
@@ -142,13 +144,8 @@ export default function Login() {
 
   return (
     <>
-      <header style={{
+      <HeaderMegaMenu />
 
-        padding: " 20px",
-      }}>
-        <HeaderMegaMenu />
-
-      </header>
       <section className={classes.RegisterContainer}>
         <Grid>
           <GridCol span={6} className={classes.GridLogin}>
@@ -206,7 +203,13 @@ export default function Login() {
                     })
                   }
                 />
-                <Link to="/forgot-password">Forgot Password</Link>
+                <Link to="/forgot-password" style={{ textDecoration: "inherit", color: "inherit" }} >
+                  <Anchor size="sm" c="var(--color-1)">
+
+
+                    Forgot Password
+                  </Anchor>
+                </Link>
               </Group>
 
               <Button
@@ -222,15 +225,17 @@ export default function Login() {
               </Button>
 
               <Text c="dimmed" size="sm" ta="center" mt={15}>
-                Do not have an account yet?
-                <Link to="/register"  >
-                  Register
+                Do not have an account yet ? {" "}
+                <Link to="/register" style={{ textDecoration: "inherit", color: "inherit" }}  >
+                  <Anchor size="sm" c="var(--color-1)">
+                    Register
+                  </Anchor>
                 </Link>
               </Text>
             </Paper>
           </GridCol>
 
-          <GridCol span={6} >
+          <GridCol span={6}  >
             <div className={classes.imageContainer}>
               <div className={classes.position1}>
                 <img src={position1} alt="decorative" />

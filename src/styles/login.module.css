@@ -9,6 +9,7 @@
 .RegisterContainer {
   padding: 2rem;
   margin: auto;
+  background-color: var(--color-11);
 }
 
 .Paperimg {
@@ -25,6 +26,8 @@
 }
 
 .PaperLogin {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-5);
   margin: auto;
   width: 448px;
 }
@@ -32,8 +35,8 @@
 .imageContainer {
   background-color: var(--color-1);
   border-radius: 10px;
-  padding: 2rem;
-  padding-bottom: 5rem;
+  padding: 1rem;
+  /* padding-bottom: 5rem; */
   position: relative;
   overflow: hidden;
 }
@@ -44,7 +47,6 @@
   font-size: 24px;
   line-height: 45px;
   color: aliceblue;
-
   z-index: 12;
   position: relative;
 }
@@ -55,14 +57,13 @@
   font-size: 32px;
   line-height: 45px;
   color: aliceblue;
-
   z-index: 12;
   position: relative;
 }
 
 .imageContainer img {
   width: 90%;
-  height: 100%;
+  height: 90%;
   border-radius: 10px;
   margin-left: auto;
   display: flex;

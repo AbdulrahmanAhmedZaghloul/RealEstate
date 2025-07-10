@@ -20,6 +20,7 @@ import classes from "../styles/SubscriptionPlans.module.css";
 import { useMediaQuery } from "@mantine/hooks";
 import { useCurrentSubscription } from "../hooks/queries/useCurrentSubscription";
 import { notifications } from "@mantine/notifications";
+import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
 
 function SubscriptionPlans() {
   const [billingCycle, setBillingCycle] = useState("monthly");
@@ -57,7 +58,7 @@ function SubscriptionPlans() {
       // التأكد من وجود checkout_url
       if (response.data.success && response.data.data?.checkout_url) {
         window.location.href = response.data.data.checkout_url; // إعادة توجيه المستخدم إلى صفحة Stripe
-      }  
+      }
     } catch (error) {
       console.error("Error in checkout:", error);
       notifications.show({
@@ -96,16 +97,9 @@ function SubscriptionPlans() {
       </div>
 
       {/* الهيدر */}
-      <header>
-        <Grid className={classes.Gridheader}>
-          <GridCol span={6} className={classes.logo}>
-            <img src={logo} alt="" />
-          </GridCol>
-          <GridCol span={6} className={classes.login}>
-            <button onClick={() => { }}>تسجيل خروج</button>
-          </GridCol>
-        </Grid>
-      </header>
+      
+      <HeaderMegaMenu />
+
 
       <Card style={{ zIndex: "10", backgroundColor: "transparent" }}>
         <div style={{ padding: "20px", textAlign: "center" }}>

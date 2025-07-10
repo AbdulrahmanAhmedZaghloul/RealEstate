@@ -38,7 +38,7 @@
 }
 
 [data-mantine-color-scheme="dark"] {
-  --color-1: #bd92fc;
+  --color-1: #7064A4;
   --color-2: #e3e3e3;
   --color-3: #b8c0cc;
   --color-4: #B8C0CC;
@@ -51,7 +51,7 @@
   --color-P: #B8B8B8;
   --color-Per: #131116;
   --color-shadow: #000;
-  --color-border: #191d23;
+  --color-border: "transparent";
   --color-select: #F1EFFC;
   --color-9: #B8C0CC;
 

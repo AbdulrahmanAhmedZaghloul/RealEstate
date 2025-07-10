@@ -2,18 +2,16 @@ import React from "react";
 import classes from "../styles/ChoosePlan.module.css";
 import logo from "../assets/header/logo-43.png";
 import { useNavigate } from "react-router-dom";
+import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
 // import { useNavigate } from "react-router-dom";
 function ChoosePlan() {
     const navigate = useNavigate()
 
     return (
         <div>
-            <div className={classes.flexNav}>
-                <div>
-                    <img src={logo} alt="" />
-                </div>
-                <button onClick={() => navigate('/login')}>Sign In</button>
-            </div>
+
+            <HeaderMegaMenu />
+
             <div className={classes.Step}>
                 <div >
                     <div className={classes.Step1}>
@@ -37,7 +35,7 @@ function ChoosePlan() {
                                 </clipPath>
                             </defs>
                         </svg>
-                        
+
                         <p>Step 2 of 3</p>
                         <h3>Choose your plan.</h3>
 

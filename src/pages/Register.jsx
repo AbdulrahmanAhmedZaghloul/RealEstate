@@ -1,5 +1,6 @@
 // Register.jsx
-import {Anchor,Button,Group,Paper,PasswordInput,Text,TextInput,Loader,Center,Grid,GridCol,Select,
+import {
+  Anchor, Button, Group, Paper, PasswordInput, Text, TextInput, Loader, Center, Grid, GridCol, Select,
 } from "@mantine/core";
 import classes from "../styles/register.module.css";
 
@@ -10,7 +11,6 @@ import { useAuth } from "../context/authContext";
 import axiosInstance from "../api/config";
 import image from "../assets/header/screenshot_landing.png";
 import position1 from "../assets/header/pont.png";
-import logo from "../assets/header/logo-43.png";
 import { useRegisterForm } from "../hooks/Validation/useRegisterForm";
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
 
@@ -37,7 +37,7 @@ export default function Register() {
           address: account.address,
           role: account.role, // <-- new field
         });
-      
+
 
         sessionStorage.setItem("email", account.email.toLowerCase());
         notifications.show({
@@ -87,13 +87,8 @@ export default function Register() {
   return (
     <>
 
-      <header style={{
+      <HeaderMegaMenu />
 
-        padding: " 20px",
-      }}>
-        <HeaderMegaMenu />
-
-      </header>
       <section className={classes.RegisterContainer}>
         <Grid>
 
@@ -109,8 +104,7 @@ export default function Register() {
               withBorder
               shadow="md"
               p={30}
-              // w={448}
-              radius="md"
+               radius="md"
             >
               <TextInput
                 label="Name"
@@ -150,8 +144,7 @@ export default function Register() {
                 ]}
                 value={account.role}
                 onChange={(value) => handleInputChange("role", value)}
-                // error={errors.role}
-                mt="md"
+                 mt="md"
               />
 
               <PasswordInput
@@ -184,21 +177,20 @@ export default function Register() {
                 disabled={
                   loading || Object.values(errors).some((error) => error !== "")
                 }
-                // disabled={loading}
-                bg="var(--color-1)"
+                 bg="var(--color-1)"
               >
                 Create account
               </Button>
 
               <Text c="dimmed" size="sm" ta="center" mt={15}>
-                Company already registered?
+                Company already registered ?  {" "}
                 <Link
                   to="/login"
                   style={{ textDecoration: "inherit", color: "inherit" }}
                 >
-                  {/* <Anchor size="sm" c="var(--color-1)"> */}
+                  <Anchor size="sm" c="var(--color-1)">
                   Login
-                  {/* </Anchor> */}
+                  </Anchor>
                 </Link>
               </Text>
             </Paper>

@@ -6,6 +6,7 @@ import classes from "../styles/forgotPass.module.css";
 import axiosInstance from "../api/config";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "../context/authContext"; // Import useAuth
+import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
 
 export default function VerifyOTPCreateAccount({ pass }) {
   const navigate = useNavigate();
@@ -109,16 +110,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
         setLoading(false);
       });
   };
-
-  // useEffect(() => {
-  //   if (user) {
-  //     if (user.role === "marketer") {
-  //       navigate("/dashboard-Marketer", { replace: true });
-  //     }
-
-  //   }
-  // }, [user, navigate]);
-
+ 
   return (
     <Container size={460} my={30}>
       {loading && (
@@ -136,6 +128,8 @@ export default function VerifyOTPCreateAccount({ pass }) {
           </Center>
         </>
       )}
+              <HeaderMegaMenu />
+      
       <Paper
         className={classes.wrapper}
         withBorder

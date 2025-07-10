@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { TextInput, PasswordInput, Button, Container, Title, Text } from "@mantine/core";
+import {  PasswordInput, Button, Container, Title, Text } from "@mantine/core";
 import { notifications } from '@mantine/notifications';
 import axiosInstance from "../api/config";
 import { useNavigate } from "react-router-dom";
+import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -79,51 +80,63 @@ const ResetPassword = () => {
   };
 
   return (
-    <Container size="xs" p="md">
-      <Title order={2} align="center">Reset Password</Title>
-      <form onSubmit={handleSubmit}>
-        <PasswordInput
-          label="New Password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            const passError = validatePassword(e.target.value);
-            setError((prev) => ({ ...prev, password: passError }));
-          }}
-          error={error.password}
-          required
-          mt="md"
-        />
+    <>
+      <HeaderMegaMenu />
+      <div style={{
+        backgroundColor:"var(--color-11)",
+        height:"100vh"
+      }}>
 
-        <PasswordInput
-          label="Confirm Password"
-          value={passwordConfirmation}
-          onChange={(e) => {
-            setPasswordConfirmation(e.target.value);
-            if (e.target.value !== password) {
-              setError((prev) => ({ ...prev, confirmation: "Passwords do not match" }));
-            } else {
-              setError((prev) => ({ ...prev, confirmation: "" }));
-            }
-          }}
-          error={error.confirmation}
-          required
-          mt="md"
-        />
+        <Container size="xs" p="md">
+          <Title order={2} align="center">Reset Password</Title>
+          <form onSubmit={handleSubmit}>
+            <PasswordInput
+              label="New Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                const passError = validatePassword(e.target.value);
+                setError((prev) => ({ ...prev, password: passError }));
+              }}
+              error={error.password}
+              required
+              mt="md"
+            />
 
-        {error.email && <Text color="red" align="center">{error.email}</Text>}
+            <PasswordInput
+              label="Confirm Password"
+              value={passwordConfirmation}
+              onChange={(e) => {
+                setPasswordConfirmation(e.target.value);
+                if (e.target.value !== password) {
+                  setError((prev) => ({ ...prev, confirmation: "Passwords do not match" }));
+                } else {
+                  setError((prev) => ({ ...prev, confirmation: "" }));
+                }
+              }}
+              error={error.confirmation}
+              required
+              mt="md"
+            />
 
-        <Button
-          type="submit"
-          fullWidth
-          mt="md"
-          loading={loading}
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Reset Password"}
-        </Button>
-      </form>
-    </Container>
+            {error.email && <Text color="red" align="center">{error.email}</Text>}
+
+            <Button
+              type="submit"
+              fullWidth
+              mt="md"
+              loading={loading}
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Reset Password"}
+            </Button>
+          </form>
+        </Container>
+
+      </div>
+
+    </>
+
   );
 };
 

@@ -2,8 +2,8 @@
     font-family: "DM Sans";
     margin: auto;
     width: 80%;
-    padding:2rem;
-
+    padding: 2rem;
+    /* background-color: var(--color-11) */
 }
 
 .terms80 {
@@ -22,7 +22,7 @@
 .terms p {
     color: var(--color-p);
     font-weight: 300;
-    font-size: 16px;    
+    font-size: 16px;
     margin: 0;
     line-height: 200%;
 }
@@ -45,7 +45,7 @@
 .Eligibility p {
     color: var(--color-p);
     font-weight: 300;
-    font-size: 17px; 
+    font-size: 17px;
     margin: 0;
     line-height: 200%;
 }

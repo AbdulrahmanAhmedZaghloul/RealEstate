@@ -16,17 +16,17 @@ function Home() {
         style={{
           backgroundColor: " var(--color-11)"
         }}
-        >
+      >
 
 
-      <HeaderMegaMenu />
+        <HeaderMegaMenu />
 
-      <Header />
-      <BuiltTo />
-      <Pricing />
-      <Frequently />
-      <Questions/>
-      <Footer/> 
+        <Header />
+        <BuiltTo />
+        <Pricing />
+        <Frequently />
+        <Questions />
+        <Footer />
       </body>
 
     </>

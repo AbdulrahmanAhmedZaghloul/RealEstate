@@ -1,6 +1,11 @@
 {
-
   "Settings": "Settings",
+  "Home": "Home",
+  "Manage": "Manage Your",
+  "RealEstate": "Real Estate",
+  "Business": "Business with Ease",
+  "Track": "Track properties, analyze trends, and make smarter decisions with our intuitive real estate dashboard.",
+  "GetStarted":"GetStarted",
   "Themes": "Themes",
   "LightMode": "Light Mode",
   "DarkMode": "Dark Mode",

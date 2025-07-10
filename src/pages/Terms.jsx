@@ -8,6 +8,10 @@ function Terms() {
     return (
         <>
             <HeaderMegaMenu />
+              <div style={{
+                backgroundColor: " var(--color-11)"
+            }}>
+
             <div className={classes.terms}>
                 <h1> Terms and Conditions </h1>
                 <div className={classes.terms80} >
@@ -89,6 +93,10 @@ function Terms() {
                 </div>
 
             </div>
+
+            </div>
+
+
             <Footer />
 
         </>

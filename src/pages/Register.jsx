@@ -13,12 +13,14 @@ import image from "../assets/header/screenshot_landing.png";
 import position1 from "../assets/header/pont.png";
 import { useRegisterForm } from "../hooks/Validation/useRegisterForm";
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function Register() {
 
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
   const {
     account,
     errors,
@@ -104,11 +106,11 @@ export default function Register() {
               withBorder
               shadow="md"
               p={30}
-               radius="md"
+              radius="md"
             >
               <TextInput
-                label="Name"
-                placeholder="Your company name"
+                label={t.Name}
+                placeholder={t.YourCompanyName}
                 value={account.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 required
@@ -116,8 +118,8 @@ export default function Register() {
                 error={errors.name}
               />
               <TextInput
-                label="Address"
-                placeholder="Enter your address"
+                label={t.Address}
+                placeholder={t.EnterYourAddress}
                 value={account.address}
                 onChange={(e) => handleInputChange("address", e.target.value)}
                 required
@@ -126,8 +128,8 @@ export default function Register() {
                 mt="md"
               ></TextInput>
               <TextInput
-                label="Email"
-                placeholder="you@website.com"
+                label={t.Email}
+                placeholder={t.YouWebsiteCom}
                 value={account.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 required
@@ -135,21 +137,22 @@ export default function Register() {
                 error={errors.email}
                 mt="md"
               />
-              <Select
-                label="Select Role"
-                placeholder="Choose your role"
+              <Select 
+              label={t.SelectRole}
+                placeholder={t.ChooseYourRole}
                 data={[
-                  { value: "company", label: "Company" },
-                  { value: "marketer", label: "Marketer" },
+                  { value: "company", label: t.Company },
+                  { value: "marketer", label: t.Marketer },
                 ]}
                 value={account.role}
                 onChange={(value) => handleInputChange("role", value)}
-                 mt="md"
+                mt="md"
               />
 
               <PasswordInput
-                label="Password"
-                placeholder="Your company password"
+             
+                label={t.Password}
+                placeholder={t.YourCompanyPassword}
                 value={account.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
                 required
@@ -158,8 +161,8 @@ export default function Register() {
                 mt="md"
               />
               <PasswordInput
-                label="Confirm Password"
-                placeholder="Re-enter your password"
+               label={t.ConfirmPassword}
+                placeholder={t.ReEnterYourPassword}
                 value={account.confirmPassword}
                 onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
                 required
@@ -177,19 +180,19 @@ export default function Register() {
                 disabled={
                   loading || Object.values(errors).some((error) => error !== "")
                 }
-                 bg="var(--color-1)"
+                bg="var(--color-1)"
               >
-                Create account
+                {t.CreateAccount}
               </Button>
 
               <Text c="dimmed" size="sm" ta="center" mt={15}>
-                Company already registered ?  {" "}
+                {t.CompanyAlreadyRegistered}  {" "}
                 <Link
                   to="/login"
                   style={{ textDecoration: "inherit", color: "inherit" }}
                 >
                   <Anchor size="sm" c="var(--color-1)">
-                  Login
+                     {t.Login}
                   </Anchor>
                 </Link>
               </Text>
@@ -204,8 +207,8 @@ export default function Register() {
               <div className={classes.position2}>
                 <img src={position1} alt="image" />
               </div>
-              <h2>Create account</h2>
-              <p>Say Hello to Stress-Free Property Management</p>
+              <h2>{t.CreateAccount}</h2>
+              <p>{t.SayHelloToStressFreePropertyManagement}</p>
               <img src={image} alt="" />
             </div>
           </GridCol>

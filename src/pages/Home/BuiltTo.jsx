@@ -6,16 +6,19 @@ import FrameLight from "../../assets/Home/Frame 56.png";
 import EmployeesLight from "../../assets/Home/Employees (3).png";
 import FramerLight from "../../assets/Home/Frame 1984077916 (1).png";
 import iphoneLight from "../../assets/Home/iphone 18 1 (1).png";
+import { useTranslation } from '../../context/LanguageContext';
 
 function BuiltTo() {
+  const { t } = useTranslation();
+
   return (
     <>
 
       <section className={classes.Built}>
-        <h2>Built to Empower Your Real  <br /> Estate Workflow</h2>
+        <h2>{t.Empower}  <br /> {t.Workflow}</h2>
 
         <p>
-          From listings to contracts manage everything in one smart platform.
+          {t.FromListings}
         </p>
 
 
@@ -25,9 +28,8 @@ function BuiltTo() {
             <GridCol className={classes.BuiltGrid} span={{ base: 6, md: 6, sm: 12, lg: 7 }}>
               <div className={classes.shadow}>
                 <div className={classes.BuiltGridFlex}>
-                  <h3>Business Overview at a Glance</h3>
-                  <p>Get a quick snapshot of your real estate performance total listings, contracts,
-                    team activity, and more. Everything you need to make informed decisions, instantly visible..</p>
+                  <h3>{t.BusinessOverview}</h3>
+                  <p>{t.GetSnapshot}</p>
                 </div>
 
                 <img className={classes.BuiltGridImage} src={ChartLight} alt=" image" />
@@ -39,8 +41,10 @@ function BuiltTo() {
               <div className={classes.shadow}>
 
                 <div className={classes.BuiltGridCol}>
-                  <h4>Team & Role Management</h4>
-                  <p>Assign roles and track team activity <br /> without hassle.</p>
+                  <h4>{t.RoleManagement}</h4>
+                  <p>{t.Assign} <br />
+                    {t.without}
+                  </p>
                 </div>
                 <img className={classes.BuiltGrideImage} src={FrameLight} alt=" image" />
               </div>
@@ -55,10 +59,9 @@ function BuiltTo() {
             <GridCol className={classes.BuiltGridSmart} span={{ base: 6, md: 6, sm: 12, lg: 6 }}>
               <div className={classes.shadow}>
                 <div className={classes.BuiltGridSmartFlex}>
-                  <h3>Smart Property Management</h3>
+                  <h3>{t.SmartProperty}</h3>
                   <p>
-                    View, search, and manage all your property listings in one place. Add new properties, update statuses, and filter with ease.
-                    Whether you're managing 10 or 1,000 listings  it's always simple.
+                    {t.ViewManage}
                   </p>
                 </div>
                 <img className={classes.BuiltGridSmartImage} src={CardLight} alt=" image" />
@@ -70,9 +73,9 @@ function BuiltTo() {
               <div className={classes.shadow}>
 
                 <div className={classes.BuiltGridSmartFlex}>
-                  <h3>Built-In Team Chat</h3>
+                  <h3>{t.TeamChat}</h3>
                   <p>
-                    Communicate directly with your team without leaving the platform.
+                    {t.Communicate}
                   </p>
                 </div>
                 <img className={classes.BuiltGridSmartImage} src={EmployeesLight} alt=" image" />
@@ -92,8 +95,8 @@ function BuiltTo() {
               <div className={classes.shadow}>
 
                 <div className={classes.BuiltGridCol}>
-                  <h4>Client Request Handling</h4>
-                  <p>Track progress, mark matched requests, and never miss an opportunity.</p>
+                  <h4>{t.Client}</h4>
+                  <p>{t.TrackProgress}</p>
                 </div>
                 <img className={classes.FramerLight} src={FramerLight} alt=" image" />
               </div>
@@ -102,8 +105,10 @@ function BuiltTo() {
             <GridCol className={classes.BuiltGrid} span={{ base: 6, md: 6, sm: 12, lg: 7 }}>
               <div className={classes.shadow}>
                 <div className={classes.BuiltGridFlex}>
-                  <h3>Instant Mobile App Publishing</h3>
-                  <p>Every property you list is automatically published to your mobile app no extra steps needed.One system. One action. Everywhere it matters.</p>
+                  <h3>{t.InstantPublishing}</h3>
+                  <p>
+                    {t.Everyproperty}
+                  </p>
 
                 </div>
 

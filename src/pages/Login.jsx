@@ -12,12 +12,13 @@ import position1 from "../assets/header/pont.png";
 import image from "../assets/header/screenshot_landing.png";
 import { validateField } from "../hooks/Validation/validation";
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function Login() {
   const navigate = useNavigate();
   const { user, login, isSubscribed } = useAuth();
   const [loading, setLoading] = useState(false);
-
+  const { t } = useTranslation();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -158,8 +159,8 @@ export default function Login() {
               radius="md"
             >
               <TextInput
-                label="Email"
-                placeholder="you@website.com"
+                label={t.Email}
+                placeholder={t.EnterYourEmail}
                 required
                 value={credentials.email}
                 onChange={(e) => {
@@ -175,8 +176,9 @@ export default function Login() {
               />
 
               <PasswordInput
-                label="Password"
-                placeholder="Your password"
+
+                label={t.Password}
+                placeholder={t.YourPassword}
                 required
                 value={credentials.password}
                 onChange={(e) => {
@@ -194,7 +196,7 @@ export default function Login() {
 
               <Group justify="space-between" mt="lg">
                 <Checkbox
-                  label="Remember me"
+                  label={t.RememberMe}
                   checked={credentials.remember}
                   onChange={(e) =>
                     setCredentials({
@@ -205,9 +207,7 @@ export default function Login() {
                 />
                 <Link to="/forgot-password" style={{ textDecoration: "inherit", color: "inherit" }} >
                   <Anchor size="sm" c="var(--color-1)">
-
-
-                    Forgot Password
+                    {t.ForgotPassword}
                   </Anchor>
                 </Link>
               </Group>
@@ -221,14 +221,14 @@ export default function Login() {
                 }
                 bg="var(--color-1)"
               >
-                Login
+                {t.Login}
               </Button>
 
               <Text c="dimmed" size="sm" ta="center" mt={15}>
-                Do not have an account yet ? {" "}
+                {t.DoNotHaveAnAccountYet} {" "}
                 <Link to="/register" style={{ textDecoration: "inherit", color: "inherit" }}  >
                   <Anchor size="sm" c="var(--color-1)">
-                    Register
+                    {t.Register}
                   </Anchor>
                 </Link>
               </Text>
@@ -243,8 +243,8 @@ export default function Login() {
               <div className={classes.position2}>
                 <img src={position1} alt="decorative" />
               </div>
-              <h2>Sign in</h2>
-              <p>Say Hello to Stress-Free Property Management</p>
+              <h2>{t.SignIn}</h2>
+              <p>{t.SayHelloToStressFreePropertyManagement} </p>
               <img src={image} alt="preview" />
             </div>
           </GridCol>

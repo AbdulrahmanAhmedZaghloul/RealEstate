@@ -3,32 +3,37 @@ import classes from '../../styles/Questions.module.css'; // استيراد مل�
 import Avatar from '../../assets/Home/Avatar.png'; // استيراد ملف CSS
 import Avatar1 from '../../assets/Home/Avatar (1).png'; // استيراد ملف CSS
 import Avatar2 from '../../assets/Home/Avatar (2).png'; // استيراد ملف CSS
- 
-function Questions() {
-    return (
-        <div className={classes.questionsContainer}>
-            {/* الجزء العلوي */}
-            <div className={classes.topSection}>
-                <div className={classes.avatars}>
-                    <div className={classes.Avatar}>
-                        <img src={Avatar} alt="Person 1" />
-                        <img  className={classes.AvatarPosition} src={Avatar1} alt="Person 2" />
-                        <img src={Avatar2} alt="Person 2" />
-                    </div>
-                </div>
-                <h4 className={classes.questionText}>Still have questions?</h4>
-                <p>Can’t find the answer you’re looking for ? Please chat to our friendly team.</p>
-                <button className={classes.getintouchbtn}>Get in touch</button>
-            </div>
+import { useTranslation } from '../../context/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
-            <div className={classes.bottomSection}>
-                <h2 className={classes.maintitle}>Grow your real estate <br /> business with confidence.</h2>
-                <p className={classes.subtitle}>Take control of listings, contracts, and your team all in one place.</p>
-                <button className={classes.getstartedbtn}>Get Started</button>
-            </div>
-        
+function Questions() {
+  const { t } = useTranslation();
+  const navigate = useNavigate()
+  return (
+    <div className={classes.questionsContainer}>
+      {/* الجزء العلوي */}
+      <div className={classes.topSection}>
+        <div className={classes.avatars}>
+          <div className={classes.Avatar}>
+            <img src={Avatar} alt="Person 1" />
+            <img className={classes.AvatarPosition} src={Avatar1} alt="Person 2" />
+            <img src={Avatar2} alt="Person 2" />
+          </div>
         </div>
-    );
+        <h4 className={classes.questionText}>{t.StillHaveQuestions}</h4>
+        <p>{t.CantFindTheAnswerYoureLookingForPleaseChatToOurFriendlyTeam}</p>
+        <button
+          onClick={() => navigate("/ContactUs")}
+          className={classes.getintouchbtn} o>{t.GetInTouch}</button>
+      </div>
+
+      <div className={classes.bottomSection}>
+        <h2 className={classes.maintitle}>{t.GrowYourRealEstateBusinessWithConfidence}</h2>
+        <p className={classes.subtitle}>{t.TakeControlOfListingsContractsAndYourTeamAllInOnePlace}</p>
+        <button onClick={() => navigate("/register")} className={classes.getstartedbtn}>{t.GetStarted}</button>
+      </div>
+    </div>
+  );
 }
 
 export default Questions;

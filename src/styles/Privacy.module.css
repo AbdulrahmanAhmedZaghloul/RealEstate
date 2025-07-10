@@ -13,14 +13,14 @@
 
 .terms h1 {
     text-align: center;
-    color: #303030;
+    color: var(--color-10);
     font-weight: 700;
     font-size: 32px;
     margin-bottom: 0.6rem;
 }
 
 .terms p {
-    color: #303030;
+    color: var(--color-p);
     font-weight: 300;
     font-size: 16px;    
     margin: 0;
@@ -29,23 +29,37 @@
 
 
 .Welcome {
-    color: #303030;
+    color: var(--color-10);
     font-weight: 300;
     font-size: 20px;
     /* line-height: 100%; */
 }
 
 .Eligibility h2 {
-    color: #303030;
+    color: var(--color-10);
     font-weight: 700;
     font-size: 20px;
     line-height: 100%;
 }
 
 .Eligibility p {
-    color: #303030;
+    color: var(--color-p);
     font-weight: 300;
     font-size: 17px; 
     margin: 0;
     line-height: 200%;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--color-10);
+}
+
+.p {
+    color: var(--color-p);
 }

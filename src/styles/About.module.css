@@ -1,48 +1,3 @@
-.contact {
-    background-color: #F4F3FE;
-    text-align: center;
-    padding: 1.5rem;
-}
-
-.contact h1 {
-    font-size: 24px;
-    font-weight: 300;
-    font-family: "Poppins";
-    letter-spacing: 1.5px;
-    line-height: 115%;
-}
-
-
-
-.contact p {
-    font-size: 16px;
-    font-weight: 300;
-    font-family: "Poppins";
-    letter-spacing: 1.5px;
-    line-height: 115%;
-}
-
-.contact .contactSpan {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding-bottom: 10px;
-}
-
-.contact span {
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 10px;
-    font-size: 16px;
-    font-weight: 300;
-    font-family: "Poppins";
-    letter-spacing: 1.5px;
-    line-height: 115%;
-}
 
 .about {
     width: 80%;
@@ -50,6 +5,7 @@
 }
 
 .about h2 {
+    text-align: center;
     font-size: 32px;
     font-weight: 300;
     font-family: "Poppins";
@@ -61,5 +17,20 @@
     font-weight: 300;
     font-family: "Poppins";
     letter-spacing: 1px;
-    line-height: 160%;
+    line-height: 200%;
+}
+
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--color-10);
+}
+
+.p {
+    color: var(--color-p);
 }

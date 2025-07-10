@@ -11,7 +11,7 @@ function Terms() {
             <div className={classes.terms}>
                 <h1> Terms and Conditions </h1>
                 <div className={classes.terms80} >
-                    <div  >
+                    <div>
                         <p>Last Updated: 2025-05-06</p>
 
                         <p className={classes.Welcome}>

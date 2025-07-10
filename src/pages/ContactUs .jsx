@@ -26,10 +26,11 @@ const ContactUs = () => {
     <>
 
       <HeaderMegaMenu></HeaderMegaMenu>
-      <body
+      {/* <div
         style={{
-          backgroundColor: " var(--color-11)"
-        }}>
+          backgroundColor: " var(--color-11)",
+          height:"100%"
+        }}> */}
 
         <Container size="lg" py="xl" >
 
@@ -81,7 +82,7 @@ const ContactUs = () => {
 
         </Container>
 
-      </body>
+      {/* </div> */}
 
     </>
 

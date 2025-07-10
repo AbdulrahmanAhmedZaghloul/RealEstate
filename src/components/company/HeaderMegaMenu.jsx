@@ -13,13 +13,13 @@ export function HeaderMegaMenu() {
   const [opened, setOpened] = useState(false);
   const navigate = useNavigate();
   const location = useLocation(); //  تحديد الصفحة الحالية
-  location.pathname === "/";
+  location.pathname === "/" || "/about", "/privacy", "/Terms" ,"/ContactUs";
   const hiddenLogoPages = ["/", "/about", "/privacy", "/Terms"];
   const { t } = useTranslation();
 
   return (
     <>
-      {!hiddenLogoPages.includes(location.pathname) && (
+      {/* {!hiddenLogoPages.includes(location.pathname) && (
         <div className={classes.logo}>
           <img
             style={{ cursor: "pointer" }}
@@ -28,8 +28,8 @@ export function HeaderMegaMenu() {
             alt=""
           />
         </div>
-      )}
-      {hiddenLogoPages.includes(location.pathname) && (
+      )} */}
+      {/* {hiddenLogoPages.includes(location.pathname) && ( */}
         <header 
           className={classes.header}
         >
@@ -84,14 +84,14 @@ export function HeaderMegaMenu() {
             </div>
             {/* Auth Buttons - Hidden on mobile */}
             <div className={classes.authButtons}>
-              {location.pathname === "/" ? null : (
+              {/* {location.pathname === "/" ? null : (
                 <Button
                   className={classes.GetButtons}
                   onClick={() => navigate("/StartAccount")}
                 >
                   Get Started
                 </Button>
-              )}
+              )} */}
               <HomeThemeToggle />
 
               <button
@@ -162,28 +162,28 @@ export function HeaderMegaMenu() {
             <ScrollArea style={{ height: "calc(100vh - 60px)" }}>
               <nav className={classes.drawerLinks}>
                 <nav className={classes.linksMobile}>
-                  <Link style={{}} to="/">
+                  <Link  to="/">
                     Home
                   </Link>
-                  <Link style={{}} to="/Terms">
+                  <Link  to="/Terms">
                     Terms
                   </Link>
-                  <Link style={{}} to="/privacy">
+                  <Link  to="/privacy">
                     Privacy
                   </Link>
-                  <Link style={{}} to="/about">
+                  <Link  to="/about">
                     about
                   </Link>
 
 
                 </nav>
-                <Button
+                {/* <Button
                   fullWidth
                   onClick={() => navigate("/StartAccount")}
                   mt="sm"
                 >
                   Get Started
-                </Button>
+                </Button> */}
                 <Button
                   fullWidth
                   onClick={() => navigate("/login")}
@@ -196,7 +196,7 @@ export function HeaderMegaMenu() {
             </ScrollArea>
           </Drawer>
         </header>
-      )}
+      {/* )} */}
     </>
   );
 }

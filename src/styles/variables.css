@@ -14,6 +14,8 @@
   --color-10: #1A1A1A;
   --color-11: #FCFCFC;
   --color-nav: #ffff;
+  --color-P: #637381;
+  --color-Per: #F8F7FE;
 
   --color-border: #f4f6f9;
   --color-shadow: rgb(219, 219, 219, 0.4);
@@ -46,6 +48,8 @@
   --color-10: #FFFFFF;
   --color-11: #0a0a0a;
   --color-nav: #000;
+  --color-P: #B8B8B8;
+  --color-Per: #131116;
   --color-shadow: #000;
   --color-border: #191d23;
   --color-select: #F1EFFC;

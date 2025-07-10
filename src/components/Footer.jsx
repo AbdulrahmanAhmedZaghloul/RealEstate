@@ -10,8 +10,8 @@ function Footer() {
 
             <footer>
                 <Grid style={{
-                     width:"90%",
-                    margin:'auto'
+                    width: "90%",
+                    margin: 'auto'
                 }}>
                     <GridCol span={{
                         xs: 12,
@@ -78,7 +78,7 @@ function Footer() {
                                     fill="var(--color-10)"
                                 />
                             </svg>
-                            
+
                             <svg
                                 width={19}
                                 height={20}
@@ -123,7 +123,7 @@ function Footer() {
                                 width="21"
                                 height="20"
                                 viewBox="0 0 21 20"
-                                    // fill="var(--color    -10)"
+                                // fill="var(--color    -10)"
                                 xmlns="http://www.w3.org/2000/svg"
                             >
                                 <path

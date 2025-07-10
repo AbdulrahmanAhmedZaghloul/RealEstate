@@ -1,0 +1,24 @@
+.textContact {
+    color: var(--color-1);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 26px;
+    margin-bottom: 1rem;
+}
+
+.GetContact {
+    color: var(--color-10);
+}
+
+.GetQuestions {
+    color: var(--color-P);
+}
+
+.StackQuestions {
+    padding-top: 20px;
+}
+
+.backQuestions{
+    background-color: var(--color-Per);
+    color: var(--color-1);
+}

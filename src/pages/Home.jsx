@@ -15,7 +15,8 @@ function Home() {
       <body
         style={{
           backgroundColor: " var(--color-11)"
-        }}>
+        }}
+        >
 
 
       <HeaderMegaMenu />

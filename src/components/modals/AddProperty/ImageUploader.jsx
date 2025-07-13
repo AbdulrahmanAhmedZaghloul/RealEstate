@@ -2,11 +2,14 @@
 import React from "react";
 import { Text, TextInput } from "@mantine/core";
 import Compressor from "compressorjs";
+import { useTranslation } from "../../../context/LanguageContext";
 
 const MAX_IMAGES = 5;
 const MAX_SIZE_MB = 20;
 
 export const ImageUploader = ({ form }) => {
+  const { t } = useTranslation(); // ✅ استخدام الترجمة هنا
+
   const handleImageChange = async (e) => {
     let files = Array.from(e.target.files);
 
@@ -22,7 +25,7 @@ export const ImageUploader = ({ form }) => {
     });
 
     if (invalidFiles.length > 0) {
-      alert(`The following files are not images: ${invalidFiles.join(", ")}`);
+      alert(`${t.TheFollowingFilesAreNotImages} : ${invalidFiles.join(", ")}`);
     }
 
     // التحقق من وجود تكرار
@@ -36,7 +39,7 @@ export const ImageUploader = ({ form }) => {
     // التحقق من الحد الأقصى
     const totalImages = form.values.images.length + newValidImages.length;
     if (totalImages > MAX_IMAGES) {
-      form.setFieldError("images", `You cannot upload more than ${MAX_IMAGES} images`);
+      form.setFieldError("images", `${t.YouCannotUploadMoreThan}  ${MAX_IMAGES} ${t.Images}`);
       e.target.value = null;
       return;
     }
@@ -71,7 +74,8 @@ export const ImageUploader = ({ form }) => {
   return (
     <div>
       <Text size="sm" weight={500} style={{ marginBottom: 7 }}>
-        Upload Images
+                {t.UploadImages}
+
       </Text>
       <div
         style={{
@@ -87,25 +91,25 @@ export const ImageUploader = ({ form }) => {
           style={
             form.errors.images
               ? {
-                  border: "1px dashed red",
-                  borderRadius: "8px",
-                  width: "60px",
-                  height: "60px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                }
+                border: "1px dashed red",
+                borderRadius: "8px",
+                width: "60px",
+                height: "60px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }
               : {
-                  border: "1px dashed var(--color-4)",
-                  borderRadius: "8px",
-                  width: "60px",
-                  height: "60px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                }
+                border: "1px dashed var(--color-4)",
+                borderRadius: "8px",
+                width: "60px",
+                height: "60px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }
           }
           onClick={() => document.getElementById("image-upload").click()}
         >
@@ -117,7 +121,7 @@ export const ImageUploader = ({ form }) => {
             multiple
             onChange={handleImageChange}
           />
-          <div style={{ fontSize: "16px", color: "var(--color-4)" }}>+</div>
+          <div style={{ fontSize: "16px", color: "var(--color-4)" }}> + </div>
         </div>
 
         {/* Display Uploaded Images */}

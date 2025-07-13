@@ -3,6 +3,7 @@ import React from "react";
 import { Text, Loader } from "@mantine/core";
 import { AmenityBadge } from "./AmenityBadge";
 import edit from "../../../assets/edit.svg";
+import { useTranslation } from "../../../context/LanguageContext";
 
 export const AmenitiesSection = ({
     form,
@@ -11,7 +12,9 @@ export const AmenitiesSection = ({
     amenitiesLoading,
     handleAmenityBlur,
 }) => {
-    const currentCategoryType = categoryMap[form.values.category_id];
+      const { t } = useTranslation(); // ✅ استخدم الترجمة هنا
+    const currentCategoryType =
+     categoryMap[form.values.category_id];
 
     return (
         <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 24 }}>
@@ -20,7 +23,8 @@ export const AmenitiesSection = ({
                 weight={500}
                 style={{ fontSize: 14, fontWeight: 500, marginBottom: 7 }}
             >
-                Amenities
+                {t.Amenities}
+
                 <img
                     onClick={() =>
                         addCustomAmenity(
@@ -31,7 +35,7 @@ export const AmenitiesSection = ({
                     src={edit}
                     height={12}
                     width={12}
-                    alt="Add Custom Amenity"
+                    alt={t.AddCustomAmenity}
                 />
             </Text>
             {amenitiesLoading && <Loader color="grey" size="sm" />}

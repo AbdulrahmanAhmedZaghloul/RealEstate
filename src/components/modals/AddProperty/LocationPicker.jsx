@@ -2,8 +2,11 @@
 import { Select } from "@mantine/core";
 import { useState, useEffect } from "react";
 import Dropdown from "../../icons/dropdown";
+import { useTranslation } from "../../../context/LanguageContext";
 
 const LocationPicker = ({ value, onChange, error }) => {
+    const { t } = useTranslation(); // ✅ استخدم الترجمة هنا
+
   const [locationOptions, setLocationOptions] = useState([]);
   const [searchValue, setSearchValue] = useState(value || "");
   const [loading, setLoading] = useState(true);
@@ -63,10 +66,10 @@ const LocationPicker = ({ value, onChange, error }) => {
 
   return (
     <Select
-      label="Location"
-      placeholder="Enter property location"
+      label={t.Location}
+      placeholder={t.EnterPropertyLocation}
       searchable
-      nothingFoundMessage="No location found"
+      nothingFoundMessage={t.NoLocationFound}
       data={locationOptions.map((loc) => ({
         value: loc.value,
         label: loc.value,

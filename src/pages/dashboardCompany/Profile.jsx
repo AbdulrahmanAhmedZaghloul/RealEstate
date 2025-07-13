@@ -31,6 +31,7 @@ import CropModal from "../../components/CropModal";
 import { EmployeeContext } from "../../context/EmployeeContext";
 
 function Profile() {
+  // const { t } = useTranslation();
   // State hooks
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [rawImage, setRawImage] = useState(null);
@@ -61,14 +62,14 @@ function Profile() {
   const [opened, { open, close }] = useDisclosure(false);
   const [formModalOpened, { open: openFormModal, close: closeFormModal }] =
     useDisclosure(false);
-  const { user,logout} = useAuth();
+  const { user, logout } = useAuth();
   const isMobile = window.matchMedia("(max-width: 991px)").matches;
   const { t } = useTranslation();
   const { data, isLoading } = useProfile();
   // console.log(data);
-  const idNot = data?.data?.user?.id; 
+  const idNot = data?.data?.user?.id;
   const { employeeId, setEmployeeId } = useContext(EmployeeContext);
-setEmployeeId(idNot)
+  setEmployeeId(idNot)
   const pomid = localStorage.setItem("id", idNot);
 
   // Fetch and initialize profile data
@@ -130,16 +131,16 @@ setEmployeeId(idNot)
     const file = event.target.files[0];
     if (!file || !file.type.startsWith("image/")) {
       notifications.show({
-        title: "Invalid File",
-        message: "Please upload an image file only.",
+        title: t.InvalidFile,
+        message: t.PleaseUploadAnImageFileOnly,
         color: "red",
       });
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
       notifications.show({
-        title: "File Too Large",
-        message: "The image must be less than 2 MB in size.",
+        title: t.FileTooLarge,
+        message: t.TheImageMustBeLessThan2MB,
         color: "red",
       });
       return;
@@ -157,13 +158,13 @@ setEmployeeId(idNot)
   };
 
   const validatePassword = (value) => {
-    if (!value.trim()) return "Password is required";
-    if (value.length < 8) return "Password must be at least 8 characters long";
+    if (!value.trim()) return t.PasswordIsRequired;
+    if (value.length < 8) return t.PasswordMustBeAtLeast8Characters;
     if (!/[a-z]/.test(value))
-      return "Password must contain at least one lowercase letter";
+      return t.PasswordMustContainLowercaseLetter;
     if (!/[0-9]/.test(value))
-      return "Password must contain at least one number";
-    if (/\s/.test(value)) return "Password cannot contain spaces";
+      return t.PasswordMustContainNumber;
+    if (/\s/.test(value)) return t.PasswordCannotContainSpaces;
     return "";
   };
 
@@ -189,7 +190,7 @@ setEmployeeId(idNot)
         }
       );
       notifications.show({
-        title: "Password changed successfully.",
+        title: t.PasswordChangedSuccessfully,
         color: "green",
       });
       logout()
@@ -198,7 +199,7 @@ setEmployeeId(idNot)
       close();
     } catch (error) {
       notifications.show({
-        title: "Failed to change password.",
+        title: t.FailedToChangePassword,
         message: error.response?.data?.message || "An error occurred.",
         color: "red",
       });
@@ -223,8 +224,8 @@ setEmployeeId(idNot)
     // أولًا: التحقق من صحة الرقم
     if (!validateSaudiPhoneNumber(cleanedPhone)) {
       notifications.show({
-        title: "Invalid phone number",
-        message: "Please enter a valid Saudi phone number starting with +966.",
+        title: t.InvalidPhoneNumber,
+        message: t.PleaseEnterAValidSaudiPhoneNumberStartingWith966,
         color: "red",
       });
       return;
@@ -281,7 +282,7 @@ setEmployeeId(idNot)
   return (
     <>
       <Card className={classes.mainContainer} radius="lg">
-        
+
         <div className={classes.mainThemeToggle}>
           <BurgerButton />
           <span className={classes.title}>{t.profile}</span>
@@ -290,7 +291,7 @@ setEmployeeId(idNot)
             <Notifications />
           </div>
         </div>
-        
+
         <Card radius="lg" mt="16px" className={classes.profileContainer}>
 
           <Group>
@@ -325,7 +326,7 @@ setEmployeeId(idNot)
               </div>
             </div>
           </Group>
-          
+
           <div>
             <Grid>
               <GridCol
@@ -387,7 +388,7 @@ setEmployeeId(idNot)
             centered
             padding="lg"
             radius="md"
-            title="View Image"
+            title={t.ViewImage}
           >
             <Center>
               <img
@@ -448,7 +449,7 @@ setEmployeeId(idNot)
             </div>
 
             <TextInput
-              label="Name"
+              label={t.Name}
               mt="md"
               w="100%"
               value={formName}
@@ -456,7 +457,7 @@ setEmployeeId(idNot)
             />
 
             <TextInput
-              label="Address"
+              label={t.Address}
               mt="md"
               w="100%"
               value={formAddress}
@@ -464,7 +465,7 @@ setEmployeeId(idNot)
             />
 
             <TextInput
-              label="Email"
+              label={t.Email}
               mt="md"
               w="100%"
               value={email}
@@ -472,7 +473,7 @@ setEmployeeId(idNot)
             />
 
             <TextInput
-              label="Contact Number"
+              label={t.ContactNumber}
               mt="md"
               w="100%"
               value={formPhone}
@@ -530,7 +531,7 @@ setEmployeeId(idNot)
 
             {bio === "" ? (
               <TextInput
-                label="Bio"
+                label={t.Bio}
                 mt="md"
                 resize="vertical"
                 value={bio}
@@ -541,7 +542,7 @@ setEmployeeId(idNot)
             )}
 
             <Textarea
-              label="Bio"
+              label={t.Bio}
               mt="md"
               resize="vertical"
               value={bio}
@@ -549,7 +550,7 @@ setEmployeeId(idNot)
             />
 
             <Button mt="xl" w="100%" variant="light" onClick={open}>
-              Change Password
+              {t.ChangePassword}
             </Button>
 
             <Button
@@ -559,32 +560,32 @@ setEmployeeId(idNot)
               loading={mutationEditProfile.isLoading}
               disabled={!hasChanges || mutationEditProfile.isPending}
             >
-              {mutationEditProfile.isPending ? "Saving..." : "Save"}
+              {mutationEditProfile.isPending ? t.Saving : t.Save}
             </Button>
 
             <Modal
               opened={opened}
               onClose={close}
-              title="Change password"
+              title={t.ChangePassword}
               centered
             >
               <PasswordInput
-                label="Old Password"
+                label={t.OldPassword}
                 value={oldPass}
                 onChange={(e) => setOldPass(e.target.value)}
-                placeholder="Enter your old password"
+                placeholder={t.EnterYourOldPassword}
                 w="100%"
                 mb="md"
               />
               <PasswordInput
-                label="New Password"
+                label={t.NewPassword}
                 value={newPass}
                 onChange={(e) => {
                   setNewPass(e.target.value);
                   const error = validatePassword(e.target.value);
                   setPassErr(error);
                 }}
-                placeholder="Enter your new password"
+                placeholder={t.EnterYourNewPassword}
                 w="100%"
                 error={passErr}
                 mb="md"
@@ -594,7 +595,7 @@ setEmployeeId(idNot)
                 loading={loading}
                 disabled={isChangingPassword}
               >
-                {isChangingPassword ? "Saving..." : "Save"}
+                {isChangingPassword ? t.Saving : t.Save}
               </Button>
             </Modal>
           </Modal>
@@ -603,7 +604,7 @@ setEmployeeId(idNot)
 
 
         <ProfilePlane />
-      
+
       </Card>
     </>
   );

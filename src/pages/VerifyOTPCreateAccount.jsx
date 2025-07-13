@@ -7,8 +7,10 @@ import axiosInstance from "../api/config";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "../context/authContext"; // Import useAuth
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function VerifyOTPCreateAccount({ pass }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [timer, setTimer] = useState(60); // 1 minute timer
   const [loading, setLoading] = useState(false);
@@ -52,8 +54,8 @@ export default function VerifyOTPCreateAccount({ pass }) {
             if (token) {
               login(token, role, false);
               notifications.show({
-                title: "Account verified successfully.",
-                message: "You are now logged in.",
+                title: t.AccountVerifiedSuccessfully,
+                message: t.YouAreNowLoggedIn,
                 color: "green",
               });
               sessionStorage.removeItem("email");
@@ -64,7 +66,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
           })
           .catch((error) => {
             notifications.show({
-              title: "Login failed.",
+              title: t.LoginFailed,
               message: `${error.response?.data?.message}`,
               color: "red",
             });
@@ -73,7 +75,7 @@ export default function VerifyOTPCreateAccount({ pass }) {
       })
       .catch((error) => {
         notifications.show({
-          title: "Could not verify account.",
+          title: t.CouldNotVerifyAccount,
           message: `${error.response?.data?.message}`,
           color: "red",
         });
@@ -93,15 +95,15 @@ export default function VerifyOTPCreateAccount({ pass }) {
       })
       .then(() => {
         notifications.show({
-          title: "OTP sent successfully.",
-          message: "Please check your inbox to verify account.",
+          title: t.OTPSentSuccessfully,
+          message: t.PleaseCheckYourInboxToVerifyAccount,
           color: "green",
         });
         setTimer(60);
       })
       .catch((error) => {
         notifications.show({
-          title: "Could not send OTP.",
+          title: t.CouldNotSendOTP,
           message: `${error.response?.data?.message}`,
           color: "red",
         });
@@ -110,74 +112,78 @@ export default function VerifyOTPCreateAccount({ pass }) {
         setLoading(false);
       });
   };
- 
+
   return (
-    <Container size={460} my={30}>
-      {loading && (
-        <>
-          <Center
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              zIndex: 2,
-            }}
-          >
-            <Loader size="xl" />
+    <>
+
+      <HeaderMegaMenu />
+
+      <Container size={460} my={30}>
+        {loading && (
+          <>
+            <Center
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: 2,
+              }}
+            >
+              <Loader size="xl" />
+            </Center>
+          </>
+        )}
+
+        <Paper
+          className={classes.wrapper}
+          withBorder
+          shadow="md"
+          p={30}
+          radius="md"
+          mt="xl"
+        >
+          <Title mb="50px" className={classes.title} ta="center">
+            {t.PleaseEnterOTP}
+          </Title>
+          <Center>
+            <PinInput
+              type={/^[0-9]*$/}
+              inputType="tel"
+              inputMode="numeric"
+              length={4}
+              value={OTP.toString()}
+              onChange={(value) => setOTP(value.toString())}
+              onComplete={handleVerifyAccount}
+            />
           </Center>
-        </>
-      )}
-              <HeaderMegaMenu />
-      
-      <Paper
-        className={classes.wrapper}
-        withBorder
-        shadow="md"
-        p={30}
-        radius="md"
-        mt="xl"
-      >
-        <Title mb="50px" className={classes.title} ta="center">
-          Please Enter OTP
-        </Title>
-        <Center>
-          <PinInput
-            type={/^[0-9]*$/}
-            inputType="tel"
-            inputMode="numeric"
-            length={4}
-            value={OTP.toString()}
-            onChange={(value) => setOTP(value.toString())}
-            onComplete={handleVerifyAccount}
-          />
-        </Center>
-        <Stack align="center" mt="20px">
-          {timer !== 0 ? (
-            <Text>{`Resend OTP in ${timer}`}</Text>
-          ) : (
+          <Stack align="center" mt="20px">
+            {timer !== 0 ? (
+              <Text>{`Resend OTP in ${timer}`}</Text>
+            ) : (
+              <Button
+                className={classes.control}
+                onClick={handleResendOTP}
+                disabled={loading}
+                variant="light"
+              >
+                {t.ResendOTP}
+              </Button>
+            )}
+          </Stack>
+          <Group justify="center" mt="30px">
             <Button
               className={classes.control}
-              onClick={handleResendOTP}
-              disabled={loading}
-              variant="light"
+              onClick={handleVerifyAccount}
+              disabled={loading || OTP.length !== 4 || !/^\d{4}$/.test(OTP)}
             >
-              Resend OTP
+              {t.VerifyAccount}
             </Button>
-          )}
-        </Stack>
-        <Group justify="center" mt="30px">
-          <Button
-            className={classes.control}
-            onClick={handleVerifyAccount}
-            // disabled={loading}
-            disabled={loading || OTP.length !== 4 || !/^\d{4}$/.test(OTP)}
+          </Group>
+        </Paper>
+      </Container>
 
-          >
-            Verify Account
-          </Button>
-        </Group>
-      </Paper>
-    </Container>
+    </>
+
   );
 }

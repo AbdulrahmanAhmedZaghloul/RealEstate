@@ -11,7 +11,7 @@ import {
   Center,
   Loader,
   Card,
-  Select,   
+  Select,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
@@ -195,19 +195,19 @@ function Staff() {
       query.trim() === ""
         ? supervisors
         : supervisors.filter(
-            (supervisor) =>
-              supervisor.name.toLowerCase().includes(query.toLowerCase()) ||
-              supervisor.position.toLowerCase().includes(query.toLowerCase())
-          )
+          (supervisor) =>
+            supervisor.name.toLowerCase().includes(query.toLowerCase()) ||
+            supervisor.position.toLowerCase().includes(query.toLowerCase())
+        )
     );
     setSearchedEmployees(
       query.trim() === ""
         ? employees
         : employees.filter(
-            (employee) =>
-              employee.name.toLowerCase().includes(query.toLowerCase()) ||
-              employee.position.toLowerCase().includes(query.toLowerCase())
-          )
+          (employee) =>
+            employee.name.toLowerCase().includes(query.toLowerCase()) ||
+            employee.position.toLowerCase().includes(query.toLowerCase())
+        )
     );
   };
 
@@ -416,44 +416,44 @@ function Staff() {
 
   return (
     <>
-    <AddStaffModal
-          opened={addModalOpened}
-          onClose={closeAddModal}
-          onAdd={handleAddUser}
-          loading={isAddUserLoading}
-          supervisors={supervisors}
-          newUser={newUser}
-          setNewUser={setNewUser}
-          errors={errors}
-          setErrors={setErrors}
-          handleFileChange={handleFileChange}
-          setPreviewImage={setPreviewImage}
-          previewImage={previewImage}
-        />
+      <AddStaffModal
+        opened={addModalOpened}
+        onClose={closeAddModal}
+        onAdd={handleAddUser}
+        loading={isAddUserLoading}
+        supervisors={supervisors}
+        newUser={newUser}
+        setNewUser={setNewUser}
+        errors={errors}
+        setErrors={setErrors}
+        handleFileChange={handleFileChange}
+        setPreviewImage={setPreviewImage}
+        previewImage={previewImage}
+      />
 
-        <EditStaffModal
-          opened={editModalOpened}
-          onClose={closeEditModal}
-          onEdit={handleUpdateUser}
-          loading={isEditUserLoading}
-          supervisors={supervisors}
-          editUser={editUser}
-          setEditUser={setEditUser}
-          errors={errors}
-          handleFileChange={handleFileChange}
-          currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
-        />
+      <EditStaffModal
+        opened={editModalOpened}
+        onClose={closeEditModal}
+        onEdit={handleUpdateUser}
+        loading={isEditUserLoading}
+        supervisors={supervisors}
+        editUser={editUser}
+        setEditUser={setEditUser}
+        errors={errors}
+        handleFileChange={handleFileChange}
+        currentPath={location.pathname} // 👈 هنا بنبعت المسار للكومبوننت
+      />
 
-        <DeleteEmployeeModal
-          opened={deleteModalOpened}
-          onClose={() => {
-            closeDeleteModal();
-            setEmployeeToDelete(null); // Clear the selected employee if modal is closed
-          }}
-          onDelete={confirmDeleteUser} // Call the new confirmDeleteUser function
-          loading={isRemoveUserLoading}
-        />
-        
+      <DeleteEmployeeModal
+        opened={deleteModalOpened}
+        onClose={() => {
+          closeDeleteModal();
+          setEmployeeToDelete(null); // Clear the selected employee if modal is closed
+        }}
+        onDelete={confirmDeleteUser} // Call the new confirmDeleteUser function
+        loading={isRemoveUserLoading}
+      />
+
       <Card radius="lg">
         <div>
           <BurgerButton />
@@ -487,8 +487,9 @@ function Staff() {
               onChange={handleFilterChange} // Call the sorting function here
               rightSection={<Dropdown />}
               data={[
-                { value: "Most seller", label: "Most seller" },
-                { value: "Least seller", label: "Least seller" },
+              { value: "", label: t.All },
+              { value: "Most seller", label: t.MostSeller },
+              { value: "Least seller", label: t.LeastSeller },
               ]}
               styles={{
                 input: {
@@ -1076,7 +1077,7 @@ function Staff() {
           </Table>
         </Table.ScrollContainer>
 
-        
+
       </Card>
     </>
   );

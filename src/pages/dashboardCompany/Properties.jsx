@@ -1,14 +1,6 @@
 // Properties.jsx
 import { useEffect, useRef, useState } from "react";
-import {
-  Card,
-  Center,
-  Text,
-  Grid,
-  GridCol,
-  Loader,
-  Select,
-} from "@mantine/core";
+import { Card, Center, Text, Grid, GridCol, Loader, Select } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 
 // Local imports
@@ -45,28 +37,55 @@ function Properties() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({});
+  const [ref, inView] = useInView();
+  const [employees, setEmployees] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [sortBy, setSortBy] = useState("newest");
+  const [isSticky, setIsSticky] = useState(false);
+  const [transactionType, setTransactionType] = useState("all");
+  const listing_type = transactionType; // ✅ Define it first
+  const [opened, { open, close }] = useDisclosure(false);
+  const loadMoreRef = useRef(null);
+
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { t } = useTranslation();
   const [
     openedFilterModal,
     { open: openFilterModal, close: closeFilterModal },
   ] = useDisclosure(false);
-  const [sortBy, setSortBy] = useState("newest");
+
   const sortOptions = [
-    { value: "newest", label: "Newest" },
-    { value: "oldest", label: "Oldest" },
-    { value: "highest", label: "Highest price" },
-    { value: "lowest", label: "Lowest price" },
+    { value: "newest", label: t.Newest },
+    { value: "oldest", label: t.Oldest },
+    { value: "highest", label: t.HighestPrice },
+    { value: "lowest", label: t.LowestPrice },
   ];
-  const [isSticky, setIsSticky] = useState(false);
 
   const transactionOptions = [
-    { value: "all", label: "All" },
-    { value: "rent", label: "For Rent" },
-    { value: "buy", label: "For Sale" },
-    { value: "booking", label: "Booking" },
+    { value: "all", label: t.All },
+    { value: "rent", label: t.ForRent },
+    { value: "buy", label: t.ForSale },
+    { value: "booking", label: t.Booking },
   ];
 
-  const [transactionType, setTransactionType] = useState("all");
-  const listing_type = transactionType; // ✅ Define it first
+
+  // const sortOptions = [
+  //   { value: "newest", label: "Newest" },
+  //   { value: "oldest", label: "Oldest" },
+  //   { value: "highest", label: "Highest price" },
+  //   { value: "lowest", label: "Lowest price" },
+  // ];
+
+
+  // const transactionOptions = [
+  //   { value: "all", label: "All" },
+  //   { value: "rent", label: "For Rent" },
+  //   { value: "buy", label: "For Sale" },
+  //   { value: "booking", label: "Booking" },
+  // ];
 
   const {
     data,
@@ -77,9 +96,6 @@ function Properties() {
     hasNextPage,
     isFetching,
   } = useProperties(listing_type, sortBy, filters, searchTerm); // 👈 تمرير الفلتر
-
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const {
     data: employeesData,
@@ -95,12 +111,6 @@ function Properties() {
     error: categoriesError,
   } = useCategories();
 
-  const [employees, setEmployees] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [subcategories, setSubcategories] = useState([]);
-
-  const [opened, { open, close }] = useDisclosure(false);
-  const { t } = useTranslation();
   const filterForm = useForm({
     initialValues: {
       location: "",
@@ -117,11 +127,9 @@ function Properties() {
 
   });
 
-  const loadMoreRef = useRef(null);
 
   const mutation = useAddProperty(user.token, categories, close);
 
-  const [ref, inView] = useInView();
 
   useEffect(() => {
     if (inView && hasNextPage && !fetchNextPage) {
@@ -186,13 +194,7 @@ function Properties() {
     categoriesData,
   ]);
 
-  // const handleApplyFilters = (values) => {
-  //    const filteredValues = Object.fromEntries(
-  //     Object.entries(values).filter(([_, v]) => v != null && v !== "")
-  //   );
-  //   setFilters(filteredValues);
-  //   closeFilterModal();
-  // };
+
   const handleApplyFilters = useCallback((values) => {
     const filteredValues = Object.fromEntries(
       Object.entries(values).filter(([_, v]) => v != null && v !== "")
@@ -200,15 +202,6 @@ function Properties() {
     setFilters(filteredValues);
     closeFilterModal();
   }, [closeFilterModal]);
-
-  // const handleResetFilters = () => {
-  //   setFilters({});
-  //   form.reset();
-  //   setFilters({});
-  //   filterForm.reset(); // 👈 إعادة تعيين الحقول
-  //   closeFilterModal();
-  //   // إذا كنت تريد إعادة تعيين الحقول في المودال
-  // };
 
 
   const handleResetFilters = useCallback(() => {
@@ -247,6 +240,7 @@ function Properties() {
 
   return (
     <>
+
       <Card className={classes.mainContainer} radius="lg">
         <div>
           <BurgerButton />
@@ -277,7 +271,7 @@ function Properties() {
 
 
               <Select
-                placeholder="Choose sorting method"
+                placeholder={t.ChooseSortingMethod}
                 data={sortOptions}
                 value={sortBy}
                 onChange={setSortBy}
@@ -319,9 +313,13 @@ function Properties() {
                 rightSection={<Dropdown />}
                 placeholder="Filter by selling status"
                 data={[
-                  { value: "", label: "All" },
-                  { value: "0", label: "Not Sold" },
-                  { value: "1", label: "Sold" },
+
+                  { value: "", label: t.All },
+                  { value: "0", label: t.NotSold },
+                  { value: "1", label: t.Sold },
+                  // { value: "", label: "All" },
+                  // { value: "0", label: "Not Sold" },
+                  // { value: "1", label: "Sold" },
                 ]}
                 value={filters.selling_status || ""}
                 onChange={(value) => setFilters((prev) => ({ ...prev, selling_status: value }))}
@@ -359,7 +357,7 @@ function Properties() {
                 value={transactionType}
                 onChange={setTransactionType}
                 data={transactionOptions}
-                placeholder="Select type"
+                placeholder={t.SelectType}
                 radius="md"
                 size="sm"
                 styles={{
@@ -558,7 +556,7 @@ function Properties() {
         onAddProperty={handleAddProperty}
         loading={mutation.isPending}
       />
-      
+
       <FiltersModal
         opened={openedFilterModal}
         onClose={closeFilterModal}
@@ -567,6 +565,7 @@ function Properties() {
         onReset={handleResetFilters}
         form={filterForm} // 👈 إرسال النموذج للمودال
       />
+
     </>
   );
 }

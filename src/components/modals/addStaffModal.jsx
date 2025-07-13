@@ -17,6 +17,7 @@ import { IconCamera } from "@tabler/icons-react";
 import { useEffect, useRef, React, useState } from "react";
 import CropModal from "../CropModal";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "../../context/LanguageContext";
 
 const AddStaffModal = ({
   opened,
@@ -30,8 +31,8 @@ const AddStaffModal = ({
   setErrors,
   setPreviewImage,
   previewImage,
-  handleFileChange,
 }) => {
+  const { t } = useTranslation();
   const [openedCropModal, setOpenedCropModal] = useState(false);
   const [imageToCrop, setImageToCrop] = useState(null);
   function validateSaudiPhoneNumber(phoneNumber) {
@@ -74,7 +75,7 @@ const AddStaffModal = ({
       <Modal
         opened={opened}
         onClose={onClose}
-        title="Add User"
+        title={t.AddUser}
         centered
         size="xl"
         radius="lg"
@@ -179,8 +180,8 @@ const AddStaffModal = ({
             </Text>
           )}
           <TextInput
-            label="Name"
-            placeholder="Full name"
+            label={t.Name}
+            placeholder={t.EnterYourName}
             value={newUser.name}
             onChange={(e) => {
               setNewUser({ ...newUser, name: e.target.value });
@@ -193,7 +194,7 @@ const AddStaffModal = ({
           />
 
           <TextInput
-            label="Email"
+            label={t.Email}
             placeholder="user@website.com"
             value={newUser.email}
             onChange={(e) => {
@@ -207,8 +208,8 @@ const AddStaffModal = ({
           />
 
           <PasswordInput
-            label="Password"
-            placeholder="Password"
+            label={t.Password}
+            placeholder={t.EnterAPassword}
             value={newUser.password}
             onChange={(e) => {
               const newPassword = e.target.value;
@@ -223,8 +224,8 @@ const AddStaffModal = ({
           />
 
           <TextInput
-            label="Address"
-            placeholder="Address"
+            label={t.Address}
+            placeholder={t.EnterYourAddress}
             value={newUser.address}
             onChange={(e) => {
               setNewUser({ ...newUser, address: e.target.value });
@@ -237,7 +238,8 @@ const AddStaffModal = ({
           />
 
           <TextInput
-            label="Phone Number"
+            label={t.PhoneNumber}
+            // placeholder={t.EnterYourPhoneNumber}
             placeholder="512 345 678"
             value={
               newUser.phone_number.startsWith("966")
@@ -281,48 +283,48 @@ const AddStaffModal = ({
           />
 
           {/* {!location.pathname.includes("/dashboard/supervisor/team") ? null : ( */}
-            <>
+          <>
+            <Select
+              label={t.Role}
+              placeholder="Select type"
+              rightSection={<img src={downArrow} />}
+              value={newUser.position}
+              onChange={(value) =>
+                setNewUser({ ...newUser, position: value })
+              }
+              data={[
+                { value: "supervisor", label: t.Supervisor  },
+                { value: "employee",label: t.Employee  },
+              ]}
+              styles={{ input: { height: 48 } }}
+              mb={24}
+            />
+
+            {newUser.position === "employee" && (
               <Select
-                label="Position"
-                placeholder="Select type"
-                rightSection={<img src={downArrow} />}
-                value={newUser.position}
-                onChange={(value) =>
-                  setNewUser({ ...newUser, position: value })
+            label={t.AssignASupervisor}
+            placeholder={t.SelectASupervisor}
+                  value={
+                  newUser.supervisor_id !== null
+                    ? String(newUser.supervisor_id)
+                    : ""
                 }
-                data={[
-                  { value: "supervisor", label: "Supervisor" },
-                  { value: "employee", label: "Employee" },
-                ]}
+                onChange={(value) => {
+                  setNewUser((prev) => ({
+                    ...prev,
+                    supervisor_id: value ? Number(value) : null,
+                  }));
+                }}
+                data={(supervisors || []).map((supervisor) => ({
+                  value: String(supervisor.supervisor_id),
+                  label: supervisor.name,
+                }))}
                 styles={{ input: { height: 48 } }}
                 mb={24}
+                rightSection={<img src={downArrow} />}
               />
-
-              {newUser.position === "employee" && (
-                <Select
-                  label="Supervisor"
-                  placeholder="Select supervisor"
-                  value={
-                    newUser.supervisor_id !== null
-                      ? String(newUser.supervisor_id)
-                      : ""
-                  }
-                  onChange={(value) => {
-                    setNewUser((prev) => ({
-                      ...prev,
-                      supervisor_id: value ? Number(value) : null,
-                    }));
-                  }}
-                  data={(supervisors || []).map((supervisor) => ({
-                    value: String(supervisor.supervisor_id),
-                    label: supervisor.name,
-                  }))}
-                  styles={{ input: { height: 48 } }}
-                  mb={24}
-                  rightSection={<img src={downArrow} />}
-                />
-              )}
-            </>
+            )}
+          </>
           {/* // )} */}
           <Button
             fullWidth
@@ -350,8 +352,8 @@ const AddStaffModal = ({
             }}
           >
             {newUser.position === "employee"
-              ? "Add Employee"
-              : "Add Supervisor"}
+              ? t.AddEmployee
+              : t.AddSupervisor }
           </Button>
         </div>
       </Modal>

@@ -17,12 +17,14 @@ import axiosInstance from "../api/config";
 import classes from "../styles/forgotPass.module.css";
 import { validateField } from "../hooks/Validation/validation";
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function ForgotPassword() {
   const [account, setAccount] = useState({ email: "" });
   const [errors, setErrors] = useState({ email: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const validateEmail = () => {
     const emailError = validateField("email", account.email);
@@ -41,8 +43,8 @@ export default function ForgotPassword() {
 
       if (response.data.status === "success") {
         notifications.show({
-          title: "OTP sent successfully!",
-          message: `Please check your inbox to reset your password.`,
+          title: t.OTPSentSuccessfully,
+          message: t.PleaseCheckYourInboxToResetYourPassword,
           color: "green",
         });
       }
@@ -52,8 +54,8 @@ export default function ForgotPassword() {
       console.log(error);
 
       notifications.show({
-        title: "Error sending OTP",
-        message: error.response?.data?.message || "Something went wrong!",
+        title: t.ErrorSendingOTP,
+        message: error.response?.data?.message || t.SomethingWentWrong,
         color: "red",
       });
     } finally {
@@ -73,16 +75,16 @@ export default function ForgotPassword() {
 
         <Container size={460} my={30}>
           <Title className={classes.title} ta="center">
-            Forgot your password?
+            {t.ForgotYourPassword}
           </Title>
           <Text c="dimmed" fz="sm" ta="center">
-            Enter your email to get a reset link
+            {t.EnterYourEmailToGetResetLink}
           </Text>
 
           <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
             <TextInput
-              label="Your email"
-              placeholder="you@website.com"
+              label={t.YourEmail}
+              placeholder={t.YouWebsiteCom}
               value={account.email}
               onChange={(e) => {
                 const email = e.target.value;
@@ -96,7 +98,7 @@ export default function ForgotPassword() {
               <Center inline>
                 <Link to="/login" ml={5} style={{ textDecoration: "inherit", color: "inherit" }} >
                   <Anchor size="sm" c="var(--color-1)">
-                    Back to the login page
+                    {t.BackToTheLoginPage}
                   </Anchor>
                 </Link>
               </Center>
@@ -108,11 +110,11 @@ export default function ForgotPassword() {
                 }
               // loading={loading}
               >
-                Reset password
+                {t.ResetPassword}
               </Button>
             </Group>
           </Paper>
-          
+
         </Container>
 
       </div>

@@ -1,8 +1,11 @@
 // DownPaymentInputField.jsx
 import React from "react";
 import { NumberInput } from "@mantine/core";
+import { useTranslation } from "../../../context/LanguageContext";
 
 export const DownPaymentInputField = ({ form }) => {
+    const { t } = useTranslation(); // ✅ استخدم نظام الترجمة هنا
+
   const handleDownPaymentChange = (value) => {
     const numericValue = Number(value);
     if (numericValue < 0) {
@@ -23,8 +26,8 @@ export const DownPaymentInputField = ({ form }) => {
         input: { width: 289, height: 48 },
         wrapper: { width: 289 },
       }}
-      label="Down Payment"
-      placeholder="Enter the down payment (e.g., 25.5%)"
+      label={t.DownPayment}
+      placeholder={t.EnterTheDownPaymentEg25_5}
       hideControls
       min={1}
       max={100}

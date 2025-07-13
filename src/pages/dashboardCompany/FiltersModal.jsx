@@ -10,6 +10,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Select, TextInput, Button, Modal, Grid } from "@mantine/core";
 import Dropdown from "../../components/icons/dropdown";
+import { useTranslation } from "../../context/LanguageContext";
 
 const FiltersModal = React.memo(
   function FiltersModal({
@@ -20,10 +21,10 @@ const FiltersModal = React.memo(
     onReset,
     form,
   }) {
+    const { t } = useTranslation();
     const [locationOptions, setLocationOptions] = useState([]);
     const [locationError, setLocationError] = useState("");
 
-    // 👇 الحصول على الفئة المختارة
     const selectedCategory = useMemo(() => {
       return categories.find((cat) => cat.id.toString() === form.values.category_id);
     }, [categories, form.values.category_id]);
@@ -52,12 +53,12 @@ const FiltersModal = React.memo(
         let hasError = false;
 
         if (values.area_min && values.area_max && Number(values.area_min) > Number(values.area_max)) {
-          form.setFieldError("area_min", "Min area must be less than or equal to Max area");
+          form.setFieldError("area_min", t.MinAreaMustBeLessThanOrEqualToMaxArea);
           hasError = true;
         }
 
         if (values.price_min && values.price_max && Number(values.price_min) > Number(values.price_max)) {
-          form.setFieldError("price_min", "Min price must be less than or equal to Max price");
+          form.setFieldError("price_min", t.MinPriceMustBeLessThanOrEqualToMaxPrice);
           hasError = true;
         }
 
@@ -115,8 +116,8 @@ const FiltersModal = React.memo(
 
           <Select
             rightSection={<Dropdown />}
-            label="Location"
-            placeholder="Filter property location"
+            label={t.Location}
+            placeholder={t.FilterPropertyLocation}
             data={locationOptions}
             {...form.getInputProps("location")}
             error={locationError || form.errors.location}
@@ -132,7 +133,7 @@ const FiltersModal = React.memo(
               <Select
 
                 rightSection={<Dropdown />}
-                label="Category"
+                label={t.Category}
                 data={categories.map((c) => ({
                   value: c.id.toString(),
                   label: c.name,
@@ -146,7 +147,7 @@ const FiltersModal = React.memo(
               <Select
 
                 rightSection={<Dropdown />}
-                label="Subcategory"
+                label={t.Subcategory}
                 data={subcategories.map((sub) => ({
                   value: sub.id.toString(),
                   label: sub.name,
@@ -164,7 +165,8 @@ const FiltersModal = React.memo(
             <Grid.Col span={6}>
               <TextInput
                 min={0}
-                label="Min Area (sqm)"
+                label={t.MinAreaSqm}
+
                 type="number"
                 {...form.getInputProps("area_min")}
                 error={form.errors.area_min} // 👈 عرض الخطأ هنا
@@ -174,7 +176,7 @@ const FiltersModal = React.memo(
             <Grid.Col span={6}>
               <TextInput
                 min={0}
-                label="Max Area (sqm)"
+                label={t.MaxAreaSqm}
                 type="number"
                 {...form.getInputProps("area_max")}
                 error={form.errors.area_max}
@@ -187,7 +189,7 @@ const FiltersModal = React.memo(
             <Grid.Col span={6}>
               <TextInput
                 min={0}
-                label="Min Price"
+                label={t.MinPrice}
                 type="number"
                 {...form.getInputProps("price_min")}
                 error={form.errors.price_min}
@@ -196,11 +198,11 @@ const FiltersModal = React.memo(
             </Grid.Col>
             <Grid.Col span={6}>
               <TextInput
-                label="Max Price"
+                label={t.MaxPrice}
                 type="number"
                 {...form.getInputProps("price_max")}
                 min={0}
-                  error={form.errors.price_max}
+                error={form.errors.price_max}
                 maxLength={16}
               />
             </Grid.Col>
@@ -209,7 +211,7 @@ const FiltersModal = React.memo(
             <Grid mt={10} mb={10}>
               <Grid.Col span={12}>
                 <TextInput
-                  label="Rooms"
+                  label={t.Rooms}
                   type="number"
                   {...form.getInputProps("rooms")}
                   min={0}
@@ -218,7 +220,7 @@ const FiltersModal = React.memo(
               </Grid.Col>
               <Grid.Col span={12}>
                 <TextInput
-                  label="Bathrooms"
+                  label={t.Bathrooms}
                   type="number"
                   {...form.getInputProps("bathrooms")}
                   min={0}
@@ -227,7 +229,7 @@ const FiltersModal = React.memo(
               </Grid.Col>
               <Grid.Col span={12}>
                 <TextInput
-                  label="Floors"
+                  label={t.Floors}
                   type="number"
                   {...form.getInputProps("floors")}
                   min={0}
@@ -239,10 +241,10 @@ const FiltersModal = React.memo(
 
           <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
             <Button type="submit" fullWidth>
-              Apply
+                            {t.Apply}
             </Button>
             <Button onClick={onReset} color="gray" fullWidth>
-              Reset
+                      {t.Reset}
             </Button>
           </div>
         </form>

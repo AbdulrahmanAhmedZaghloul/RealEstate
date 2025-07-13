@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 import CropModal from "../CropModal";
+import { useTranslation } from "../../context/LanguageContext";
 
 //Local imports
 //-
@@ -31,6 +32,8 @@ const EditStaffModal = ({
   handleOpenChangePassword,
 
 }) => {
+  const { t } = useTranslation(); // ✅ استخدام الترجمة هنا
+
   const location = useLocation();
   const [openedCropModal, setOpenedCropModal] = useState(false);
   const [imageToCrop, setImageToCrop] = useState(null);
@@ -47,7 +50,7 @@ const EditStaffModal = ({
       <Modal
         opened={opened}
         onClose={onClose}
-        title="Edit User"
+        title={t.EditStaff}
         centered
         size="xl"
         radius="lg"
@@ -59,7 +62,7 @@ const EditStaffModal = ({
           },
         }}
       >
-        
+
         <div style={{ padding: "10px" }}>
 
           {/* Image Upload with Preview */}
@@ -171,17 +174,18 @@ const EditStaffModal = ({
             </p>
           )}
 
-         
+
           <TextInput
-            label="Name"
-            placeholder="Full Name"
+
+            label={t.Name}
+            placeholder={t.EnterYourName}
             value={editUser.name}
             onChange={(e) => setEditUser({ ...editUser, name: e.target.value })}
             required
             error={errors.name}
           />
           <TextInput
-            label="Email"
+            label={t.Email}
             placeholder="user@website.com"
             value={editUser.email}
             onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
@@ -190,7 +194,8 @@ const EditStaffModal = ({
             error={errors.email}
           />
           <TextInput
-            label="Phone Number"
+
+            label={t.PhoneNumber}
             placeholder="512 345 678"
             value={`${editUser.phone_number || ""}`}
             onChange={(e) => {
@@ -255,8 +260,8 @@ const EditStaffModal = ({
 
           {editUser.position === "employee" && (
             <Select
-              label="Supervisor"
-              placeholder="Select supervisor"
+              label={t.Supervisor}
+              placeholder={t.SelectSupervisor}
               rightSection={<img src={downArrow} />}
               value={editUser.supervisor_id ? String(editUser.supervisor_id) : ""}
               onChange={(value) =>
@@ -274,7 +279,7 @@ const EditStaffModal = ({
             null
             :
             <Button fullWidth mt="xl" bg={"#1e3a8a"} onClick={handleOpenChangePassword} radius="md">
-              ChangePassword
+              {t.ChangePassword}
             </Button>
           }
           <Button
@@ -295,7 +300,7 @@ const EditStaffModal = ({
             loading={loading}
             disabled={loading}
           >
-            Update user
+            {t.Update}
           </Button>
         </div>
       </Modal>

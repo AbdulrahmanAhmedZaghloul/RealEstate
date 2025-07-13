@@ -27,6 +27,7 @@ import { AssignEmployeeField } from "./AddProperty/AssignEmployeeField";
 import { AmenitiesSection } from "./AddProperty/AmenitiesSection";
 import { PriceInputField } from "./AddProperty/PriceInputField";
 import { DownPaymentInputField } from "./AddProperty/DownPaymentInputField";
+import { useTranslation } from "../../context/LanguageContext";
 
 const AddPropertyModal = React.memo(
   ({
@@ -38,6 +39,7 @@ const AddPropertyModal = React.memo(
     onAddProperty,
     loading = false,
   }) => {
+    const { t } = useTranslation();
     const [selectedCategoryType, setSelectedCategoryType] = useState("");
     const form = useForm({
       initialValues: {
@@ -62,12 +64,12 @@ const AddPropertyModal = React.memo(
         },
       },
       validate: {
-        title: (value) => (value.trim() ? null : "Title is required"),
+        title: (value) => (value.trim() ? null : t.TitleIsRequired),
         description: (value) =>
-          value.trim() ? null : "Description is required",
-        price: (value) => (value > 0 ? null : "Price must be greater than 0"),
-        area: (value) => (value > 0 ? null : "Area must be greater than 0"),
-        location: (value) => (value.trim() ? null : "Location is required"),
+          value.trim() ? null :  t.DescriptionIsRequired,
+        price: (value) => (value > 0 ? null :  t.PriceMustBeGreaterThan0),
+        area: (value) => (value > 0 ? null :  t.AreaMustBeGreaterThan0),
+        location: (value) => (value.trim() ? null :  t.LocationIsRequired),
         rooms: (value) => {
           const categoryId = form.values.category_id;
           const category = categories.find(
@@ -75,7 +77,7 @@ const AddPropertyModal = React.memo(
           );
           const categoryName = category?.name.toLowerCase();
           if (categoryName === "residential") {
-            return value > 0 ? null : "Rooms must be greater than 0";
+            return value > 0 ? null : t.RoomsMustBeGreaterThan0 ;
           }
           return null;
         },
@@ -86,7 +88,7 @@ const AddPropertyModal = React.memo(
           );
           const categoryName = category?.name.toLowerCase();
           if (categoryName === "residential") {
-            return value > 0 ? null : "Bathrooms must be greater than 0";
+            return value > 0 ? null : t.BathroomsMustBeGreaterThan0;
           }
           return null;
         },
@@ -97,32 +99,32 @@ const AddPropertyModal = React.memo(
           );
           const categoryName = category?.name.toLowerCase();
           if (categoryName === "residential") {
-            return value > 0 ? null : "Floors must be greater than 0";
+            return value > 0 ? null : t.FloorsMustBeGreaterThan0;
           }
           return null;
         },
         images: (value) => {
           if (value.length < 3) {
-            return "Please upload at least 3 images";
+            return  t.PleaseUploadAtLeast3Images;
           }
           if (value.length > 8) {
             // ✅ تغيير الحد الأقصى إلى 5 صور
-            return "You cannot upload more than 5 images";
+            return t.YouCannotUploadMoreThan5Images ;
           }
           const oversizedImage = value.find(
             (image) => image.size > 20 * 1024 * 1024
           ); // ✅ تحقق من الحجم قبل الرفع
           if (oversizedImage) {
-            return "Each image must be less than 20 MB";
+            return t.YouCannotUploadMoreThan5Images ;
           }
           return null;
         },
         down_payment: (value) => {
           if (value === null || value === "" || isNaN(value)) {
-            return "Down payment must be a number";
+            return t.DownPaymentMustBeANumber ;
           }
           if (value < 0 || value > 100) {
-            return "Down payment must be between 0 and 100%";
+            return t.DownPaymentMustBeBetween0And100 ;
           }
           return null;
         },
@@ -131,11 +133,11 @@ const AddPropertyModal = React.memo(
             ? null
             : value
               ? null
-              : "Employee is required",
+              : t.EmployeeIsRequired,
         category_id: (value) =>
-          value ? null : "Property category is required",
-        subcategory_id: (value) => (value ? null : "Property type is required"),
-        listing_type: (value) => (value ? null : "Property type is required"),
+          value ? null : t.PropertyCategoryIsRequired,
+        subcategory_id: (value) => (value ? null : t.PropertyTypeIsRequired),
+        listing_type: (value) => (value ? null : t.PropertyTypeIsRequired),
       },
     });
 
@@ -371,7 +373,7 @@ const AddPropertyModal = React.memo(
       <Modal
         opened={opened}
         onClose={onClose}
-        title="Add Property"
+        title={t.AddProperty}
         size="xl"
         radius="lg"
         styles={{
@@ -389,8 +391,8 @@ const AddPropertyModal = React.memo(
 
               {/* Title */}
               <TextInputField
-                label="Title"
-                placeholder="Enter property title"
+                label={t.Title}
+                placeholder={t.EnterPropertyTitle}
                 fieldProps={form.getInputProps("title")}
                 maxLength={30}
                 styles={{
@@ -403,8 +405,8 @@ const AddPropertyModal = React.memo(
 
               {/* Description */}
               <TextAreaField
-                label="Description"
-                placeholder="Enter property description"
+                label={t.Description}
+                placeholder={t.EnterPropertyDescription}
                 fieldProps={form.getInputProps("description")}
                 maxLength={500}
                 styles={{
@@ -417,8 +419,8 @@ const AddPropertyModal = React.memo(
 
               {/* Area */}
               <NumberInputField
-                label="Area"
-                placeholder="Enter property area"
+                label={t.Area}
+                placeholder={t.EnterPropertyArea}
                 fieldProps={form.getInputProps("area")}
                 min={0}
                 hideControls
@@ -482,7 +484,7 @@ const AddPropertyModal = React.memo(
               radius="md"
               disabled={loading}
             >
-              Add Property
+              {loading ? t.Saving : t.AddProperty}
             </Button>
           </Center>
         </form>

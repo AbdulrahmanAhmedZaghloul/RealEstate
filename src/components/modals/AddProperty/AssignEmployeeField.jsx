@@ -2,13 +2,16 @@
 import React from "react";
 import { Select } from "@mantine/core";
 import Dropdown from "../../icons/dropdown";
+import { useTranslation } from "../../../context/LanguageContext";
 
 export const AssignEmployeeField = ({ form, employees }) => {
+    const { t } = useTranslation(); // ✅ استخدم الترجمة هنا
+
   return (
     <Select
       rightSection={<Dropdown />}
-      label="Assign Employee"
-      placeholder="Select an employee"
+      label={t.AssignEmployee}
+      placeholder={t.SelectAnEmployee}
       data={employees
         .filter((employee) => employee.employee_id !== undefined)
         .map((employee) => ({

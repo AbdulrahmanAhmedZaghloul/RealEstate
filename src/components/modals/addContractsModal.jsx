@@ -31,8 +31,7 @@ const AddContractsModal = ({
   t
 }) => {
   const [loading, setLoading] = useState(false);
-  // const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
-
+ 
   const form = useForm({
     initialValues: {
       listing_id: null,
@@ -52,20 +51,20 @@ const AddContractsModal = ({
       status: "", // terminated, active, etc.
     },
     validate: {
-      listing_id: (value) => (value ? null : "Listing is required"),
-      title: (value) => (value.trim() ? null : "Title is required"),
-      description: (value) => (value.trim() ? null : "Description is required"),
-      price: (value) => (value > 0 ? null : "Price must be greater than 0"),
+      listing_id: (value) => (value ? null :t.ListingIsRequired),
+      title: (value) => (value.trim() ? null : t.TitleIsRequired),
+      description: (value) => (value.trim() ? null : t.DescriptionIsRequired),
+      price: (value) => (value > 0 ? null : t.PriceMustBeGreaterThan0),
       down_payment: (value) => {
         if (value === null || value === "" || isNaN(value)) {
-          return "Down payment must be a number";
+          return t.DownPaymentMustBeANumber;
         }
         if (value < 0 || value > 100) {
-          return "Down payment must be between 0 and 100%";
+          return t.DownPaymentMustBeBetween0And100;
         }
         return null;
       },
-      contract_type: (value) => (value ? null : "Contract type is required"),
+      contract_type: (value) => (value ? null : t.ContractTypeIsRequired),
       contract_document: (value) =>
         value ? null : "Contract document is required",
       customer_name: (value) =>
@@ -77,15 +76,15 @@ const AddContractsModal = ({
 
       effective_date: (value, values) =>
         values.contract_type !== "sale" && !value
-          ? "Effective date is required"
+          ? t.EffectiveDateIsRequired
           : null,
       expiration_date: (value, values) =>
         values.contract_type !== "sale" && !value
-          ? "Expiration date is required"
+          ? t.ExpirationDateIsRequired
           : null,
       release_date: (value, values) =>
         values.contract_type !== "sale" && !value
-          ? "Release date is required"
+          ? t.ReleaseDateIsRequired
           : null,
     },
   })
@@ -112,7 +111,7 @@ const AddContractsModal = ({
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Add Contract"
+      title={t.AddContract}
       size="xl"
       radius="lg"
       styles={{
@@ -135,7 +134,7 @@ const AddContractsModal = ({
               weight={500}
               style={{ fontSize: 14, fontWeight: 500, marginBottom: 7 }}
             >
-              Upload Images
+              {t.UploadImages}
             </Text>
             <CameraUpload
 
@@ -166,8 +165,8 @@ const AddContractsModal = ({
             <TextInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               mb={24}
-              label="Title"
-              placeholder="Enter the title of the contract"
+              label={t.Title}
+              placeholder={t.EnterTheTitleOfTheContract}
               error={form.errors.title}
               {...form.getInputProps("title")}
               minLength={5}
@@ -177,8 +176,8 @@ const AddContractsModal = ({
             <Textarea
               styles={{ input: { width: 289, height: 155 }, wrapper: { width: 289 } }}
               mb={24}
-              label="Description"
-              placeholder="Enter the description of the contract"
+              label={t.Description}
+              placeholder={t.EnterTheDescriptionOfTheContract}
               error={form.errors.description}
               {...form.getInputProps("description")}
               minLength={5}
@@ -188,9 +187,8 @@ const AddContractsModal = ({
             {/* Price */}
             <NumberInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24}
-              label="Price"
-              placeholder="Enter the price of the contract"
+              mb={24} label={t.Price}
+              placeholder={t.EnterThePriceOfTheContract}
               error={form.errors.price}
               hideControls
               {...form.getInputProps("price")}
@@ -198,8 +196,9 @@ const AddContractsModal = ({
             />
             <NumberInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              label="Down Payment"
-              placeholder="Enter the down payment (e.g., 25.5%)"
+              
+              label={t.DownPayment}
+              placeholder={t.EnterTheDownPaymentEg25_5}
               hideControls
               min={1}
               max={100}
@@ -240,13 +239,13 @@ const AddContractsModal = ({
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               mb={24}
               rightSection={<img src={downArrow} />}
-              label="Contract Type"
-              placeholder="Select Contract Type"
+              label={t.ContractType}
+              placeholder={t.SelectContractType}
               error={form.errors.contract_type}
               data={[
-                { label: "Sale", value: "sale" },
-                { label: "Rental", value: "rental" },
-                { label: "Booking", value: "booking" },
+                { label: t.Sale, value: "sale" },
+                { label: t.Rental, value: "rental" },
+                { label: t.Booking, value: "booking" },
               ]}
               {...form.getInputProps("contract_type")}
             />
@@ -254,8 +253,8 @@ const AddContractsModal = ({
             <TextInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               mb={24}
-              label="Customer Name"
-              placeholder="Enter the name of the customer"
+              label={t.CustomerName}
+              placeholder={t.EnterTheNameOfTheCustomer}
               error={form.errors.customer_name}
               {...form.getInputProps("customer_name")}
               maxLength={50}
@@ -264,7 +263,7 @@ const AddContractsModal = ({
 
             {/* Customer Phone with Saudi Code & Formatting */}
             <TextInput
-              label="Customer Phone"
+              label={t.CustomerPhone}
               placeholder="512 345 678"
               value={form.values.customer_phone}
               onChange={(e) => {
@@ -326,8 +325,8 @@ const AddContractsModal = ({
             <TextInput
               styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
               mb={24}
-              label="Release Date"
-              placeholder="Enter the release date of the contract"
+                label={t.ReleaseDate}
+                placeholder={t.EnterTheReleaseDateOfTheContract}
               type="date"
               error={form.errors.release_date}
               {...form.getInputProps("release_date")}
@@ -337,8 +336,8 @@ const AddContractsModal = ({
               <TextInput
                 styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
                 mb={24}
-                label="Effective Date"
-                placeholder="Enter the effective date of the contract"
+              label={t.EffectiveDate}
+              placeholder={t.EnterTheEffectiveDateOfTheContract}
                 type="date"
                 error={form.errors.effective_date}
                 {...form.getInputProps("effective_date")}
@@ -348,8 +347,9 @@ const AddContractsModal = ({
             {form.values.contract_type !== "sale" && (
               <TextInput
                 styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-                label="Expiration Date"
-                placeholder="Enter the expiration date of the contract"
+               
+                label={t.ExpirationDate}
+                placeholder={t.EnterTheExpirationDateOfTheContract}
                 type="date"
                 error={form.errors.expiration_date}
                 {...form.getInputProps("expiration_date")}

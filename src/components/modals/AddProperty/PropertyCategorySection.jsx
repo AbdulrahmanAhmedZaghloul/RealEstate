@@ -2,6 +2,7 @@
 import React from "react";
 import { Select, NumberInput } from "@mantine/core";
 import Dropdown from "../../icons/dropdown";
+import { useTranslation } from "../../../context/LanguageContext";
 
 export const PropertyCategorySection = ({
     form,
@@ -10,12 +11,13 @@ export const PropertyCategorySection = ({
     selectedCategoryType,
     handleCategoryChange,
 }) => {
+    const { t } = useTranslation();
     return (
         <>
             {/* Property Category */}
             <Select
-                label="Property Category"
-                placeholder="Select category of property"
+                label={t.PropertyCategory}
+                placeholder={t.SelectTypeOfProperty}
                 data={categories
                     .filter((category) => category.id !== undefined)
                     .map((category) => ({
@@ -37,7 +39,7 @@ export const PropertyCategorySection = ({
 
             {/* Property Subcategory */}
             <Select
-                label="Property Subcategory"
+                label={t.PropertySubcategory}
                 placeholder="Select type of property"
                 data={subcategories
                     .filter(
@@ -61,12 +63,12 @@ export const PropertyCategorySection = ({
 
             {/* Property Type */}
             <Select
-                label="Property Type"
-                placeholder="Select type of property"
+                label={t.PropertyType}
+                placeholder={t.SelectTypeOfProperty}
                 data={[
-                    { value: "rent", label: "For Rent" },
-                    { value: "buy", label: "For Sale" },
-                    { value: "booking", label: "For Booking" },
+                    { value: "rent", label: t.ForRent },
+                    { value: "buy", label: t.ForSale },
+                    { value: "booking", label: t.Booking },
                 ]}
                 {...form.getInputProps("listing_type")}
                 error={form.errors.type}
@@ -81,8 +83,8 @@ export const PropertyCategorySection = ({
             {/* Rooms */}
             {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
                 <NumberInput
-                    label="Rooms"
-                    placeholder="Enter number of rooms"
+                    label={t.Rooms}
+                    placeholder={t.EnterNumberOfRooms}
                     min={0}
                     {...form.getInputProps("rooms")}
                     error={form.errors.rooms}
@@ -105,8 +107,8 @@ export const PropertyCategorySection = ({
                     disabled={
                         selectedCategoryType === "commercial" || selectedCategoryType === "land"
                     }
-                    label="Bathrooms"
-                    placeholder="Enter number of bathrooms"
+                    label={t.Bathrooms}
+                    placeholder={t.EnterNumberOfBathrooms}
                     min={0}
                     {...form.getInputProps("bathrooms")}
                     error={form.errors.bathrooms}
@@ -123,8 +125,8 @@ export const PropertyCategorySection = ({
             {/* Floors */}
             {!(selectedCategoryType === "commercial" || selectedCategoryType === "land") && (
                 <NumberInput
-                    label="Floors"
-                    placeholder="Enter number of floors"
+                    label={t.Floors}
+                    placeholder={t.EnterNumberOfFloors}
                     min={1}
                     {...form.getInputProps("floors")}
                     error={form.errors.floors}

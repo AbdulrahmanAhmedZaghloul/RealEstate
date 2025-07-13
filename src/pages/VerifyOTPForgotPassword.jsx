@@ -17,6 +17,7 @@ import axiosInstance from "../api/config";
 import { notifications } from "@mantine/notifications";
 import classes from "../styles/forgotPass.module.css"; // استخدام نفس الـ CSS class
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
+import { useTranslation } from "../context/LanguageContext";
 
 const VerifyOTPForgotPassword = () => {
   const email = localStorage.getItem("user_email");
@@ -25,7 +26,7 @@ const VerifyOTPForgotPassword = () => {
   const [timer, setTimer] = useState(60); // 1 minute timer
   const [errors, setErrors] = useState({ otp: "" });
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -40,10 +41,10 @@ const VerifyOTPForgotPassword = () => {
     let newErrors = { otp: "" };
 
     if (!otp.trim()) {
-      newErrors.otp = "OTP is required";
+      newErrors.otp = t.OTPIsRequired;
       isValid = false;
     } else if (!/^\d{4}$/.test(otp)) {
-      newErrors.otp = "OTP must be exactly 4 digits";
+      newErrors.otp = t.OTPMustBeExactly4Digits;
       isValid = false;
     }
 
@@ -65,23 +66,23 @@ const VerifyOTPForgotPassword = () => {
       if (response.data.status === "success") {
         localStorage.setItem("token", response.data.data.reset_token);
         notifications.show({
-          title: "Success",
-          message: "OTP verified successfully!",
+          title: t.Success,
+          message: t.OTPVerifiedSuccessfully,
           color: "green",
         });
         navigate("/ResetPassword");
       } else {
         notifications.show({
-          title: "Error",
-          message: "Invalid OTP. Please try again.",
+          title: t.Error,
+          message: t.InvalidOTPPleaseTryAgain,
           color: "red",
         });
       }
     } catch (error) {
       console.log(error);
       notifications.show({
-        title: "Error",
-        message: "Error verifying OTP. Please try again.",
+        title: t.Error,
+        message: t.ErrorVerifyingOTPPleaseTryAgain,
         color: "red",
       });
     } finally {
@@ -101,16 +102,16 @@ const VerifyOTPForgotPassword = () => {
       })
       .then(() => {
         notifications.show({
-          title: "OTP sent successfully.",
-          message: "Please check your inbox to verify account.",
+          title: t.OTPSentSuccessfully,
+          message: t.PleaseCheckYourInboxToVerifyAccount,
           color: "green",
         });
         setTimer(60);
       })
       .catch((error) => {
         notifications.show({
-          title: "Could not send OTP.",
-          message: `${error.response?.data?.message}`,
+          title: t.CouldNotSendOTP,
+          message: `${error.response?.data?.message}` || t.UnknownError,
           color: "red",
         });
       })
@@ -145,7 +146,7 @@ const VerifyOTPForgotPassword = () => {
           )}
           <Paper className={classes.wrapper} withBorder shadow="md" p={30} radius="md" mt="xl">
             <Title mb="50px" className={classes.title} ta="center">
-              OTP Verification
+              {t.OTPVerification}
             </Title>
             <Center>
               <PinInput
@@ -165,7 +166,7 @@ const VerifyOTPForgotPassword = () => {
                 onClick={handleVerify}
                 disabled={loading || otp.length !== 4 || !/^\d{4}$/.test(otp)}
               >
-                Verify OTP
+                {t.VerifyOTP}
               </Button>
               <span align="center" mt="20px">
                 {timer !== 0 ? (
@@ -177,7 +178,7 @@ const VerifyOTPForgotPassword = () => {
                     disabled={loading}
                     variant="light"
                   >
-                    Resend OTP
+                    {t.VerifyOTP}
                   </Button>
                 )}
               </span>
@@ -191,7 +192,7 @@ const VerifyOTPForgotPassword = () => {
                 margin: "0 auto",
               }}
             >
-              Cancel
+              {t.Cancel}
             </Button>
           </Paper>
         </Container>

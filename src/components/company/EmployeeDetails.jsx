@@ -34,6 +34,7 @@ function EmployeeDetails() {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   const [changePasswordModal, { open: openChangePasswordModal, close: closeChangePasswordModal }] = useDisclosure(false);
@@ -330,64 +331,13 @@ function EmployeeDetails() {
     }
   };
 
-  const { t } = useTranslation();
 
   useEffect(() => {
     fetchEmployee();
     fetchSupervisors();
     fetchEmployeeListings();
-    // fetchDataKPIs();
-  }, []);
-
-  // const performanceData = [
-
-  //   {
-  //     label: "Total Selling",
-  //     value: kpiData?.performance_metrics?.sales?.total_amount,
-  //   },
-  //   {
-  //     label: "Avg Selling",
-  //     value:
-  //       kpiData?.performance_metrics?.sales?.total_amount /
-  //       kpiData?.performance_metrics?.sales?.count,
-  //   },
-
-
-  //   {
-  //     label: "Total Rental",
-  //     value: kpiData?.performance_metrics?.rentals?.total_amount,
-  //   },
-  //   {
-  //     label: "Avg Rental",
-  //     value:
-  //       kpiData?.performance_metrics?.rentals?.total_amount /
-  //       kpiData?.performance_metrics?.rentals?.count,
-  //   },
-
-  //   {
-  //     label: "Total Booking",
-  //     value:
-  //       kpiData?.performance_metrics?.rentals?.total_amount +
-  //       kpiData?.performance_metrics?.sales?.total_amount,
-  //   },
-  //   {
-  //     label: "Avg Booking",
-  //     value:
-  //       (kpiData?.performance_metrics?.rentals?.total_amount +
-  //         kpiData?.performance_metrics?.sales?.total_amount) /
-  //       2,
-  //   },
-  //   {
-  //     label: "Total Commissions",
-  //     value: kpiData?.performance_metrics?.commissions,
-  //   },
-  //   {
-  //     label: "Avg Commissions",
-  //     value:
-  //       kpiData?.performance_metrics?.commissions /
-  //       kpiData?.performance_metrics?.contracts.length,
-  //   },
-  // ];
+   }, []);
+ 
 
   if (loading) {
     return (
@@ -440,14 +390,6 @@ function EmployeeDetails() {
             }}>{employee.email}</p>
           </div>
         </div>
-        <span
-          style={{
-            cursor: "pointer",
-          }}
-          onClick={openDeleteModal}
-          className={classes.deleteIcon}>
-          <DeleteIcon />
-        </span>
 
       </div>
 
@@ -522,9 +464,9 @@ function EmployeeDetails() {
         </div>
       </div>
 
-      <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title="Change Password">
+      <Modal opened={changePasswordModal} onClose={closeChangePasswordModal} title={t.ChangePassword}>
         <TextInput
-          label="New Password"
+          label={t.NewPassword}
           type={showPassword ? "text" : "password"}
           value={passwordData.password}
           maxLength={50}
@@ -554,7 +496,7 @@ function EmployeeDetails() {
         )}
 
         <Button loading={loading} onClick={handleChangePassword} mt="md" fullWidth>
-          Change Password
+          {t.ChangePassword}
         </Button>
       </Modal>
 

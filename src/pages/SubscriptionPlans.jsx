@@ -21,9 +21,11 @@ import { useMediaQuery } from "@mantine/hooks";
 import { useCurrentSubscription } from "../hooks/queries/useCurrentSubscription";
 import { notifications } from "@mantine/notifications";
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
+import { useTranslation } from "../context/LanguageContext";
 
 function SubscriptionPlans() {
   const [billingCycle, setBillingCycle] = useState("monthly");
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [modalOpened, setModalOpened] = useState(false);
   const isMobile = useMediaQuery(`(max-width: 991px)`);
@@ -34,10 +36,12 @@ function SubscriptionPlans() {
   } else {
     console.log("No role found in session or local storage.");
   }
-  let successUrl = "https://real-estate-one-lake.vercel.app/#/dashboard";
+  // let successUrl = "https://real-estate-one-lake.vercel.app/#/dashboard";
+  let successUrl = "http://localhost:5173/#/dashboard";
 
   if (role === "marketer") {
-    successUrl = "https://real-estate-one-lake.vercel.app/#/dashboard-Marketer"
+    // successUrl = "https://real-estate-one-lake.vercel.app/#/dashboard-Marketer"
+    successUrl = "http://localhost:5173/#/dashboard-Marketer"
   }
   const {
     data,
@@ -62,8 +66,8 @@ function SubscriptionPlans() {
     } catch (error) {
       console.error("Error in checkout:", error);
       notifications.show({
-        title: "Error",
-        message: error.response.message || "Failed to fetch employees",
+        title: t.Error,
+        message: error.response.message || t.FailedToFetchEmployees,
         color: "red",
       });
     }
@@ -75,38 +79,42 @@ function SubscriptionPlans() {
       <Modal
         opened={modalOpened}
         onClose={() => setModalOpened(false)}
-        title="تلقائي التجديد"
+        title={t.AutoRenewal}
         centered
         className={classes.zIndex}
       >
-        <Text>هل تريد تجديد الاشتراك تلقائياً؟</Text>
+        <Text>{t.ConfirmAutoRenewal}</Text>
         <Group position="center" mt="md">
-          <Button color="green">نعم</Button>
+          <Button color="green">{t.Yes}</Button>
           <Button color="red" onClick={() => setModalOpened(false)}>
-            لا
+            {t.No}
           </Button>
         </Group>
       </Modal>
 
       {/* صورة الجانبين */}
-      <div className={classes.positionright}>
+      {/* <div className={classes.positionright}>
         <img src={positionright} alt="" />
       </div>
       <div className={classes.positionleft}>
         <img src={positionleft} alt="" />
-      </div>
+      </div> */}
 
       {/* الهيدر */}
-      
+
       <HeaderMegaMenu />
 
 
       <Card style={{ zIndex: "10", backgroundColor: "transparent" }}>
         <div style={{ padding: "20px", textAlign: "center" }}>
-          <Text fz={50} className={classes.Choose}>Choose your plan</Text>
+          <Text fz={50} className={classes.Choose}>
+            {t.ChooseYourPlan}
+          </Text>
           <Center style={{ marginTop: "30px" }}>
-            <Text fz={18} fw={600} mr={20}>monthly</Text>
+            <Text fz={18} fw={600} mr={20}>  {t.Monthly}</Text>
             <Switch
+            mr={20}
+            ml={20}
               checked={billingCycle === "annually"}
               onChange={(event) =>
                 setBillingCycle(event.currentTarget.checked ? "annually" : "monthly")
@@ -117,8 +125,8 @@ function SubscriptionPlans() {
                 thumb: { backgroundColor: "#4E00B2" },
               }}
             />
-            <Text fz={18} fw={600} ml={20}>yearly</Text>
-            <span className={classes.off}>35% discount</span>
+            <Text fz={18} fw={600} ml={20}> {t.Yearly} </Text>
+            <span className={classes.off}> {t.Discount35} </span>
           </Center>
         </div>
 
@@ -148,7 +156,7 @@ function SubscriptionPlans() {
                     <br />
                     {billingCycle === "annually" && (
                       <>
-                        I saved money: $ {plan.pricing.yearly_savings}
+                        {t.SavedMoney}: $ {plan.pricing.yearly_savings}
                         <br />
                       </>
                     )}
@@ -165,18 +173,18 @@ function SubscriptionPlans() {
                     }}
                   >
                     <li>
-                      <span style={{ color: "green" }}>✔</span>
-                      <span>Limit RealState</span> {" : "}
+                      <span style={{ color: "green", margin:"0px 10px" }}>✔</span>
+                      <span>{t.LimitRealState}</span> {" : "}
                       {plan.features.listings_limit}
                     </li>
                     <li>
-                      <span style={{ color: "green" }}>✔</span>
-                      <span>Limit employees</span> {" : "}
+                      <span style={{ color: "green" , margin:"0px 10px"}}>✔</span>
+                      <span>{t.LimitEmployees}</span> {" : "}
                       {plan.features.employees_limit}
                     </li>
                     <li>
-                      <span style={{ color: "green" }}>✔</span>
-                      <span>Limit supervisors</span> {" : "}
+                      <span style={{ color: "green", margin:"0px 10px" }}>✔</span>
+                      <span>{t.LimitSupervisors}</span> {" : "}
                       {plan.features.supervisors_limit}
                     </li>
                   </ul>
@@ -192,7 +200,7 @@ function SubscriptionPlans() {
                       borderRadius: "10px",
                     }}
                   >
-                    choose
+                    {t.Choose}
                   </Button>
                 </div>
               </Grid.Col>

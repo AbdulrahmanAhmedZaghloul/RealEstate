@@ -4,13 +4,14 @@ import { notifications } from '@mantine/notifications';
 import axiosInstance from "../api/config";
 import { useNavigate } from "react-router-dom";
 import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
+import { useTranslation } from "../context/LanguageContext";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
-
+const { t } = useTranslation();
   const email = localStorage.getItem("user_email");
   const resetToken = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -63,15 +64,15 @@ const ResetPassword = () => {
       });
 
       notifications.show({
-        title: 'Success',
-        message: 'Your password has been reset successfully!',
+        title: t.Success,
+        message: t.YourPasswordHasBeenResetSuccessfully,
         color: 'green',
       });
       navigate("/");
     } catch (err) {
       notifications.show({
         title: 'Error',
-        message: err.response?.data?.message || 'Something went wrong. Please try again.',
+        message: err.response?.data?.message ||  t.SomethingWentWrongPleaseTryAgain,
         color: 'red',
       });
     } finally {
@@ -88,10 +89,13 @@ const ResetPassword = () => {
       }}>
 
         <Container size="xs" p="md">
-          <Title order={2} align="center">Reset Password</Title>
+          <Title order={2} align="center">
+                        {t.ResetPassword}
+
+          </Title>
           <form onSubmit={handleSubmit}>
             <PasswordInput
-              label="New Password"
+              label={t.NewPassword}
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -104,7 +108,7 @@ const ResetPassword = () => {
             />
 
             <PasswordInput
-              label="Confirm Password"
+              label={t.ConfirmPassword}
               value={passwordConfirmation}
               onChange={(e) => {
                 setPasswordConfirmation(e.target.value);
@@ -128,7 +132,7 @@ const ResetPassword = () => {
               loading={loading}
               disabled={loading}
             >
-              {loading ? "Loading..." : "Reset Password"}
+              {loading ?  t.Loading : t.ResetPassword}
             </Button>
           </form>
         </Container>

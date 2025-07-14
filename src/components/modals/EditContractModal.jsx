@@ -13,11 +13,12 @@ import { notifications } from "@mantine/notifications";
 import axiosInstance from "../../api/config";
 import { useState } from "react";
 import { useAuth } from "../../context/authContext";
+import { useTranslation } from "../../context/LanguageContext";
 // import { validateSaudiPhoneNumber } from "../../utils/saudiPhoneNumberVaبlidator";
 
 export default function EditContractModal({ opened, onClose, contract, onEditSuccess }) {
     const [loading, setLoading] = useState(false);
-
+    const { t } = useTranslation();
     const { user } = useAuth();
     const form = useForm({
         initialValues: {
@@ -39,27 +40,27 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
                 const regex = /^9665[01356789]\d{7}$/;
                 return regex.test(cleaned)
                     ? null
-                    : "Please enter a valid Saudi phone number starting with +966.";
+                    : t.PleaseEnterAValidSaudiPhoneNumberStartingWith966;
             },
 
-            title: (value) => (value.trim() ? null : "Title is required"),
-            description: (value) => (value.trim() ? null : "Description is required"),
-            price: (value) => (value > 0 ? null : "Price must be greater than 0"),
-            customer_name: (value) => (value.trim() ? null : "Customer name is required"),
+            title: (value) => (value.trim() ? null : t.TitleIsRequired),
+            description: (value) => (value.trim() ? null : t.DescriptionIsRequired),
+            price: (value) => (value > 0 ? null : t.PriceMustBeGreaterThan0),
+            customer_name: (value) => (value.trim() ? null : t.CustomerNameIsRequired),
 
             effective_date: (value, values) =>
                 ["rental", "booking"].includes(values.contract_type) && !value
-                    ? "Effective date is required"
+                    ? t.EffectiveDateIsRequired
                     : null,
 
             expiration_date: (value, values) =>
                 ["rental", "booking"].includes(values.contract_type) && !value
-                    ? "Expiration date is required"
+                    ? t.ExpirationDateIsRequired
                     : null,
 
             release_date: (value, values) =>
                 ["rental", "booking"].includes(values.contract_type) && !value
-                    ? "Release date is required"
+                    ? t.ReleaseDateIsRequired
                     : null,
         },
     });
@@ -79,26 +80,23 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
             setLoading(true);
             try {
                 await axiosInstance.post(`contracts/${contract.id}`, formData, {
-                    // headers: {
-                    //     "Content-Type": "multipart/form-data",
-                    //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    // },
+
                     headers: {
                         "Content-Type": "multipart/form-data",
                         Authorization: `Bearer ${user.token}`
                     },
                 });
                 notifications.show({
-                    title: "Contract Updated",
-                    message: "Contract has been updated successfully.",
+                    title: t.ContractUpdated,
+                    message: t.ContractHasBeenUpdatedSuccessfully,
                     color: "green",
                 });
                 onEditSuccess(); // إعادة جلب البيانات
                 onClose(); // إغلاق المودال
             } catch (err) {
                 notifications.show({
-                    title: "Error",
-                    message: "Failed to update contract.",
+                    title: t.Error,
+                    message: t.FailedToUpdateContract,
                     color: "red",
                 });
                 console.error(err);
@@ -112,7 +110,7 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
         <Modal
             opened={opened}
             onClose={onClose}
-            title="Edit Contract"
+            title={t.EditContract}
             size="xl"
             radius="lg"
             centered
@@ -121,26 +119,32 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
                 <Stack>
                     {/* Title */}
                     <TextInput maxLength={20}
-                        label="Title" {...form.getInputProps("title")} />
+                        label={t.Title} {...form.getInputProps("title")}
+                        placeholder={t.EnterTheTitleOfTheContract}
+                    />
 
                     {/* Description */}
                     <Textarea maxLength={250}
-                        label="Description" {...form.getInputProps("description")} />
+                        label={t.Description}
+                        placeholder={t.EnterTheDescriptionOfTheContract}
+                        {...form.getInputProps("description")} />
 
                     {/* Price */}
-                    <NumberInput maxLength={20} min={1} label="Price" {...form.getInputProps("price")} />
+                    <NumberInput maxLength={20} min={1}
+                        label={t.Price}
+                        placeholder={t.EnterThePriceOfTheContract}
+                        {...form.getInputProps("price")} />
 
                     {/* Down Payment */}
-                    <NumberInput label="Down Payment"
+                    <NumberInput
+                        label={t.DownPayment}
+                        placeholder={t.EnterTheDownPaymentEg25_5}
                         {...form.getInputProps("down_payment")}
-
-
-                        placeholder="Enter the down payment of the contract"
                         hideControls
 
                         error={
                             form.values.down_payment < 0 || form.values.down_payment > 100
-                                ? "Down payment must be between 0 and 100%"
+                                ? t.DownPaymentMustBeBetween0And100
                                 : form.errors.down_payment
                         }
                         value={form.values.down_payment}
@@ -161,23 +165,32 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
 
                     {/* Contract Type */}
                     <Select
-                        label="Contract Type"
+                        label={t.ContractType}
+                        placeholder={t.SelectContractType}
                         data={[
-                            { value: "sale", label: "Sale" },
-                            { value: "rental", label: "Rental" },
-                            { value: "booking", label: "Booking" },
+
+                            { value: "sale", label: t.Sale },
+                            { value: "rental", label: t.Rental },
+                            { value: "booking", label: t.Booking },
+                            // { value: "sale", label: "Sale" },
+                            // { value: "rental", label: "Rental" },
+                            // { value: "booking", label: "Booking" },
                         ]}
                         {...form.getInputProps("contract_type")}
                     />
 
                     {/* Customer Name */}
                     <TextInput maxLength={30}
-                        label="Customer Name" {...form.getInputProps("customer_name")} />
+                        label={t.CustomerName}
+                        placeholder={t.EnterCustomerName}
+                        {...form.getInputProps("customer_name")} />
 
                     {/* Customer Phone with Saudi Code & Formatting */}
                     <TextInput
-                        label="Customer Phone"
-                        placeholder="512 345 678"
+
+                        label={t.CustomerPhone}
+                        placeholder={t.EnterCustomerPhoneNumber}
+                        //  placeholder="512 345 678"
                         value={form.values.customer_phone}
                         onChange={(e) => {
                             let input = e.target.value;
@@ -238,7 +251,7 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
 
                             <TextInput
                                 type="date"
-                                label="Release Date"
+                                label={t.ReleaseDate}
                                 {...form.getInputProps("release_date")}
                             />
                         </>
@@ -249,24 +262,45 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
                         <>
                             <TextInput
                                 type="date"
-                                label="Effective Date"
+                                label={t.EffectiveDate}
                                 {...form.getInputProps("effective_date")}
                             />
                             <TextInput
                                 type="date"
-                                label="Expiration Date"
+                                label={t.ExpirationDate}
                                 {...form.getInputProps("expiration_date")}
                             />
                             <TextInput
                                 type="date"
-                                label="Release Date"
+                                label={t.ReleaseDate}
                                 {...form.getInputProps("release_date")}
                             />
                         </>
                     )}
 
                     {/* Save Button */}
+
                     <Button
+                        type="submit"
+                        loading={loading}
+                        disabled={!form.isValid() || loading}
+                        mt="xl"
+                        fullWidth
+                        bg="var(--color-1)"
+                    >
+                        {loading ? t.Saving : t.Save}
+                    </Button>
+
+                    <Button
+                        variant="default"
+                        onClick={onClose}
+                        disabled={loading}
+                        fullWidth
+                        mt="md"
+                    >
+                        {t.Cancel}
+                    </Button>
+                    {/* <Button
                         type="submit"
                         fullWidth
                         mt="xl"
@@ -276,7 +310,7 @@ export default function EditContractModal({ opened, onClose, contract, onEditSuc
                         disabled={!form.isValid()}
                     >
                         {loading ? "Saving..." : "Save"}
-                    </Button>
+                    </Button> */}
                 </Stack>
             </form>
         </Modal>

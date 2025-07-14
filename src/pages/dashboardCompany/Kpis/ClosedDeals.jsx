@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import classes from "../../../styles/analytics.module.css";
 import { useClosedDeals } from '../../../hooks/queries/QueriesAnalytics/CompanyKpi/ClosedDeals';
 import { Grid, GridCol } from '@mantine/core';
+import { useTranslation } from '../../../context/LanguageContext';
 
 function ClosedDeals({ timeFrame, month, year }) {
   const { data: apiData } = useClosedDeals(timeFrame, month, year);
+    const { t ,lang } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+  
   const [data, setData] = useState({});
 console.log(data);
 
@@ -17,7 +20,7 @@ console.log(data);
       {/* Card 1: Closed Deals */}
       <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
         <div className={classes.card}>
-          <div className={classes.cardTitle}>Closed Deals</div>
+          <div className={classes.cardTitle}>{t.ClosedDeals}</div>
           <div className={classes.cardCount}>{data?.closed_deals_count ?? 0}</div>
           <div className={classes.cardRevenue}>
             <span className="icon-saudi_riyal">&#xea; </span>
@@ -29,7 +32,7 @@ console.log(data);
       {/* Card 2: Total Properties */}
       <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
         <div className={classes.card}>
-          <div className={classes.cardTitle}>Total Properties</div>
+          <div className={classes.cardTitle}>{t.TotalProperties}</div>
           <div className={classes.cardCount}>{data?.total_properties ?? 0}</div>
           <div className={classes.cardRevenue}>
             <span className="icon-saudi_riyal">&#xea; </span>
@@ -42,7 +45,7 @@ console.log(data);
       <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
         <div className={classes.card}>
           {console.log(data)}
-          <div className={classes.cardTitle}>Marketplace Properties</div>
+          <div className={classes.cardTitle}>{t.MarketplaceProperties}</div>
           <div className={classes.cardCount}>{data?.total_properties_sold}</div>
           <div className={classes.cardRevenue}>
             {/* ممكن تضيف رقم تانى هنا لو عندك قيمة للربح من المبيعات */}

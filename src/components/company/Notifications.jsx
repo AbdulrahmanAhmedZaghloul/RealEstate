@@ -48,6 +48,8 @@ function Notifications() {
         opened={opened}
         onChange={setOpened}
         shadow="md"
+        mr={5}
+        ml={5}
       >
         <Popover.Target className={classes.positionTarget}>
           <Box onClick={() => setOpened((o) => !o)} className="cursor-pointer">

@@ -58,6 +58,8 @@ const rejectionReasons = [
 ];
 
 function Transactions() {
+    const { t, lang } = useTranslation();
+
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({});
@@ -71,10 +73,10 @@ function Transactions() {
   const [sortBy, setSortBy] = useState("newest");
 
   const sortOptions = [
-    { value: "newest", label: "Newest" },
-    { value: "oldest", label: "Oldest" },
-    { value: "highest", label: "Highest price" },
-    { value: "lowest", label: "Lowest price" },
+    { value: "newest", label: t.Newest },
+    { value: "oldest", label: t.Oldest },
+    { value: "highest", label: t.HighestPrice },
+    { value: "lowest", label: t.LowestPrice },
   ];
   const [rejectionReason, setRejectionReason] = useState("");
 
@@ -85,10 +87,10 @@ function Transactions() {
   const [isSticky, setIsSticky] = useState(false);
 
   const transactionOptions = [
-    { value: "all", label: "All" },
-    { value: "rent", label: "For Rent" },
-    { value: "buy", label: "For Sale" },
-    { value: "booking", label: "Booking" },
+    { value: "all", label: t.All },
+    { value: "rent", label: t.ForRent },
+    { value: "buy", label: t.ForSale },
+    { value: "booking", label: t.Booking },
   ];
 
   const [transactionType, setTransactionType] = useState("all");
@@ -128,7 +130,6 @@ function Transactions() {
   const [subcategories, setSubcategories] = useState([]);
 
   const [opened, { open, close }] = useDisclosure(false);
-  const { t } = useTranslation();
   const filterForm = useForm({
     initialValues: {
       location: "",
@@ -315,6 +316,10 @@ function Transactions() {
 
         <header
           className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
+          style={{
+            ...(isSticky ? { [lang === "ar" ? "right" : "left"]: "25%" } : {}),
+            zIndex: isSticky ? 10 : "auto",
+          }}
         >
           <div className={classes.controls}>
             <div className={classes.flexSearch}>

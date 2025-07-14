@@ -161,7 +161,7 @@ function ProfileEmployee() {
   return (
     <div
       style={{
-        backgroundColor: "#fff",
+        backgroundColor: "var(--color-5)",
       }}
       className={classes.container}
     >

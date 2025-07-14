@@ -2,6 +2,7 @@ import { Modal, TextInput, Select, Button, Group, Divider, Stack } from '@mantin
 // import { DateRangePicker } from '@mantine/dates';
 // import { IconCalendar } from '@ftabler/icons-react';
 import React from 'react';
+import { useTranslation } from '../../context/LanguageContext';
 
 const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilters }) => {
   const [filters, setFilters] = React.useState({
@@ -17,6 +18,8 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
     status: 'all',
     ...initialFilters,
   });
+
+  const { t } = useTranslation();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -61,7 +64,7 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Contract Filters"
+      title={t.ContractFilters}
       centered
       size="lg"
       padding="xl"
@@ -69,18 +72,12 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
       <form onSubmit={handleSubmit}>
         <Stack gap="md">
           {/* General Search */}
-          {/* <TextInput
-            label="Search"
-            placeholder="Search by any field"
-            name="search"
-            value={filters.search}
-            onChange={handleInputChange}
-          /> */}
+
 
           {/* Contract Title */}
           <TextInput
-            label="Contract Title"
-            placeholder="Enter contract title"
+            label={t.ContractTitle}
+            placeholder={t.EnterContractTitle}
             name="title"
             value={filters.title}
             onChange={handleInputChange}
@@ -88,8 +85,8 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
 
           {/* Customer Name */}
           <TextInput
-            label="Customer Name"
-            placeholder="Enter customer name"
+            label={t.CustomerName}
+            placeholder={t.EnterCustomerName}
             name="customer_name"
             value={filters.customer_name}
             onChange={handleInputChange}
@@ -97,8 +94,8 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
 
           {/* Location */}
           <TextInput
-            label="Location"
-            placeholder="Enter location"
+            label={t.Location}
+            placeholder={t.EnterLocation}
             name="location"
             value={filters.location}
             onChange={handleInputChange}
@@ -106,12 +103,12 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
 
           {/* Contract Type */}
           <Select
-            label="Contract Type"
+            label={t.ContractType}
             data={[
-              { value: 'all', label: 'All' },
-              { value: 'sale', label: 'Sale' },
-              { value: 'rental', label: 'Rental' },
-              { value: 'booking', label: 'Booking' },
+              { value: 'all', label: t.All },
+              { value: 'sale', label: t.Sale },
+              { value: 'rental', label: t.Rental },
+              { value: 'booking', label: t.Booking },
             ]}
             name="contract_type"
             value={filters.contract_type}
@@ -122,8 +119,8 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
 
           {/* Employee Name */}
           <TextInput
-            label="Employee Name"
-            placeholder="Enter employee name"
+            label={t.EmployeeName}
+            placeholder={t.EnterEmployeeName}
             name="employee_name"
             value={filters.employee_name}
             onChange={handleInputChange}
@@ -131,12 +128,12 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
 
           {/* Category ID */}
           <Select
-            label="Category"
+            label={t.Category}
             data={[
-              { value: '', label: 'All Categories' },
-              { value: '1', label: 'Residential' },
-              { value: '2', label: 'Commercial' },
-              { value: '3', label: 'Land' },
+              { value: '', label: t.AllCategories },
+              { value: '1', label: t.Residential },
+              { value: '2', label: t.Commercial },
+              { value: '3', label: t.Land },
             ]}
             name="category_id"
             value={filters.category_id || ''}
@@ -145,27 +142,22 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
             }
           />
 
-          {/* Date Range */}
-          {/* <DateRangePicker
-            icon={<IconCalendar size={16} />}
-            label="Select Date Range"
-            placeholder="Pick dates range"
-            value={[
-              filters.date_from ? new Date(filters.date_from) : null,
-              filters.date_to ? new Date(filters.date_to) : null,
-            ]}
-            onChange={handleDateChange}
-          /> */}
 
           {/* Status */}
           <Select
-            label="Status"
+            label={t.Status}
             data={[
-              { value: 'all', label: 'All Statuses' },
-              { value: 'active', label: 'Active' },
-              { value: 'expired', label: 'Expired' },
-              { value: 'pending', label: 'Pending' },
-              { value: 'completed', label: 'Completed' },
+
+              { value: 'all', label: t.AllStatuses },
+              { value: 'active', label: t.Active },
+              { value: 'expired', label: t.Expired },
+              { value: 'pending', label: t.Pending },
+              { value: 'completed', label: t.Completed },
+              // { value: 'all', label: 'All Statuses' },
+              // { value: 'active', label: 'Active' },
+              // { value: 'expired', label: 'Expired' },
+              // { value: 'pending', label: 'Pending' },
+              // { value: 'completed', label: 'Completed' },
             ]}
             name="status"
             value={filters.status}
@@ -179,9 +171,11 @@ const FilterContractsModal = ({ opened, onClose, onFilter, onReset, initialFilte
           {/* Buttons */}
           <Group justify="space-between">
             <Button variant="subtle" color="red" onClick={handleReset}>
-              Reset Filters
+              {t.ResetFilters}
             </Button>
-            <Button type="submit">Apply Filters</Button>
+            <Button type="submit">
+              {t.ApplyFilters}
+            </Button>
           </Group>
         </Stack>
       </form>

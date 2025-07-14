@@ -66,7 +66,7 @@ function EmployeeDetailsSupervisor() {
   const [showPassword, setShowPassword] = useState(false);
 
 
-  const { t } = useTranslation(); // 👈 استدعاء اللغة
+  const { t ,lang} = useTranslation(); // 👈 استدعاء اللغة
 
 
   const handleDeleteEmployee = async (id) => {
@@ -312,17 +312,15 @@ function EmployeeDetailsSupervisor() {
   return (
     <div
       style={{
-        backgroundColor: "#fff",
-
+        backgroundColor: "",
       }}
       className={classes.container}
     >
       <div className={classes.header}>
         <BurgerButton />
+
         <span
-          style={{
-            // fontSize: isSmallScreen ? "24px" : "16px",
-          }}
+          
           className={classes.employePosition}
         >
           {t.Employee}
@@ -381,7 +379,7 @@ function EmployeeDetailsSupervisor() {
 
           </span>
 
-        </div> 
+        </div>
         <Grid>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>
             <h2

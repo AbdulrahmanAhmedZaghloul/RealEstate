@@ -51,7 +51,7 @@ function Properties() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   const [
     openedFilterModal,
     { open: openFilterModal, close: closeFilterModal },
@@ -250,6 +250,10 @@ function Properties() {
 
         <header
           className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
+          style={{
+            ...(isSticky ? { [lang === "ar" ? "right" : "left"]: "25%" } : {}),
+            zIndex: isSticky ? 10 : "auto",
+          }}
         >
           <div className={classes.controls}>
             <div className={classes.flexSearch}>
@@ -513,13 +517,14 @@ function Properties() {
                             ? `${Math.floor(
                               (new Date() - new Date(listing.created_at)) /
                               (1000 * 60 * 60 * 24)
-                            )} days ago`
+                            )} ${t.daysAgo}`
                             : Math.floor(
                               (new Date() - new Date(listing.created_at)) /
                               (1000 * 60 * 60 * 24)
                             ) === 1
-                              ? "Yesterday"
-                              : "Today"}
+                              ? `${t.Yesterday}`
+                              : `${t.Today}`}
+
                         </div>
                       </div>
                     </Card>

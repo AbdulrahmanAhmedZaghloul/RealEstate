@@ -50,7 +50,7 @@ function ProfileSupervisor() {
   return (
     <div
       style={{
-        backgroundColor: "#FFF",
+        backgroundColor: "var(--color-5)",
       }}
       className={classes.container}
     >
@@ -79,7 +79,7 @@ function ProfileSupervisor() {
 
       <div className={classes.personalInfo}>
         <div>
-          <h3  >{t.PersonalInfo}</h3>
+          <h3>{t.PersonalInfo}</h3>
         </div>
         <Grid>
           <Grid.Col span={isMobile ? 6 : 3} className={classes.gridCol}>

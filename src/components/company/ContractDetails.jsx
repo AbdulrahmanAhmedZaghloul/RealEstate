@@ -11,7 +11,6 @@ import {
   GridCol,
   Avatar,
   Image,
-  useMantineColorScheme,
   Text,
   TextInput,
 } from "@mantine/core";
@@ -22,13 +21,13 @@ import { notifications } from "@mantine/notifications";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 // Local imports
-import axiosInstance, { apiUrl } from "../../api/config";
+import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 import Contract from "../../assets/contract/contract.png";
 import edit from "../../assets/edit.svg";
 import trash from "../../assets/trash.svg";
 import { useTranslation } from "../../context/LanguageContext";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import EditContractModal from "../modals/EditContractModal";
 import CategoryIcon from "../icons/CategoryIcon";
 import FloorsIcon from "../icons/FloorsIcon";
@@ -54,7 +53,6 @@ function ContractDetails() {
   const [shareOpened, { open: openShare, close: closeShare }] =
     useDisclosure(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // تتبع الصورة المختارة
-  const [api, setfApi] = useState(null);
   const navigate = useNavigate();
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   const queryClient = useQueryClient();
@@ -76,18 +74,18 @@ function ContractDetails() {
       release_date: "",
     },
     validate: {
-      title: (value) => (value ? null : "Title is required"),
-      description: (value) => (value ? null : "Description is required"),
-      price: (value) => (value ? 0 : "Price is required"),
-      customer_name: (value) => (value ? null : "Customer name is required"),
+      title: (value) => (value ? null : t.TitleIsRequired),
+      description: (value) => (value ? null : t.DescriptionIsRequired),
+      price: (value) => (value ? 0 : t.PriceMustBeGreaterThan0),
+      customer_name: (value) => (value ? null : t.CustomerNameIsRequired),
       customer_phone: (value) => {
         const cleaned = value.replace(/\s+/g, "").replace(/\D/g, ""); // نزيل المسافات والأحرف
         if (!cleaned.startsWith("9665") || cleaned.length !== 12) {
-          return "Please enter a valid Saudi phone number starting with +966.";
+          return t.PleaseEnterAValidSaudiPhoneNumberStartingWith966;
         }
         return validateSaudiPhoneNumber(cleaned)
           ? null
-          : "Please enter a valid Saudi phone number starting with +966.";
+          : t.PleaseEnterAValidSaudiPhoneNumberStartingWith966;
       },
       down_payment: (value) =>
         value === null || value === "" || value < 0 || value > 100
@@ -95,10 +93,10 @@ function ContractDetails() {
           : null,
       // customer_phone: (value) => (value ? null : "Customer phone is required"),
       creation_date: (value) => (value ? null : "Creation date is required"),
-      effective_date: (value) => (value ? null : "Effective date is required"),
+      effective_date: (value) => (value ? null : t.EffectiveDateIsRequired),
       expiration_date: (value) =>
-        value ? null : "Expiration date is required",
-      release_date: (value) => (value ? null : "Release date is required"),
+        value ? null : t.ExpirationDateIsRequired,
+      release_date: (value) => (value ? null : t.ReleaseDateIsRequired),
     },
     enableReinitialize: true,
   });
@@ -172,8 +170,8 @@ function ContractDetails() {
       .catch((err) => {
         console.error(err);
         notifications.show({
-          title: "Sharing Failed",
-          message: "Failed to share the contract.",
+          title: t.SharingFailed,
+          message: t.CouldNotShareContract,
           color: "red",
         });
       })
@@ -200,16 +198,16 @@ function ContractDetails() {
         document.body.appendChild(link);
         link.click();
         notifications.show({
-          title: "Download Started", // Updated notification message
-          message: "Contract document download has started.",
+          title: t.DownloadStarted, // Updated notification message
+          message: t.ContractDocumentDownloadHasStarted,
           color: "green",
         });
       })
       .catch((err) => {
         console.log(err);
         notifications.show({
-          title: "Download Failed",
-          message: "Failed to download the contract document.",
+          title: t.DownloadFailed,
+          message: t.FailedToDownloadTheContractDocument,
           color: "red",
         });
       })
@@ -228,8 +226,8 @@ function ContractDetails() {
         // بعد النجاح
         queryClient.invalidateQueries(["contracts"]);
         notifications.show({
-          title: "Contract Deleted", // Updated notification message
-          message: "Contract has been deleted successfully.",
+          title: t.ContractDeleted, // Updated notification message
+          message: t.ContractHasBeenDeletedSuccessfully,
           color: "green",
         });
         navigate("/dashboard/contracts");
@@ -237,8 +235,8 @@ function ContractDetails() {
       .catch((err) => {
         console.log(err);
         notifications.show({
-          title: "Delete Failed", // Updated notification message
-          message: "Failed to delete the contract.",
+          title: t.DeleteFailed, // Updated notification message
+          message: t.FailedToDeleteTheContract,
           color: "red",
         });
       })
@@ -246,6 +244,7 @@ function ContractDetails() {
         setLoading(false);
       });
   };
+
   useEffect(() => {
     fetchContract();
   }, []);
@@ -397,14 +396,14 @@ function ContractDetails() {
                               (new Date() -
                                 new Date(contract?.creation_date)) /
                               (1000 * 60 * 60 * 24)
-                            )} days ago`
+                            )} ${t.daysAgo}`
                             : Math.floor(
                               (new Date() -
                                 new Date(contract?.creation_date)) /
                               (1000 * 60 * 60 * 24)
                             ) === 1
-                              ? "Yesterday"
-                              : "Today"}
+                              ? `${t.Yesterday}`
+                              : `${t.Today}`}
                         </p>
                       </div>
                     </div>
@@ -414,7 +413,7 @@ function ContractDetails() {
                         <span className={classes.svgSpan}>
                           <div>
                             <BedsIcon />
-                            <span>{contract?.real_estate?.rooms} Beds</span>
+                            <span>{contract?.real_estate?.rooms} {t.Rooms}</span>
                           </div>
                         </span>
                       )}
@@ -423,7 +422,7 @@ function ContractDetails() {
                           <div>
                             <BathsIcon />
                             <span>
-                              {contract?.real_estate?.bathrooms} Baths
+                              {contract?.real_estate?.bathrooms} {t.Bathrooms}
                             </span>
                           </div>
                         </span>
@@ -432,7 +431,7 @@ function ContractDetails() {
                       <span className={classes.svgSpan}>
                         <div>
                           <Area />
-                          <span>{contract?.real_estate?.area} sqm</span>
+                          <span>{contract?.real_estate?.area} {t.sqm}</span>
                         </div>
                       </span>
 
@@ -480,7 +479,7 @@ function ContractDetails() {
 
                     <span>{contract?.listed_by?.name}</span>
                   </div>
-                  <div className={classes.viewText}>
+                  <div  onClick={handleDownloadDocument} className={classes.viewText}>
                     <span>View</span>
                   </div>
                 </div>
@@ -506,8 +505,8 @@ function ContractDetails() {
                         <DownloadIcon />
                       </Button>
                     </div>
-                    <div className={classes.documents}>
-                      <p>View Documents</p>
+                    <div onClick={handleDownloadDocument} className={classes.documents}>
+                      <p>{t.ViewDocuments}</p>
                     </div>
                   </div>
                 </div>
@@ -624,7 +623,7 @@ function ContractDetails() {
               <GridCol span={isMobile ? 12 : 10}>
                 <h4 className={classes.Location}>{t.Location}</h4>
                 <div className={classes.LocationPrivado}>
-                 <LocationIcon/> 
+                  <LocationIcon />
                   <span style={{}}>{contract?.real_estate?.location}</span>
                 </div>
                 <iframe
@@ -751,7 +750,7 @@ function ContractDetails() {
       <Modal
         opened={opened}
         onClose={close}
-        title="Delete Contract"
+        title={t.DeleteContract}
         centered
         overlayOpacity={0.55}
         overlayBlur={3}
@@ -764,13 +763,14 @@ function ContractDetails() {
           },
         }}
       >
-        <p>Are you sure you want to delete this contract?</p>
+        <p>{t.AreYouSureYouWantToDeleteThisContract}</p>
         <Group position="right" mt="md">
           <Button variant="outline" color="gray" onClick={close}>
-            Cancel
+                  {t.Cancel}
+
           </Button>{" "}
           <Button color="red" onClick={handleDeleteContract}>
-            Delete
+            {t.Delete}
           </Button>
         </Group>
       </Modal>
@@ -779,7 +779,7 @@ function ContractDetails() {
       <Modal
         opened={shareOpened}
         onClose={closeShare}
-        title="Share Contract"
+        title={t.ShareContract}
         centered
         size={"lg"}
         radius="lg"
@@ -794,14 +794,11 @@ function ContractDetails() {
         }}
       >
         <div>
-          {/* <p>Share this PageShareContract using the link below: </p> */}
 
           <div style={{ marginTop: "20px" }}>
             {/* {console.log(shareLink)} */}
-            <h4>Share on Social Media: </h4>
-            {/* <a href={shareLink} target="_blank"  >
-              {shareLink}
-            </a> */}
+            <h4>{t.ShareContract} </h4>
+
             <TextInput
               value={shareLink}
               readOnly
@@ -810,17 +807,17 @@ function ContractDetails() {
                   onClick={() => {
                     navigator.clipboard.writeText(shareLink);
                     notifications.show({
-                      title: "Copied!",
-                      message: "Link copied to clipboard.",
+                      title: t.Copied,
+                      message: t.LinkCopiedToClipboard,
                       color: "green",
                     });
                   }}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer" , marginBottom: "10px"}}
                   className="fa fa-copy"
                 ></i>
               }
             />
-            <Group spacing="sm">
+            <Group spacing="sm"  style={{ marginTop: "20px" }}>
               {/* WhatsApp */}
               <Button
                 component="a"
@@ -828,7 +825,7 @@ function ContractDetails() {
                 target="_blank"
                 color="green"
               >
-                WhatsApp
+                {t.WhatsApp}
               </Button>
 
               {/* Telegram */}
@@ -840,7 +837,7 @@ function ContractDetails() {
                 target="_blank"
                 color="blue"
               >
-                Telegram
+                {t.Telegram}
               </Button>
 
               {/* X (formerly Twitter) */}
@@ -852,7 +849,7 @@ function ContractDetails() {
                 target="_blank"
                 color="var(--color-2);"
               >
-                X (formerly Twitter)
+                {t.Twitter}
               </Button>
             </Group>
           </div>

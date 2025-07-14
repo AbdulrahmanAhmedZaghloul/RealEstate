@@ -351,7 +351,7 @@ function StaffSupervisor() {
     <>
       <Card
         style={{
-          backgroundColor: "#ffff",
+          backgroundColor: "var(--color-5)",
           display: "flex",
           justifyContent: "center",
         }}
@@ -400,7 +400,7 @@ function StaffSupervisor() {
                 input: {
                   width: "132px",
                   height: "48px",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--color-7)",
                   borderRadius: "15px",
                   border: "1.5px solid var(--color-border)",
                   padding: "14px 24px",
@@ -437,6 +437,7 @@ function StaffSupervisor() {
               <span style={{ marginLeft: "13px" }}>{t.Add}</span>
             </button>
           </div>
+        
         </div>
         <Table.ScrollContainer shadow="xs" mt={20}>
           <Table verticalSpacing="sm">
@@ -527,13 +528,13 @@ function StaffSupervisor() {
                     >
                       <EditIcon />
                     </ActionIcon>
-                    <ActionIcon
+                    {/* <ActionIcon
                       variant="subtle"
                       color="red"
                       onClick={() => handleDeleteEmployee(employee.employee_id)}
                     >
                       <DeleteIcon />
-                    </ActionIcon>
+                    </ActionIcon> */}
                   </Group>
                   {/* <Group
                     style={{

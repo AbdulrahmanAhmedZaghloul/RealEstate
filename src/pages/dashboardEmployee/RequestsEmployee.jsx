@@ -259,7 +259,7 @@ function RequestsEmployee() {
                   input: {
                     width: "132px",
                     height: "48px",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--color-7)",
                     borderRadius: "15px",
                     border: "1.5px solid var(--color-border)",
                     padding: "14px 24px",

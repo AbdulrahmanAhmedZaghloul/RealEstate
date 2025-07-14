@@ -41,7 +41,7 @@ function Contracts() {
   const [approvedListings, setApprovedListings] = useState([]);
   const { data: listingsData } = usePropertiesContracts();
   const queryClient = useQueryClient();
-  const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+  const { t ,lang } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
   const [filters, setFilters] = useState({
     search: "",
@@ -120,14 +120,17 @@ function Contracts() {
 
         <header
           className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
+            style={{
+            ...(isSticky ? { [lang === "ar" ? "right" : "left"]: "25%" } : {}),
+            zIndex: isSticky ? 10 : "auto",
+          }}
         >
           <div className={classes.controls}>
             <div className={classes.flexSearch}>
               <div className={classes.divSearch}>
                 <input
-                  placeholder="Search"
+                  placeholder={t.SearchContracts}
                   className={classes.search}
-
                   value={filters.search}
                   onChange={(e) =>
                     setFilters((prev) => ({ ...prev, search: e.target.value }))
@@ -139,61 +142,13 @@ function Contracts() {
               <button className={classes.filter} onClick={openFilter}>
                 <FilterIcon />
               </button>
-              {/* <option value="all">All Types</option>
-                <option value="sale">For Sale</option>
-                <option value="rental">For Rent</option>
-                <option value="booking">For Booking</option> */}
-              {/* </Select> */}
-
-              {/* <input
-                type="date"
-                value={filters.date_from}
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, date_from: e.target.value }))
-                }
-              />
-              <input
-                type="date"
-                value={filters.date_to}
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, date_to: e.target.value }))
-                }
-              /> */}
-              {/* <button className={classes.filter} onClick={openFilter}>
-                <FilterIcon />
-              </button> */}
             </div>
 
             <div className={classes.addAndSort}>
-              {/* <Select
-                label={t["Sort By"]}
-                placeholder="Choose sorting"
-                value={sortOption}
-                onChange={setSortOption}
-                data={[
-                  { value: "newest", label: "Newest" },
-                  { value: "oldest", label: "Oldest" },
-                  { value: "highest", label: "HighestPrice" },
-                  { value: "lowest", label: "LowestPrice" },
-                ]}
-                styles={{
-                  input: {
-                    width: "132px",
-                    height: "48px",
-                    borderRadius: "15px",
-                    border: "1px solid var(--color-border)",
-                    padding: "14px 24px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    backgroundColor: "var(--color-7)",
-                  },
-                }}
-                className={classes.select}
-              /> */}
+
 
               <Select
                 value={filters.contract_type}
-
                 onChange={(value) =>
                   setFilters((prev) => ({ ...prev, contract_type: value }))
                 }
@@ -232,10 +187,10 @@ function Contracts() {
                   },
                 }}
                 data={[
-                  { value: "all", label: "All" },
-                  { value: "rental", label: "ForRent" },
-                  { value: "sale", label: "ForSale" },
-                  { value: "booking", label: "Booking" },
+                { value: "all", label: t.All },
+                { value: "sale", label: t.Sale },
+                { value: "rental", label: t.Rental },
+                { value: "booking", label: t.Booking },
                 ]}
                 className={classes.select}
               />
@@ -255,7 +210,7 @@ function Contracts() {
             <Center className={classes.notFound}>
               <img src={notFound} alt="" />
               <Text style={{ color: "var(--color-9)" }}>
-                {t.Nocontracts}
+                 {t.NoContractsFoundMessage} 
               </Text>
             </Center>
           ) : (
@@ -307,57 +262,47 @@ function Contracts() {
 
                   <div className={classes.contractTitle}>{contract.title}</div>
 
-                        <div className={classes.listingUtilities}>
-                          <div className={classes.listingUtility}>
-                            {contract.real_estate.rooms > 0 && (
-                              <>
-                                <div className={classes.utilityImage}>
-                                  <Rooms />
-                                </div>
-                                {contract.real_estate.rooms}
-                              </>
-                            )}
+                  <div className={classes.listingUtilities}>
+                    <div className={classes.listingUtility}>
+                      {contract.real_estate.rooms > 0 && (
+                        <>
+                          <div className={classes.utilityImage}>
+                            <Rooms />
                           </div>
-                          <div className={classes.listingUtility}>
-                            {contract.real_estate.bathrooms > 0 && (
-                              <>
-                                <div className={classes.utilityImage}>
-                                  <Bathrooms />
-                                </div>
-                                {contract.real_estate.bathrooms}
-                              </>
-                             )} 
+                          {contract.real_estate.rooms}
+                        </>
+                      )}
+                    </div>
+                    <div className={classes.listingUtility}>
+                      {contract.real_estate.bathrooms > 0 && (
+                        <>
+                          <div className={classes.utilityImage}>
+                            <Bathrooms />
                           </div>
-                          {/* <div className={classes.listingUtility}>
-                            {contract.real_estate.floors > 0 && (
-                              <>
-                                <div className={classes.utilityImage}>
-                                  <FloorsIcon />
-                                </div>
-                                {contract.real_estate.floors}
-                              </>
-                             )} 
-                          </div> */}
-                          <div className={classes.listingUtility}>
-                            <div className={classes.utilityImage}>
-                              <Area />
-                            </div>
-                            {contract.real_estate.area} sqm
-                          </div>
-                        </div>
+                          {contract.real_estate.bathrooms}
+                        </>
+                      )}
+                    </div>
+                    <div className={classes.listingUtility}>
+                      <div className={classes.utilityImage}>
+                        <Area />
+                      </div>
+                      {contract.real_estate.area} sqm
+                    </div>
+                  </div>
                   <div className={classes.contractEmployee}>
                     <span>
                       {t.Customer}: {contract.customer_name}
                     </span>
                   </div>
-                  
+
 
                   <div className={classes.contractEmployee}>
                     <span>
-                    {contract.real_estate.location}
+                      {contract.real_estate.location}
                     </span>
                   </div>
-                  
+
                   <div className={classes.contractDate}>
                     {Math.floor(
                       (new Date() - new Date(contract.creation_date)) /

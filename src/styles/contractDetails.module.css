@@ -38,7 +38,8 @@
 .svgSpan div {
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  gap: 10px;
+  /* margin-right: 20px; */
 
 }
 
@@ -224,7 +225,7 @@
   letter-spacing: 0%;
   vertical-align: middle;
   color: var(--color-1);
-  margin-right: 15px;
+  margin: 0px 15px;
 }
 
 .downPayment {
@@ -313,6 +314,7 @@
   display: flex;
   justify-content: start;
   align-items: center;
+  gap: 10px;
 }
 
 .svgLocation svg {

@@ -135,11 +135,11 @@ function PropertyDetails() {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       navigate("/dashboard/properties");
-      
-    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
-    queryClient.invalidateQueries(["listingsRealEstate"]);
-    queryClient.invalidateQueries(["listings"]);
-    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
 
       notifications.show({
         title: "Success",
@@ -166,15 +166,16 @@ function PropertyDetails() {
       });
       notifications.show({ title: "Success", message: "Listing updated successfully!", color: "green" });
 
-    queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
-    queryClient.invalidateQueries(["listingsRealEstate"]);
-    queryClient.invalidateQueries(["listings"]);
-    queryClient.invalidateQueries(["listingsRealEstate-employee"]);
-          closeEdit();
+      queryClient.invalidateQueries({ queryKey: ["listingsRealEstate-pending"] });
+      queryClient.invalidateQueries(["listingsRealEstate"]);
+      queryClient.invalidateQueries(["listings"]);
+      queryClient.invalidateQueries(["listingsRealEstate-employee"]);
+      closeEdit();
     } catch (err) {
       notifications.show({ title: "Error", message: "Failed to update property", color: "red" });
     }
   };
+
   useEffect(() => {
     if (listing && editModalOpened) {
       setEditData({
@@ -355,14 +356,37 @@ function PropertyDetails() {
                         fill="var(--color-2)"
                       />
                     </svg>
+                    {listing?.selling_status === 0 && (
+                      <>
 
-                    <svg onClick={openEdit} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M15 5.99994L18 8.99994M13 19.9999H21M5 15.9999L4 19.9999L8 18.9999L19.586 7.41394C19.9609 7.03889 20.1716 6.53027 20.1716 5.99994C20.1716 5.46961 19.9609 4.961 19.586 4.58594L19.414 4.41394C19.0389 4.039 18.5303 3.82837 18 3.82837C17.4697 3.82837 16.9611 4.039 16.586 4.41394L5 15.9999Z" stroke="#1B2559" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                        <svg onClick={openEdit} width="24" height="24" viewBox="0 0 24 24" fill="#B8C0CC"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path d="M15 5.99994L18 8.99994M13 19.9999H21M5 15.9999L4 19.9999L8 18.9999L19.586 
+                      7.41394C19.9609 7.03889 20.1716 6.53027 20.1716 5.99994C20.1716 5.46961 19.9609 4.961
+                       19.586 4.58594L19.414 4.41394C19.0389 4.039 18.5303 3.82837 18 3.82837C17.4697 3.82837
+                        16.9611 4.039 16.586 4.41394L5 15.9999Z" stroke="#B8C0CC" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
 
-                    <svg onClick={open} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M7.274 5.9L8.086 19.548C8.09823 19.7514 8.18761 19.9425 8.3359 20.0822C8.4842 20.222 8.68023 20.2999 8.884 20.3H16.116C16.3198 20.2999 16.5158 20.222 16.6641 20.0822C16.8124 19.9425 16.9018 19.7514 16.914 19.548L17.726 5.9H7.274ZM18.929 5.9L18.112 19.619C18.0817 20.1278 17.8582 20.6059 17.4872 20.9555C17.1162 21.3051 16.6258 21.4999 16.116 21.5H8.884C8.37425 21.4999 7.88377 21.3051 7.51279 20.9555C7.14182 20.6059 6.91833 20.1278 6.888 19.619L6.071 5.9H4V5.2C4 5.06739 4.05268 4.94021 4.14645 4.84645C4.24021 4.75268 4.36739 4.7 4.5 4.7H20.5C20.6326 4.7 20.7598 4.75268 20.8536 4.84645C20.9473 4.94021 21 5.06739 21 5.2V5.9H18.929ZM14.5 2.5C14.6326 2.5 14.7598 2.55268 14.8536 2.64645C14.9473 2.74021 15 2.86739 15 3V3.7H10V3C10 2.86739 10.0527 2.74021 10.1464 2.64645C10.2402 2.55268 10.3674 2.5 10.5 2.5H14.5ZM10 8.5H11.2L11.7 17.5H10.5L10 8.5ZM13.8 8.5H15L14.5 17.5H13.3L13.8 8.5Z" fill="#1B2559" />
-                    </svg>
+                        <svg onClick={open} width="24" height="24" viewBox="0 0 24 24" fill="#B8C0CC"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M7.274 5.9L8.086 19.548C8.09823 19.7514 8.18761 19.9425 8.3359 20.0822C8.4842 
+                      20.222 8.68023 20.2999 8.884 20.3H16.116C16.3198 20.2999 16.5158 20.222 16.6641 
+                      20.0822C16.8124 19.9425 16.9018 19.7514 16.914 19.548L17.726 5.9H7.274ZM18.929 
+                      5.9L18.112 19.619C18.0817 20.1278 17.8582 20.6059 17.4872 20.9555C17.1162 21.3051 
+                      16.6258 21.4999 16.116 21.5H8.884C8.37425 21.4999 7.88377 21.3051 7.51279 20.9555C7.14182 
+                      20.6059 6.91833 20.1278 6.888 19.619L6.071 5.9H4V5.2C4 5.06739 4.05268 4.94021 4.14645 
+                      4.84645C4.24021 4.75268 4.36739 4.7 4.5 4.7H20.5C20.6326 4.7 20.7598 4.75268 20.8536 
+                      4.84645C20.9473 4.94021 21 5.06739 21 5.2V5.9H18.929ZM14.5 2.5C14.6326 2.5 14.7598 2.55268 
+                      14.8536 2.64645C14.9473 2.74021 15 2.86739 15 3V3.7H10V3C10 2.86739 10.0527 2.74021 10.1464 
+                      2.64645C10.2402 2.55268 10.3674 2.5 10.5 2.5H14.5ZM10 8.5H11.2L11.7 17.5H10.5L10 8.5ZM13.8
+                       8.5H15L14.5 17.5H13.3L13.8 8.5Z" fill="#B8C0CC" />
+                        </svg>
+
+                      </>
+
+
+                    )}
 
                   </Grid.Col>
                   <Grid.Col span={12}>
@@ -415,7 +439,7 @@ function PropertyDetails() {
                     <span className={classes.svgSpan}>
                       {listing.rooms === 0 ? null : <div>
                         <BedsIcon />
-                        <span>{listing.rooms} Beds</span>
+                        <span>{listing.rooms} {t.Rooms}</span>
                       </div>
                       }
 
@@ -423,7 +447,7 @@ function PropertyDetails() {
                     <span className={classes.svgSpan}>
                       {listing.bathrooms === 0 ? null : <div>
                         <BathsIcon />
-                        <span>{listing.bathrooms} Baths</span>
+                        <span>{listing.bathrooms} {t.bathrooms}</span>
                       </div>}
 
                     </span>
@@ -431,7 +455,7 @@ function PropertyDetails() {
                       <div>
                         <Area />
 
-                        <span>{listing.area} sqm</span>
+                        <span>{listing.area} {t.sqm}</span>
                       </div>
                     </span>
                     <span className={classes.svgSpan}>
@@ -548,7 +572,7 @@ function PropertyDetails() {
         </Text>
         {/* <Divider my="sm" /> */}
         <Stack gap="xs" style={{ marginTop: "20px" }}>
-          <Text className={classes.Locationpom}>Location</Text>
+          <Text className={classes.Locationpom}>{t.Location}</Text>
           <span className={classes.svgSpan}>
             <div>
               <svg

@@ -43,24 +43,26 @@ import FilterIcon from "../../components/icons/filterIcon";
 // import FiltersModal from "../dashboardCompany/FiltersModal";
 
 function PropertiesEmployee() {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({});
   const [openedFilterModal, { open: openFilterModal, close: closeFilterModal }] = useDisclosure(false);
   const [sortBy, setSortBy] = useState("newest");
   const sortOptions = [
-    { value: "newest", label: "Newest" },
-    { value: "oldest", label: "Oldest" },
-    { value: "highest", label: "Highest price" },
-    { value: "lowest", label: "Lowest price" },
+    { value: "newest", label: t.Newest },
+    { value: "oldest", label: t.Oldest },
+    { value: "highest", label: t.HighestPrice },
+    { value: "lowest", label: t.LowestPrice },
   ];
   const [isSticky, setIsSticky] = useState(false);
 
   const transactionOptions = [
-    { value: "all", label: "All" },
-    { value: "rent", label: "For Rent" },
-    { value: "buy", label: "For Sale" },
-    { value: "booking", label: "Booking" }
+    { value: "all", label: t.All },
+    { value: "rent", label: t.ForRent },
+    { value: "buy", label: t.ForSale },
+    { value: "booking", label: t.Booking }
   ];
 
   const [transactionType, setTransactionType] = useState("all");
@@ -98,7 +100,6 @@ function PropertiesEmployee() {
   const [subcategories, setSubcategories] = useState([]);
 
   const [opened, { open, close }] = useDisclosure(false);
-  const { t } = useTranslation();
   const filterForm = useForm({
     initialValues: {
       location: "",
@@ -339,6 +340,7 @@ function PropertiesEmployee() {
             <Grid className={classes.sty} align="center" spacing="xl">
               {data?.pages
                 .flatMap((page) => page.data.listings)
+                .filter((listing) => listing.status === "approved")
                 .map((listing) => (
                   <GridCol
                     span={{ base: 12, lg: 4, md: 6, sm: 6 }}
@@ -356,7 +358,9 @@ function PropertiesEmployee() {
                             radius="md"
                           />
                           <p className={classes.listingfor}>
-                            {listing.selling_status === 1 ? "sold" : listing.listing_type}
+                            {listing.selling_status === 1
+                              ? `${listing.listing_type} / sold`
+                              : listing.listing_type}
                           </p>
                         </div>
                       </Card.Section>
@@ -425,13 +429,13 @@ function PropertiesEmployee() {
                             ? `${Math.floor(
                               (new Date() - new Date(listing.created_at)) /
                               (1000 * 60 * 60 * 24)
-                            )} days ago`
+                            )} ${t.daysAgo}`
                             : Math.floor(
                               (new Date() - new Date(listing.created_at)) /
                               (1000 * 60 * 60 * 24)
                             ) === 1
-                              ? "Yesterday"
-                              : "Today"}
+                              ? `${t.Yesterday}`
+                              : `${t.Today}`}
                         </div>
                       </div>
                     </Card>

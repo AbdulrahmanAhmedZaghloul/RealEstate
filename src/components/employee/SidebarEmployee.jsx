@@ -144,8 +144,8 @@ export default function SidebarEmployee() {
           >
             <span style={{
             }} className={classes.profileName}>{profile.name}</span>
-            <span style={{
-            }} className={classes.profileEmail}>{profile.email}</span>
+            {/* <span style={{
+            }} className={classes.profileEmail}>{profile.email}</span> */}
           </div>
         </Group>
 

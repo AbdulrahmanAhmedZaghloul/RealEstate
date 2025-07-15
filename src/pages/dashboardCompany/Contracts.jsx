@@ -287,7 +287,7 @@ function Contracts() {
                       <div className={classes.utilityImage}>
                         <Area />
                       </div>
-                      {contract.real_estate.area} sqm
+                      {contract.real_estate.area} {t.sqm}
                     </div>
                   </div>
                   <div className={classes.contractEmployee}>
@@ -311,13 +311,13 @@ function Contracts() {
                       ? `${Math.floor(
                         (new Date() - new Date(contract.creation_date)) /
                         (1000 * 60 * 60 * 24)
-                      )} days ago`
+                      )} ${t.daysAgo}`
                       : Math.floor(
                         (new Date() - new Date(contract.creation_date)) /
                         (1000 * 60 * 60 * 24)
                       ) === 1
-                        ? "Yesterday"
-                        : "Today"}
+                        ? `${t.Yesterday}`
+                        : `${t.Today}`}
                   </div>
                 </GridCol>
               </Grid>

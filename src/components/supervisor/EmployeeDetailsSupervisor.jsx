@@ -36,6 +36,8 @@ import { notifications } from "@mantine/notifications";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { validateField } from "../../hooks/Validation/validation";
 import EditIcon from "../icons/edit";
+import EmployeeAnalytics from "../company/Kpi/EmployeeAnalytics";
+import YearlyPerformance from "../company/Kpi/YearlyPerformance";
 
 function EmployeeDetailsSupervisor() {
   const [employee, setEmployee] = useState(null);
@@ -465,7 +467,12 @@ function EmployeeDetailsSupervisor() {
         </Grid>
       </div>
 
-      <div className={classes.summary}>
+
+      <EmployeeAnalytics />
+
+
+      <YearlyPerformance />
+      {/* <div className={classes.summary}>
         <div className={classes.card}>
           <div
             className={classes.cardTitle}
@@ -579,6 +586,7 @@ function EmployeeDetailsSupervisor() {
           </BarChart>
         </ResponsiveContainer>
       </div>
+       */}
       <div className={classes.properties}>
         <div className={classes.propertyList}>
           <EmployeeProperties id={id} />

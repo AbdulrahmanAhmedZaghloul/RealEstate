@@ -41,6 +41,8 @@ import { useInView } from "react-intersection-observer";
 // import FiltersModal from "./FiltersModal";
 
 function EmployeeProperties({ id }) {
+       const { t } = useTranslation();
+
     const { pathname } = useLocation(); // 🟢 نجيب المسار الحالي
 
   // 🟢 تحديد الـ endpoint بناءً على المسار
@@ -52,18 +54,18 @@ function EmployeeProperties({ id }) {
     const [openedFilterModal, { open: openFilterModal, close: closeFilterModal }] = useDisclosure(false);
     const [sortBy, setSortBy] = useState("newest");
     const sortOptions = [
-      { value: "newest", label: "Newest" },
-      { value: "oldest", label: "Oldest" },
-      { value: "highest", label: "Highest price" },
-      { value: "lowest", label: "Lowest price" },
+      { value: "newest", label: t.Newest },
+      { value: "oldest", label: t.Oldest },
+      { value: "highest", label: t.HighestPrice },
+      { value: "lowest", label: t.LowestPrice },
     ];
     const [isSticky, setIsSticky] = useState(false);
   
     const transactionOptions = [
-      { value: "all", label: "All" },
-      { value: "rent", label: "For Rent" },
-      { value: "buy", label: "For Sale" },
-      { value: "booking", label: "Booking" }
+      { value: "all", label: t.All },
+      { value: "rent", label: t.ForRent },
+      { value: "buy", label: t.ForSale },
+      { value: "booking", label: t.Booking }
     ];
   
     const [transactionType, setTransactionType] = useState("all");
@@ -100,7 +102,6 @@ function EmployeeProperties({ id }) {
     const [categories, setCategories] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
   
-     const { t } = useTranslation();
     const filterForm = useForm({
       initialValues: {
         location: "",
@@ -211,9 +212,9 @@ function EmployeeProperties({ id }) {
     <>
       <Card className={classes.mainContainer} radius="lg">
         <div>
-          <BurgerButton />
+          {/* <BurgerButton /> */}
           <span className={classes.title}>{t.Properties}</span>
-          <Notifications />
+          {/* <Notifications /> */}
         </div>
 
         <header className={`${classes.header} ${isSticky ? classes.sticky : ""}`}>

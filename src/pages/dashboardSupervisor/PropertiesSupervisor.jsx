@@ -430,6 +430,7 @@ function PropertiesSupervisor() {
                             {listing.selling_status === 1
                               ? `${listing.listing_type} / sold`
                               : listing.listing_type}
+                          
                           </p>
                         </div>
                       </Card.Section>

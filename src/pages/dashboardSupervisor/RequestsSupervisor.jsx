@@ -56,6 +56,8 @@ const rejectionReasons = [
 ];
 
 function RequestsSupervisor() {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({});
@@ -69,10 +71,10 @@ function RequestsSupervisor() {
   const [sortBy, setSortBy] = useState("newest");
 
   const sortOptions = [
-    { value: "newest", label: "Newest" },
-    { value: "oldest", label: "Oldest" },
-    { value: "highest", label: "Highest price" },
-    { value: "lowest", label: "Lowest price" },
+    { value: "newest", label: t.Newest },
+    { value: "oldest", label: t.Oldest },
+    { value: "highest", label: t.HighestPrice },
+    { value: "lowest", label: t.LowestPrice },
   ];
   const [rejectionReason, setRejectionReason] = useState("");
 
@@ -83,10 +85,10 @@ function RequestsSupervisor() {
   const [isSticky, setIsSticky] = useState(false);
 
   const transactionOptions = [
-    { value: "all", label: "All" },
-    { value: "rent", label: "For Rent" },
-    { value: "buy", label: "For Sale" },
-    { value: "booking", label: "Booking" },
+    { value: "all", label: t.All },
+    { value: "rent", label: t.ForRent },
+    { value: "buy", label: t.ForSale },
+    { value: "booking", label: t.Booking },
   ];
 
   const [transactionType, setTransactionType] = useState("all");
@@ -126,7 +128,6 @@ function RequestsSupervisor() {
   const [subcategories, setSubcategories] = useState([]);
 
   const [opened, { open, close }] = useDisclosure(false);
-  const { t } = useTranslation();
   const filterForm = useForm({
     initialValues: {
       location: "",
@@ -466,7 +467,7 @@ function RequestsSupervisor() {
                           />
                           <p className={classes.listingfor}>
                             {listing.selling_status === 1
-                              ? "sold"
+                              ? `${listing.listing_type} / sold`
                               : listing.listing_type}
                           </p>
                         </div>
@@ -536,13 +537,13 @@ function RequestsSupervisor() {
                             ? `${Math.floor(
                               (new Date() - new Date(listing.created_at)) /
                               (1000 * 60 * 60 * 24)
-                            )} days ago`
+                            )} ${t.daysAgo}`
                             : Math.floor(
                               (new Date() - new Date(listing.created_at)) /
                               (1000 * 60 * 60 * 24)
                             ) === 1
-                              ? "Yesterday"
-                              : "Today"}
+                              ? `${t.Yesterday}`
+                              : `${t.Today}`}
                         </div>
                       </div>
 
@@ -556,7 +557,7 @@ function RequestsSupervisor() {
                               updateStatus(listing.id, "approved", null)
                             }
                           >
-                            Accept
+                            {t.Accept}
                           </Button>
                           <Button
                             color="red"
@@ -564,7 +565,7 @@ function RequestsSupervisor() {
                             h="40px"
                             onClick={() => handleReject(listing.id)}
                           >
-                            Reject
+                            {t.Reject}
                           </Button>
                         </Group>
                       </Center>

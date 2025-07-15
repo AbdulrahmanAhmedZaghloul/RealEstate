@@ -416,6 +416,8 @@ function Properties() {
             <Grid className={classes.sty} align="center" spacing="xl">
               {data?.pages
                 .flatMap((page) => page.data.listings)
+                .filter((listing) => listing.status === "approved")
+
                 .map((listing) => (
                   <GridCol
                     span={{ base: 12, lg: 4, md: 6, sm: 6 }}

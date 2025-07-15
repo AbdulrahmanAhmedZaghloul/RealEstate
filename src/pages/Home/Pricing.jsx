@@ -27,7 +27,7 @@ function Pricing() {
             <Card style={{ zIndex: "10", backgroundColor: "transparent" }}>
                 <div style={{ padding: "20px", textAlign: "center" }}>
                     <h2 className={classes.Choose}>{t.Pricing}</h2>
-                    <p>
+                    <p style={{ color: "var(--color-P)" }}>
                         {t.JoinCompany} <br />
                         {t.listingsLead}
                     </p>

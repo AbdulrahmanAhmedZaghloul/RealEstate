@@ -17,7 +17,7 @@ function BuiltTo() {
       <section className={classes.Built}>
         <h2>{t.Empower}  <br /> {t.Workflow}</h2>
 
-        <p>
+        <p style={{ color: "var(--color-P)" }}>
           {t.FromListings}
         </p>
 
@@ -29,7 +29,7 @@ function BuiltTo() {
               <div className={classes.shadow}>
                 <div className={classes.BuiltGridFlex}>
                   <h3>{t.BusinessOverview}</h3>
-                  <p>{t.GetSnapshot}</p>
+                  <p style={{ color: "var(--color-P)" }}>{t.GetSnapshot}</p>
                 </div>
 
                 <img className={classes.BuiltGridImage} src={ChartLight} alt=" image" />
@@ -42,7 +42,7 @@ function BuiltTo() {
 
                 <div className={classes.BuiltGridCol}>
                   <h4>{t.RoleManagement}</h4>
-                  <p>{t.Assign} <br />
+                  <p style={{ color: "var(--color-P)" }}>{t.Assign} <br />
                     {t.without}
                   </p>
                 </div>
@@ -60,7 +60,7 @@ function BuiltTo() {
               <div className={classes.shadow}>
                 <div className={classes.BuiltGridSmartFlex}>
                   <h3>{t.SmartProperty}</h3>
-                  <p>
+                  <p style={{ color: "var(--color-P)" }}>
                     {t.ViewManage}
                   </p>
                 </div>
@@ -74,12 +74,16 @@ function BuiltTo() {
 
                 <div className={classes.BuiltGridSmartFlex}>
                   <h3>{t.TeamChat}</h3>
-                  <p>
+                  <p style={{ color: "var(--color-P)" }}>
                     {t.Communicate}
                   </p>
                 </div>
-                <img className={classes.BuiltGridSmartImage} src={EmployeesLight} alt=" image" />
+                <div>
 
+                <img className={classes.BuiltGridSmartImage1} src={EmployeesLight} alt=" image" />
+
+                </div>
+                
               </div>
 
             </GridCol>
@@ -96,9 +100,13 @@ function BuiltTo() {
 
                 <div className={classes.BuiltGridCol}>
                   <h4>{t.Client}</h4>
-                  <p>{t.TrackProgress}</p>
+                  <p style={{ color: "var(--color-P)" }}>{t.TrackProgress}</p>
                 </div>
-                <img className={classes.FramerLight} src={FramerLight} alt=" image" />
+                <div>
+                  <img className={classes.FramerLight} src={FramerLight} alt=" image" />
+
+                </div>
+
               </div>
             </GridCol>
 
@@ -106,13 +114,16 @@ function BuiltTo() {
               <div className={classes.shadow}>
                 <div className={classes.BuiltGridFlex}>
                   <h3>{t.InstantPublishing}</h3>
-                  <p>
+                  <p style={{ color: "var(--color-P)" }}>
                     {t.Everyproperty}
                   </p>
 
                 </div>
+                <div>
+                  <img className={classes.iphoneImage} src={iphoneLight} alt=" image" />
 
-                <img className={classes.iphoneImage} src={iphoneLight} alt=" image" />
+                </div>
+
               </div>
 
             </GridCol>

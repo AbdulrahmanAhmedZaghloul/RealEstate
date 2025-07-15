@@ -23,11 +23,12 @@ function Header() {
 
           <div className={classes.text}>
             <h1>
-              {t.Manage}{" "}
+              {t.Manage}
               <span style={{ color: "var(--color-1)" }}>{t.RealEstate}</span>
-              <br /> {t.BusinessWithEase}
+              <br />
+               {t.BusinessWithEase}
             </h1>
-            <p>
+            <p style={{ color: "var(--color-P)" }}>
               {t.TrackPropertiesAnalyzeTrends} <br />
               {t.MakeSmarterDecisions}
             </p>

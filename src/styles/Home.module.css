@@ -116,10 +116,10 @@
 }
 
 .BuiltGridImage {
-  width: 100%;
+  width: 80%;
   object-fit: contain;
   padding-top: 5rem;
-  padding-bottom: 2.2rem;
+  /* padding-bottom: 2.2rem; */
   padding-right: 2.2rem;
 }
 
@@ -130,14 +130,22 @@
 }
 
 
-.BuiltGridSmartImage {
-  width: 100%;
+.BuiltGridSmartImage1 {
+  width: 108%;
+  height: 30% !important;
+
   object-fit: contain;
   padding-top: 5rem;
 }
 
-.BuiltGride .shadow {
+.BuiltGridSmartImage {
+  width: 100%;
+  height: 20.7rem !important;
+  object-fit: contain;
+  padding-top: 1rem;
+}
 
+.BuiltGride .shadow {
   background-color: var(--color-5);
 }
 
@@ -173,7 +181,15 @@
 }
 
 .iphoneImage {
-  padding-top: 2.2rem;
+  width: 100%;
+  /* background-color: yellowgreen; */
+  padding-top: 2rem;
+}
+
+.FramerLight {
+  width: 52%;
+  /* background-color: yellowgreen; */
+  /* padding-top: 2rem; */
 }
 
 .BuiltGridSmartFlex {

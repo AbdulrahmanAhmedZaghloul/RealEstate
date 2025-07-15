@@ -40,6 +40,8 @@ import Search from "../../components/icons/search";
 import { useInView } from "react-intersection-observer";
 
 function PropertiesMarketer() {
+  const { t, lang } = useTranslation();
+
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({});
@@ -49,18 +51,18 @@ function PropertiesMarketer() {
   ] = useDisclosure(false);
   const [sortBy, setSortBy] = useState("newest");
   const sortOptions = [
-    { value: "newest", label: "Newest" },
-    { value: "oldest", label: "Oldest" },
-    { value: "highest", label: "Highest price" },
-    { value: "lowest", label: "Lowest price" },
+    { value: "newest", label: t.Newest },
+    { value: "oldest", label: t.Oldest },
+    { value: "highest", label: t.HighestPrice },
+    { value: "lowest", label: t.LowestPrice },
   ];
   const [isSticky, setIsSticky] = useState(false);
 
   const transactionOptions = [
-    { value: "all", label: "All" },
-    { value: "rent", label: "For Rent" },
-    { value: "buy", label: "For Sale" },
-    { value: "booking", label: "Booking" },
+    { value: "all", label: t.All },
+    { value: "rent", label: t.ForRent },
+    { value: "buy", label: t.ForSale },
+    { value: "booking", label: t.Booking },
   ];
 
   const [transactionType, setTransactionType] = useState("all");
@@ -79,7 +81,7 @@ function PropertiesMarketer() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
- 
+
 
   const {
     data: categoriesData,
@@ -88,11 +90,11 @@ function PropertiesMarketer() {
     error: categoriesError,
   } = useCategories();
 
-   const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
 
   const [opened, { open, close }] = useDisclosure(false);
-  const { t } = useTranslation();
+
   const filterForm = useForm({
     initialValues: {
       location: "",
@@ -106,9 +108,10 @@ function PropertiesMarketer() {
       subcategory: "",
     },
   });
+
   const loadMoreRef = useRef(null);
 
-  const mutation = useAddProperty(user.token, categories, close );
+  const mutation = useAddProperty(user.token, categories, close);
 
   const [ref, inView] = useInView();
 
@@ -117,7 +120,7 @@ function PropertiesMarketer() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage, fetchNextPage]);
-  const handleAddProperty = (values) => { 
+  const handleAddProperty = (values) => {
     queryClient.invalidateQueries(["listingsRealEstate-Marketer"]);
     mutation.mutate(values);
   };
@@ -142,7 +145,7 @@ function PropertiesMarketer() {
 
   // 👇 تحديث بيانات الموظفين والتصنيفات
   useEffect(() => {
-   
+
     if (
       !categoriesLoading &&
       !isCategoriesError &&
@@ -153,7 +156,7 @@ function PropertiesMarketer() {
         categoriesData.data.categories.map((cat) => cat.subcategories).flat()
       );
     }
-  }, [ 
+  }, [
     categoriesLoading,
     isCategoriesError,
     categoriesData,
@@ -177,7 +180,7 @@ function PropertiesMarketer() {
     // إذا كنت تريد إعادة تعيين الحقول في المودال
   };
 
-  if (  categoriesLoading) {
+  if (categoriesLoading) {
     return (
       <Center
         style={{
@@ -207,6 +210,11 @@ function PropertiesMarketer() {
 
         <header
           className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
+
+          style={{
+            ...(isSticky ? { [lang === "ar" ? "right" : "left"]: "25%" } : {}),
+            zIndex: isSticky ? 10 : "auto",
+          }}
         >
           <div className={classes.controls}>
             <div className={classes.flexSearch}>
@@ -357,8 +365,9 @@ function PropertiesMarketer() {
                             radius="md"
                           />
                           <p className={classes.listingfor}>
+
                             {listing.selling_status === 1
-                              ? "sold"
+                              ? `${listing.listing_type} / sold`
                               : listing.listing_type}
                           </p>
                         </div>
@@ -407,11 +416,11 @@ function PropertiesMarketer() {
                             <div className={classes.utilityImage}>
                               <Area />
                             </div>
-                            {listing.area} sqm
+                            {listing.area} {t.sqm}
                           </div>
                         </div>
                         <div className={classes.listingEmployee}>
-                          {t.Category}: {listing.category} /{" "}
+                          {t.Category}: {listing.category} / {" "}
                           {listing.subcategory.name}
                         </div>
                         <div className={classes.listingEmployee}>
@@ -423,18 +432,18 @@ function PropertiesMarketer() {
                         <div className={classes.listingDate}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
+                            (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              )} days ago`
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            )} ${t.daysAgo}`
                             : Math.floor(
-                                (new Date() - new Date(listing.created_at)) /
-                                  (1000 * 60 * 60 * 24)
-                              ) === 1
-                            ? "Yesterday"
-                            : "Today"}
+                              (new Date() - new Date(listing.created_at)) /
+                              (1000 * 60 * 60 * 24)
+                            ) === 1
+                              ? `${t.Yesterday}`
+                              : `${t.Today}`}
                         </div>
                       </div>
                     </Card>
@@ -453,7 +462,7 @@ function PropertiesMarketer() {
             {/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
             {!isLoading &&
               data?.pages.flatMap((page) => page.data.listings).length ===
-                0 && (
+              0 && (
                 <Center>
                   <Text>{t.NoListingsFound}</Text>
                 </Center>
@@ -461,7 +470,7 @@ function PropertiesMarketer() {
           </>
         )}
       </Card>
- 
+
       <AddPropertyModal
         opened={opened}
         onClose={close}
@@ -484,4 +493,3 @@ function PropertiesMarketer() {
 
 export default PropertiesMarketer;
 
- 

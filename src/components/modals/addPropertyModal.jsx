@@ -1,11 +1,11 @@
 // Dependency imports
 import {
   Modal,
-  Grid, 
+  Grid,
   Button,
-  Center, 
+  Center,
   Divider,
- } from "@mantine/core";
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@mantine/hooks";
@@ -14,10 +14,10 @@ import Compressor from "compressorjs"; // ✅ إضافة مكتبة الضغط
 
 // Local imports
 import classes from "../../styles/modals.module.css";
- import axiosInstance from "../../api/config";
+import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 import { useLocation } from "react-router-dom";
- import LocationPicker from "./AddProperty/LocationPicker";
+import LocationPicker from "./AddProperty/LocationPicker";
 import { ImageUploader } from "./AddProperty/ImageUploader";
 import NumberInputField from "./AddProperty/NumberInputField";
 import TextInputField from "./AddProperty/TextInputField";
@@ -66,10 +66,10 @@ const AddPropertyModal = React.memo(
       validate: {
         title: (value) => (value.trim() ? null : t.TitleIsRequired),
         description: (value) =>
-          value.trim() ? null :  t.DescriptionIsRequired,
-        price: (value) => (value > 0 ? null :  t.PriceMustBeGreaterThan0),
-        area: (value) => (value > 0 ? null :  t.AreaMustBeGreaterThan0),
-        location: (value) => (value.trim() ? null :  t.LocationIsRequired),
+          value.trim() ? null : t.DescriptionIsRequired,
+        price: (value) => (value > 0 ? null : t.PriceMustBeGreaterThan0),
+        area: (value) => (value > 0 ? null : t.AreaMustBeGreaterThan0),
+        location: (value) => (value.trim() ? null : t.LocationIsRequired),
         rooms: (value) => {
           const categoryId = form.values.category_id;
           const category = categories.find(
@@ -77,7 +77,7 @@ const AddPropertyModal = React.memo(
           );
           const categoryName = category?.name.toLowerCase();
           if (categoryName === "residential") {
-            return value > 0 ? null : t.RoomsMustBeGreaterThan0 ;
+            return value > 0 ? null : t.RoomsMustBeGreaterThan0;
           }
           return null;
         },
@@ -105,26 +105,26 @@ const AddPropertyModal = React.memo(
         },
         images: (value) => {
           if (value.length < 3) {
-            return  t.PleaseUploadAtLeast3Images;
+            return t.PleaseUploadAtLeast3Images;
           }
           if (value.length > 8) {
             // ✅ تغيير الحد الأقصى إلى 5 صور
-            return t.YouCannotUploadMoreThan5Images ;
+            return t.YouCannotUploadMoreThan5Images;
           }
           const oversizedImage = value.find(
             (image) => image.size > 20 * 1024 * 1024
           ); // ✅ تحقق من الحجم قبل الرفع
           if (oversizedImage) {
-            return t.YouCannotUploadMoreThan5Images ;
+            return t.YouCannotUploadMoreThan5Images;
           }
           return null;
         },
         down_payment: (value) => {
           if (value === null || value === "" || isNaN(value)) {
-            return t.DownPaymentMustBeANumber ;
+            return t.DownPaymentMustBeANumber;
           }
           if (value < 0 || value > 100) {
-            return t.DownPaymentMustBeBetween0And100 ;
+            return t.DownPaymentMustBeBetween0And100;
           }
           return null;
         },
@@ -164,7 +164,7 @@ const AddPropertyModal = React.memo(
     const { user } = useAuth();
     const isMobile = useMediaQuery(`(max-width: 991px)`);
     const location = useLocation();
-    const isMarketerPropertiesPage = location.pathname === "/dashboard-Marketer/PropertiesMarketer";
+    const isMarketerPropertiesPage = location.pathname === "/dashboard-Marketer/PropertiesMarketer" || location.pathname === "/dashboard-employee/Properties";
 
     // ✅ تنظيف Object URLs عند إغلاق النافذة
     useEffect(() => {
@@ -460,8 +460,9 @@ const AddPropertyModal = React.memo(
               />
 
               {/* Assign Employee */}
-
-              <AssignEmployeeField form={form} employees={employees} />
+              {!isMarketerPropertiesPage ? (
+                <AssignEmployeeField form={form} employees={employees} />
+              ) : null}
 
 
 

@@ -25,7 +25,7 @@ function BuiltTo() {
         <Grid>
 
           <Grid className={classes.mtb}>
-            <GridCol className={classes.BuiltGrid} span={{ base: 6, md: 6, sm: 12, lg: 7 }}>
+            <GridCol className={classes.BuiltGrid} span={{ base: 12, md: 6, sm: 12, lg: 7 }}>
               <div className={classes.shadow}>
                 <div className={classes.BuiltGridFlex}>
                   <h3>{t.BusinessOverview}</h3>
@@ -37,7 +37,7 @@ function BuiltTo() {
 
             </GridCol>
 
-            <GridCol className={classes.BuiltGride} span={{ base: 6, md: 6, sm: 12, lg: 5 }}>
+            <GridCol className={classes.BuiltGride} span={{ base: 12, md: 6, sm: 12, lg: 5 }}>
               <div className={classes.shadow}>
 
                 <div className={classes.BuiltGridCol}>
@@ -56,7 +56,7 @@ function BuiltTo() {
 
           <Grid className={classes.mtb}>
 
-            <GridCol className={classes.BuiltGridSmart} span={{ base: 6, md: 6, sm: 12, lg: 6 }}>
+            <GridCol className={classes.BuiltGridSmart} span={{ base: 12, md: 6, sm: 12, lg: 6 }}>
               <div className={classes.shadow}>
                 <div className={classes.BuiltGridSmartFlex}>
                   <h3>{t.SmartProperty}</h3>
@@ -69,7 +69,7 @@ function BuiltTo() {
 
             </GridCol>
 
-            <GridCol className={classes.BuiltGridSmart} span={{ base: 6, md: 6, sm: 12, lg: 6 }}>
+            <GridCol className={classes.BuiltGridSmart} span={{ base: 12, md: 6, sm: 12, lg: 6 }}>
               <div className={classes.shadow}>
 
                 <div className={classes.BuiltGridSmartFlex}>
@@ -95,7 +95,7 @@ function BuiltTo() {
 
           <Grid className={classes.mtb}>
 
-            <GridCol className={classes.BuiltGride} span={{ base: 6, md: 6, sm: 12, lg: 5 }}>
+            <GridCol className={classes.BuiltGride} span={{ base: 12, md: 6, sm: 12, lg: 5 }}>
               <div className={classes.shadow}>
 
                 <div className={classes.BuiltGridCol}>
@@ -110,7 +110,7 @@ function BuiltTo() {
               </div>
             </GridCol>
 
-            <GridCol className={classes.BuiltGrid} span={{ base: 6, md: 6, sm: 12, lg: 7 }}>
+            <GridCol className={classes.BuiltGrid} span={{ base: 12, md: 6, sm: 12, lg: 7 }}>
               <div className={classes.shadow}>
                 <div className={classes.BuiltGridFlex}>
                   <h3>{t.InstantPublishing}</h3>

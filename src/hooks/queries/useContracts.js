@@ -32,7 +32,7 @@ const fetchContracts = (token, cursor, filters) => async () => {
     headers: { Authorization: `Bearer ${token}` },
     params,
   });
-
+      console.log(response)
   return response.data;
 };
 

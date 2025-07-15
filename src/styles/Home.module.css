@@ -132,7 +132,7 @@
 
 .BuiltGridSmartImage1 {
   width: 108%;
-  height: 30% !important;
+  height: 30% ;
 
   object-fit: contain;
   padding-top: 5rem;
@@ -140,7 +140,7 @@
 
 .BuiltGridSmartImage {
   width: 100%;
-  height: 20.7rem !important;
+  height: 20.7rem ;
   object-fit: contain;
   padding-top: 1rem;
 }

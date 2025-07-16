@@ -23,6 +23,7 @@ import DeleteIcon from "../icons/DeleteIcon";
 import TimeFilter from "../TimeFilter";
 import EmployeeAnalytics from "./Kpi/EmployeeAnalytics";
 import YearlyPerformance from "./Kpi/YearlyPerformance";
+import AnalyticsEmployeeDetails from "./Kpi/AnalyticsEmployeeDetails";
 
 function EmployeeDetails() {
   const [employee, setEmployee] = useState(null);
@@ -336,8 +337,8 @@ function EmployeeDetails() {
     fetchEmployee();
     fetchSupervisors();
     fetchEmployeeListings();
-   }, []);
- 
+  }, []);
+
 
   if (loading) {
     return (
@@ -453,11 +454,13 @@ function EmployeeDetails() {
         </Grid>
       </div>
 
+      {console.log(employee)}
 
-      <EmployeeAnalytics />
+      <AnalyticsEmployeeDetails employee_id={employee.employee_id} />
 
 
-      <YearlyPerformance />
+      <YearlyPerformance employee_id={employee.employee_id} />
+
       <div className={classes.properties}>
         <div className={classes.propertyList}>
           <EmployeeProperties id={id} />

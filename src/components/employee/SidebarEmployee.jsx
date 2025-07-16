@@ -34,7 +34,7 @@ export default function SidebarEmployee() {
           },
         })
         .then((response) => {
-          setProfile(response.data.data.employee);
+          setProfile(response?.data?.data?.employee);
         })
         .catch((error) => {
           console.error(error);
@@ -130,20 +130,20 @@ export default function SidebarEmployee() {
         <Group className={classes.profile}>
           <Avatar
             className={classes.avatar}
-            src={`${profile.picture_url}`}
+            src={profile?.picture_url}
             radius="xl"
             bg="var(--color-3)"
             color="white"
             onClick={() => navigate("/dashboard-employee")}
           >
-            {profile.name?.slice(0, 2)}
+            {profile?.name?.slice(0, 2)}
           </Avatar>
           <div
             className={classes.profileContainer}
             onClick={() => navigate("/dashboard")}
           >
             <span style={{
-            }} className={classes.profileName}>{profile.name}</span>
+            }} className={classes.profileName}>{profile?.name}</span>
             {/* <span style={{
             }} className={classes.profileEmail}>{profile.email}</span> */}
           </div>

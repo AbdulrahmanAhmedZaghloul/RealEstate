@@ -69,14 +69,7 @@ const TimeFilter = ({ initialTimeFrame = "month", onChange }) => {
 
         {timeFrame === "month" && (
           <div className={classes.divDatePickerInput}>
-            {/* <DatePicker
-            selected={selectedDate || new Date()}
-            onChange={handleDateChange}
-            showMonthYearPicker
-            dateFormat="MM/yyyy"
-            className={classes.datePickerInput}
-            inline
-          /> */}
+          
 
             <DatePicker
               selected={selectedDate}

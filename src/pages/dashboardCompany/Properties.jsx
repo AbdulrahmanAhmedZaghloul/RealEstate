@@ -273,7 +273,6 @@ function Properties() {
 
             <div className={classes.addAndSort}>
 
-
               <Select
                 placeholder={t.ChooseSortingMethod}
                 data={sortOptions}
@@ -321,9 +320,7 @@ function Properties() {
                   { value: "", label: t.All },
                   { value: "0", label: t.NotSold },
                   { value: "1", label: t.Sold },
-                  // { value: "", label: "All" },
-                  // { value: "0", label: "Not Sold" },
-                  // { value: "1", label: "Sold" },
+                  
                 ]}
                 value={filters.selling_status || ""}
                 onChange={(value) => setFilters((prev) => ({ ...prev, selling_status: value }))}
@@ -400,6 +397,9 @@ function Properties() {
             </div>
           </div>
         </header>
+
+
+
 
         {data?.pages.flatMap((page) => page.data.listings).length === 0 ? (
           <Center className={classes.notFound}>

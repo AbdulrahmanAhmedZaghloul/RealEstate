@@ -400,6 +400,10 @@
   "ListingType": "نوع الإعلان",
   "ClosedDeals": "الصفقات المغلقة",
   "TotalProperties": "إجمالي العقارات",
-  "MarketplaceProperties": "عقارات السوق"
-
+  "MarketplaceProperties": "عقارات السوق",
+  "SalesPerformance": "أداء المبيعات",
+  "NothingFound": " لم يتم العثور على شيء",
+  "Region": "منطقة",
+  "City": "مدينة",
+  "District": " حي"
 }

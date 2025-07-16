@@ -1,3 +1,6 @@
+
+
+
 import {
   ActionIcon,
   Anchor,
@@ -14,7 +17,7 @@ import {
   Select,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react"; // 🔵 NEW useMemo
 import { notifications } from "@mantine/notifications";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -56,6 +59,36 @@ const jobColors = {
   employee: "cyan",
 };
 
+// 🟡 FIX: Utility تحوِّل شكل بيانات KPI إلى Array آمنة
+function normalizeKpiData(raw) {
+  if (!raw) return [];
+  // في حالة React Query بيرجع {status:'success', data:[...]}:
+  if (Array.isArray(raw)) return raw;
+  if (Array.isArray(raw.data)) return raw.data;
+  // fallback آخر
+  return [];
+}
+
+// 🔵 NEW: حساب عدد العقود
+function getContractCountFromKpi(kpiRecord) {
+  if (!kpiRecord?.performance_metrics) return 0;
+  const pm = kpiRecord.performance_metrics;
+  if (typeof pm.total_contracts === "number" && !isNaN(pm.total_contracts)) {
+    return pm.total_contracts;
+  }
+  const salesCount = pm?.sales?.count ?? 0;
+  const rentalsCount = pm?.rentals?.count ?? 0;
+  return salesCount + rentalsCount;
+}
+
+// 🔵 NEW: متريكس افتراضية لو مفيش KPI
+const EMPTY_METRICS = {
+  total_contracts: 0,
+  sales: { count: 0, total_amount: 0, average_price: 0 },
+  rentals: { count: 0, total_amount: 0, average_price: 0 },
+  commissions: 0,
+};
+
 function Staff() {
   const location = useLocation();
 
@@ -74,7 +107,7 @@ function Staff() {
   } = useSupervisors();
 
   const {
-    data: rankingData,
+    data: rankingData, // React Query result
     isLoading: rankingLoading,
     isError: isRankingError,
     error: rankingError,
@@ -98,7 +131,7 @@ function Staff() {
 
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState(null);
+  const [filter, setFilter] = useState(""); // 👈 هنستخدمها كـ sortOrder ("Most seller" | "Least seller" | null)
 
   const [newUser, setNewUser] = useState({
     name: "",
@@ -138,7 +171,7 @@ function Staff() {
   const [searchedSupervisors, setSearchedSupervisors] = useState([]);
   const [supervisors, setSupervisors] = useState([]);
   const [expandedSupervisors, setExpandedSupervisors] = useState({});
-  const [kpiData, setKpiData] = useState({});
+  const [kpiData, setKpiData] = useState([]); // 🟡 FIX: خليها Array بدل Object
   const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
 
   const navigate = useNavigate();
@@ -146,13 +179,14 @@ function Staff() {
 
   const fetchEmployees = async () => {
     try {
-      setEmployees(employeesData?.data?.employees || []);
-      setSearchedEmployees(employeesData?.data?.employees || []);
+      const list = employeesData?.data?.employees || [];
+      setEmployees(list);
+      setSearchedEmployees(list);
     } catch (error) {
       console.error("Error fetching employees:", error);
       notifications.show({
         title: "Error",
-        message: error.response.data.message || "Failed to fetch employees",
+        message: error?.response?.data?.message || "Failed to fetch employees",
         color: "red",
       });
     }
@@ -161,13 +195,14 @@ function Staff() {
   const fetchSupervisors = async () => {
     setLoading(true);
     try {
-      setSupervisors(supervisorsData?.data?.supervisors || []);
-      setSearchedSupervisors(supervisorsData?.data?.supervisors || []);
+      const list = supervisorsData?.data?.supervisors || [];
+      setSupervisors(list);
+      setSearchedSupervisors(list);
     } catch (error) {
       console.error("Error fetching supervisors:", error);
       notifications.show({
         title: "Error",
-        message: error.response?.data?.message || "Failed to fetch supervisors",
+        message: error?.response?.data?.message || "Failed to fetch supervisors",
         color: "red",
       });
     } finally {
@@ -177,7 +212,9 @@ function Staff() {
 
   const fetchDataKPIs = async () => {
     try {
-      setKpiData(rankingData?.data?.data || []);
+      // 🟡 FIX: normalize بدل الوصول غير الصحيح
+      const normalized = normalizeKpiData(rankingData?.data ?? rankingData);
+      setKpiData(normalized);
     } catch (error) {
       console.error("Error fetching KPI data:", error);
       notifications.show({
@@ -188,26 +225,54 @@ function Staff() {
     }
   };
 
+  // 🔵 NEW: Map سريع من employeeId -> kpiRecord
+  const kpiMap = useMemo(() => {
+    const map = new Map();
+    kpiData.forEach((kpi) => {
+      const id = kpi?.employee?.id;
+      if (id != null) map.set(Number(id), kpi);
+    });
+    return map;
+  }, [kpiData]);
+
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
+
+    // لو عامل Sort (filter) إحنا في Mode "flat list" بالفعل، فهنفلتر في searchedEmployees اللي اتبنت من الكيبى
+    if (filter === "Most seller" || filter === "Least seller") {
+      setSearchedSupervisors([]); // مخبية
+      setSearchedEmployees((prev) => {
+        const base = prev.length ? prev : employees; // fallback
+        return query.trim() === ""
+          ? base
+          : base.filter(
+              (emp) =>
+                emp.name?.toLowerCase().includes(query.toLowerCase()) ||
+                emp.position?.toLowerCase().includes(query.toLowerCase())
+            );
+      });
+      return;
+    }
+
+    // الوضع العادي (بدون Sort)
     setSearchedSupervisors(
       query.trim() === ""
         ? supervisors
         : supervisors.filter(
-          (supervisor) =>
-            supervisor.name.toLowerCase().includes(query.toLowerCase()) ||
-            supervisor.position.toLowerCase().includes(query.toLowerCase())
-        )
+            (supervisor) =>
+              supervisor.name?.toLowerCase().includes(query.toLowerCase()) ||
+              supervisor.position?.toLowerCase().includes(query.toLowerCase())
+          )
     );
     setSearchedEmployees(
       query.trim() === ""
         ? employees
         : employees.filter(
-          (employee) =>
-            employee.name.toLowerCase().includes(query.toLowerCase()) ||
-            employee.position.toLowerCase().includes(query.toLowerCase())
-        )
+            (employee) =>
+              employee.name?.toLowerCase().includes(query.toLowerCase()) ||
+              employee.position?.toLowerCase().includes(query.toLowerCase())
+          )
     );
   };
 
@@ -243,7 +308,6 @@ function Staff() {
   const [previewImage, setPreviewImage] = useState(null);
 
   // Add a new function to confirm and delete the user
-
   const confirmDeleteUser = () => {
     if (!employeeToDelete) return;
 
@@ -339,57 +403,60 @@ function Staff() {
     }));
   };
 
+  // 🔵 NEW: الترتيب حسب العقود (Most / Least seller)
   const handleFilterChange = (value) => {
     setFilter(value);
 
-    // Merge employee data with their KPI metrics
-    const employeesWithMetrics = employees.map((employee) => {
-      // Find matching KPI data for this employee
-      const employeeKpi = kpiData?.find(
-        (kpi) =>
-          kpi.employee.id === employee.employee_id ||
-          kpi.employee.id === employee.supervisor_id
-      );
-
-      return {
-        ...employee,
-        performance_metrics: employeeKpi?.performance_metrics || {
-          total_contracts: 0,
-          sales: { count: 0, total_amount: 0, average_price: 0 },
-          rentals: { count: 0, total_amount: 0, average_price: 0 },
-          commissions: 0,
-        },
-      };
-    });
-
-    // Filter only employees (not supervisors)
-    const filteredEmployees = employeesWithMetrics.filter(
+    // نبني قائمة الموظفين فقط (مش المشرفين)
+    const employeesOnly = employees.filter(
       (emp) => emp.position === "employee"
     );
 
-    // Sort based on total_contracts
-    const sortedEmployees = [...filteredEmployees].sort((a, b) => {
-      const aContracts = a.performance_metrics.total_contracts;
-      const bContracts = b.performance_metrics.total_contracts;
+    // نضيف متريكس لكل موظف
+    const employeesWithMetrics = employeesOnly.map((emp) => {
+      const empId =
+        emp.employee_id != null
+          ? Number(emp.employee_id)
+          : emp.id != null
+          ? Number(emp.id)
+          : null;
 
-      if (value === "Most seller") {
-        return bContracts - aContracts; // Descending (most first)
-      } else if (value === "Least seller") {
-        return aContracts - bContracts; // Ascending (least first)
-      }
-      return 0;
+      const kpi = empId != null ? kpiMap.get(empId) : null;
+      const metrics = kpi?.performance_metrics || EMPTY_METRICS;
+
+      // لإظهار عدد العقود (هنضيفه على الكائن نفسه)
+      return {
+        ...emp,
+        performance_metrics: metrics,
+        __contracts: getContractCountFromKpi(kpi || { performance_metrics: metrics }),
+      };
     });
 
+    let sortedEmployees = employeesWithMetrics;
+
+    if (value === "Most seller") {
+      sortedEmployees = [...employeesWithMetrics].sort(
+        (a, b) => b.__contracts - a.__contracts
+      );
+    } else if (value === "Least seller") {
+      sortedEmployees = [...employeesWithMetrics].sort(
+        (a, b) => a.__contracts - b.__contracts
+      );
+    }
+
+    // عرض كـ بحث/فلتر Mode:
     setSearchedEmployees(sortedEmployees);
-    setSearchedSupervisors([]); // Clear supervisors from search results
+    setSearchedSupervisors([]); // نخفي المشرفين في وضع الترتيب
   };
 
+  // إعادة تعيين الصورة لما المودال يتقفل
   useEffect(() => {
     if (!addModalOpened) {
-      setPreviewImage(null); // إعادة تعيين الصورة عند إغلاق المودال
+      setPreviewImage(null);
     }
   }, [addModalOpened]);
 
+  // جلب البيانات لما تتغير الـ Queries
   useEffect(() => {
     fetchEmployees();
     fetchSupervisors();
@@ -454,7 +521,12 @@ function Staff() {
         loading={isRemoveUserLoading}
       />
 
-      <Card radius="lg">
+      <Card
+        radius="lg"
+        style={{
+          backgroundColor: "var(--color-5)",
+        }}
+      >
         <div>
           <BurgerButton />
           <span style={{}} className={classes.title}>
@@ -480,6 +552,7 @@ function Staff() {
           </div>
 
           <div className={classes.addAndSort}>
+            {/* 🔵 NEW: Sort Select مفعّل */}
             <Select
               placeholder={t.Sortby}
               value={filter}
@@ -487,10 +560,12 @@ function Staff() {
               onChange={handleFilterChange} // Call the sorting function here
               rightSection={<Dropdown />}
               data={[
-              { value: "", label: t.All },
-              { value: "Most seller", label: t.MostSeller },
-              { value: "Least seller", label: t.LeastSeller },
+                { value: "", label: t.All }, // Mantine بيحتاج string؛ لو بتحصل مشكلة, خلي value:"" وتعامل معها
+                { value: "Most seller", label: t.MostSeller },
+                { value: "Least seller", label: t.LeastSeller },
               ]}
+              // Mantine بترجع string دايمًا؛ نزبط الـ null:
+              // NOTE: already handled in handleFilterChange
               styles={{
                 input: {
                   width: "132px",
@@ -563,7 +638,9 @@ function Staff() {
                 <Table.Th />
               </Table.Tr>
             </Table.Thead>
-            {searchQuery === "" && filter === null ? (
+
+            {searchQuery === "" && (filter === null || filter === "" || filter === undefined) ? (
+              // 👇 الوضع العادي (إظهار المشرفين + الموظفين تحتهم)
               <Table.Tbody
                 style={{
                   borderRadius: "20px",
@@ -675,15 +752,7 @@ function Staff() {
                           >
                             <EditIcon />
                           </ActionIcon>
-                          {/* <ActionIcon
-                            variant="subtle"
-                            color="red"
-                            onClick={() =>
-                              handleRemoveUser(supervisor.supervisor_id, true)
-                            }
-                          >
-                            <DeleteIcon />
-                          </ActionIcon> */}
+                          {/* <ActionIcon ... حذف */ }
                         </Group>
                       </Table.Td>
                     </Table.Tr>
@@ -806,18 +875,7 @@ function Staff() {
                                         >
                                           <EditIcon />
                                         </ActionIcon>
-                                        {/* <ActionIcon
-                                          variant="subtle"
-                                          color="red"
-                                          onClick={() =>
-                                            handleRemoveUser(
-                                              employee.employee_id,
-                                              false
-                                            )
-                                          }
-                                        >
-                                          <DeleteIcon />
-                                        </ActionIcon> */}
+                                        {/* <ActionIcon ... حذف */ }
                                       </Group>
                                     </Table.Td>
                                   </Table.Tr>
@@ -889,198 +947,185 @@ function Staff() {
                         >
                           <EditIcon />
                         </ActionIcon>
-                        {/* <ActionIcon
-                          variant="subtle"
-                          color="red"
-                          onClick={() =>
-                            handleRemoveUser(employee.employee_id, false)
-                          }
-                        >
-                          <DeleteIcon />
-                        </ActionIcon> */}
                       </Group>
                     </Table.Td>
                   </Table.Tr>
                 ))}
               </Table.Tbody>
             ) : (
+              // 👇 وضع البحث / الترتيب (flat list)
               <Table.Tbody
                 style={{
                   borderRadius: "20px",
                   border: "1px solid transparent",
                 }}
               >
-                {searchedEmployees?.map((employee) => (
-                  <Table.Tr
-                    style={{
-                      borderRadius: "20px",
-                      border: "1px solid transparent",
-                    }}
-                    key={employee.id}
-                  >
-                    <Table.Td>
-                      <Group
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          navigate(
-                            `/dashboard/employee/${employee.employee_id}`
-                          );
-                        }}
-                        gap="sm"
-                      >
-                        <Avatar
-                          size={30}
-                          src={`${employee.picture_url}`}
-                          color={jobColors[employee.position]}
-                          radius={30}
-                        />
-                        <Text fz="sm" fw={500}>
-                          {employee.name}
-                        </Text>
-                      </Group>
-                    </Table.Td>
-                    <Table.Td>
-                      <Badge
-                        color={jobColors[employee.status]}
-                        variant={
-                          employee.status === "active" ? "gradient" : "gradient"
-                        }
-                        gradient={{
-                          from:
-                            employee.status === "active" ? "#E9FFEF" : "red",
-                          to: employee.status === "active" ? "#E9FFEF" : "red",
-                        }}
-                      >
-                        <span className={classes.spanStatus}>
-                          <span className={classes.Statusrom}></span>
-
-                          {employee.status}
-                        </span>
-                      </Badge>
-                    </Table.Td>
-                    <Table.Td>
-                      <Anchor component="button" size="sm">
-                        {employee.email}
-                      </Anchor>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text fz="sm">{employee.position}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text fz="sm">{employee.phone_number}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Group gap={0} justify="flex-end">
-                        <ActionIcon
-                          variant="subtle"
-                          color="gray"
-                          onClick={() => handleEditUser(employee, false)}
-                          mr={24}
+                {searchedEmployees?.map((employee) => {
+                  const contracts =
+                    employee.__contracts ??
+                    employee?.performance_metrics?.total_contracts ??
+                    0;
+                  return (
+                    <Table.Tr
+                      style={{
+                        borderRadius: "20px",
+                        border: "1px solid transparent",
+                      }}
+                      key={employee.employee_id ?? employee.id}
+                    >
+                      <Table.Td>
+                        <Group
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            navigate(
+                              `/dashboard/employee/${employee.employee_id}`
+                            );
+                          }}
+                          gap="sm"
                         >
-                          <EditIcon />
-                        </ActionIcon>
-                        {/* <ActionIcon
-                          variant="subtle"
-                          color="red"
-                          onClick={() =>
-                            handleRemoveUser(employee.employee_id, false)
+                          <Avatar
+                            size={30}
+                            src={`${employee.picture_url}`}
+                            color={jobColors[employee.position]}
+                            radius={30}
+                          />
+                          <Text fz="sm" fw={500}>
+                            {employee.name}{" "}
+                            {/* 👇 (اختياري) عرض عدد العقود */}
+                            <Text
+                              component="span"
+                              fz="xs"
+                              c="dimmed"
+                            >{`(${contracts})`}</Text>
+                          </Text>
+                        </Group>
+                      </Table.Td>
+                      <Table.Td>
+                        <Badge
+                          color={jobColors[employee.status]}
+                          variant={
+                            employee.status === "active" ? "gradient" : "gradient"
                           }
+                          gradient={{
+                            from:
+                              employee.status === "active" ? "#E9FFEF" : "red",
+                            to: employee.status === "active" ? "#E9FFEF" : "red",
+                          }}
                         >
-                          <DeleteIcon />
-                        </ActionIcon> */}
-                      </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                ))}
+                          <span className={classes.spanStatus}>
+                            <span className={classes.Statusrom}></span>
 
-                {searchedSupervisors?.map((supervisor) => (
-                  <Table.Tr key={supervisor.id}>
-                    <Table.Td>
-                      <Group
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          navigate(
-                            `/dashboard/supervisor/${supervisor.supervisor_id}`
-                          );
-                        }}
-                        gap="sm"
-                      >
-                        <Avatar
-                          size={30}
-                          src={`${supervisor.picture_url}`}
-                          color={jobColors[supervisor.position]}
-                          radius={30}
-                        />
-                        <Text fz="sm" fw={500}>
-                          {supervisor.name}
-                        </Text>
-                      </Group>
-                    </Table.Td>
-                    <Table.Td>
-                      <Badge
-                        color={jobColors[supervisor.status]}
-                        variant={
-                          supervisor.status === "active"
-                            ? "gradient"
-                            : "gradient"
-                        }
-                        gradient={{
-                          from:
-                            supervisor.status === "active" ? "#E9FFEF" : "red",
-                          to:
-                            supervisor.status === "active" ? "#E9FFEF" : "red",
-                        }}
-                      >
-                        <span className={classes.spanStatus}>
-                          <span className={classes.Statusrom}></span>
+                            {employee.status}
+                          </span>
+                        </Badge>
+                      </Table.Td>
+                      <Table.Td>
+                        <Anchor component="button" size="sm">
+                          {employee.email}
+                        </Anchor>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text fz="sm">{employee.position}</Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text fz="sm">{employee.phone_number}</Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Group gap={0} justify="flex-end">
+                          <ActionIcon
+                            variant="subtle"
+                            color="gray"
+                            onClick={() => handleEditUser(employee, false)}
+                            mr={24}
+                          >
+                            <EditIcon />
+                          </ActionIcon>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                  );
+                })}
 
-                          {supervisor.status}
-                        </span>
-                      </Badge>
-                    </Table.Td>
-                    <Table.Td>
-                      <Anchor component="button" size="sm">
-                        {supervisor.email}
-                      </Anchor>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text fz="sm">{supervisor.position}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text fz="sm">{supervisor.phone_number}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Group gap={0} justify="flex-end">
-                        <ActionIcon
-                          variant="subtle"
-                          color="gray"
-                          onClick={() => handleEditUser(supervisor, false)}
-                          mr={24}
+                {/* لو عامل Search بدون Sort، ممكن برضه نعرض المشرفين المتطابقين */}
+                {filter === null &&
+                  searchedSupervisors?.map((supervisor) => (
+                    <Table.Tr key={supervisor.id}>
+                      <Table.Td>
+                        <Group
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            navigate(
+                              `/dashboard/supervisor/${supervisor.supervisor_id}`
+                            );
+                          }}
+                          gap="sm"
                         >
-                          <EditIcon />
-                        </ActionIcon>
-                        {/* <ActionIcon
-                          variant="subtle"
-                          color="red"
-                          onClick={() =>
-                            handleRemoveUser(supervisor.supervisor_id, false)
+                          <Avatar
+                            size={30}
+                            src={`${supervisor.picture_url}`}
+                            color={jobColors[supervisor.position]}
+                            radius={30}
+                          />
+                          <Text fz="sm" fw={500}>
+                            {supervisor.name}
+                          </Text>
+                        </Group>
+                      </Table.Td>
+                      <Table.Td>
+                        <Badge
+                          color={jobColors[supervisor.status]}
+                          variant={
+                            supervisor.status === "active"
+                              ? "gradient"
+                              : "gradient"
                           }
+                          gradient={{
+                            from:
+                              supervisor.status === "active" ? "#E9FFEF" : "red",
+                            to:
+                              supervisor.status === "active" ? "#E9FFEF" : "red",
+                          }}
                         >
-                          <DeleteIcon />
-                        </ActionIcon> */}
-                      </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                ))}
+                          <span className={classes.spanStatus}>
+                            <span className={classes.Statusrom}></span>
+
+                            {supervisor.status}
+                          </span>
+                        </Badge>
+                      </Table.Td>
+                      <Table.Td>
+                        <Anchor component="button" size="sm">
+                          {supervisor.email}
+                        </Anchor>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text fz="sm">{supervisor.position}</Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text fz="sm">{supervisor.phone_number}</Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Group gap={0} justify="flex-end">
+                          <ActionIcon
+                            variant="subtle"
+                            color="gray"
+                            onClick={() => handleEditUser(supervisor, false)}
+                            mr={24}
+                          >
+                            <EditIcon />
+                          </ActionIcon>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
               </Table.Tbody>
             )}
           </Table>
         </Table.ScrollContainer>
-
-
       </Card>
     </>
   );
 }
 
-export default Staff;
+export default Staff; 
+

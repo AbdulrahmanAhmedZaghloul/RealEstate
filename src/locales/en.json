@@ -402,6 +402,12 @@
   "FailedToFetchPropertyDetails": "Failed to fetch property details.",
   "ClosedDeals": "Closed Deals",
   "TotalProperties": "Total Properties",
-  "MarketplaceProperties": "Marketplace Properties"
+  "MarketplaceProperties": "Marketplace Properties",
+  "SalesPerformance": "Sales Performance",
+  "NothingFound": "  Nothing Found",
+    "Region": " Region",
+    "City": " City",
+    "District": " District"
+
 
 }

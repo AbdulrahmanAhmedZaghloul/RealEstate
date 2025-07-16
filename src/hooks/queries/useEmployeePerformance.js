@@ -6,6 +6,7 @@ const fetchEmployeePerformance = async (token) => {
     const { data } = await axiosInstance.get("kpi/employee-performance", {
         headers: { Authorization: `Bearer ${token}` },
     });
+    
     return data;
 };
 

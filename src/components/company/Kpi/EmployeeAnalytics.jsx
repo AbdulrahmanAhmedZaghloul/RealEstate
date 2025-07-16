@@ -6,90 +6,85 @@ import classes from "../../../styles/EmployeeDetails.module.css";
 import { useTranslation } from '../../../context/LanguageContext';
 import { useParams } from 'react-router-dom';
 import { useEmployeeKpi } from '../../../hooks/queries/QueriesAnalytics/CompanyKpi/useEmployeeKpi';
-import YearlyPerformance from './YearlyPerformance';
+ import { useEffect, useState } from 'react';
 
-function EmployeeAnalytics() {
-
+function EmployeeAnalytics({ employee_id, timeFrame = "yearly", month = "", year = "" }) {
     const { id } = useParams();
-
     const { t } = useTranslation();
 
-    const { data: kpiData, isLoading } = useEmployeeKpi(id);
- 
+    const { data: kpiData, isLoading } = useEmployeeKpi(id || employee_id, timeFrame, month, year);
+    const [data, setData] = useState(null);
+
+    // ✅ تحديث البيانات عند تغير kpiData
+    useEffect(() => {
+        if (kpiData) {
+            setData(kpiData);
+        }
+    }, [kpiData]);
 
     if (isLoading) {
         return (
-            <>
-                <Center
-                    style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        zIndex: 2,
-                    }}
-                >
-                    <Loader size="xl" />
-                </Center>
-            </>
+            <Center
+                style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 2,
+                }}
+            >
+                <Loader size="xl" />
+            </Center>
         );
+    }
+
+    if (!data) {
+        return <p >No data available for this period.</p>;
     }
 
     return (
         <>
-            {/* EmployeeAnalytics.jsx */}
+            {/* Employee Analytics Cards */}
             <div className={classes.summary}>
-                <div style={{
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                }}
-                    className={classes.card}
-                >
-                    <div
-                        className={classes.cardTitle}>
-                        {t.Selling}</div>
+                {/* Card: Sales */}
+                <div style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }} className={classes.card}>
+                    <div className={classes.cardTitle}>{t.Selling}</div>
                     <div className={classes.cardCount}>
-                        {kpiData?.performance_metrics?.sales?.count}
+                        {data?.performance_metrics?.sales?.count ?? 0}
                     </div>
                     <div className={classes.cardRevenue}>
-                        <span className="icon-saudi_riyal">&#xea; </span>
-                        {kpiData?.performance_metrics?.sales?.total_amount.toLocaleString(
-                            "en-GB"
-                        )}
+                        <span className="icon-saudi_riyal">&#xea;</span>
+                        {Number(data?.performance_metrics?.sales?.total_amount || 0).toLocaleString("en-GB")}
                     </div>
                 </div>
-                <div style={{
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                }} className={classes.card}>
+
+                {/* Card: Rentals */}
+                <div style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }} className={classes.card}>
                     <div className={classes.cardTitle}>{t.Renting}</div>
                     <div className={classes.cardCount}>
-                        {kpiData?.performance_metrics?.rentals?.count}
+                        {data?.performance_metrics?.rentals?.count ?? 0}
                     </div>
                     <div className={classes.cardRevenue}>
-                        <span className="icon-saudi_riyal">&#xea; </span>
-                        {kpiData?.performance_metrics?.rentals?.total_amount.toLocaleString(
-                            "en-GB"
-                        )}
+                        <span className="icon-saudi_riyal">&#xea;</span>
+                        {Number(data?.performance_metrics?.rentals?.total_amount || 0).toLocaleString("en-GB")}
                     </div>
                 </div>
-                <div style={{
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                }} className={classes.card}>
 
+                {/* Card: Bookings */}
+                <div style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }} className={classes.card}>
                     <div className={classes.cardTitle}>{t.Booking}</div>
-
                     <div className={classes.cardCount}>
-                        {kpiData?.performance_metrics?.bookings.count}
+                        {data?.performance_metrics?.bookings?.count ?? 0}
                     </div>
                     <div className={classes.cardRevenue}>
-                        <span className="icon-saudi_riyal">&#xea; </span>
-                        {kpiData?.performance_metrics?.bookings.total_amount}
+                        <span className="icon-saudi_riyal">&#xea;</span>
+                        {Number(data?.performance_metrics?.bookings?.total_amount || 0).toLocaleString("en-GB")}
                     </div>
                 </div>
             </div>
-
-
+ 
         </>
-    )
+    );
 }
 
-export default EmployeeAnalytics
+export default EmployeeAnalytics; 

@@ -1,135 +1,355 @@
+// import React, { useState } from "react";
+// import { Select } from "@mantine/core";
+// import { useTranslation } from "../../../context/LanguageContext";
+
+// // استيراد ملفات JSON
+// import regions from "../../../../public/regions_lite.json";
+// import cities from "../../../../public/cities_lite.json";
+// import districts from "../../../../public/districts_lite.json";
+
+// const LocationPicker = ({ value, onChange }) => {
+//   const { t } = useTranslation();
+
+//   // الحقول المحفوظة
+//   const [selectedRegion, setSelectedRegion] = useState(value?.region_id || "");
+//   const [selectedCity, setSelectedCity] = useState(value?.city_id || "");
+//   const [selectedDistrict, setSelectedDistrict] = useState(value?.district_id || "");
+
+//   // الفلترة الديناميكية
+//   const filteredCities = cities.filter((city) =>
+//     selectedRegion ? city.region_id === parseInt(selectedRegion) : true
+//   );
+
+//   const filteredDistricts = districts.filter((district) =>
+//     selectedCity ? district.city_id === parseInt(selectedCity) : true
+//   );
+
+//   // جمع البيانات وارسالها مرة واحدة
+//   React.useEffect(() => {
+//     const regionObj = regions.find((r) => r.region_id === parseInt(selectedRegion));
+//     const cityObj = cities.find((c) => c.city_id === parseInt(selectedCity));
+//     const districtObj = districts.find((d) => d.district_id === parseInt(selectedDistrict));
+
+//     const parts = [];
+
+//     if (districtObj) parts.push(t.locale === 'ar' ? districtObj.name_ar : districtObj.name_en);
+//     if (cityObj) parts.push(t.locale === 'ar' ? cityObj.name_ar : cityObj.name_en);
+//     if (regionObj) parts.push(t.locale === 'ar' ? regionObj.name_ar : regionObj.name_en);
+
+//     const fullLocation = parts.join(", ") + ", المملكة العربية السعودية";
+
+//     onChange({
+//       location: fullLocation,
+//       region_id: selectedRegion || null,
+//       city_id: selectedCity || null,
+//       district_id: selectedDistrict || null,
+//     });
+//   }, [selectedRegion, selectedCity, selectedDistrict]);
+
+//   return (
+//     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+//       {/* منطقة */}
+//       <Select
+//         label={t.Region}
+//         placeholder={t.SelectRegion}
+//         data={regions.map((r) => ({
+//           value: r.region_id.toString(),
+//           label: t.locale === 'ar' ? r.name_ar : r.name_en,
+//         }))}
+//         value={selectedRegion}
+//         onChange={(value) => {
+//           setSelectedRegion(value);
+//           setSelectedCity("");  // إعادة تعيين المدينة والحي عند تغيير المنطقة
+//           setSelectedDistrict("");
+//         }}
+//         // searchable
+//         nothingFound={t.NothingFound}
+//       />
+
+//       {/* مدينة */}
+//       <Select
+//         label={t.City}
+//         placeholder={t.SelectCity}
+//         data={filteredCities.map((c) => ({
+//           value: c.city_id.toString(),
+//           label: t.locale === 'ar' ? c.name_ar : c.name_en,
+//         }))}
+//         value={selectedCity}
+//         onChange={(value) => {
+//           setSelectedCity(value);
+//           setSelectedDistrict("");  // إعادة تعيين الحي عند تغيير المدينة
+//         }}
+//         disabled={!selectedRegion}
+//         searchable
+//         nothingFound={t.NothingFound}
+//       />
+
+//       {/* حي */}
+//       <Select
+//         label={t.District}
+//         placeholder={t.SelectDistrict}
+//         data={filteredDistricts.map((d) => ({
+//           value: d.district_id.toString(),
+//           label: t.locale === 'ar' ? d.name_ar : d.name_en,
+//         }))}
+//         value={selectedDistrict}
+//         onChange={setSelectedDistrict}
+//         disabled={!selectedCity}
+//         searchable
+//         nothingFound={t.NothingFound}
+//       />
+//     </div>
+//   );
+// };
+
+// export default LocationPicker;
+
+
+
+
+
+import React, { useState, useEffect, useMemo } from "react";
 import { Select } from "@mantine/core";
-import { useState, useEffect } from "react";
-import Dropdown from "../../icons/dropdown";
 import { useTranslation } from "../../../context/LanguageContext";
 
-const LocationPicker = ({ value, onChange, error }) => {
+const LocationPicker = ({ value, onChange }) => {
   const { t } = useTranslation();
 
   const [regions, setRegions] = useState([]);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
-      console.log( cities  );
 
-  const [selectedRegion, setSelectedRegion] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState(value?.region_id || "");
+  const [selectedCity, setSelectedCity] = useState(value?.city_id || "");
+  const [selectedDistrict, setSelectedDistrict] = useState(value?.district_id || "");
 
+  // Lazy Load JSON files when needed
   useEffect(() => {
-    // تحميل الملفات الثلاثة
-    Promise.all([
-      fetch("/regions_lite.json").then((res) => res.json()),
-      
-      
-      fetch("/cities.json").then((res) => res.json()),
-      fetch("/districts_lite.json").then((res) => res.json()),
-    ]).then(([regionsData, citiesData, districtsData]) => {
-      console.log(  citiesData );
-      // ربط البيانات كما في الهيكل القديم
-      const regionsWithCities = regionsData.map((region) => ({
-        ...region,
-        cities: citiesData
-          .filter((city) => city.region_id === region.id)
-          .map((city) => ({
-            ...city,
-            districts: districtsData.filter(
-              (district) => district.city_id === city.id
-            ),
-          })),
-      }));
-
-      setRegions(regionsWithCities);
-    });
+    if (!regions.length) {
+      import("../../../../public/regions_lite.json").then((res) =>
+        setRegions(res.default)
+      );
+    }
+    if (!cities.length) {
+      import("../../../../public/cities_lite.json").then((res) =>
+        setCities(res.default)
+      );
+    }
+    if (!districts.length) {
+      import("../../../../public/districts_lite.json").then((res) =>
+        setDistricts(res.default)
+      );
+    }
   }, []);
 
-  useEffect(() => {
-    if (selectedRegion) {
-      const region = regions.find((r) => r.name_en === selectedRegion);
-      setCities(region ? region.cities || [] : []);
-      setSelectedCity("");
-      setSelectedDistrict("");
-      setNeighborhoods([]);
-    }
-  }, [selectedRegion, regions]);
-
-  useEffect(() => {
-    if (selectedCity) {
-      const city = cities.find((c) => c.name_en === selectedCity);
-      setDistricts(city ? city.districts || [] : []);
-      setSelectedDistrict("");
-      setNeighborhoods([]);
-    }
-  }, [selectedCity, cities]);
-
-  useEffect(() => {
-    if (selectedDistrict) {
-      const district = districts.find((d) => d.name_en === selectedDistrict);
-      setNeighborhoods(district ? district.neighborhoods || [] : []);
-    }
-  }, [selectedDistrict, districts]);
-
-  useEffect(() => {
-    onChange({
-      region: selectedRegion,
-      city: selectedCity,
-      district: selectedDistrict,
-      neighborhood: neighborhoods.length > 0 ? neighborhoods[0] : "",
+  const citiesByRegion = useMemo(() => {
+    const map = {};
+    cities.forEach((city) => {
+      if (!map[city.region_id]) map[city.region_id] = [];
+      map[city.region_id].push(city);
     });
-  }, [selectedRegion, selectedCity, selectedDistrict, neighborhoods]);
+    return map;
+  }, [cities]);
+
+  const districtsByCity = useMemo(() => {
+    const map = {};
+    districts.forEach((district) => {
+      if (!map[district.city_id]) map[district.city_id] = [];
+      map[district.city_id].push(district);
+    });
+    return map;
+  }, [districts]);
+
+  const filteredCities = selectedRegion ? citiesByRegion[selectedRegion] || [] : [];
+  const filteredDistricts = selectedCity ? districtsByCity[selectedCity] || [] : [];
+
+  // بناء النص الكامل للموقع
+  useEffect(() => {
+    const regionObj = regions.find((r) => r.region_id === parseInt(selectedRegion));
+    const cityObj = cities.find((c) => c.city_id === parseInt(selectedCity));
+    const districtObj = districts.find((d) => d.district_id === parseInt(selectedDistrict));
+
+    const parts = [];
+
+    if (districtObj) parts.push(t.locale === 'ar' ? districtObj.name_ar : districtObj.name_en);
+    if (cityObj) parts.push(t.locale === 'ar' ? cityObj.name_ar : cityObj.name_en);
+    if (regionObj) parts.push(t.locale === 'ar' ? regionObj.name_ar : regionObj.name_en);
+
+    const fullLocation = parts.join(", ") + ", المملكة العربية السعودية";
+
+    onChange({
+      location: fullLocation,
+      region_id: selectedRegion || null,
+      city_id: selectedCity || null,
+      district_id: selectedDistrict || null,
+    });
+  }, [selectedRegion, selectedCity, selectedDistrict]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {/* منطقة */}
       <Select
         label={t.Region}
         placeholder={t.SelectRegion}
-        data={regions.map((r) => ({ value: r.name_en, label: r.name_en }))}
+        data={regions.map((r) => ({
+          value: r.region_id.toString(),
+          label: t.locale === 'ar' ? r.name_ar : r.name_en,
+        }))}
         value={selectedRegion}
-        onChange={setSelectedRegion}
-        rightSection={<Dropdown />}
+        onChange={(value) => {
+          setSelectedRegion(value);
+          setSelectedCity("");
+          setSelectedDistrict("");
+        }}
         searchable
         nothingFound={t.NothingFound}
+        limit={5}
+        withinPortal
       />
 
+      {/* مدينة */}
       <Select
         label={t.City}
         placeholder={t.SelectCity}
-        data={cities.map((c) => ({ value: c.name_en, label: c.name_en }))}
+        data={filteredCities.map((c) => ({
+          value: c.city_id.toString(),
+          label: t.locale === 'ar' ? c.name_ar : c.name_en,
+        }))}
         value={selectedCity}
-        onChange={setSelectedCity}
+        onChange={(value) => {
+          setSelectedCity(value);
+          setSelectedDistrict("");
+        }}
         disabled={!selectedRegion}
-        rightSection={<Dropdown />}
         searchable
         nothingFound={t.NothingFound}
+        limit={5}
+        withinPortal
       />
 
+      {/* حي */}
       <Select
         label={t.District}
         placeholder={t.SelectDistrict}
-        data={districts.map((d) => ({ value: d.name_en, label: d.name_en }))}
+        data={filteredDistricts.map((d) => ({
+          value: d.district_id.toString(),
+          label: t.locale === 'ar' ? d.name_ar : d.name_en,
+        }))}
         value={selectedDistrict}
         onChange={setSelectedDistrict}
         disabled={!selectedCity}
-        rightSection={<Dropdown />}
         searchable
         nothingFound={t.NothingFound}
+        limit={5}
+        withinPortal
       />
-
-      {neighborhoods.length > 0 && (
-        <Select
-          label={t.Neighborhood}
-          placeholder={t.SelectNeighborhood}
-          data={neighborhoods.map((n) => ({ value: n, label: n }))}
-          value={neighborhoods[0]}
-          onChange={() => {}}
-          disabled
-        />
-      )}
     </div>
   );
 };
 
 export default LocationPicker;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import { TextInput } from "@mantine/core";
+// import { useTranslation } from "../../../context/LanguageContext";
+
+// const LocationPicker = ({ value, onChange }) => {
+//   const { t } = useTranslation();
+
+//   // الحقول الفردية
+//   const [selectedRegion, setSelectedRegion] = useState(value?.region || "");
+//   const [selectedCity, setSelectedCity] = useState(value?.city || "");
+//   const [selectedDistrict, setSelectedDistrict] = useState(value?.district || "");
+
+//   // التجميع التلقائي عند أي تغيير
+//   React.useEffect(() => {
+//     const parts = [];
+
+//     if (selectedDistrict) parts.push(selectedDistrict);
+//     if (selectedCity) parts.push(selectedCity);
+//     if (selectedRegion) parts.push(selectedRegion);
+
+//     const fullLocation = parts.join(", ");
+
+//     onChange({
+//       location: fullLocation,
+//     });
+//   }, [selectedRegion, selectedCity, selectedDistrict]);
+
+//   return (
+//     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+//       {/* إدخال المنطقة */}
+//       <TextInput
+//         label={t.Region}
+//         placeholder={t.EnterRegion}
+//         value={selectedRegion}
+//         onChange={(e) => setSelectedRegion(e.currentTarget.value)}
+//       />
+
+//       {/* إدخال المدينة */}
+//       <TextInput
+//         label={t.City}
+//         placeholder={t.EnterCity}
+//         value={selectedCity}
+//         onChange={(e) => setSelectedCity(e.currentTarget.value)}
+//         disabled={!selectedRegion}
+//       />
+
+//       {/* إدخال الحي */}
+//       <TextInput
+//         label={t.District}
+//         placeholder={t.EnterDistrict}
+//         value={selectedDistrict}
+//         onChange={(e) => setSelectedDistrict(e.currentTarget.value)}
+//         disabled={!selectedCity}
+//       />
+//     </div>
+//   );
+// };
+
+// export default LocationPicker;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -44,6 +44,7 @@ function EmployeeAnalytics({ employee_id, timeFrame = "yearly", month = "", year
 
     return (
         <>
+        {console.log(data)}
             {/* Employee Analytics Cards */}
             <div className={classes.summary}>
                 {/* Card: Sales */}

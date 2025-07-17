@@ -32,9 +32,9 @@
 
 //     const parts = [];
 
-//     if (districtObj) parts.push(t.locale === 'ar' ? districtObj.name_ar : districtObj.name_en);
-//     if (cityObj) parts.push(t.locale === 'ar' ? cityObj.name_ar : cityObj.name_en);
-//     if (regionObj) parts.push(t.locale === 'ar' ? regionObj.name_ar : regionObj.name_en);
+//     if (districtObj) parts.push(t.locale === 'ar' ? districtObj.name_ar : districtObj.name_ar);
+//     if (cityObj) parts.push(t.locale === 'ar' ? cityObj.name_ar : cityObj.name_ar);
+//     if (regionObj) parts.push(t.locale === 'ar' ? regionObj.name_ar : regionObj.name_ar);
 
 //     const fullLocation = parts.join(", ") + ", المملكة العربية السعودية";
 
@@ -54,7 +54,7 @@
 //         placeholder={t.SelectRegion}
 //         data={regions.map((r) => ({
 //           value: r.region_id.toString(),
-//           label: t.locale === 'ar' ? r.name_ar : r.name_en,
+//           label: t.locale === 'ar' ? r.name_ar : r.name_ar,
 //         }))}
 //         value={selectedRegion}
 //         onChange={(value) => {
@@ -72,7 +72,7 @@
 //         placeholder={t.SelectCity}
 //         data={filteredCities.map((c) => ({
 //           value: c.city_id.toString(),
-//           label: t.locale === 'ar' ? c.name_ar : c.name_en,
+//           label: t.locale === 'ar' ? c.name_ar : c.name_ar,
 //         }))}
 //         value={selectedCity}
 //         onChange={(value) => {
@@ -90,7 +90,7 @@
 //         placeholder={t.SelectDistrict}
 //         data={filteredDistricts.map((d) => ({
 //           value: d.district_id.toString(),
-//           label: t.locale === 'ar' ? d.name_ar : d.name_en,
+//           label: t.locale === 'ar' ? d.name_ar : d.name_ar,
 //         }))}
 //         value={selectedDistrict}
 //         onChange={setSelectedDistrict}
@@ -171,9 +171,9 @@ const LocationPicker = ({ value, onChange }) => {
 
     const parts = [];
 
-    if (districtObj) parts.push(t.locale === 'ar' ? districtObj.name_ar : districtObj.name_en);
-    if (cityObj) parts.push(t.locale === 'ar' ? cityObj.name_ar : cityObj.name_en);
-    if (regionObj) parts.push(t.locale === 'ar' ? regionObj.name_ar : regionObj.name_en);
+    if (districtObj) parts.push(t.locale === 'ar' ? districtObj.name_ar : districtObj.name_ar);
+    if (cityObj) parts.push(t.locale === 'ar' ? cityObj.name_ar : cityObj.name_ar);
+    if (regionObj) parts.push(t.locale === 'ar' ? regionObj.name_ar : regionObj.name_ar);
 
     const fullLocation = parts.join(", ") + ", المملكة العربية السعودية";
 
@@ -193,7 +193,7 @@ const LocationPicker = ({ value, onChange }) => {
         placeholder={t.SelectRegion}
         data={regions.map((r) => ({
           value: r.region_id.toString(),
-          label: t.locale === 'ar' ? r.name_ar : r.name_en,
+          label: t.locale === 'ar' ? r.name_ar : r.name_ar,
         }))}
         value={selectedRegion}
         onChange={(value) => {
@@ -213,7 +213,7 @@ const LocationPicker = ({ value, onChange }) => {
         placeholder={t.SelectCity}
         data={filteredCities.map((c) => ({
           value: c.city_id.toString(),
-          label: t.locale === 'ar' ? c.name_ar : c.name_en,
+          label: t.locale === 'ar' ? c.name_ar : c.name_ar,
         }))}
         value={selectedCity}
         onChange={(value) => {
@@ -233,7 +233,7 @@ const LocationPicker = ({ value, onChange }) => {
         placeholder={t.SelectDistrict}
         data={filteredDistricts.map((d) => ({
           value: d.district_id.toString(),
-          label: t.locale === 'ar' ? d.name_ar : d.name_en,
+          label: t.locale === 'ar' ? d.name_ar : d.name_ar,
         }))}
         value={selectedDistrict}
         onChange={setSelectedDistrict}
@@ -377,15 +377,15 @@ export default LocationPicker;
 //         data.forEach((region) => {
 //           region.cities.forEach((city) => {
 //             city.districts.forEach((district) => {
-//               const locationValue = `${district.name_en}, ${city.name_en}, ${region.name_en}`;
+//               const locationValue = `${district.name_ar}, ${city.name_ar}, ${region.name_ar}`;
 //               if (!uniqueLocations.has(locationValue)) {
 //                 uniqueLocations.add(locationValue);
 //                 formatted.push({
 //                   value: locationValue,
 //                   label: locationValue,
-//                   region: region.name_en,
-//                   city: city.name_en,
-//                   district: district.name_en,
+//                   region: region.name_ar,
+//                   city: city.name_ar,
+//                   district: district.name_ar,
 //                 });
 //               }
 //             });

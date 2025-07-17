@@ -8,7 +8,8 @@ import {   BrowserRouter, HashRouter  } from "react-router-dom";
 import App from "./App.jsx";
 import { LanguageProvider } from "./context/LanguageContext.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
- 
+ import 'react-datepicker/dist/react-datepicker.css';
+
 function Main() {
   const [colorScheme, setColorScheme] = useState("light");
   const queryClient = new QueryClient();

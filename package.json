@@ -12,6 +12,7 @@
     "axios": "^1.9.0",
     "compressorjs": "^1.2.1",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
     "formik": "^2.4.6",
     "laravel-echo": "^2.1.6",
     "lodash.debounce": "^4.0.8",

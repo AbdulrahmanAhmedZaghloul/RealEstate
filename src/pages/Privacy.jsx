@@ -22,13 +22,6 @@ function Privacy() {
                                 Welcome to [App Name]! These Terms and Conditions ("Terms")
                                 govern your use of our real estate mobile application and web platform
                                 (collectively, the "Service") operated by us.
-                                {/* hykjjkhjkjklh */}
-                                {/* hykjjkhjkjklh */}
-                                {/* hykjjkhjkjklh */}
-                                {/* hykjjkhjkjklh */}
-                                {/* hykjjkhjkjklh */}
-                                {/* hykjjkhjkjklh */}
-                                {/* hykjjkhjkjklh */}
                             </p>
 
                             <p>

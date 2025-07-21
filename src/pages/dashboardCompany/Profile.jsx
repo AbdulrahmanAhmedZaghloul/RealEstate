@@ -28,7 +28,7 @@ import { useProfile } from "../../hooks/queries/useProfile";
 import { useEditProfile } from "../../hooks/mutations/useEditProfile";
 import EditIcon from "../../components/icons/edit";
 import CropModal from "../../components/CropModal";
-import { EmployeeContext } from "../../context/EmployeeContext";
+import { EmployeeContext } from "../../context/EmployeeContext"; 
 
 function Profile() {
   // const { t } = useTranslation();
@@ -289,6 +289,8 @@ function Profile() {
           <div className={classes.ThemeToggle}>
             <ThemeToggle />
             <Notifications />
+            {/* <NotificationDropdown /> */}
+
           </div>
         </div>
 

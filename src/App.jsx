@@ -62,6 +62,7 @@ import ContactUs from "./pages/ContactUs .jsx";
 
 function App() {
   return (
+    <EmployeeProvider>
     <LanguageProvider>
       <AuthProvider>
         <SidebarProvider>
@@ -232,6 +233,7 @@ function App() {
         </SidebarProvider>
       </AuthProvider>
     </LanguageProvider>
+    </EmployeeProvider>
 
     //
   );

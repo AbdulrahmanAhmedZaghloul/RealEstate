@@ -96,7 +96,7 @@ function ClosedDealsMarkters({ timeFrame, month, year }) {
 
                 </GridCol>
 
-                {/* <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
+                 <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
                     <div
                         style={{ marginRight: "0px", }}
                         className={classes.card}
@@ -109,16 +109,16 @@ function ClosedDealsMarkters({ timeFrame, month, year }) {
                         <div
                             className={classes.cardCount}
                         >
-                            {data?.contracts?.total_bookings}
+                            {newListings?.total_listings - data?.total_contracts}
                         </div>
                         <div
                             className={classes.cardRevenue}
                         >
                             <span className="icon-saudi_riyal">&#xea; </span>
-                            {parseFloat(data?.revenue?.booking_revenue).toLocaleString("en-GB")}
+                            {parseFloat(newListings?.total_value - data?.total_revenue).toLocaleString("en-GB")}
                         </div>
                     </div>
-                </GridCol> */}
+                </GridCol>  
 
 
             </Grid>

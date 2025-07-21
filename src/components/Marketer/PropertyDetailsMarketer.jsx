@@ -56,7 +56,7 @@ function PropertyDetailsMarketer() {
   const fetchListing = async () => {
     setLoading(true);
     try {
-      const { data } = await axiosInstance.get(`marketer/listings/cursor/${id}`, {
+      const { data } = await axiosInstance.get(`marketer/listings/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setListing(data?.data.listing);
@@ -499,10 +499,10 @@ function PropertyDetailsMarketer() {
                   ) : (
                     <Box className={classes.BoxImage}>
                       <div className={classes.divImage}>
-                        <Avatar w={60} h={60} src={listing.employee.picture_url} alt={listing.employee?.name} />
+                        <Avatar w={60} h={60} src={listing.marketer.picture_url} alt={listing.marketer?.name} />
                         <span className={classes.spanImage}>
 
-                          {listing.employee?.name}
+                          {listing.marketer?.name}
                         </span>
                       </div>
 

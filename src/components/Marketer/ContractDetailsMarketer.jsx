@@ -226,14 +226,14 @@ function ContractDetailsMarketer() {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(() => {
-        // بعد النجاح
+
         queryClient.invalidateQueries(["contracts"]);
         notifications.show({
           title: t.ContractDeleted, // Updated notification message
           message: t.ContractHasBeenDeletedSuccessfully,
           color: "green",
         });
-        navigate("/dashboard/contracts");
+        navigate("/dashboard-Marketer/ContractsMarketer");
       })
       .catch((err) => {
         console.log(err);
@@ -482,7 +482,7 @@ function ContractDetailsMarketer() {
 
                     <span>{contract?.listed_by?.name}</span>
                   </div>
-                  <div  onClick={handleDownloadDocument} className={classes.viewText}>
+                  <div onClick={handleDownloadDocument} className={classes.viewText}>
                     <span>View</span>
                   </div>
                 </div>
@@ -769,7 +769,7 @@ function ContractDetailsMarketer() {
         <p>{t.AreYouSureYouWantToDeleteThisContract}</p>
         <Group position="right" mt="md">
           <Button variant="outline" color="gray" onClick={close}>
-                  {t.Cancel}
+            {t.Cancel}
 
           </Button>{" "}
           <Button color="red" onClick={handleDeleteContract}>
@@ -815,12 +815,12 @@ function ContractDetailsMarketer() {
                       color: "green",
                     });
                   }}
-                  style={{ cursor: "pointer" , marginBottom: "10px"}}
+                  style={{ cursor: "pointer", marginBottom: "10px" }}
                   className="fa fa-copy"
                 ></i>
               }
             />
-            <Group spacing="sm"  style={{ marginTop: "20px" }}>
+            <Group spacing="sm" style={{ marginTop: "20px" }}>
               {/* WhatsApp */}
               <Button
                 component="a"

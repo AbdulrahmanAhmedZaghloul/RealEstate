@@ -78,12 +78,12 @@ function BuiltTo() {
                     {t.Communicate}
                   </p>
                 </div>
-                <div>
+                {/* <div> */}
 
-                <img className={classes.BuiltGridSmartImage1} src={EmployeesLight} alt=" image" />
+                  <img className={classes.BuiltGridSmartImage1} src={EmployeesLight} alt=" image" />
 
-                </div>
-                
+                {/* </div> */}
+
               </div>
 
             </GridCol>
@@ -102,10 +102,10 @@ function BuiltTo() {
                   <h4>{t.Client}</h4>
                   <p style={{ color: "var(--color-P)" }}>{t.TrackProgress}</p>
                 </div>
-                <div>
-                  <img className={classes.FramerLight} src={FramerLight} alt=" image" />
+                {/* <div> */}
+                <img className={classes.FramerLight} src={FramerLight} alt=" image" />
 
-                </div>
+                {/* </div> */}
 
               </div>
             </GridCol>
@@ -119,10 +119,10 @@ function BuiltTo() {
                   </p>
 
                 </div>
-                <div>
-                  <img className={classes.iphoneImage} src={iphoneLight} alt=" image" />
+                {/* <div> */}
+                <img className={classes.iphoneImage} src={iphoneLight} alt=" image" />
 
-                </div>
+                {/* </div> */}
 
               </div>
 

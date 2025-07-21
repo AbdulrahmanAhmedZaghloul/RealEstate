@@ -1,14 +1,14 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import en from "../locales/en.json";
 import ar from "../locales/ar.json";
- 
+
 export const LanguageContext = createContext();
- 
+
 export const LanguageProvider = ({ children }) => {
-  const [lang, setLang] = useState(  ()=>{
+  const [lang, setLang] = useState(() => {
     return localStorage.getItem("language") || "en";
 
-  } );
+  });
   const [translations, setTranslations] = useState(en);
 
   useEffect(() => {
@@ -30,8 +30,8 @@ export const LanguageProvider = ({ children }) => {
     }
     localStorage.setItem("language", lang);
   }, [lang]);
-  
- 
+
+
   return (
     <LanguageContext.Provider value={{ lang, setLang, t: translations }}>
       {children}

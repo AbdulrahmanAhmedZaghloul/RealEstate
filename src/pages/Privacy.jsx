@@ -23,6 +23,12 @@ function Privacy() {
                                 govern your use of our real estate mobile application and web platform
                                 (collectively, the "Service") operated by us.
                                 {/* hykjjkhjkjklh */}
+                                {/* hykjjkhjkjklh */}
+                                {/* hykjjkhjkjklh */}
+                                {/* hykjjkhjkjklh */}
+                                {/* hykjjkhjkjklh */}
+                                {/* hykjjkhjkjklh */}
+                                {/* hykjjkhjkjklh */}
                             </p>
 
                             <p>

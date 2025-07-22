@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
-import   classes from "../../styles/ClientRequestsDetails.module.css";
+import classes from "../../styles/ClientRequestsDetails.module.css";
 import Notifications from "../../components/company/Notifications";
-import { Card } from "@mantine/core";
+import { Card, Grid } from "@mantine/core";
 
 export default function ClientRequestsDetails() {
       const { id } = useParams();
@@ -65,10 +65,85 @@ export default function ClientRequestsDetails() {
                               alignItems: "center",
                               justifyContent: "space-between",
                               marginBottom: "1.5rem",
+                              // padding:"2rem"
                         }}>
                               <h2>Client Information</h2>
 
+                              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="0.5" y="0.5" width="47" height="47" rx="15.5" stroke="#E0E0E0" />
+                                    <path d="M18.414 27.89L28.556 17.748L27.142 16.334L17 26.476V27.89H18.414ZM19.243 29.89H15V25.647L26.435 14.212C26.6225 14.0245 26.8768 13.9192 27.142 13.9192C27.4072 13.9192 27.6615 14.0245 27.849 14.212L30.678 17.041C30.8655 17.2285 30.9708 17.4828 30.9708 17.748C30.9708 18.0132 30.8655 18.2675 30.678 18.455L19.243 29.89ZM15 31.89H33V33.89H15V31.89Z" fill="#4F4F4F" />
+                              </svg>
+                        </div>
 
+                        <Grid >
+                              <Grid.Col span={6}>
+                                    <p>
+                                          <strong>Name:</strong>
+                                          <br />
+                                          {client_request.client_name}
+                                    </p>
+
+
+                              </Grid.Col>
+
+                              <Grid.Col span={6}>
+                                    <p>
+                                          <strong>Phone:</strong>
+                                          <br />
+                                          {client_request.client_phone}
+                                    </p>
+
+
+                              </Grid.Col>
+                              <Grid.Col span={6}>
+                                    <p>
+                                          <strong> Date: </strong>
+                                          <br />
+                                          {new Date(client_request.created_at).toLocaleDateString()}
+                                    </p>
+                                    {/* <p><strong>Date:</strong> {new Date(client_request.created_at).toLocaleDateString()}</p> */}
+                                    {/* <p><strong> employee: </strong> {client_request.employee}</p> */}
+
+
+
+                              </Grid.Col>
+
+                              <Grid.Col span={6}>
+                                    <p>
+                                          <strong>employee:</strong>
+                                          <br />
+                                          {client_request.employee}
+                                    </p>
+
+
+
+                              </Grid.Col>
+
+
+
+                        </Grid>
+ 
+                  </div>
+                  {/* Request Details */}
+
+                  <div className={classes.Information} >
+                        <div style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              marginBottom: "1.5rem",
+                              // padding:"2rem"
+                        }}>
+                              <h2>Request Details</h2>
+
+                  
+                  {/* <div className="bg-white shadow-md rounded p-4 mb-4">
+                        <h2 className="text-xl font-bold mb-2">Request Details</h2>
+                        <p><strong>Location:</strong> {client_request.location}</p>
+                        <p><strong>Property Type:</strong> {client_request.property_type}</p>
+                        <p><strong>Budget:</strong> {client_request.price_min} - {client_request.price_max}</p>
+                        <p><strong>Area:</strong> {client_request.area_min} - {client_request.area_max} m²</p>
+                  </div> */}
 
 
                               <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,43 +152,59 @@ export default function ClientRequestsDetails() {
                               </svg>
                         </div>
 
-                        <div style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              marginBottom: "1.5rem",
-                        }}  >
-
-                              <p><strong>Name:</strong> {client_request.client_name}</p>
-
-                              <p><strong>Phone:</strong> {client_request.client_phone}</p>
-
-                        </div>
+                        <Grid >
+                              <Grid.Col span={6}>
+                                    <p>
+                                          <strong>Location:</strong>
+                                          <br />
+                                          {client_request.location}
+                                    </p>
 
 
-                        <div style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              marginBottom: "1.5rem",
-                        }}>
+                              </Grid.Col>
 
-                              <p><strong>Date:</strong> {new Date(client_request.created_at).toLocaleDateString()}</p>
-                              <p><strong>employee:</strong> {client_request.employee}</p>
+                              <Grid.Col span={6}>
+                                    <p>
+                                          <strong>property Type : </strong>
+                                          <br />
+                                          {client_request.property_type}
+                                    </p>
 
 
-                        </div>
+                              </Grid.Col>
+                              <Grid.Col span={6}>
+                                    <p>
+                                          <strong> Budget :  </strong>
+                                          <br /> {client_request.price_min} - {client_request.price_max}
+                                    </p>
+                                    {/* <p><strong>Date:</strong> {new Date(client_request.created_at).toLocaleDateString()}</p> */}
+                                    {/* <p><strong> employee: </strong> {client_request.employee}</p> */}
 
+
+
+                              </Grid.Col>
+
+                              <Grid.Col span={6}>
+                                    <p>
+                                          <strong>Area : </strong>
+                                          <br />
+                                          {client_request.area_min} - {client_request.area_max} m²
+                                    </p>
+
+
+
+                              </Grid.Col>
+
+
+
+                        </Grid>
+ 
                   </div>
+
 
                   {/* Request Details */}
-                  <div className="bg-white shadow-md rounded p-4 mb-4">
-                        <h2 className="text-xl font-bold mb-2">Request Details</h2>
-                        <p><strong>Location:</strong> {client_request.location}</p>
-                        <p><strong>Property Type:</strong> {client_request.property_type}</p>
-                        <p><strong>Budget:</strong> {client_request.price_min} - {client_request.price_max}</p>
-                        <p><strong>Area:</strong> {client_request.area_min} - {client_request.area_max} m²</p>
-                  </div>
+                  
+                  
 
                   {/* Matches */}
                   <div>

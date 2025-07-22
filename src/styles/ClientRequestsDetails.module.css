@@ -16,6 +16,9 @@
       width: 90%;
       margin: auto;
       border: 1px solid var(--color-border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border-radius: 1rem;
 }
 
 .section h2 {

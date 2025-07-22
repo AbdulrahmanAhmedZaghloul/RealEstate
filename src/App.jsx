@@ -59,6 +59,7 @@ import PublicContractView from "./pages/PublicContractView.jsx";
 import { EmployeeProvider } from "./context/EmployeeContext.jsx";
 import ShareRealEstate from "./pages/ShareRealEstate.jsx";
 import ContactUs from "./pages/ContactUs .jsx";
+import ClientRequests from "./pages/dashboardCompany/ClientRequests.jsx";
 
 function App() {
   return (
@@ -141,6 +142,7 @@ function App() {
                 <Route path="supervisor/:id" element={<SupervisorDetails />} />
                 <Route path="Properties/:id" element={<PropertyDetails />} />
                 <Route path="Properties" element={<Properties />} />
+                  <Route path="ClientRequests" element={<ClientRequests />} />
                 <Route path="Contracts/:id" element={<ContractDetails />} />
               </Route>
 

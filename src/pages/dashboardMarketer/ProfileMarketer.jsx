@@ -24,6 +24,7 @@ import { useTranslation } from "../../context/LanguageContext";
 import { useProfileMarketer } from "../../hooks/queries/useProfileMarketer";
 import { useEditProfileMarketer } from "../../hooks/mutations/useEditProfileMarketer";
 import EditIcon from "../../components/icons/edit";
+import ProfilePlane from "../../components/company/ProfilePlane";
 
 function ProfileMarketer() {
   const { t } = useTranslation();
@@ -203,6 +204,8 @@ function ProfileMarketer() {
             </Grid>
           </div>
         </Card>
+                <ProfilePlane />
+        
       </Card>
 
       {/* Edit Modal */}

@@ -71,22 +71,7 @@ function Properties() {
     { value: "booking", label: t.Booking },
   ];
 
-
-  // const sortOptions = [
-  //   { value: "newest", label: "Newest" },
-  //   { value: "oldest", label: "Oldest" },
-  //   { value: "highest", label: "Highest price" },
-  //   { value: "lowest", label: "Lowest price" },
-  // ];
-
-
-  // const transactionOptions = [
-  //   { value: "all", label: "All" },
-  //   { value: "rent", label: "For Rent" },
-  //   { value: "buy", label: "For Sale" },
-  //   { value: "booking", label: "Booking" },
-  // ];
-
+ 
   const {
     data,
     isLoading,

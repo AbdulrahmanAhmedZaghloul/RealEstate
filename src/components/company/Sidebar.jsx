@@ -154,6 +154,28 @@ export default function Sidebar() {
         />
       ),
     },
+
+    {
+      link: "/dashboard/ClientRequests",
+      label: t["ClientRequests"],
+      // label: "Profile",
+      icon: (
+        <img
+          src={
+            active === "ClientRequests" && colorScheme === "light"
+              ? ProfileActive
+              : active === "ClientRequests" && colorScheme === "dark"
+                ? ProfileActiveDark
+                : Profile
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
+
     {
       link: "/dashboard/Contracts",
       label: t["Contracts"],
@@ -195,6 +217,9 @@ export default function Sidebar() {
         />
       ),
     },
+
+
+
   ];
 
   const links = navlist.map((item) => (

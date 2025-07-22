@@ -36,12 +36,12 @@ function SubscriptionPlans() {
   } else {
     console.log("No role found in session or local storage.");
   }
-  // let successUrl = "https://real-estate-one-lake.vercel.app/#/dashboard";
-  let successUrl = "http://localhost:5173/#/dashboard";
+  let successUrl = "https://real-estate-one-lake.vercel.app/#/dashboard";
+  // let successUrl = "http://localhost:5173/#/dashboard";
 
   if (role === "marketer") {
-    // successUrl = "https://real-estate-one-lake.vercel.app/#/dashboard-Marketer"
-    successUrl = "http://localhost:5173/#/dashboard-Marketer"
+    successUrl = "https://real-estate-one-lake.vercel.app/#/dashboard-Marketer"
+    // successUrl = "http://localhost:5173/#/dashboard-Marketer"
   }
   const {
     data,

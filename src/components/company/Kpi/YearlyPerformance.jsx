@@ -21,21 +21,6 @@ function YearlyPerformance({ employee_id }) {
 
   const { data: kpiData, isLoading } = useEmployeeKpiBarChart(id || employee_id);
 
-  if (isLoading) {
-    return (
-      <Center
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          zIndex: 2,
-        }}
-      >
-        <Loader size="xl" />
-      </Center>
-    );
-  }
 
   const period = kpiData?.period || {};
   const metrics = kpiData?.performance_metrics || {};
@@ -67,9 +52,24 @@ function YearlyPerformance({ employee_id }) {
       },
     ];
   }, [metrics, selectedType, period, t]);
+  if (isLoading) {
+    return (
+      <Center
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 2,
+        }}
+      >
+        <Loader size="xl" />
+      </Center>
+    );
+  }
 
   return (
-    <div className={classes.chart}>
+     <div className={classes.chart}>
       <div
         style={{
           display: "flex",

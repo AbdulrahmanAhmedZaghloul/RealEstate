@@ -192,26 +192,26 @@ function Notifications() {
               <div
                 key={notif.id}
                 className={classes.divFlex}
-                onClick={() => navigate(`/dashboard/Properties/${notif.data.listing_id}`)}
+                onClick={() => navigate(`/dashboard/Properties/${notif?.data?.listing_id}`)}
                 style={{
                   display: 'flex',
                   padding: '15px',
                   borderBottom: '1px solid #f0f0f0',
                   cursor: 'pointer',
-                  backgroundColor: !notif.read_at ? '#f3f4f6' : 'white',
-                  transition: 'background-color 0.2s'
+                  // backgroundColor: !notif.read_at ? '#f3f4f6' : 'white',
+                  // transition: 'background-color 0.2s'
                 }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = '#f9f9f9'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = !notif.read_at ? '#f3f4f6' : 'white'}
+                // onMouseEnter={(e) => e.target.style.backgroundColor = '#f9f9f9'}
+                // onMouseLeave={(e) => e.target.style.backgroundColor = !notif.read_at ? '#f3f4f6' : 'white'}
               >
                 {/* أيقونة النوتفيكيشن */}
-                <div style={{
+                {/* <div style={{
                   fontSize: '24px',
                   marginLeft: '12px',
                   flexShrink: 0
                 }}>
                   {getNotificationIcon(notif.type)}
-                </div>
+                </div> */}
 
                 {/* محتوى النوتفيكيشن */}
                 <div className={classes.divImage} style={{ flex: 1 }}>
@@ -248,14 +248,14 @@ function Notifications() {
                     {formatNotificationDate(notif.created_at)}
                   </p>
 
-                  {!notif.read_at && (
+                  {/* {!notif.read_at && (
                     <div style={{
                       width: '8px',
                       height: '8px',
                       backgroundColor: '#1976d2',
                       borderRadius: '50%'
                     }}></div>
-                  )}
+                  )} */}
 
                   <button
                     onClick={(e) => {
@@ -295,6 +295,15 @@ function Notifications() {
 }
 
 export default Notifications;
+
+
+
+
+
+
+
+
+
 
 // // Notifications.jsx
 

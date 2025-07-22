@@ -48,6 +48,7 @@ export const useAddProperty = (userToken, categories, closeModal) => {
       'category',
       categories.find((cat) => cat.id === parseInt(values.category_id))?.name || ''
     );
+    console.log({axiosInstance},endpoint);
 
     const { data } = await axiosInstance.post(endpoint, formData, {
       headers: {

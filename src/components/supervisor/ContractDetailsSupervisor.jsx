@@ -1688,25 +1688,25 @@ export default ContractDetailsSupervisor;
 //       </Modal>
 
 //       {/* Delete Contract Modal */}
-//       <Modal
-//         opened={opened}
-//         onClose={close}
-//         title="Delete Contract"
-//         centered
-//         overlayOpacity={0.55}
-//         overlayBlur={3}
-//         radius="lg"
-//       >
-//         <p>Are you sure you want to delete this contract?</p>
-//         <Group position="right" mt="md">
-//           <Button variant="outline" color="gray" onClick={close}>
-//             Cancel
-//           </Button>
-//           <Button color="red" onClick={handleDeleteContract}>
-//             Delete
-//           </Button>
-//         </Group>
-//       </Modal>
+      // <Modal
+      //   opened={opened}
+      //   onClose={close}
+      //   title="Delete Contract"
+      //   centered
+      //   overlayOpacity={0.55}
+      //   overlayBlur={3}
+      //   radius="lg"
+      // >
+      //   <p>Are you sure you want to delete this contract?</p>
+      //   <Group position="right" mt="md">
+      //     <Button variant="outline" color="gray" onClick={close}>
+      //       Cancel
+      //     </Button>
+      //     <Button color="red" onClick={handleDeleteContract}>
+      //       Delete
+      //     </Button>
+      //   </Group>
+      // </Modal>
 
 //       {/* Share Contract Modal */}
 //       <Modal

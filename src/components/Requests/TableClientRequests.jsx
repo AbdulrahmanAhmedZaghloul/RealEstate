@@ -12,6 +12,7 @@ import DeleteIcon from "../../components/icons/DeleteIcon";
 import { AddClientRequestModal } from "../modals/Request/AddClientRequestModal";
 import { useDeleteClientRequest } from "../../hooks/queries/Requests/useDeleteClientRequest";
 import { useNavigate } from "react-router-dom";
+import { EditClientRequestModal } from "../modals/Request/EditClientRequestModal";
 
 const formatNumber = (n) => (n == null ? "-" : new Intl.NumberFormat().format(Number(n)));
 const formatRange = (min, max, unit = "") => {
@@ -23,7 +24,8 @@ export default function TableClientRequests({ rowsData = [], meta = {}, page, on
       const { t } = useTranslation();
       const [addOpened, setAddOpened] = useState(false);
       const navigate = useNavigate();
-
+      const [editOpened, setEditOpened] = useState(false);
+      const [selectedRequest, setSelectedRequest] = useState(null);
       // حالة للمودال
       const [deleteModalOpened, setDeleteModalOpened] = useState(false);
       const [selectedRow, setSelectedRow] = useState(null);
@@ -97,13 +99,7 @@ export default function TableClientRequests({ rowsData = [], meta = {}, page, on
                         </div>
 
                         <div className={classes.addAndSort}>
-                              <Select
-                                    placeholder={t.Sortby}
-                                    mr={10}
-                                    rightSection={<Dropdown />}
-                                    data={[]}
-                                    styles={{ input: { width: "132px", height: "48px" } }}
-                              />
+
                               <button
                                     className={classes.add}
                                     onClick={() => setAddOpened(true)}
@@ -119,7 +115,7 @@ export default function TableClientRequests({ rowsData = [], meta = {}, page, on
 
                   {/* Table */}
                   <Table.ScrollContainer style={{
-                        border:"none"
+                        border: "none"
                   }}>
                         <Table style={{
                               border: "none"
@@ -146,7 +142,7 @@ export default function TableClientRequests({ rowsData = [], meta = {}, page, on
                                     ) : (
                                           rowsData.map((row) => (
                                                 <Table.Tr onClick={() => navigate(`/dashboard/ClientRequestsDetails/${row.id}`)}
-  key={row.id}>
+                                                      key={row.id}>
                                                       <td >{row.client_name}</td>
                                                       <td>{row.location}</td>
                                                       <td>{row.property_type}</td>
@@ -154,7 +150,15 @@ export default function TableClientRequests({ rowsData = [], meta = {}, page, on
                                                       <td>{formatRange(row.area_min, row.area_max, "m²")}</td>
                                                       <td>{row.matches_count}</td>
                                                       <td style={{ textAlign: "center", display: "flex", gap: "10px" }}>
-                                                            <ActionIcon variant="light" color="blue">
+                                                            <ActionIcon
+                                                                  variant="light"
+                                                                  color="blue"
+                                                                  onClick={(e) => {
+                                                                        e.stopPropagation(); // منع التوجه للصف
+                                                                        setSelectedRequest(row);
+                                                                        setEditOpened(true);
+                                                                  }}
+                                                            >
                                                                   <EditIcon />
                                                             </ActionIcon>
                                                             <ActionIcon
@@ -170,6 +174,7 @@ export default function TableClientRequests({ rowsData = [], meta = {}, page, on
                                     )}
                               </Table.Tbody>
                         </Table>
+
                   </Table.ScrollContainer>
 
                   {/* Footer */}
@@ -188,6 +193,19 @@ export default function TableClientRequests({ rowsData = [], meta = {}, page, on
                               size="sm"
                         />
                   </div>
+                  {/* Edit Request Modal */}
+                  <EditClientRequestModal
+                        opened={editOpened}
+                        onClose={(updated) => {
+                              setEditOpened(false);
+                              setSelectedRequest(null);
+                              if (updated) {
+                                    // يمكنك إعادة جلب البيانات هنا إذا كنت تستخدم refetch
+                                    // مثلاً: refetch();
+                              }
+                        }}
+                        request={selectedRequest}
+                  />
             </>
       );
 }

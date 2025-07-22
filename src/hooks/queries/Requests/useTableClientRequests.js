@@ -16,7 +16,7 @@ const fetchCompanyKPIs = async (token) => {
 export const useTableClientRequests = () => {
       const { user } = useAuth();
       return useQuery({
-            queryKey: ['RequestsKPIs'],
+            queryKey: ['TableClientRequests'],
             queryFn: () => fetchCompanyKPIs(user.token),
             staleTime: 1000 * 60 * 5,
             cacheTime: 1000 * 60 * 10,

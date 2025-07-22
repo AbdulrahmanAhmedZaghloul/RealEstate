@@ -17,7 +17,7 @@
 }
 
 thead {
-      background-color: #409261;
+      /* background-color: #409261; */
       width: 90%;
       overflow: auto;
 
@@ -149,7 +149,8 @@ thead {
       border-radius: 30px;
       padding: 10px;
       overflow-x: auto;
-      width: 10%;
+            text-align: center;
+      /* width: 10%; */
 }
 
 .currentPage {
@@ -175,7 +176,9 @@ thead {
 }
 
 .tableth {
+      /* width: 30% !important; */
       padding: 10px 3rem;
+            text-align: center;
 }
 
 .tablebody {

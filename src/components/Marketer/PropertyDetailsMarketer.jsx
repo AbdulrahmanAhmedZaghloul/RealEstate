@@ -486,11 +486,11 @@ function PropertyDetailsMarketer() {
                   )}
                 </Group>
 
-                <Box
+                {/* <Box
                   className={classes.colImage}
                   onClick={() =>
                     navigate(
-                      `/dashboard/employee/${listing.employee.employee_id}`
+                      `/dashboard-Marketer`
                     )
                   }
                 >
@@ -518,7 +518,7 @@ function PropertyDetailsMarketer() {
                       </div>
                     </Box>
                   )}
-                </Box>
+                </Box> */}
 
 
               </Grid.Col>
@@ -530,21 +530,21 @@ function PropertyDetailsMarketer() {
         {isMobile ? (
           <Box
             className={classes.BoxImage}
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/dashboard/employee/${listing.employee.employee_id}`);
-            }}
+            // onClick={(e) => {
+            //   e.stopPropagation();
+            //   navigate(`/dashboard-Marketer`);
+            // }}
           >
-            <div className={classes.divImage}>
-              <Avatar src={""} w={80} h={80} alt="" />
+            {/* <div className={classes.divImage}>
+              <Avatar w={60} h={60} src={listing?.marketer?.picture_url} alt={listing.marketer?.name} />
               <span className={classes.spanImage}>
-                {listing.employee?.name}
+                {listing.marketer?.name}
               </span>
             </div>
 
             <div className={classes.TextView}>
               <Text className={classes.View}>View</Text>
-            </div>
+            </div> */}
           </Box>
         ) : (
           ""

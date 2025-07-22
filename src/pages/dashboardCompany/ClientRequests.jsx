@@ -25,6 +25,9 @@ import AddIcon from "../../components/icons/addIcon";
 import Search from "../../components/icons/search";
 import Dropdown from "../../components/icons/dropdown";
 import Notifications from "../../components/company/Notifications";
+import EditIcon from "../../components/icons/edit";
+import DeleteIcon from "../../components/icons/DeleteIcon";
+import RequestsKpi from "../../components/Requests/RequestsKpi";
 
 function ClientRequests() {
       const { t } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
@@ -68,60 +71,10 @@ function ClientRequests() {
 
 
                         <Box p="lg">
-                              {/* Header */}
+                              {/* RequestsKpi */}
 
-                              {/* Stats Cards */}
-                              <Box mb="lg">
-                                    <Grid gutter="md">
-                                          {/* Total Requests */}
-                                          <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
-                                                <Card shadow="sm" padding="lg" radius="md" withBorder>
-                                                      <Text size="lg" fw={500}>
-                                                            Total Requests
-                                                      </Text>
-                                                      <Text size="xl" fw={700}>
-                                                            1,240
-                                                      </Text>
-                                                </Card>
-                                          </Grid.Col>
+                              <RequestsKpi />
 
-                                          {/* Matched */}
-                                          <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
-                                                <Card shadow="sm" padding="lg" radius="md" withBorder>
-                                                      <Text size="lg" fw={500}>
-                                                            Matched
-                                                      </Text>
-                                                      <Text size="xl" fw={700}>
-                                                            1,000
-                                                      </Text>
-                                                </Card>
-                                          </Grid.Col>
-
-                                          {/* Pending */}
-                                          <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
-                                                <Card shadow="sm" padding="lg" radius="md" withBorder>
-                                                      <Text size="lg" fw={500}>
-                                                            Pending
-                                                      </Text>
-                                                      <Text size="xl" fw={700}>
-                                                            240
-                                                      </Text>
-                                                </Card>
-                                          </Grid.Col>
-
-                                          {/* Match Rate */}
-                                          <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
-                                                <Card shadow="sm" padding="lg" radius="md" withBorder>
-                                                      <Text size="lg" fw={500}>
-                                                            Match Rate
-                                                      </Text>
-                                                      <Text size="xl" fw={700}>
-                                                            40%
-                                                      </Text>
-                                                </Card>
-                                          </Grid.Col>
-                                    </Grid>
-                              </Box>
                               {/* Search + Add */}
                               <div className={classes.controls}>
                                     <div className={classes.flexSearch}>
@@ -199,63 +152,60 @@ function ClientRequests() {
                               </div>
 
                               {/* Table */}
-                              {/* <Card withBorder shadow="sm" radius="md"> */}
-                                    <Table.ScrollContainer>
-                                          <Table
+                              <Table.ScrollContainer>
+                                    <Table
+                                          style={{
+                                                border: "1px solid var(--color-white)",
+                                          }}
+                                          verticalSpacing="xs"
+                                          className={classes.tablecontainer}
+                                    >
+
+                                          <Table.Thead
                                                 style={{
-                                                      border: "1px solid var(--color-white)",
-                                                }}
-                                                verticalSpacing="xs"
-                                                className={classes.tablecontainer}
-                                          >
-
-                                                <Table.Thead
-                                                      style={{
-                                                            borderRadius: "20px",
-                                                            border: "1px solid var(--color-border)",
-                                                      }}>
-                                                      <Table.Tr>
-                                                            <th className={classes.tableth}>Client</th>
-                                                            <th className={classes.tableth}>Location</th>
-                                                            <th className={classes.tableth}>Type</th>
-                                                            <th className={classes.tableth}>Budget</th>
-                                                            <th className={classes.tableth}>Area</th>
-                                                            <th className={classes.tableth}>Matches</th>
-                                                            <th className={classes.tableth}>Actions</th>
+                                                      borderRadius: "20px",
+                                                      border: "1px solid var(--color-border)",
+                                                }}>
+                                                <Table.Tr>
+                                                      <th className={classes.tableth}>Client</th>
+                                                      <th className={classes.tableth}>Location</th>
+                                                      <th className={classes.tableth}>Type</th>
+                                                      <th className={classes.tableth}>Budget</th>
+                                                      <th className={classes.tableth}>Area</th>
+                                                      <th className={classes.tableth}>Matches</th>
+                                                      <th className={classes.tableth}>Actions</th>
+                                                </Table.Tr>
+                                          </Table.Thead>
+                                          <Table.Tbody>
+                                                {requests.map((req, index) => (
+                                                      <Table.Tr key={index}>
+                                                            <td>{req.client}</td>
+                                                            <td>{req.location}</td>
+                                                            <td>{req.type}</td>
+                                                            <td>{req.budget}</td>
+                                                            <td>{req.area}</td>
+                                                            <td>{req.matches}</td>
+                                                            <td style={{
+                                                                  textAlign: "center",
+                                                                  display: "flex",
+                                                                  alignItems: "center",
+                                                                  justifyContent: "center",
+                                                                  gap: "10px",
+                                                                  flexWrap: "wrap"
+                                                            }}>
+                                                                  <EditIcon />
+                                                                  <DeleteIcon />
+                                                            </td>
                                                       </Table.Tr>
-                                                </Table.Thead>
-                                                <Table.Tbody
-
-                                                >
-                                                      {requests.map((req, index) => (
-                                                            <Table.Tr key={index}>
-                                                                  <td>{req.client}</td>
-                                                                  <td>{req.location}</td>
-                                                                  <td>{req.type}</td>
-                                                                  <td>{req.budget}</td>
-                                                                  <td>{req.area}</td>
-                                                                  <td>{req.matches}</td>
-                                                                  <td>
-                                                                        <Group spacing="xs">
-                                                                              <ActionIcon color="blue" variant="light">
-                                                                                    {/* <FiEdit size={16} /> */}
-                                                                              </ActionIcon>
-                                                                              <ActionIcon color="red" variant="light">
-                                                                                    {/* <FiTrash2 size={16} /> */}
-                                                                              </ActionIcon>
-                                                                        </Group>
-                                                                  </td>
-                                                            </Table.Tr>
-                                                      ))}
-                                                </Table.Tbody>
+                                                ))}
+                                          </Table.Tbody>
 
 
 
-                                          </Table>
+                                    </Table>
 
-                                    </Table.ScrollContainer>
-                              {/* </Card> */}
-                        </Box>
+                              </Table.ScrollContainer>
+                         </Box>
                   </Card>
 
 

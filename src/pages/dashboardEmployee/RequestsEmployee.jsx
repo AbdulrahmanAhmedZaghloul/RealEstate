@@ -19,7 +19,7 @@ import { useTranslation } from "../../context/LanguageContext";
 import { useQueryClient } from "@tanstack/react-query";
 
 // Component Imports
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import AddPropertyModal from "../../components/modals/addPropertyModal";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { useProperties } from "../../hooks/queries/useProperties";

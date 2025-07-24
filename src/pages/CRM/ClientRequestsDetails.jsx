@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../../api/config";
 import { useAuth } from "../../context/authContext";
 import classes from "../../styles/ClientRequestsDetails.module.css";
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import { Card } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";

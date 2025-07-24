@@ -12,7 +12,7 @@ import EmployeeProperties from "./EmployeeProperties";
 import EditStaffModal from "../modals/editStaffModal";
 import DeleteEmployeeModal from "../modals/deleteEmployeeModal";
 import { BurgerButton } from "../buttons/burgerButton";
-import Notifications from "./Notifications";
+import Notifications from "../Notifications/Notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import { IconEye, IconEyeOff } from "@tabler/icons-react"; // أو أي مكتبة أيقونات مستخدمة
 import EditIcon from "../icons/edit";

@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import classes from "../../styles/analytics.module.css";
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { useTranslation } from "../../context/LanguageContext";
 import TimeFilter from "../../components/TimeFilter";

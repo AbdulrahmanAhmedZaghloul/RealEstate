@@ -5,7 +5,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { Box, Text } from "@mantine/core";
 import { useTranslation } from "../../context/LanguageContext";
 import { useClientRequests } from "../../hooks/queries/Requests/useClientRequests";
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import RequestsKpi from "../../components/Requests/RequestsKpi";
 import TableClientRequests from "../../components/Requests/TableClientRequests";
 

@@ -22,7 +22,7 @@ import classes from "../../styles/realEstates.module.css";
 import AddStaffModal from "../../components/modals/addStaffModal";
 import UpdataStaffModal from "./../../components/modals/editStaffModal_Supervisor";
 import { BurgerButton } from "../../components/buttons/burgerButton";
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import Search from "../../components/icons/search";
 import AddIcon from "../../components/icons/addIcon";

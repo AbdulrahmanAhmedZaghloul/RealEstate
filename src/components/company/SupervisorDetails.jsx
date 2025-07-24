@@ -20,7 +20,7 @@ import axiosInstance from "../../api/config";
 import classes from "../../styles/SupervisorDetails.module.css";
 import { useAuth } from "../../context/authContext";
 import { BurgerButton } from "../buttons/burgerButton";
-import Notifications from "./Notifications";
+import Notifications from "../Notifications/Notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import { IconEye, IconEyeOff } from "@tabler/icons-react"; // أو أي مكتبة أيقونات مستخدمة
 // import DeleteIcon from "../icons/DeleteIcon";

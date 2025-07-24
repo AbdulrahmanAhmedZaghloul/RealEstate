@@ -22,7 +22,7 @@ import {
 import EditEmployeeProfile from "../../components/modals/editEmployeeProfile";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { BurgerButton } from "../../components/buttons/burgerButton";
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "../../context/LanguageContext";
 import { ThemeToggle } from "../../Settings/ThemeToggle";

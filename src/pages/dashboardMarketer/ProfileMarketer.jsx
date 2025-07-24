@@ -17,7 +17,7 @@ import { useState, useEffect, useRef } from "react";
 import classes from "../../styles/profile.module.css";
 import { useDisclosure } from "@mantine/hooks";
 import { useAuth } from "../../context/authContext";
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { ThemeToggle } from "../../Settings/ThemeToggle";
 import { useTranslation } from "../../context/LanguageContext";

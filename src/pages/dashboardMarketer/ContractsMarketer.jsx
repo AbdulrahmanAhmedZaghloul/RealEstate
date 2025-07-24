@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import AddContractsModal from "../../components/modals/addContractsModal";
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { useTranslation } from "../../context/LanguageContext";
 import { usePropertiesContracts } from "../../hooks/queries/usePropertiesContracts";

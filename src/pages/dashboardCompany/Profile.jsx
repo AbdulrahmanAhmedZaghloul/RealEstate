@@ -19,7 +19,7 @@ import { useDisclosure } from "@mantine/hooks";
 import axiosInstance from "../../api/config";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "../../context/authContext";
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import ProfilePlane from "../../components/company/ProfilePlane";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { ThemeToggle } from "../../Settings/ThemeToggle";

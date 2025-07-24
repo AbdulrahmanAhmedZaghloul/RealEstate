@@ -27,7 +27,7 @@ import axiosInstance, { apiUrl } from "../../api/config";
 import { useAuth } from "../../context/authContext";
 import EmployeeProperties from "../company/EmployeeProperties";
 import { BurgerButton } from "../buttons/burgerButton";
-import Notifications from "../company/Notifications";
+import Notifications from "../Notifications/Notifications";
 import { useMediaQuery } from "@mantine/hooks";
 import { useTranslation } from "../../context/LanguageContext";
 import UpdataStaffModal from "../../components/modals/editStaffModal_Supervisor";

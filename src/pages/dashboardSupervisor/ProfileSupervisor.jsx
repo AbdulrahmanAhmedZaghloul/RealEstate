@@ -4,7 +4,7 @@ import axiosInstance, { apiUrl } from "../../api/config";
 // import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import { useMediaQuery } from "@mantine/hooks";
-import Notifications from "../../components/company/Notifications";
+import Notifications from "../../components/Notifications/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { Grid, useMantineColorScheme } from "@mantine/core";
 import { ThemeToggle } from "../../Settings/ThemeToggle";

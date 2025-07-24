@@ -3,7 +3,30 @@
       width: 100%;
       position: relative;
 }
+.tablecontainer {
+      /* border: 1px  var(--color-border) solid; */
+      /* border-radius: 30px; */
+      /* padding: 20px; */
+      overflow-x: auto;
+      text-align: center;
+      /* width: 10%; */
+}
 
+.tableFooter{
+      margin-top: 20px;
+     
+       display: flex;
+       justify-content: center;
+}
+
+.TheaTable{
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+}
+
+.TheaTr td{
+      padding: 0.7rem !important;
+}
 .title {
       font-size: 24px;
       font-weight: 500;
@@ -144,14 +167,6 @@ thead {
       font-weight: 500;
 }
 
-.tablecontainer {
-      border: 1px rgb(232, 232, 232) solid;
-      border-radius: 30px;
-      padding: 10px;
-      overflow-x: auto;
-            text-align: center;
-      /* width: 10%; */
-}
 
 .currentPage {
       border: none;

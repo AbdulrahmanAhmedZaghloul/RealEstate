@@ -1,28 +1,35 @@
-// src/hooks/queries/Requests/useClientRequests.js
+
+
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../../api/config";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../context/authContext"; 
+const fetchClientRequests = async ({ token, page, filters = {} }) => {
+       const params = { page };
 
-/**
- * Fetch paginated client requests + KPIs
- */
-const fetchClientRequests = async ({ token, page }) => {
+       Object.keys(filters).forEach(key => {
+            if (filters[key] !== '' && filters[key] !== null && filters[key] !== undefined) {
+                  params[key] = filters[key];
+            }
+      });
+
       const { data } = await axiosInstance.get("crm", {
             headers: { Authorization: `Bearer ${token}` },
-            params: { page }, // يعتمد على دعم الباك إند لـ ?page=
+            params,  
       });
-      return data; // الاستجابة الكاملة (status + data)
+      return data;
 };
-
-export const useClientRequests = (page = 1) => {
+ 
+export const useClientRequests = (page = 1, filters = {}) => {
       const { user } = useAuth();
 
       return useQuery({
-            queryKey: ["client-requests", page, user?.token],
-            queryFn: () => fetchClientRequests({ token: user.token, page }),
+             queryKey: ["client-requests", page, filters, user?.token],
+            queryFn: () => fetchClientRequests({ token: user.token, page, filters }),
             staleTime: 1000 * 60 * 5,
             cacheTime: 1000 * 60 * 10,
             enabled: !!user?.token,
-            keepPreviousData: true, // مهم للـ pagination عشان ما يفلاشش الجدول
+            keepPreviousData: true,
       });
 };
+
+ 

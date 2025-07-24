@@ -59,8 +59,9 @@ import PublicContractView from "./pages/PublicContractView.jsx";
 import { EmployeeProvider } from "./context/EmployeeContext.jsx";
 import ShareRealEstate from "./pages/ShareRealEstate.jsx";
 import ContactUs from "./pages/ContactUs .jsx";
-import ClientRequests from "./pages/dashboardCompany/ClientRequests.jsx";
-import ClientRequestsDetails from "./pages/dashboardCompany/ClientRequestsDetails.jsx";
+import ClientRequestsDetails from "./pages/dashboardCompany/ClientRequest/ClientRequestsDetails.jsx";
+import ClientRequests from "./pages/dashboardCompany/ClientRequest/ClientRequests.jsx";
+// import ClientRequestsDetails from "./pages/dashboardCompany/ClientRequestsDetails.jsx";
 
 function App() {
   return (

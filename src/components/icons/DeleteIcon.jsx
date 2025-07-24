@@ -2,27 +2,10 @@
 export default function DeleteIcon() {
     return (
         <>
-            <svg
-                width="48"
-                height="48"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <rect
-                    x="0.75"
-                    y="0.75"
-                    width="46.5"
-                    height="46.5"
-                    rx="15.25"
-                    stroke="var(--color-border)"
-                    strokeWidth="1.5"
-                />
-                <path
-                    d="M19 33C18.45 33 17.9793 32.8043 17.588 32.413C17.1967 32.0217 17.0007 31.5507 17 31V18H16V16H21V15H27V16H32V18H31V31C31 31.55 30.8043 32.021 30.413 32.413C30.0217 32.805 29.5507 33.0007 29 33H19ZM29 18H19V31H29V18ZM21 29H23V20H21V29ZM25 29H27V20H25V29Z"
-                    fill="#666666"
-                />
+            <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 18C2.45 18 1.97933 17.8043 1.588 17.413C1.19667 17.0217 1.00067 16.5507 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.8043 17.021 14.413 17.413C14.0217 17.805 13.5507 18.0007 13 18H3ZM13 3H3V16H13V3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z" fill="#666666" />
             </svg>
+
         </>
     )
 }

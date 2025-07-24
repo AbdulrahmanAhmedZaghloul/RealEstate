@@ -1,10 +1,4 @@
-// =============================================================
-// 2) Component: AddClientRequestModal
-// =============================================================
-// Modal يحتوي على حقول الإدخال وإرسال الطلب.
-
-// File: src/components/Requests/AddClientRequestModal.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
       Modal,
       TextInput,
@@ -13,25 +7,27 @@ import {
       Button,
       Group,
       Stack,
-      Text,
 } from "@mantine/core";
+
 import { useForm } from "@mantine/form";
-// import { useTranslation } from "../../context/LanguageContext";
-// import { useCreateClientRequest } from "../../hooks/queries/Requests/useCreateClientRequest";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "../../../context/LanguageContext";
 import { useCreateClientRequest } from "../../../hooks/queries/Requests/useCreateClientRequest";
+import LocationPicker from "../AddProperty/LocationPicker";
 
 export function AddClientRequestModal({ opened, onClose, defaultValues }) {
       const { t } = useTranslation();
-      const { mutate, isLoading, isSuccess, isError, error, data } = useCreateClientRequest();
+      const { mutate, isLoading, isSuccess, isError, error } = useCreateClientRequest();
 
       const form = useForm({
             initialValues: {
                   client_name: defaultValues?.client_name ?? "",
                   client_phone: defaultValues?.client_phone ?? "",
                   location: defaultValues?.location ?? "",
-                  property_type: defaultValues?.property_type ?? "rent", // rent | sale | other?
+                  region_id: defaultValues?.region_id ?? "",
+                  city_id: defaultValues?.city_id ?? "",
+                  district_id: defaultValues?.district_id ?? "",
+                  property_type: defaultValues?.property_type ?? "rent",
                   price_min: defaultValues?.price_min ?? "",
                   price_max: defaultValues?.price_max ?? "",
                   area_min: defaultValues?.area_min ?? "",
@@ -49,8 +45,7 @@ export function AddClientRequestModal({ opened, onClose, defaultValues }) {
             },
       });
 
-      // إشعار عند النجاح / الخطأ
-      useEffect(() => {
+       useEffect(() => {
             if (isSuccess) {
                   notifications.show({
                         title: t.Success ?? "Success",
@@ -63,7 +58,6 @@ export function AddClientRequestModal({ opened, onClose, defaultValues }) {
 
       useEffect(() => {
             if (isError) {
-                  // حاول استخراج رسالة من السيرفر
                   const serverMsg = error?.response?.data?.message || error?.message;
                   notifications.show({
                         title: t.Error ?? "Error",
@@ -73,8 +67,7 @@ export function AddClientRequestModal({ opened, onClose, defaultValues }) {
             }
       }, [isError]);
 
-      const handleSubmit = (values) => {
-            // تحويل القيم الرقمية (Mantine TextInput/NumberInput قد تعيد string)
+       const handleSubmit = (values) => {
             const payload = {
                   ...values,
                   price_min: values.price_min !== "" ? Number(values.price_min) : null,
@@ -86,7 +79,13 @@ export function AddClientRequestModal({ opened, onClose, defaultValues }) {
       };
 
       return (
-            <Modal opened={opened} onClose={onClose} title={t.AddClientRequest ?? "Add Client Request"} centered size="lg">
+            <Modal
+                  opened={opened}
+                  onClose={onClose}
+                  title={t.AddClientRequest ?? "Add Client Request"}
+                  centered
+                  size="lg"
+            >
                   <form onSubmit={form.onSubmit(handleSubmit)}>
                         <Stack>
                               <TextInput
@@ -103,11 +102,20 @@ export function AddClientRequestModal({ opened, onClose, defaultValues }) {
                                     {...form.getInputProps("client_phone")}
                               />
 
-                              <TextInput
-                                    label={t.Location ?? "Location"}
-                                    placeholder="Cairo, ..."
-                                    withAsterisk
-                                    {...form.getInputProps("location")}
+                              {/* Location Picker */}
+                              <LocationPicker
+                                    value={{
+                                          region_id: form.values.region_id,
+                                          city_id: form.values.city_id,
+                                          district_id: form.values.district_id,
+                                    }}
+                                    onChange={(data) => {
+                                          form.setFieldValue("location", data.location);
+                                          form.setFieldValue("region_id", data.region_id);
+                                          form.setFieldValue("city_id", data.city_id);
+                                          form.setFieldValue("district_id", data.district_id);
+                                    }}
+                                    error={form.errors.location}
                               />
 
                               <Select
@@ -169,4 +177,4 @@ export function AddClientRequestModal({ opened, onClose, defaultValues }) {
                   </form>
             </Modal>
       );
-}
+} 

@@ -37,6 +37,7 @@ import EditIcon from "../icons/edit";
 import { useQueryClient } from "@tanstack/react-query";
 import LocationIcon from "../icons/LocationIcon";
 import ShareIcon from "../icons/ShareIcon";
+import PropertyInformation from "../company/PropertyInformation";
 
 function PropertyDetailsSupervisor() {
   const { id } = useParams();
@@ -175,7 +176,7 @@ function PropertyDetailsSupervisor() {
       });
     } catch (err) {
       console.log(err);
-      
+
       notifications.show({
         title: t.Error,
         message: err.response?.data?.message || t.FailedToDeleteProperty,
@@ -375,54 +376,7 @@ function PropertyDetailsSupervisor() {
                         {listing?.down_payment} % {t.DownPayment}
                       </Text>
                       <div className={classes.UpdataShare}>
-                        {/* {listing?.selling_status === 0 && (
-                          <>
-                            <span onClick={open}>
-                              <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M7.274 5.9L8.086 19.548C8.09823 19.7514 8.18761 19.9425 8.3359 20.0822C8.4842 
-                                  20.222 8.68023 20.2999 8.884 20.3H16.116C16.3198 20.2999 16.5158 20.222 16.6641 
-                                  20.0822C16.8124 19.9425 16.9018 19.7514 16.914 19.548L17.726 5.9H7.274ZM18.929 
-                                  5.9L18.112 19.619C18.0817 20.1278 17.8582 20.6059 17.4872 20.9555C17.1162 21.3051 
-                                  16.6258 21.4999 16.116 21.5H8.884C8.37425 21.4999 7.88377 21.3051 7.51279 
-                                  20.9555C7.14182 20.6059 6.91833 20.1278 6.888 19.619L6.071 5.9H4V5.2C4 5.06739 
-                                  4.05268 4.94021 4.14645 4.84645C4.24021 4.75268 4.36739 4.7 4.5 4.7H20.5C20.6326 
-                                  4.7 20.7598 4.75268 20.8536 4.84645C20.9473 4.94021 21 5.06739 21 
-                                  5.2V5.9H18.929ZM14.5 2.5C14.6326 2.5 14.7598 2.55268 14.8536 2.64645C14.9473 
-                                  2.74021 15 2.86739 15 3V3.7H10V3C10 2.86739 10.0527 2.74021 10.1464 2.64645C10.2402 2.55268 10.3674 2.5 10.5 2.5H14.5ZM10 8.5H11.2L11.7 17.5H10.5L10 8.5ZM13.8 8.5H15L14.5 17.5H13.3L13.8 8.5Z"
-                                  fill="#666666"
-                                />
-                              </svg>
-                            </span>
 
-                            <svg
-                              onClick={openEdit}
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              // fill="#666666"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                               <path
-                                d="M15 5.99994L18 8.99994M13 19.9999H21M5 15.9999L4 19.9999L8 18.9999L19.586 7.41394C19.9609 
-                                7.03889 20.1716 6.53027 20.1716 5.99994C20.1716 5.46961 19.9609 4.961 19.586 4.58594L19.414 
-                                4.41394C19.0389 4.039 18.5303 3.82837 18 3.82837C17.4697 3.82837 16.9611 4.039 16.586 4.41394L5 
-                                15.9999Z"
-                                stroke="#666666"
-                                stroke-width="1.3"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                            </svg>
-                          </>
-                        )} */}
                         <span onClick={handleShareProperty}>
                           <ShareIcon />
                         </span>
@@ -549,6 +503,22 @@ function PropertyDetailsSupervisor() {
                   }}
                 >
                   <Text className={classes.Description} fw={600}>
+                    Property Information
+                  </Text>
+                  <div>
+                    <PropertyInformation property={listing} /> {/* Use the component here */}
+
+                  </div>
+                </Stack>
+                {/* <Stack
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "start",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Text className={classes.Description} fw={600}>
                     {t.Status}
                   </Text>
                   <Text className={classes.listing}>
@@ -556,7 +526,9 @@ function PropertyDetailsSupervisor() {
                       ? "Sold"
                       : listing?.listing_type}
                   </Text>
-                </Stack>
+                </Stack> */}
+
+
               </Grid.Col>
               <Grid.Col span={isMobile ? 12 : 5}>
                 <Group
@@ -589,7 +561,7 @@ function PropertyDetailsSupervisor() {
                 <Box
                   className={classes.colImage}
                   onClick={() =>
-                       navigate(
+                    navigate(
                       `/dashboard-supervisor/Team/${listing.employee.employee_id}`
                     )
                   }

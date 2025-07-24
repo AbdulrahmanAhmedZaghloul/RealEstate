@@ -6,7 +6,7 @@ import BedsIcon from "../icons/BedsIcon";
 import BathsIcon from "../icons/BathsIcon";
 import Area from "../icons/area";
 import FloorsIcon from "../icons/FloorsIcon";
-import CalendarIcon from "../icons/calendarIcon";
+import CalendarIcon from "../icons/CalendarIcon";
 import Purpose from "../icons/Purpose";
 // import { CategoryIcon, BedsIcon, BathsIcon, Area, FloorsIcon } from "../icons"; // Assuming you have these icons
 

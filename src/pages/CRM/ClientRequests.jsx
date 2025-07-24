@@ -3,17 +3,17 @@
 // src/pages/ClientRequests/ClientRequestsPage.jsx
 import React, { useCallback, useMemo, useState } from "react";
 import { Box, Text } from "@mantine/core";
-import { useTranslation } from "../../../context/LanguageContext";
-import { useClientRequests } from "../../../hooks/queries/Requests/useClientRequests";
-import Notifications from "../../../components/company/Notifications";
-import RequestsKpi from "../../../components/Requests/RequestsKpi";
-import TableClientRequests from "../../../components/Requests/TableClientRequests";
+import { useTranslation } from "../../context/LanguageContext";
+import { useClientRequests } from "../../hooks/queries/Requests/useClientRequests";
+import Notifications from "../../components/company/Notifications";
+import RequestsKpi from "../../components/Requests/RequestsKpi";
+import TableClientRequests from "../../components/Requests/TableClientRequests";
 
 export default function ClientRequests() {
       const { t } = useTranslation();
       const [page, setPage] = useState(1);
 
-       const [filters, setFilters] = useState({
+      const [filters, setFilters] = useState({
             location: '',
             client_name: '',
             property_type: '',
@@ -25,9 +25,9 @@ export default function ClientRequests() {
             status: '',
       });
 
-       const [appliedFilters, setAppliedFilters] = useState({});
+      const [appliedFilters, setAppliedFilters] = useState({});
       const handleClearAllFilters = useCallback(() => {
-             setFilters({
+            setFilters({
                   location: '',
                   client_name: '',
                   property_type: '',
@@ -38,18 +38,18 @@ export default function ClientRequests() {
                   area_max: '',
                   status: '',
             });
-             setAppliedFilters({});
-             setPage(1);
+            setAppliedFilters({});
+            setPage(1);
       }, []);
-       const handleFilterChange = useCallback((name, value) => {
+      const handleFilterChange = useCallback((name, value) => {
             setFilters(prev => ({ ...prev, [name]: value }));
-             if (name === 'client_name') {
-                   const newFilters = { ...filters, [name]: value };
-                   const processed = processFilters(newFilters);
-                   setAppliedFilters(processed);
-                   setPage(1);
-             }
-       }, [filters]);
+            if (name === 'client_name') {
+                  const newFilters = { ...filters, [name]: value };
+                  const processed = processFilters(newFilters);
+                  setAppliedFilters(processed);
+                  setPage(1);
+            }
+      }, [filters]);
 
       const processFilters = (filters) => {
             const processed = { ...filters };
@@ -57,17 +57,17 @@ export default function ClientRequests() {
             return processed;
       };
 
-       const handleClearAppliedFilters = useCallback(() => {
+      const handleClearAppliedFilters = useCallback(() => {
             setAppliedFilters({});
-            setPage(1); 
+            setPage(1);
       }, []);
- 
+
       const handleApplyFilters = useCallback(() => {
             const processed = { ...filters };
-             if (processed.client_phone !== '') {
+            if (processed.client_phone !== '') {
                   const numVal = parseFloat(processed.client_phone);
                   if (!isNaN(numVal)) processed.client_phone = numVal;
-                  else delete processed.client_phone; 
+                  else delete processed.client_phone;
             } else {
                   delete processed.client_phone;
             }
@@ -104,27 +104,31 @@ export default function ClientRequests() {
                   delete processed.area_max;
             }
 
-             Object.keys(processed).forEach(key => {
+            Object.keys(processed).forEach(key => {
                   if (processed[key] === '' || processed[key] === null || processed[key] === undefined) {
                         delete processed[key];
                   }
             });
 
-            setAppliedFilters(processed);  
-            setPage(1); 
-      }, [filters]);  
+            setAppliedFilters(processed);
+            setPage(1);
+      }, [filters]);
 
- 
-      const filterParamsForQuery = useMemo(() => { 
-            const params = { ...appliedFilters }; 
+
+      const filterParamsForQuery = useMemo(() => {
+            const params = { ...appliedFilters };
             return params;
-      }, [appliedFilters]);  
+      }, [appliedFilters]);
 
-       const { data, isLoading, isError, isFetching } = useClientRequests(page, filterParamsForQuery);
-    
+      const { data, isLoading, isError, isFetching } = useClientRequests(page, filterParamsForQuery);
+
 
       if (isLoading && !isFetching) return <Text>{t.Loading ?? "Loading..."}</Text>; // ✅ تمييز التحميل الأولي
       if (isError) return <Text color="red">{t.ErrorLoading ?? "Error loading data."}</Text>;
+      console.log(data);
+      console.log(isLoading);
+      console.log(isError);
+      console.log(isFetching);
 
       const kpis = data?.data?.kpis;
       const clientRequests = data?.data?.client_requests;
@@ -176,4 +180,3 @@ export default function ClientRequests() {
             </Box>
       );
 }
- 

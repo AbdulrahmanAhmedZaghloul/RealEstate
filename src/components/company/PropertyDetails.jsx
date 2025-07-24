@@ -37,6 +37,7 @@ import EditIcon from "../icons/edit";
 import { useQueryClient } from "@tanstack/react-query";
 import LocationIcon from "../icons/LocationIcon";
 import ShareIcon from "../icons/ShareIcon";
+import PropertyInformation from "./PropertyInformation";
 
 function PropertyDetails() {
   const { id } = useParams();
@@ -53,8 +54,7 @@ function PropertyDetails() {
   const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
-  const { colorScheme } = useMantineColorScheme();
-  const { t } = useTranslation();
+   const { t } = useTranslation();
 
   const [shareOpened, { open: openShare, close: closeShare }] =
     useDisclosure(false);
@@ -75,6 +75,8 @@ function PropertyDetails() {
       const { data } = await axiosInstance.get(`listings/employee/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
+      console.log(data);
+      
       setListing(data?.data.listing);
     } catch (err) {
       notifications.show({
@@ -283,8 +285,7 @@ function PropertyDetails() {
           <Grid.Col span={12} style={{ marginBottom: "1rem" }}>
             <div className={classes.imageContainer}>
               <>
-                {/* حاوية الصورة الرئيسية */}
-                <div className={classes.ImageContainerBig}>
+                 <div className={classes.ImageContainerBig}>
                   {listing.images?.find((image) => image.is_primary)
                     ?.image_url && (
                       <>
@@ -326,11 +327,10 @@ function PropertyDetails() {
                     )}
                 </div>
 
-                {/* حاوية الصور الإضافية */}
-                <div className={classes.widthImageContainer}>
+                 <div className={classes.widthImageContainer}>
                   {listing.images
                     ?.filter((image) => !image.is_primary)
-                    .slice(0, 2) // عرض أول صورتين فقط
+                    .slice(0, 2) // Show only the first two images
                     .map((image, index) => (
                       <img
                         style={{
@@ -539,7 +539,25 @@ function PropertyDetails() {
                     )}
                   </Text>
                 </Stack>
+
+
                 <Stack
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "start",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Text className={classes.Description} fw={600}>
+                    Property Information
+                  </Text>
+                  <div>
+                    <PropertyInformation property={listing} /> {/* Use the component here */}
+
+                  </div>
+                </Stack>
+                {/* <Stack
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -555,7 +573,7 @@ function PropertyDetails() {
                       ? "Sold"
                       : listing?.listing_type}
                   </Text>
-                </Stack>
+                </Stack> */}
               </Grid.Col>
               <Grid.Col span={isMobile ? 12 : 5}>
                 <Group
@@ -659,6 +677,7 @@ function PropertyDetails() {
             ) : null}
           </Grid>
         </Text>
+        
         {/* <Divider my="sm" /> */}
         <Stack gap="xs" style={{ marginTop: "20px", padding: "0px 10px" }}>
           <Text className={classes.Locationpom}>{t.Location}</Text>
@@ -683,10 +702,12 @@ function PropertyDetails() {
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </Stack>
+
       </Card>
 
 
       {/* Share Contract Modal */}
+
       <Modal
         opened={shareOpened}
         onClose={closeShare}
@@ -768,6 +789,7 @@ function PropertyDetails() {
       </Modal>
 
       {/*  Image count */}
+      
       <Modal
         opened={opened1}
         onClose={close1}
@@ -873,6 +895,7 @@ function PropertyDetails() {
         )}
       </Modal>
 
+      
       <Modal
         opened={opened}
         onClose={close}

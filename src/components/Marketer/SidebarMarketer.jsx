@@ -117,6 +117,28 @@ export default function SidebarMarketer() {
       ),
     },
     
+
+    {
+      link: "/dashboard-Marketer/ClientRequests",
+      label: t["ClientRequests"],
+      // label: "Properties",
+      icon: (
+        <img
+          src={
+            active === "ClientRequests" && colorScheme === "light"
+              ? PropertiesActive
+              : active === "ClientRequests" && colorScheme === "dark"
+                ? PropertiesActiveDark
+                : Properties
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
+    
     {
       link: "/dashboard-Marketer/ContractsMarketer",
       label: t["Contracts"],

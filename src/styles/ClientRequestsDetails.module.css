@@ -12,6 +12,12 @@
       border-radius: 8px;
 }
 
+
+.InfoHeader{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+}
 .Information {
       width: 90%;
       margin: auto;

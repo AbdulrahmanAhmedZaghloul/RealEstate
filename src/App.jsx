@@ -59,8 +59,8 @@ import PublicContractView from "./pages/PublicContractView.jsx";
 import { EmployeeProvider } from "./context/EmployeeContext.jsx";
 import ShareRealEstate from "./pages/ShareRealEstate.jsx";
 import ContactUs from "./pages/ContactUs .jsx";
-import ClientRequestsDetails from "./pages/dashboardCompany/ClientRequest/ClientRequestsDetails.jsx";
-import ClientRequests from "./pages/dashboardCompany/ClientRequest/ClientRequests.jsx";
+import ClientRequestsDetails from "./pages/CRM/ClientRequestsDetails.jsx";
+import ClientRequests from "./pages/CRM/ClientRequests.jsx";
 // import ClientRequestsDetails from "./pages/dashboardCompany/ClientRequestsDetails.jsx";
 
 function App() {
@@ -183,6 +183,9 @@ function App() {
                     path="ContractDetailsMarketer/:id"
                     element={<ContractDetailsMarketer />}
                   />
+
+                  <Route path="ClientRequests" element={<ClientRequests />} />
+                  <Route path="ClientRequestsDetails/:id" element={<ClientRequestsDetails />} />
                 </Route>
 
                 {/* Supervisor Routes */}
@@ -214,6 +217,9 @@ function App() {
                     path="Properties/:id"
                     element={<PropertyDetailsSupervisor />}
                   />
+
+                  <Route path="ClientRequests" element={<ClientRequests />} />
+                  <Route path="ClientRequestsDetails/:id" element={<ClientRequestsDetails />} />
                 </Route>
 
                 {/* Employee Routes */}
@@ -228,6 +234,9 @@ function App() {
                   <Route index element={<ProfileEmployee />} />
                   <Route path="Properties" element={<PropertiesEmployee />} />
                   <Route path="Requests" element={<RequestsEmployee />} />
+
+                  <Route path="ClientRequests" element={<ClientRequests />} />
+                  <Route path="ClientRequestsDetails/:id" element={<ClientRequestsDetails />} />
                   <Route
                     path="Properties/:id"
                     element={<PropertyDetailsEmployee />}

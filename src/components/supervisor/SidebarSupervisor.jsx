@@ -86,6 +86,20 @@ export default function SidebarSupervisor() {
       ),
     },
     {
+      link: "/dashboard-supervisor/ClientRequests",
+      label: t["ClientRequests"],
+      icon: (
+        <img
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+          src={active === "ClientRequests" ? StaffActive : Staff}
+          className={classes.linkIcon}
+        />
+      ),
+    },
+    
+    {
       link: "/dashboard-supervisor/Team",
       label: t["Team"],
       icon: (

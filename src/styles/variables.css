@@ -1,6 +1,14 @@
 @import "/node_modules/@abdulrysr/saudi-riyal-new-symbol-font/style.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+/* styles.css */
+.property-information {
+  font-size: 14px;
+  line-height: 1.5;
+}
 
+.property-information .mantine-Text {
+  margin-bottom: 5px;
+}
 :root {
   --color-1: #6e62e5;
   --color-2: #1b2559;

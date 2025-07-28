@@ -64,9 +64,10 @@ export default function SidebarSupervisor() {
       link: "/dashboard-supervisor/Properties",
       label: t["Properties"],
       icon: (
-        <img style={{
-          [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
-        }}
+        <img
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
           src={active === "Properties" ? PropertiesActive : Properties}
           className={classes.linkIcon}
         />
@@ -85,6 +86,21 @@ export default function SidebarSupervisor() {
         />
       ),
     },
+
+    {
+      link: "/dashboard-supervisor/Chat",
+      label: t["Chat"],
+      icon: (
+        <img
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+          src={active === "Chat" ? StaffActive : Staff}
+          className={classes.linkIcon}
+        />
+      ),
+    },
+
     {
       link: "/dashboard-supervisor/ClientRequests",
       label: t["ClientRequests"],
@@ -98,7 +114,7 @@ export default function SidebarSupervisor() {
         />
       ),
     },
-    
+
     {
       link: "/dashboard-supervisor/Team",
       label: t["Team"],

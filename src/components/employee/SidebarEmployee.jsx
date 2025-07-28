@@ -71,6 +71,19 @@ export default function SidebarEmployee() {
       ),
     },
     {
+      link: "/dashboard-employee/Chat",
+      label: t["Chat"],
+      icon: (
+        <img
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+          src={active === "Chat" ? TransactionsActive : Transactions}
+          className={classes.linkIcon}
+        />
+      ),
+    },
+    {
       link: "/dashboard-employee/ClientRequests",
       label: t["ClientRequests"],
       icon: (

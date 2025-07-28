@@ -155,6 +155,33 @@ export default function Sidebar() {
       ),
     },
 
+
+
+    {
+      link: "/dashboard/Chat",
+      label: t["Chat"],
+      // label: "Profile",
+      icon: (
+        <img
+          src={
+            active === "Chat" && colorScheme === "light"
+              ? ProfileActive
+              : active === "Chat" && colorScheme === "dark"
+                ? ProfileActiveDark
+                : Profile
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
+
+
+
+
+    
     {
       link: "/dashboard/ClientRequests",
       label: t["ClientRequests"],
@@ -175,6 +202,8 @@ export default function Sidebar() {
         />
       ),
     },
+
+
 
     {
       link: "/dashboard/Contracts",

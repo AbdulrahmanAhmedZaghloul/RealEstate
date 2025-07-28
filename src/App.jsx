@@ -61,6 +61,7 @@ import ShareRealEstate from "./pages/ShareRealEstate.jsx";
 import ContactUs from "./pages/ContactUs .jsx";
 import ClientRequestsDetails from "./pages/CRM/ClientRequestsDetails.jsx";
 import ClientRequests from "./pages/CRM/ClientRequests.jsx";
+import Chat from "./pages/Chat/ChatLayout.jsx";
 // import ClientRequestsDetails from "./pages/dashboardCompany/ClientRequestsDetails.jsx";
 
 function App() {
@@ -141,11 +142,18 @@ function App() {
                   <Route path="Categories" element={<Categories />} />
                   <Route path="Transactions" element={<Transactions />} />
                   <Route path="employee/:id" element={<EmployeeDetails />} />
-                  <Route path="supervisor/:id" element={<SupervisorDetails />} />
+                  <Route
+                    path="supervisor/:id"
+                    element={<SupervisorDetails />}
+                  />
                   <Route path="Properties/:id" element={<PropertyDetails />} />
                   <Route path="Properties" element={<Properties />} />
+                  <Route path="Chat" element={<Chat />} />
                   <Route path="ClientRequests" element={<ClientRequests />} />
-                  <Route path="ClientRequestsDetails/:id" element={<ClientRequestsDetails />} />
+                  <Route
+                    path="ClientRequestsDetails/:id"
+                    element={<ClientRequestsDetails />}
+                  />
                   <Route path="Contracts/:id" element={<ContractDetails />} />
                 </Route>
 
@@ -183,9 +191,13 @@ function App() {
                     path="ContractDetailsMarketer/:id"
                     element={<ContractDetailsMarketer />}
                   />
+                  <Route path="Chat" element={<Chat />} />
 
                   <Route path="ClientRequests" element={<ClientRequests />} />
-                  <Route path="ClientRequestsDetails/:id" element={<ClientRequestsDetails />} />
+                  <Route
+                    path="ClientRequestsDetails/:id"
+                    element={<ClientRequestsDetails />}
+                  />
                 </Route>
 
                 {/* Supervisor Routes */}
@@ -218,8 +230,13 @@ function App() {
                     element={<PropertyDetailsSupervisor />}
                   />
 
+                  <Route path="Chat" element={<Chat />} />
+
                   <Route path="ClientRequests" element={<ClientRequests />} />
-                  <Route path="ClientRequestsDetails/:id" element={<ClientRequestsDetails />} />
+                  <Route
+                    path="ClientRequestsDetails/:id"
+                    element={<ClientRequestsDetails />}
+                  />
                 </Route>
 
                 {/* Employee Routes */}
@@ -234,9 +251,13 @@ function App() {
                   <Route index element={<ProfileEmployee />} />
                   <Route path="Properties" element={<PropertiesEmployee />} />
                   <Route path="Requests" element={<RequestsEmployee />} />
+                  <Route path="Chat" element={<Chat />} />
 
                   <Route path="ClientRequests" element={<ClientRequests />} />
-                  <Route path="ClientRequestsDetails/:id" element={<ClientRequestsDetails />} />
+                  <Route
+                    path="ClientRequestsDetails/:id"
+                    element={<ClientRequestsDetails />}
+                  />
                   <Route
                     path="Properties/:id"
                     element={<PropertyDetailsEmployee />}

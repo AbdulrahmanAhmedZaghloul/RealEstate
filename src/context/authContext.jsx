@@ -72,11 +72,13 @@ export const AuthProvider = ({ children }) => {
     const token = sessionStorage.getItem("token")
       ? sessionStorage.getItem("token")
       : localStorage.getItem("token");
-    return await axiosInstance
-      .get("stripe/subscriptions/current", {
+    return await axiosInstance.get("stripe/subscriptions/current", {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then(() => {
+      .then((res) => {
+        console.log(res);
+        console.log(token);
+        
         return true;
       })
       .catch((err) => {

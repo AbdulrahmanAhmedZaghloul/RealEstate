@@ -85,8 +85,8 @@ export default function SidebarMarketer() {
             active === "Analytics" && colorScheme === "light"
               ? AnalyticsActive
               : active === "Analytics" && colorScheme === "dark"
-                ? AnalyticsActiveDark
-                : Analytics
+              ? AnalyticsActiveDark
+              : Analytics
           }
           className={classes.linkIcon}
           style={{
@@ -106,8 +106,8 @@ export default function SidebarMarketer() {
             active === "Properties" && colorScheme === "light"
               ? PropertiesActive
               : active === "Properties" && colorScheme === "dark"
-                ? PropertiesActiveDark
-                : Properties
+              ? PropertiesActiveDark
+              : Properties
           }
           className={classes.linkIcon}
           style={{
@@ -116,7 +116,27 @@ export default function SidebarMarketer() {
         />
       ),
     },
-    
+
+    {
+      link: "/dashboard-Marketer/Chat",
+      label: t["Chat"],
+      // label: "Properties",
+      icon: (
+        <img
+          src={
+            active === "Chat" && colorScheme === "light"
+              ? PropertiesActive
+              : active === "Chat" && colorScheme === "dark"
+              ? PropertiesActiveDark
+              : Properties
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
 
     {
       link: "/dashboard-Marketer/ClientRequests",
@@ -128,8 +148,8 @@ export default function SidebarMarketer() {
             active === "ClientRequests" && colorScheme === "light"
               ? PropertiesActive
               : active === "ClientRequests" && colorScheme === "dark"
-                ? PropertiesActiveDark
-                : Properties
+              ? PropertiesActiveDark
+              : Properties
           }
           className={classes.linkIcon}
           style={{
@@ -138,7 +158,7 @@ export default function SidebarMarketer() {
         />
       ),
     },
-    
+
     {
       link: "/dashboard-Marketer/ContractsMarketer",
       label: t["Contracts"],
@@ -149,8 +169,8 @@ export default function SidebarMarketer() {
             active === "Contracts" && colorScheme === "light"
               ? ContractsActive
               : active === "Contracts" && colorScheme === "dark"
-                ? ContractsActiveDark
-                : Contracts
+              ? ContractsActiveDark
+              : Contracts
           }
           className={classes.linkIcon}
           style={{
@@ -170,8 +190,8 @@ export default function SidebarMarketer() {
             active === "Profile" && colorScheme === "light"
               ? ProfileActive
               : active === "Profile" && colorScheme === "dark"
-                ? ProfileActiveDark
-                : Profile
+              ? ProfileActiveDark
+              : Profile
           }
           className={classes.linkIcon}
           style={{

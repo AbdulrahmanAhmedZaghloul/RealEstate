@@ -1,0 +1,26 @@
+.title{
+      color: var(--color-3);
+      font-size: 1.3rem;
+      font-weight: 700;
+      font-family: Poppins;
+}
+
+.divSearch {
+      position: relative;
+      display: flex;
+      align-items: center;
+}
+
+.divSearch svg {
+      position: absolute;
+      left: 16px;
+}
+.search {
+      width: 289px;
+      height: 48px;
+      border-radius: 15px;
+      border: 1.5px solid var(--color-border);
+      padding: 0 14px;
+      padding-left: 56px;
+      background-color: var(--color-7);
+}

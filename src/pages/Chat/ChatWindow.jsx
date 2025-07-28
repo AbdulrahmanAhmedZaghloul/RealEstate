@@ -87,11 +87,11 @@
 
 //   return (
 //     <Box
-//       style={{
-//         display: "flex",
-//         flexDirection: "column",
-//         height: "95vh",
-//       }}
+      // style={{
+      //   display: "flex",
+      //   flexDirection: "column",
+      //   height: "95vh",
+      // }}
 //     >
 //       <Box
 //         p="md"
@@ -301,7 +301,13 @@ export default function ChatWindow({ userid, onBack }) {
   }
 
   return (
-    <Box style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <Box
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "95vh",
+      }}
+    >
       <Box
         p="md"
         style={{
@@ -319,41 +325,34 @@ export default function ChatWindow({ userid, onBack }) {
       </Box>
 
       <ScrollArea style={{ flex: 1, padding: "16px" }} viewportRef={scrollRef}>
-        {/* {loading ? (
-          <MantineText>Loading messages...</MantineText>
-        ) : messages.length === 0 ? (
-          <MantineText color="dimmed">
-            No messages yet. Start the conversation!
-          </MantineText>
-        ) : ( */}
-       {   messages.map((msg) => (
-            <Box
-              key={msg.id}
+   
+        {messages.map((msg) => (
+          <Box
+            key={msg.id}
+            style={{
+              alignSelf: msg.fromMe ? "flex-end" : "flex-start",
+              backgroundColor: msg.fromMe ? "#735BF2" : "#f1f1f1",
+              color: msg.fromMe ? "white" : "black",
+              borderRadius: "20px",
+              padding: "10px 16px",
+              marginBottom: "10px",
+              maxWidth: "70%",
+              wordBreak: "break-word",
+            }}
+          >
+            {msg.text}
+            <MantineText
+              size="xs"
+              color="dimmed"
               style={{
-                alignSelf: msg.fromMe ? "flex-end" : "flex-start",
-                backgroundColor: msg.fromMe ? "#735BF2" : "#f1f1f1",
-                color: msg.fromMe ? "white" : "black",
-                borderRadius: "20px",
-                padding: "10px 16px",
-                marginBottom: "10px",
-                maxWidth: "70%",
-                wordBreak: "break-word",
+                textAlign: msg.fromMe ? "right" : "left",
+                marginTop: "4px",
               }}
             >
-              {msg.text}
-              <MantineText
-                size="xs"
-                color="dimmed"
-                style={{
-                  textAlign: msg.fromMe ? "right" : "left",
-                  marginTop: "4px",
-                }}
-              >
-                {msg.sentAt}
-              </MantineText>
-            </Box>
-          ))
-        }
+              {msg.sentAt}
+            </MantineText>
+          </Box>
+        ))}
       </ScrollArea>
 
       <Box

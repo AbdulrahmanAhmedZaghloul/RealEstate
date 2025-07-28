@@ -49,9 +49,10 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.getItem("token")
           ? (sessionStorage.removeItem("token"),
             sessionStorage.removeItem("role"))
-          : (localStorage.removeItem("token"), localStorage.removeItem("role"));
-        // localStorage.clear()
-        // sessionStorage.clear()
+          : (localStorage.removeItem("token"), 
+          localStorage.removeItem("role"));
+        localStorage.clear()
+        sessionStorage.clear()
         setUser(null);
         navigate("/");
         notifications.show({
@@ -72,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       ? sessionStorage.getItem("token")
       : localStorage.getItem("token");
     return await axiosInstance
-      .get("subscriptions/current", {
+      .get("stripe/subscriptions/current", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {

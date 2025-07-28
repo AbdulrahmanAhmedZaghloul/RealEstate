@@ -9,7 +9,9 @@ import {
   Group,
   Button,
   Text,
-  ActionIcon, // ✅ أضف ActionIcon
+  ActionIcon,
+  Grid,
+  GridCol, // ✅ أضف ActionIcon
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import axiosInstance from "../../../api/config";
@@ -133,61 +135,74 @@ export function EditClientRequestModal({ opened, onClose, request }) {
       overlayProps={{ opacity: 0.55, blur: 3 }}
     >
       <Stack gap="md">
-        <TextInput
-          label="Client Name"
-          placeholder="Enter client name"
-          value={formData.client_name}
-          onChange={(e) =>
-            setFormData({ ...formData, client_name: e.currentTarget.value })
-          }
-          error={errors.client_name}
-          required
-        />
-        <TextInput
-          label="Phone"
-          placeholder="5XX XXX XXX"
-          value={formData.client_phone}
-          onChange={(e) => {
-            let input = e.target.value;
-            // إزالة كل شيء غير أرقام
-            const digitsOnly = input.replace(/\D/g, "");
-            // إذا لم يبدأ بـ +966، نضيفه
-            if (!digitsOnly.startsWith("966") && digitsOnly.length >= 3) {
-              const cleaned = "+966" + digitsOnly.slice(3, 12);
-              setFormData({ ...formData, client_phone: cleaned });
-              return;
-            }
-            // لو أقل من 3 أرقام، نعيده إلى +966
-            if (digitsOnly.length < 3) {
-              setFormData({ ...formData, client_phone: "+966" });
-              return;
-            }
-            // تنسيق الرقم بمسافات
-            let formattedNumber = "+966";
-            const phoneDigits = digitsOnly.slice(3); // الأرقام بعد +966
-            if (phoneDigits.length > 0) formattedNumber += " " + phoneDigits.slice(0, 3);
-            if (phoneDigits.length > 3) formattedNumber += " " + phoneDigits.slice(3, 6);
-            if (phoneDigits.length > 6) formattedNumber += " " + phoneDigits.slice(6, 9);
-            setFormData({ ...formData, client_phone: formattedNumber });
-          }}
-          onFocus={() => {
-            if (!formData.client_phone || !formData.client_phone.startsWith("+966")) {
-              setFormData({ ...formData, client_phone: "+966" });
-            }
-          }}
-          leftSection={
-            <img
-              src="https://flagcdn.com/w20/sa.png"
-              alt="Saudi Arabia"
-              width={20}
-              height={20}
+        <Grid>
+          <GridCol span={{ base: 12, lg: 6, md: 6, sm: 6 }}>
+            <TextInput
+              label="Client Name"
+              placeholder="Enter client name"
+              value={formData.client_name}
+              onChange={(e) =>
+                setFormData({ ...formData, client_name: e.currentTarget.value })
+              }
+              error={errors.client_name}
+              required
             />
-          }
-          leftSectionPointerEvents="none"
-          styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-          error={errors.client_phone}
-          required
-        />
+          </GridCol>
+          <GridCol span={{ base: 12, lg: 6, md: 6, sm: 6 }}>
+
+            <TextInput
+              label="Phone"
+              placeholder="5XX XXX XXX"
+              value={formData.client_phone}
+              onChange={(e) => {
+                let input = e.target.value;
+                // إزالة كل شيء غير أرقام
+                const digitsOnly = input.replace(/\D/g, "");
+                // إذا لم يبدأ بـ +966، نضيفه
+                if (!digitsOnly.startsWith("966") && digitsOnly.length >= 3) {
+                  const cleaned = "+966" + digitsOnly.slice(3, 12);
+                  setFormData({ ...formData, client_phone: cleaned });
+                  return;
+                }
+                // لو أقل من 3 أرقام، نعيده إلى +966
+                if (digitsOnly.length < 3) {
+                  setFormData({ ...formData, client_phone: "+966" });
+                  return;
+                }
+                // تنسيق الرقم بمسافات
+                let formattedNumber = "+966";
+                const phoneDigits = digitsOnly.slice(3); // الأرقام بعد +966
+                if (phoneDigits.length > 0) formattedNumber += " " + phoneDigits.slice(0, 3);
+                if (phoneDigits.length > 3) formattedNumber += " " + phoneDigits.slice(3, 6);
+                if (phoneDigits.length > 6) formattedNumber += " " + phoneDigits.slice(6, 9);
+                setFormData({ ...formData, client_phone: formattedNumber });
+              }}
+              onFocus={() => {
+                if (!formData.client_phone || !formData.client_phone.startsWith("+966")) {
+                  setFormData({ ...formData, client_phone: "+966" });
+                }
+              }}
+              leftSection={
+                <img
+                  src="https://flagcdn.com/w20/sa.png"
+                  alt="Saudi Arabia"
+                  width={20}
+                  height={20}
+                />
+              }
+              leftSectionPointerEvents="none"
+              styles={{
+                   width : "100%",
+                // input: { width: 289, height: 48 },
+                // wrapper: { width: 289 }
+              }
+              }
+              error={errors.client_phone}
+              required
+            />
+          </GridCol>
+        </Grid>
+
 
         {/* ✅ قسم الموقع الجديد */}
         <div>
@@ -248,7 +263,7 @@ export function EditClientRequestModal({ opened, onClose, request }) {
             </>
           ) : (
             // ✅ عرض حقل نصي فقط إذا لم يكن المستخدم بيشتغل على الموقع
-            <Group align="center" grow> {/* Group to keep items aligned */}
+            <Group align="start" > {/* Group to keep items aligned */}
               <TextInput
                 value={formData.location || "No location selected"} // عرض اسم الموقع أو رسالة
                 readOnly // جعل الحقل للقراءة فقط
@@ -258,8 +273,10 @@ export function EditClientRequestModal({ opened, onClose, request }) {
               />
               <ActionIcon
                 onClick={() => setIsEditingLocation(true)} // ✅ تشغيل وضع تحرير الموقع
-                variant="light"
-                color="blue" // يمكنك تغيير اللون
+               
+                style={{
+                  backgroundColor: "transparent",
+                }}
                 title="Edit Location" // نص مساعدة
               >
                 <EditIcon size={16} />
@@ -267,6 +284,7 @@ export function EditClientRequestModal({ opened, onClose, request }) {
             </Group>
           )}
         </div>
+
         {/* ✅ نهاية قسم الموقع الجديد */}
 
         <Select

@@ -1,13 +1,17 @@
+
+
 // Properties.jsx
 import { useEffect, useRef, useState } from "react";
 import { Card, Center, Text, Grid, GridCol, Loader, Select } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+
 
 // Local imports
 import classes from "../../styles/realEstates.module.css";
 import { useAuth } from "../../context/authContext";
 import { useTranslation } from "../../context/LanguageContext";
 import { useQueryClient } from "@tanstack/react-query";
+
 
 // Component Imports
 import Notifications from "../../components/Notifications/Notifications";
@@ -33,7 +37,7 @@ import { useCallback } from "react";
 import FloorsIcon from "../../components/icons/FloorsIcon";
 import notFound from "../../assets/Not Found.png";
 
-function Properties() {
+function PropertiesMarketer() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({});
@@ -401,15 +405,15 @@ function Properties() {
           <>
             <Grid className={classes.sty} align="center" spacing="xl">
               {data?.pages
-                .flatMap((page) => page.data.listings)
-                .filter((listing) => listing.status === "approved")
+                .flatMap((page) => page?.data?.listings)
+                .filter((listing) => listing?.status === "approved")
 
                 .map((listing) => (
                   <GridCol
                     span={{ base: 12, lg: 4, md: 6, sm: 6 }}
-                    key={listing.id}
+                    key={listing?.id}
                     onClick={() =>
-                      navigate(`/dashboard-Marketer/PropertyDetailsMarketer/${listing.id}`)
+                      navigate(`/dashboard-Marketer/PropertyDetailsMarketer/${listing?.id}`)
                     }
                     style={{ cursor: "pointer" }}
                   >
@@ -417,16 +421,16 @@ function Properties() {
                       <Card.Section radius="md">
                         <div className={classes.listingImage}>
                           <LazyImage
-                            src={listing.picture_url}
-                            alt={listing.title}
+                            src={listing?.picture_url}
+                            alt={listing?.title}
                             height={200}
                             radius="md"
                           />
 
                           <p className={classes.listingfor}>
                             {listing.selling_status === 1
-                              ? `${listing.listing_type} / sold`
-                              : listing.listing_type}
+                              ? `${listing?.listing_type} / sold`
+                              : listing?.listing_type}
                           </p>
                         </div>
                       </Card.Section>
@@ -439,44 +443,44 @@ function Properties() {
                       >
                         <span className={classes.listingPrice}>
                           <span className="icon-saudi_riyal">&#xea; </span>{" "}
-                          {parseFloat(listing.price)?.toLocaleString()}
+                          {parseFloat(listing?.price)?.toLocaleString()}
                         </span>
                         <div className={classes.downPaymentBadge}>
-                          {listing.down_payment} %{t.DownPayment}
+                          {listing?.down_payment} %{t.DownPayment}
                         </div>
                       </div>
                       <div style={{ display: "block" }}>
                         <div className={classes.listingTitle}>
-                          {listing.title}
+                          {listing?.title}
                         </div>
                         <div className={classes.listingUtilities}>
                           <div className={classes.listingUtility}>
-                            {listing.rooms > 0 && (
+                            {listing?.rooms > 0 && (
                               <>
                                 <div className={classes.utilityImage}>
                                   <Rooms />
                                 </div>
-                                {listing.rooms}
+                                {listing?.rooms}
                               </>
                             )}
                           </div>
                           <div className={classes.listingUtility}>
-                            {listing.bathrooms > 0 && (
+                            {listing?.bathrooms > 0 && (
                               <>
                                 <div className={classes.utilityImage}>
                                   <Bathrooms />
                                 </div>
-                                {listing.bathrooms}
+                                {listing?.bathrooms}
                               </>
                             )}
                           </div>
                           <div className={classes.listingUtility}>
-                            {listing.floors > 0 && (
+                            {listing?.floors > 0 && (
                               <>
                                 <div className={classes.utilityImage}>
                                   <FloorsIcon />
                                 </div>
-                                {listing.floors}
+                                {listing?.floors}
                               </>
                             )}
                           </div>
@@ -484,30 +488,30 @@ function Properties() {
                             <div className={classes.utilityImage}>
                               <Area />
                             </div>
-                            {listing.area} sqm
+                            {listing?.area} sqm
                           </div>
                         </div>
                         <div className={classes.listingEmployee}>
-                          {t.Category}: {listing.category} / {" "}
-                          {listing.subcategory.name}
+                          {t.Category}: {listing?.category} / {" "}
+                          {listing?.subcategory?.name}
                         </div>
-                        <div className={classes.listingEmployee}>
-                          {t.Employee}: {listing.employee?.name}
-                        </div>
-                        <div className={classes.listingLocation}>
-                          {listing.location}
-                        </div>
+                        {/* <div className={classes.listingEmployee}>
+                          {t.Employee}: {listing?.employee?.name}
+                        </div> */}
+                        <div className={classes?.listingLocation}>
+                          {listing?.location}
+                        </div> 
                         <div className={classes.listingDate}>
                           {Math.floor(
-                            (new Date() - new Date(listing.created_at)) /
+                            (new Date() - new Date(listing?.created_at)) /
                             (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
+                              (new Date() - new Date(listing?.created_at)) /
                               (1000 * 60 * 60 * 24)
                             )} ${t.daysAgo}`
                             : Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
+                              (new Date() - new Date(listing?.created_at)) /
                               (1000 * 60 * 60 * 24)
                             ) === 1
                               ? `${t.Yesterday}`
@@ -563,6 +567,6 @@ function Properties() {
   );
 }
 
-export default Properties;
+export default PropertiesMarketer;
 
  

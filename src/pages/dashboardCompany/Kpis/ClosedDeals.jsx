@@ -46,11 +46,11 @@ console.log(data);
         <div className={classes.card}>
           {console.log(data)}
           <div className={classes.cardTitle}>{t.MarketplaceProperties}</div>
-          <div className={classes.cardCount}>{data?.total_properties_sold}</div>
+          <div className={classes.cardCount}>{ data?.total_properties - data?.total_properties_sold}</div>
           <div className={classes.cardRevenue}>
             {/* ممكن تضيف رقم تانى هنا لو عندك قيمة للربح من المبيعات */}
             <span className="icon-saudi_riyal">&#xea; </span>
-            {parseFloat(data?.closed_deals || 0).toLocaleString("en-GB")}
+            {parseFloat( data?.closed_deals - data?.on_market).toLocaleString("en-GB")}
           </div>
         </div>
       </GridCol>

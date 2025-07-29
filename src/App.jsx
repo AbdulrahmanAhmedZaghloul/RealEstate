@@ -195,6 +195,7 @@ function App() {
                 </Route>
 
                 {/* Supervisor Routes */}
+
                 <Route
                   path="/dashboard-supervisor"
                   element={
@@ -204,27 +205,35 @@ function App() {
                   }
                 >
                   <Route index element={<ProfileSupervisor />} />
+              
                   <Route path="Properties" element={<Properties />} />
+              
                   <Route path="Requests" element={<Transactions />} />
+              
                   <Route path="Team" element={<StaffSupervisor />} />
+              
                   <Route
                     path="Contracts"
                     element={<Contracts role="supervisor" />}
                   />
+              
                   <Route
                     path="Team/:id"
                     element={<EmployeeDetailsSupervisor />}
                   />
                   <Route path="Contracts/:id" element={<ContractDetails />} />
+              
                   <Route path="Properties/:id" element={<PropertyDetails />} />
 
                   <Route path="Chat" element={<Chat />} />
 
                   <Route path="ClientRequests" element={<ClientRequests />} />
+              
                   <Route
                     path="ClientRequestsDetails/:id"
                     element={<ClientRequestsDetails />}
                   />
+              
                 </Route>
 
                 {/* Employee Routes */}
@@ -236,16 +245,22 @@ function App() {
                     </ProtectedRoute>
                   }
                 >
+                
                   <Route index element={<ProfileEmployee />} />
+                
                   <Route path="Properties" element={<PropertiesEmployee />} />
+                
                   <Route path="Requests" element={<RequestsEmployee />} />
+                
                   <Route path="Chat" element={<Chat />} />
 
                   <Route path="ClientRequests" element={<ClientRequests />} />
+                
                   <Route
                     path="ClientRequestsDetails/:id"
                     element={<ClientRequestsDetails />}
                   />
+                
                   <Route
                     path="Properties/:id"
                     element={<PropertyDetailsEmployee />}

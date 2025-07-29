@@ -5,11 +5,12 @@ import { useCompanyKPIs } from '../../../hooks/queries/1_useCompanyKPIs';
 import { Grid, GridCol } from '@mantine/core';
 import { useNewlyListedMarkters } from '../../../hooks/queries/QueriesAnalytics/MarketerKpi/useNewlyListedMarkters';
 import { useSellingMarketerKpi } from '../../../hooks/queries/QueriesAnalytics/MarketerKpi/useSellingMarketerKpi';
+import { useTranslation } from '../../../context/LanguageContext';
 function ClosedDealsMarkters({ timeFrame, month, year }) {
     const { data: newlyListedData } = useNewlyListedMarkters(timeFrame, month, year);
     const { data: companyKPIsData } = useSellingMarketerKpi(timeFrame, month, year);
     const [data, setData] = useState(null);
-
+    const { t ,lang } = useTranslation(); 
     const [newListings, setNewListings] = useState(null);
     const SellingMarketerKpi = async () => {
         try {
@@ -47,6 +48,7 @@ function ClosedDealsMarkters({ timeFrame, month, year }) {
         <>
 
             <Grid className={classes.summary}>
+
                 <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
                     <div
                         className={classes.card}
@@ -54,7 +56,7 @@ function ClosedDealsMarkters({ timeFrame, month, year }) {
                         <div
                             className={classes.cardTitle}
                         >
-                            Closed Deals
+                            {t.ClosedDeals}
                         </div>
                         <div
                             className={classes.cardCount}
@@ -67,7 +69,9 @@ function ClosedDealsMarkters({ timeFrame, month, year }) {
                             <span className="icon-saudi_riyal">&#xea; </span>
                             {parseFloat(data?.total_revenue).toLocaleString("en-GB")}
                         </div>
+               
                     </div>
+               
                 </GridCol>
 
                 <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
@@ -78,7 +82,7 @@ function ClosedDealsMarkters({ timeFrame, month, year }) {
                         <div
                             className={classes.cardTitle}
                         >
-                            Total Properties
+                            {t.TotalProperties}
                         </div>
                         <div
                             className={classes.cardCount}
@@ -94,6 +98,7 @@ function ClosedDealsMarkters({ timeFrame, month, year }) {
                     </div>
 
 
+               
                 </GridCol>
 
                  <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
@@ -104,7 +109,7 @@ function ClosedDealsMarkters({ timeFrame, month, year }) {
                         <div
                             className={classes.cardTitle}
                         >
-                            Marketplace Properties
+                            {t.MarketplaceProperties}
                         </div>
                         <div
                             className={classes.cardCount}

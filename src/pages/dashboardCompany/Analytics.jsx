@@ -71,6 +71,7 @@ function Analytics() {
         month={filter.month}
         year={filter.year}
       />
+      
       <MarketChart
         timeFrame={filter.timeFrame}
         month={filter.month}

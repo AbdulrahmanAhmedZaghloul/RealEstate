@@ -34,13 +34,8 @@ import ChoosePlan from "./pages/ChoosePlan.jsx";
 import MakePayment from "./pages/MakePayment.jsx";
 import DashboardSupervisorLayout from "./pages/dashboardSupervisor/DashboardLayoutSupervisor.jsx";
 import ProfileSupervisor from "./pages/dashboardSupervisor/ProfileSupervisor.jsx";
-import ContractsSupervisor from "./pages/dashboardSupervisor/ContractsSupervisor.jsx";
 import StaffSupervisor from "./pages/dashboardSupervisor/StaffSupervisor.jsx";
-import RequestsSupervisor from "./pages/dashboardSupervisor/RequestsSupervisor.jsx";
-import PropertiesSupervisor from "./pages/dashboardSupervisor/PropertiesSupervisor.jsx";
 import EmployeeDetailsSupervisor from "./components/supervisor/EmployeeDetailsSupervisor.jsx";
-import PropertyDetailsSupervisor from "./components/supervisor/PropertyDetailsSupervisor.jsx";
-import ContractDetailsSupervisor from "./components/supervisor/ContractDetailsSupervisor.jsx";
 import DashboardEmployeeLayout from "./pages/dashboardEmployee/DashboardLayoutEmployee.jsx";
 import ProfileEmployee from "./pages/dashboardEmployee/ProfileEmployee.jsx";
 import PropertiesEmployee from "./pages/dashboardEmployee/PropertiesEmployee.jsx";
@@ -191,7 +186,6 @@ function App() {
                     path="ContractDetailsMarketer/:id"
                     element={<ContractDetailsMarketer />}
                   />
-                  <Route path="Chat" element={<Chat />} />
 
                   <Route path="ClientRequests" element={<ClientRequests />} />
                   <Route
@@ -210,25 +204,19 @@ function App() {
                   }
                 >
                   <Route index element={<ProfileSupervisor />} />
-                  <Route path="Properties" element={<PropertiesSupervisor />} />
-                  <Route path="Requests" element={<RequestsSupervisor />} />
+                  <Route path="Properties" element={<Properties />} />
+                  <Route path="Requests" element={<Transactions />} />
                   <Route path="Team" element={<StaffSupervisor />} />
                   <Route
                     path="Contracts"
-                    element={<ContractsSupervisor role="supervisor" />}
+                    element={<Contracts role="supervisor" />}
                   />
                   <Route
                     path="Team/:id"
                     element={<EmployeeDetailsSupervisor />}
                   />
-                  <Route
-                    path="Contracts/:id"
-                    element={<ContractDetailsSupervisor />}
-                  />
-                  <Route
-                    path="Properties/:id"
-                    element={<PropertyDetailsSupervisor />}
-                  />
+                  <Route path="Contracts/:id" element={<ContractDetails />} />
+                  <Route path="Properties/:id" element={<PropertyDetails />} />
 
                   <Route path="Chat" element={<Chat />} />
 

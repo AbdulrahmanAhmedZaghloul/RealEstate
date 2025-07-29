@@ -19,6 +19,6 @@ export const useUnreadCount = () => {
     staleTime: 1000 * 60,
     cacheTime: 1000 * 60 * 5,
     enabled: !!user?.token,
-    refetchInterval: 1000 * 10, // كل 10 ثواني (لـ polling شبه حقيقي)
+    refetchInterval: 1000 * 10,  
   });
 };

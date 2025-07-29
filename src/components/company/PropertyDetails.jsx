@@ -422,9 +422,11 @@ function PropertyDetails() {
                             </svg>
                           </>
                         )}
-                        <span onClick={handleShareProperty}>
+
+                        
+                        {/* <span onClick={handleShareProperty}>
                           <ShareIcon />
-                        </span>
+                        </span> */}
 
                       </div>
                     </div>
@@ -474,7 +476,12 @@ function PropertyDetails() {
                     </Grid>
                   </Grid.Col>
 
-                  <Grid.Col span={12} className={classes.svgCol}>
+                  <Grid.Col style={{
+                    display:"flex",
+                    alignItems:"center",
+                    justifyContent:"start",
+                    gap:"20px"
+                  }} span={12} className={classes.svgCol}>
                     <span className={classes.svgSpan}>
                       {listing?.rooms === 0 ? null : (
                         <div>
@@ -500,26 +507,7 @@ function PropertyDetails() {
                         <span>{listing?.area} {t.sqm}</span>
                       </div>
                     </span>
-
-                    <span className={classes.svgSpan}>
-                      {listing?.floors === 0 ? null : (
-                        <div>
-                          <FloorsIcon />
-                          <span>{listing?.floors}</span>
-                        </div>
-                      )}
-                    </span>
-
-                    <span className={classes.svgSpan}>
-                      <div>
-                        <CategoryIcon />
-                        {console.log(listing?.category?.name)}
-
-                        <span>
-                          {listing?.category?.name} / {listing?.subcategory?.name}{" "}
-                        </span>
-                      </div>
-                    </span>
+ 
                   </Grid.Col>
                 </Grid>
 
@@ -556,24 +544,7 @@ function PropertyDetails() {
                     <PropertyInformation property={listing} /> {/* Use the component here */}
 
                   </div>
-                </Stack>
-                {/* <Stack
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "start",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Text className={classes.Description} fw={600}>
-                    {t.Status}
-                  </Text>
-                  <Text className={classes.listing}>
-                    {listing?.selling_status === 1
-                      ? "Sold"
-                      : listing?.listing_type}
-                  </Text>
-                </Stack> */}
+                </Stack> 
               </Grid.Col>
               <Grid.Col span={isMobile ? 12 : 5}>
                 <Group
@@ -610,15 +581,13 @@ function PropertyDetails() {
                       `/dashboard/employee/${listing?.employee?.employee_id}`
                     )
                   }
-                >
-                  {console.log(listing)
-                  }
+                > 
                   <Box className={classes.BoxImage}>
                     <div className={classes.divImage}>
                       <Avatar
                         w={60}
                         h={60}
-                        src={listing?.employee?.picture_url}
+                        src={listing?.picture_url}
                         alt={listing?.employee?.name}
                       />
                       <span className={classes.spanImage}>

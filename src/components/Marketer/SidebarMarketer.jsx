@@ -115,29 +115,10 @@ export default function SidebarMarketer() {
           }}
         />
       ),
-    },
+    }, 
 
-    {
-      link: "/dashboard-Marketer/Chat",
-      label: t["Chat"],
-      // label: "Properties",
-      icon: (
-        <img
-          src={
-            active === "Chat" && colorScheme === "light"
-              ? PropertiesActive
-              : active === "Chat" && colorScheme === "dark"
-              ? PropertiesActiveDark
-              : Properties
-          }
-          className={classes.linkIcon}
-          style={{
-            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
-          }}
-        />
-      ),
-    },
 
+    
     {
       link: "/dashboard-Marketer/ClientRequests",
       label: t["ClientRequests"],

@@ -305,7 +305,6 @@ function Transactions() {
   }
 
   return (
-
     <>
       <Card className={classes.mainContainer} radius="lg">
         <div>
@@ -430,7 +429,6 @@ function Transactions() {
                   },
                 }}
               />
-
             </div>
           </div>
         </header>
@@ -439,9 +437,11 @@ function Transactions() {
           <Center className={classes.notFound}>
             <img src={notFound} alt="" />
 
-            <Text style={{
-              color: "var(--color-9)"
-            }}>
+            <Text
+              style={{
+                color: "var(--color-9)",
+              }}
+            >
               {t.Nolistingsfound}
             </Text>
           </Center>
@@ -463,8 +463,16 @@ function Transactions() {
                             src={listing.picture_url}
                             alt={listing.title}
                             onClick={() =>
-                              navigate(`/dashboard/Properties/${listing.id}`)
+                              navigate(
+                                user.role === "supervisor"
+                                  ? `/dashboard-supervisor/Properties/${listing.id}`
+                                  : `/dashboard/Properties/${listing.id}`
+                              )
                             }
+                            // onClick={() =>
+                            //   navigate(`/dashboard/Properties/${listing.id}`)
+                            // }
+
                             height={200}
                             radius="md"
                           />
@@ -535,18 +543,18 @@ function Transactions() {
                         <div className={classes.listingDate}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
+                              (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                            )} days ago`
+                                (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              )} days ago`
                             : Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                            ) === 1
-                              ? "Yesterday"
-                              : "Today"}
+                                (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              ) === 1
+                            ? "Yesterday"
+                            : "Today"}
                         </div>
                       </div>
 
@@ -588,7 +596,7 @@ function Transactions() {
             {/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
             {!isLoading &&
               data?.pages.flatMap((page) => page.data.listings).length ===
-              0 && (
+                0 && (
                 <Center>
                   <Text>{t.NoListingsFound}</Text>
                 </Center>
@@ -641,7 +649,6 @@ function Transactions() {
         </Group>
       </Modal>
 
-
       <FiltersModal
         opened={openedFilterModal}
         onClose={closeFilterModal}
@@ -651,7 +658,6 @@ function Transactions() {
         form={filterForm} // 👈 إرسال النموذج للمودال
       />
     </>
-
   );
 }
 

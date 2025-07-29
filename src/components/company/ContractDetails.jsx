@@ -153,8 +153,8 @@ function ContractDetails() {
           // نعمل encode للرابط
           const encodedPath = encodeURIComponent(fullPath);
 
-          const finalLink = `http://localhost:5173/#/ShareContracts/${encodedPath}`;
-          // const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareRealEstate/${encodedPath}`;
+          // const finalLink = `http://localhost:5173/#/ShareContracts/${encodedPath}`;
+          const finalLink = `https://real-estate-one-lake.vercel.app/#/ShareRealEstate/${encodedPath}`;
           setShareLink(finalLink);
           openShare(); // فتح المودال
           //  (); // تحديث share_url في ال state
@@ -276,17 +276,17 @@ function ContractDetails() {
     if (contract) {
       form.setValues({
         listing_id: contract.id,
-        title: contract.title,
-        description: contract.description,
-        price: contract.price,
-        down_payment: contract.down_payment,
-        contract_type: contract.contract_type,
-        customer_name: contract.customer_name,
-        customer_phone: contract.customer_phone,
-        creation_date: contract.creation_date?.split("T")[0],
-        effective_date: contract.effective_date?.split("T")[0],
-        expiration_date: contract.expiration_date?.split("T")[0],
-        release_date: contract.release_date?.split("T")[0],
+        title: contract?.title,
+        description: contract?.description,
+        price: contract?.price,
+        down_payment: contract?.down_payment,
+        contract_type: contract?.contract_type,
+        customer_name: contract?.customer_name,
+        customer_phone: contract?.customer_phone,
+        creation_date: contract?.creation_date?.split("T")[0],
+        effective_date: contract?.effective_date?.split("T")[0],
+        expiration_date: contract?.expiration_date?.split("T")[0],
+        release_date: contract?.release_date?.split("T")[0],
       });
     }
   }, [contract]);

@@ -1,170 +1,271 @@
 // src/components/EditPropertyModal.jsx
 
 import {
-    Modal,
-    Stack,
-    Textarea,
-    Button,
-    TextInput,
-    NumberInput,
-    Group,
-    Text,
-    Select,
-    Divider,
+  Modal,
+  Stack,
+  Textarea,
+  Button,
+  TextInput,
+  NumberInput,
+  Group,
+  Text,
+  Select,
+  Divider,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState, useEffect } from "react";
 import Dropdown from "../icons/dropdown";
 import { useTranslation } from "../../context/LanguageContext";
+import LocationPicker from "./AddProperty/LocationPicker";
 
-export default function EditPropertyModal({ opened, onClose, listing, onUpdate }) {
-    const [loading, setLoading] = useState(false);
-    const [selectedCategoryType, setSelectedCategoryType] = useState("");
-    const { t } = useTranslation();
+export default function EditPropertyModal({
+  opened,
+  onClose,
+  listing,
+  onUpdate,
+}) {
+  const [loading, setLoading] = useState(false);
+  const [selectedCategoryType, setSelectedCategoryType] = useState("");
+  const { t } = useTranslation();
+  const [locationData, setLocationData] = useState({
+    location: listing?.location || "",
+    region_id: listing?.region_id || "",
+    city_id: listing?.city_id || "",
+    district_id: listing?.district_id || "",
+  });
 
-    const [locationOptions, setLocationOptions] = useState([]);
-    // افتراضي للمرافق حتى لو لم تكن موجودة في الـ listing
-    const defaultAmenities = {
-        residential: [],
-        commercial: [],
-        land: [],
-    };
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
 
-    // تحديد نوع الفئة بناءً على category_id
-    useEffect(() => {
-        if (listing?.category_id) {
-            const categoriesMap = {
-                1: "residential",
-                2: "commercial",
-                3: "land",
-            };
-            setSelectedCategoryType(categoriesMap[listing.category_id] || "");
-        }
-    }, [listing]);
-    console.log(listing);
+  
+  const [locationOptions, setLocationOptions] = useState([]);
+  // افتراضي للمرافق حتى لو لم تكن موجودة في الـ listing
+  const defaultAmenities = {
+    residential: [],
+    commercial: [],
+    land: [],
+  };
 
-    // استخدام القيم المتوفرة أو القيم الافتراضية
-    const initialValues = {
-        title: listing?.title || "",
-        description: listing?.description || "",
-        price: parseFloat(listing?.price) || null,
-        down_payment: parseFloat(listing?.down_payment) || null,
-        area: parseFloat(listing?.area) || null,
-        rooms: listing?.rooms ?? null,
-        bathrooms: listing?.bathrooms ?? null,
-        location: listing?.location || "",
-        listing_type: listing?.listing_type || "",
-        images: listing?.images?.map((img) => img.image_path) || [],
-        amenities: listing?.amenities ? listing.amenities : defaultAmenities,
-    };
+  // تحديد نوع الفئة بناءً على category_id
+  useEffect(() => {
+    if (listing?.category_id) {
+      const categoriesMap = {
+        1: "residential",
+        2: "commercial",
+        3: "land",
+      };
+      setSelectedCategoryType(categoriesMap[listing.category_id] || "");
+    }
+  }, [listing]);
+  console.log(listing);
 
-    const form = useForm({
-        initialValues,
+  // استخدام القيم المتوفرة أو القيم الافتراضية
+  const initialValues = {
+    title: listing?.title || "",
+    description: listing?.description || "",
+    price: parseFloat(listing?.price) || null,
+    down_payment: parseFloat(listing?.down_payment) || null,
+    area: parseFloat(listing?.area) || null,
+    rooms: listing?.rooms ?? null,
+    bathrooms: listing?.bathrooms ?? null,
+    location: listing?.location || "",
+    listing_type: listing?.listing_type || "",
+    images: listing?.images?.map((img) => img.image_path) || [],
+    amenities: listing?.amenities ? listing.amenities : defaultAmenities,
+  };
 
-        validate: {
-            title: (value) => value.trim() ? null : "Title is required",
-            description: (value) =>
-                value.trim() && value.trim().split(/\s+/).filter(Boolean).length > 200
-                    ? "Description cannot exceed 200 words"
-                    : null,
-            price: (value) => (value > 0 ? null : "Price must be greater than zero"),
-            area: (value) => (value > 0 ? null : "Area must be greater than zero"),
-            location: (value) => (value.trim() ? null : "Location is required"),
-        },
-    });
+  const form = useForm({
+    initialValues,
 
-    const handleSubmit = async (values) => {
-        setLoading(true);
-        try {
-            await onUpdate(values);
-            onClose();
-        } catch (error) {
-            console.error("Error updating property:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    validate: {
+      title: (value) => (value.trim() ? null : "Title is required"),
+      description: (value) =>
+        value.trim() && value.trim().split(/\s+/).filter(Boolean).length > 200
+          ? "Description cannot exceed 200 words"
+          : null,
+      price: (value) => (value > 0 ? null : "Price must be greater than zero"),
+      area: (value) => (value > 0 ? null : "Area must be greater than zero"),
+      location: (value) => (value.trim() ? null : "Location is required"),
+    },
+  });
 
-    useEffect(() => {
-        fetch("/locations.json")
-            .then((res) => res.json())
-            .then((data) => {
-                const uniqueLocations = new Set();
-                const formatted = [];
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    try {
+      await onUpdate(values);
+      onClose();
+    } catch (error) {
+      console.error("Error updating property:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                data.forEach((region) => {
-                    region.cities.forEach((city) => {
-                        city.districts.forEach((district) => {
-                            const locationValue = `${district.name_en}, ${city.name_en}, ${region.name_en}`;
-                            if (!uniqueLocations.has(locationValue)) {
-                                uniqueLocations.add(locationValue);
-                                formatted.push({
-                                    label: locationValue,
-                                    value: locationValue,
-                                    region: region.name_en,
-                                    city: city.name_en,
-                                    district: district.name_en,
-                                });
-                            }
-                        });
-                    });
+  useEffect(() => {
+    fetch("/locations.json")
+      .then((res) => res.json())
+      .then((data) => {
+        const uniqueLocations = new Set();
+        const formatted = [];
+
+        data.forEach((region) => {
+          region.cities.forEach((city) => {
+            city.districts.forEach((district) => {
+              const locationValue = `${district.name_en}, ${city.name_en}, ${region.name_en}`;
+              if (!uniqueLocations.has(locationValue)) {
+                uniqueLocations.add(locationValue);
+                formatted.push({
+                  label: locationValue,
+                  value: locationValue,
+                  region: region.name_en,
+                  city: city.name_en,
+                  district: district.name_en,
                 });
-
-                setLocationOptions(formatted);
-            })
-            .catch((error) => {
-                console.error("Failed to load locations:", error);
-                setError("Failed to load location data");
+              }
             });
-    }, []);
-    return (
-        <Modal opened={opened} onClose={onClose} title={t.EditProperty} centered size="lg">
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-                <Stack gap="md">
+          });
+        });
 
-                    {/* Title */}
-                    <TextInput label={t.Title} {...form.getInputProps("title")} />
+        setLocationOptions(formatted);
+      })
+      .catch((error) => {
+        console.error("Failed to load locations:", error);
+        setError("Failed to load location data");
+      });
+  }, []);
+  useEffect(() => {
+    if (opened) {
+      // إعادة تعيين الفورم
+      form.reset();
 
-                    {/* Description */}
-                    <Textarea
-                        label={t.Description}
-                        autosize
-                        minRows={3}
-                        {...form.getInputProps("description")}
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            const wordCount = value.trim().split(/\s+/).filter(Boolean).length;
-                            if (wordCount <= 200) form.setFieldValue("description", value);
-                        }}
-                    />
-                    <Text size="xs" c="dimmed">
-                        {form.values.description.trim().split(/\s+/).filter(Boolean).length} / {t.words}
-                    </Text>
+      // تحديث locationData بالقيم الحالية
+      setLocationData({
+        location: listing?.location || "",
+        region_id: listing?.region_id || "",
+        city_id: listing?.city_id || "",
+        district_id: listing?.district_id || "",
+      });
+    }
+  }, [opened, listing]);
+  return (
+    <Modal
+      opened={opened}
+      onClose={onClose}
+      title={t.EditProperty}
+      centered
+      size="lg"
+    >
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Stack gap="md">
+          {/* Title */}
+          <TextInput label={t.Title} {...form.getInputProps("title")} />
 
-                    {/* Price */}
-                    <NumberInput label={t.Price} min={1} {...form.getInputProps("price")} />
+          {/* Description */}
+          <Textarea
+            label={t.Description}
+            autosize
+            minRows={3}
+            {...form.getInputProps("description")}
+            onChange={(e) => {
+              const value = e.target.value;
+              const wordCount = value
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean).length;
+              if (wordCount <= 200) form.setFieldValue("description", value);
+            }}
+          />
+          <Text size="xs" c="dimmed">
+            {form.values.description.trim().split(/\s+/).filter(Boolean).length}{" "}
+            / {t.words}
+          </Text>
 
-                    {/* Down Payment */}
-                    <NumberInput
-                        label={t.DownPayment}
-                        min={0}
-                        max={100}
-                        suffix="%"
-                        {...form.getInputProps("down_payment")}
-                    />
+          {/* Price */}
+          <NumberInput
+            label={t.Price}
+            min={1}
+            {...form.getInputProps("price")}
+          />
 
-                    {/* Area */}
-                    <NumberInput label={t.Area} min={1} {...form.getInputProps("area")} />
+          {/* Down Payment */}
+          <NumberInput
+            label={t.DownPayment}
+            min={0}
+            max={100}
+            suffix="%"
+            {...form.getInputProps("down_payment")}
+          />
 
-                    {/* Rooms */}
-                    <NumberInput label={t.Rooms} min={1} {...form.getInputProps("rooms")} />
+          {/* Area */}
+          <NumberInput label={t.Area} min={1} {...form.getInputProps("area")} />
 
-                    {/* Bathrooms */}
-                    <NumberInput label={t.Bathrooms} min={1} {...form.getInputProps("bathrooms")} />
+          {/* Rooms */}
+          <NumberInput
+            label={t.Rooms}
+            min={1}
+            {...form.getInputProps("rooms")}
+          />
 
-                    {/* Location */}
+          {/* Bathrooms */}
+          <NumberInput
+            label={t.Bathrooms}
+            min={1}
+            {...form.getInputProps("bathrooms")}
+          />
 
-                    <Select
+          {/* Location */}
+          {!showLocationPicker ? (
+            <TextInput
+              label={t.Location}
+              value={locationData.location}
+              onClick={() => setShowLocationPicker(true)}
+              readOnly
+              placeholder={t.EnterPropertyLocation}
+              error={form.errors.location}
+              mb="md"
+            />
+          ) : (
+            <LocationPicker
+              value={locationData}
+              onChange={(data) => {
+                setLocationData(data);
+
+                // تحديث حقول الفورم
+                form.setFieldValue("location", data.location);
+                form.setFieldValue("region_id", data.region_id);
+                form.setFieldValue("city_id", data.city_id);
+                form.setFieldValue("district_id", data.district_id);
+
+                // مسح خطأ الموقع إذا وُجد
+                if (form.errors.location) {
+                  form.setFieldError("location", null);
+                }
+              }}
+              error={form.errors.location}
+              mb="md"
+            />
+          )}
+
+          {/* <LocationPicker
+            value={locationData}
+            onChange={(data) => {
+              setLocationData(data);
+
+              // تحديث حقول الفورم
+              form.setFieldValue("location", data.location);
+              form.setFieldValue("region_id", data.region_id);
+              form.setFieldValue("city_id", data.city_id);
+              form.setFieldValue("district_id", data.district_id);
+
+              // مسح خطأ الموقع إذا وُجد
+              if (form.errors.location) {
+                form.setFieldError("location", null);
+              }
+            }}
+            error={form.errors.location}
+            mb="md"
+          /> */}
+
+          {/* <Select
                         rightSection={<Dropdown />}
                         label={t.Location}
                         placeholder={t.EnterPropertyLocation}
@@ -179,36 +280,35 @@ export default function EditPropertyModal({ opened, onClose, listing, onUpdate }
                         }}
                         mb={24}
                         limit={15}
-                    />
+                    /> */}
 
-                    {/* Listing Type */}
-                    <Select
-                
-                        label={t.ListingType}
-                        data={[
-                            { value: "buy", label: "ForSale" },
-                            { value: "rent", label: "ForRent" },
-                            { value: "booking", label: "ForBooking" },
-                        ]}
-                        {...form.getInputProps("listing_type")}
-                    />
+          {/* Listing Type */}
+          <Select
+            label={t.ListingType}
+            data={[
+              { value: "buy", label: "ForSale" },
+              { value: "rent", label: "ForRent" },
+              { value: "booking", label: "ForBooking" },
+            ]}
+            {...form.getInputProps("listing_type")}
+          />
 
-
-
-                    {/* Submit Buttons */}
-                    <Group position="right">
-                        <Button variant="outline" onClick={onClose}>{t.Cancel}</Button>
-                        <Button
-                            color="green"
-                            type="submit"
-                            loading={loading}
-                            disabled={!form.isDirty() || Object.keys(form.errors).length > 0}
-                        >
-                            {t.SaveChanges}
-                        </Button>
-                    </Group>
-                </Stack>
-            </form>
-        </Modal>
-    );
+          {/* Submit Buttons */}
+          <Group position="right">
+            <Button variant="outline" onClick={onClose}>
+              {t.Cancel}
+            </Button>
+            <Button
+              color="green"
+              type="submit"
+              loading={loading}
+              disabled={!form.isDirty() || Object.keys(form.errors).length > 0}
+            >
+              {t.SaveChanges}
+            </Button>
+          </Group>
+        </Stack>
+      </form>
+    </Modal>
+  );
 }

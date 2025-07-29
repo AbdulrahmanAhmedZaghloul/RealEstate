@@ -9,7 +9,7 @@ import {
   Grid,
 } from "@mantine/core";
 import classes from "../../styles/realEstates.module.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import AddContractsModal from "../../components/modals/addContractsModal";
@@ -29,7 +29,6 @@ import Dropdown from "../../components/icons/dropdown";
 import FilterContractsModal from "../../components/modals/filterContractsModal";
 import FilterIcon from "../../components/icons/filterIcon";
 import Area from "../../components/icons/area";
-import FloorsIcon from "../../components/icons/FloorsIcon";
 import Bathrooms from "../../components/icons/bathrooms";
 import Rooms from "../../components/icons/rooms";
 
@@ -37,11 +36,18 @@ function Contracts() {
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const { user } = useAuth();
+  console.log(user.role);
+
+  // supervisor == /dashboard-supervisor/Contracts/id
+  // company == /dashboard/Contracts/id
+
   const [searchQuery, setSearchQuery] = useState("");
   const [approvedListings, setApprovedListings] = useState([]);
   const { data: listingsData } = usePropertiesContracts();
+  const location = useLocation();
   const queryClient = useQueryClient();
-  const { t ,lang } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+  const { t, lang } = useTranslation(); // الحصول على الكلمات المترجمة والسياق
+  // const { user, login, isSubscribed } = useAuth();
 
   const [filters, setFilters] = useState({
     search: "",
@@ -65,8 +71,10 @@ function Contracts() {
       console.log(error);
     }
   };
+
   const [openedFilterModal, { open: openFilter, close: closeFilter }] =
     useDisclosure(false);
+
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
@@ -82,6 +90,7 @@ function Contracts() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useContracts(filters);
 
+  console.log(data);
 
   // ✅ تجميع جميع العقود من الصفحات المختلفة
   const contracts = data?.pages.flatMap((page) => page.data.data.data) || [];
@@ -98,7 +107,7 @@ function Contracts() {
     const handleScroll = () => {
       if (
         window.innerHeight + window.scrollY >=
-        document.body.offsetHeight - 500 &&
+          document.body.offsetHeight - 500 &&
         hasNextPage &&
         !isFetchingNextPage
       ) {
@@ -112,15 +121,22 @@ function Contracts() {
   return (
     <>
       <Card className={classes.mainContainer} radius="lg">
-        <div>
+        <div
+          style={{
+            marginBottom: "20px",
+          }}
+        >
           <BurgerButton />
           <span className={classes.title}>{t.Contracts}</span>
-          <Notifications />
+
+          {!location.pathname.startsWith("/dashboard/supervisor") && (
+            <Notifications />
+          )}
         </div>
 
         <header
           className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
-            style={{
+          style={{
             ...(isSticky ? { [lang === "ar" ? "right" : "left"]: "25%" } : {}),
             zIndex: isSticky ? 10 : "auto",
           }}
@@ -145,15 +161,12 @@ function Contracts() {
             </div>
 
             <div className={classes.addAndSort}>
-
-
               <Select
                 value={filters.contract_type}
                 onChange={(value) =>
                   setFilters((prev) => ({ ...prev, contract_type: value }))
                 }
                 rightSection={<Dropdown />}
-
                 radius="sm"
                 size="sm"
                 styles={{
@@ -187,10 +200,10 @@ function Contracts() {
                   },
                 }}
                 data={[
-                { value: "all", label: t.All },
-                { value: "sale", label: t.Sale },
-                { value: "rental", label: t.Rental },
-                { value: "booking", label: t.Booking },
+                  { value: "all", label: t.All },
+                  { value: "sale", label: t.Sale },
+                  { value: "rental", label: t.Rental },
+                  { value: "booking", label: t.Booking },
                 ]}
                 className={classes.select}
               />
@@ -210,7 +223,7 @@ function Contracts() {
             <Center className={classes.notFound}>
               <img src={notFound} alt="" />
               <Text style={{ color: "var(--color-9)" }}>
-                 {t.NoContractsFoundMessage} 
+                {t.NoContractsFoundMessage}
               </Text>
             </Center>
           ) : (
@@ -218,7 +231,14 @@ function Contracts() {
               <Grid
                 key={contract.id}
                 className={classes.contractCard}
-                onClick={() => navigate(`/dashboard/Contracts/${contract.id}`)}
+                onClick={() =>
+                  navigate(
+                    user.role === "supervisor"
+                      ? `/dashboard-supervisor/Contracts/${contract.id}`
+                      : `/dashboard/Contracts/${contract.id}`
+                  )
+                }
+                // onClick={() => navigate(`/dashboard/Contracts/${contract.id}`)}
                 style={{
                   cursor: "pointer",
                   borderRadius: "20px",
@@ -230,7 +250,7 @@ function Contracts() {
                   className={classes.contractImage}
                 >
                   <div className={classes.listingImage}>
-                    <img src={imageContract} alt="" />
+                    <img src={contract.real_estate.image} alt="" />
                     <p className={classes.listingfor}>
                       {contract.contract_type}
                     </p>
@@ -296,28 +316,25 @@ function Contracts() {
                     </span>
                   </div>
 
-
                   <div className={classes.contractEmployee}>
-                    <span>
-                      {contract.real_estate.location}
-                    </span>
+                    <span>{contract.real_estate.location}</span>
                   </div>
 
                   <div className={classes.contractDate}>
                     {Math.floor(
                       (new Date() - new Date(contract.creation_date)) /
-                      (1000 * 60 * 60 * 24)
+                        (1000 * 60 * 60 * 24)
                     ) > 1
                       ? `${Math.floor(
-                        (new Date() - new Date(contract.creation_date)) /
-                        (1000 * 60 * 60 * 24)
-                      )} ${t.daysAgo}`
+                          (new Date() - new Date(contract.creation_date)) /
+                            (1000 * 60 * 60 * 24)
+                        )} ${t.daysAgo}`
                       : Math.floor(
-                        (new Date() - new Date(contract.creation_date)) /
-                        (1000 * 60 * 60 * 24)
-                      ) === 1
-                        ? `${t.Yesterday}`
-                        : `${t.Today}`}
+                          (new Date() - new Date(contract.creation_date)) /
+                            (1000 * 60 * 60 * 24)
+                        ) === 1
+                      ? `${t.Yesterday}`
+                      : `${t.Today}`}
                   </div>
                 </GridCol>
               </Grid>
@@ -359,25 +376,8 @@ function Contracts() {
         }
         initialFilters={filters}
       />
-
     </>
   );
 }
 
 export default Contracts;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

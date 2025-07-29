@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import  { useState, useEffect, useContext } from "react";
 import classes from "../../styles/EmployeeDetails.module.css";
-import axiosInstance, { apiUrl } from "../../api/config";
-// import { useParams } from "react-router-dom";
-import { useAuth } from "../../context/authContext";
+import axiosInstance  from "../../api/config";
+ import { useAuth } from "../../context/authContext";
 import { useMediaQuery } from "@mantine/hooks";
 import Notifications from "../../components/Notifications/Notifications";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { Grid, useMantineColorScheme } from "@mantine/core";
 import { ThemeToggle } from "../../Settings/ThemeToggle";
 import { useTranslation } from "../../context/LanguageContext";
-import ContractsSupervisor from "./ContractsSupervisor";
-import { EmployeeContext } from "../../context/EmployeeContext";
+ import { EmployeeContext } from "../../context/EmployeeContext";
+import Contracts from "../dashboardCompany/Contracts";
 
 function ProfileSupervisor() {
   const [profile, setProfile] = useState({});
@@ -19,8 +18,7 @@ function ProfileSupervisor() {
   const { user } = useAuth();
   const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
 
-  const { colorScheme } = useMantineColorScheme();
-  const { t } = useTranslation(); // 👈 استدعاء اللغة
+   const { t } = useTranslation(); // 👈 استدعاء اللغة
   const { employeeId, setEmployeeId } = useContext(EmployeeContext);
 
   const fetchProfile = async () => {
@@ -120,7 +118,7 @@ function ProfileSupervisor() {
           </Grid.Col>
         </Grid>
       </div>
-      <ContractsSupervisor />
+      <Contracts />
     </div>
   );
 }

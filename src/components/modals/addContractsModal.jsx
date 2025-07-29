@@ -14,7 +14,7 @@ import {
   rem,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery } from "@mantine/hooks";
 
 //Local imports
 import downArrow from "../../assets/downArrow.svg";
@@ -23,15 +23,9 @@ import { useEffect, useState } from "react";
 import CameraUpload from "../CameraUpload";
 import { useTranslation } from "../../context/LanguageContext";
 
-const AddContractsModal = ({
-  opened,
-  onClose,
-  onAdd,
-  approvedListings,
-  t
-}) => {
+const AddContractsModal = ({ opened, onClose, onAdd, approvedListings, t }) => {
   const [loading, setLoading] = useState(false);
- 
+
   const form = useForm({
     initialValues: {
       listing_id: null,
@@ -51,7 +45,7 @@ const AddContractsModal = ({
       status: "", // terminated, active, etc.
     },
     validate: {
-      listing_id: (value) => (value ? null :t.ListingIsRequired),
+      listing_id: (value) => (value ? null : t.ListingIsRequired),
       title: (value) => (value.trim() ? null : t.TitleIsRequired),
       description: (value) => (value.trim() ? null : t.DescriptionIsRequired),
       price: (value) => (value > 0 ? null : t.PriceMustBeGreaterThan0),
@@ -87,7 +81,7 @@ const AddContractsModal = ({
           ? t.ReleaseDateIsRequired
           : null,
     },
-  })
+  });
 
   function validateSaudiPhoneNumber(phoneNumber) {
     const cleaned = phoneNumber.replace(/\D/g, "");
@@ -97,16 +91,16 @@ const AddContractsModal = ({
 
   function handleSubmit(values) {
     setLoading(true); // تفعيل اللودينج
-    onAdd(values)
+    onAdd(values);
   }
 
   useEffect(() => {
     if (opened) {
-      form.reset();      // 👈 Reset form fields
+      form.reset(); // 👈 Reset form fields
       setLoading(false); // 👈 Reset loading state
     }
   }, [opened]);
-  const isMobile = useMediaQuery(`(max-width: ${("991px")})`);
+  const isMobile = useMediaQuery(`(max-width: ${"991px"})`);
   return (
     <Modal
       opened={opened}
@@ -137,7 +131,6 @@ const AddContractsModal = ({
               {t.UploadImages}
             </Text>
             <CameraUpload
-
               onChange={(file) => form.setFieldValue("contract_document", file)}
             />
             {form.errors.contract_document && (
@@ -146,10 +139,12 @@ const AddContractsModal = ({
               </Text>
             )}
 
-
             {/* Property listing*/}
             <Select
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
               mb={24}
               rightSection={<img src={downArrow} />}
               label="Property listing"
@@ -163,7 +158,10 @@ const AddContractsModal = ({
             />
             {/* Title */}
             <TextInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
               mb={24}
               label={t.Title}
               placeholder={t.EnterTheTitleOfTheContract}
@@ -174,7 +172,10 @@ const AddContractsModal = ({
             />
             {/* Description */}
             <Textarea
-              styles={{ input: { width: 289, height: 155 }, wrapper: { width: 289 } }}
+              styles={{
+                input: { width: 289, height: 155 },
+                wrapper: { width: 289 },
+              }}
               mb={24}
               label={t.Description}
               placeholder={t.EnterTheDescriptionOfTheContract}
@@ -186,8 +187,12 @@ const AddContractsModal = ({
 
             {/* Price */}
             <NumberInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              mb={24} label={t.Price}
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
+              mb={24}
+              label={t.Price}
               placeholder={t.EnterThePriceOfTheContract}
               error={form.errors.price}
               hideControls
@@ -195,8 +200,10 @@ const AddContractsModal = ({
               maxLength={19}
             />
             <NumberInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-              
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
               label={t.DownPayment}
               placeholder={t.EnterTheDownPaymentEg25_5}
               hideControls
@@ -207,7 +214,8 @@ const AddContractsModal = ({
               step={0.1}
               clampBehavior="strict" // 👈 يجبر القيمة على البقاء ضمن min/max
               error={
-                form.values.down_payment !== null && (form.values.down_payment < 0 || form.values.down_payment > 100)
+                form.values.down_payment !== null &&
+                (form.values.down_payment < 0 || form.values.down_payment > 100)
                   ? "Down payment must be between 0 and 100%"
                   : form.errors.down_payment
               }
@@ -227,16 +235,15 @@ const AddContractsModal = ({
               }}
               suffix="%"
             />
-
-
-
           </Grid.Col>
 
           <Grid.Col span={6}>
-
             {/* Contract Type */}
             <Select
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
               mb={24}
               rightSection={<img src={downArrow} />}
               label={t.ContractType}
@@ -251,7 +258,10 @@ const AddContractsModal = ({
             />
             {/* Customer Name */}
             <TextInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
               mb={24}
               label={t.CustomerName}
               placeholder={t.EnterTheNameOfTheCustomer}
@@ -301,9 +311,12 @@ const AddContractsModal = ({
                 }
 
                 form.setFieldValue("customer_phone", formattedNumber);
-              }} 
+              }}
               onFocus={() => {
-                if (!form.values.customer_phone || !form.values.customer_phone.startsWith("+966")) {
+                if (
+                  !form.values.customer_phone ||
+                  !form.values.customer_phone.startsWith("+966")
+                ) {
                   form.setFieldValue("customer_phone", "+966");
                 }
               }}
@@ -316,28 +329,51 @@ const AddContractsModal = ({
                 />
               }
               leftSectionPointerEvents="none"
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
               error={form.errors.customer_phone}
               mb={24}
             />
 
+            <TextInput
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
+              mb={24}
+              label={t.creation_date}
+              placeholder={t.EnterTheReleaseDateOfTheContract}
+              type="date"
+              error={form.errors.creation_date}
+              {...form.getInputProps("creation_date")}
+            />
+            
             {/* Release Date */}
             <TextInput
-              styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+              styles={{
+                input: { width: 289, height: 48 },
+                wrapper: { width: 289 },
+              }}
               mb={24}
-                label={t.ReleaseDate}
-                placeholder={t.EnterTheReleaseDateOfTheContract}
+              label={t.ReleaseDate}
+              placeholder={t.EnterTheReleaseDateOfTheContract}
               type="date"
               error={form.errors.release_date}
               {...form.getInputProps("release_date")}
             />
+
             {/* Effective Date */}
             {form.values.contract_type !== "sale" && (
               <TextInput
-                styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
+                }}
                 mb={24}
-              label={t.EffectiveDate}
-              placeholder={t.EnterTheEffectiveDateOfTheContract}
+                label={t.EffectiveDate}
+                placeholder={t.EnterTheEffectiveDateOfTheContract}
                 type="date"
                 error={form.errors.effective_date}
                 {...form.getInputProps("effective_date")}
@@ -346,8 +382,10 @@ const AddContractsModal = ({
             {/* Expiration Date */}
             {form.values.contract_type !== "sale" && (
               <TextInput
-                styles={{ input: { width: 289, height: 48 }, wrapper: { width: 289 } }}
-               
+                styles={{
+                  input: { width: 289, height: 48 },
+                  wrapper: { width: 289 },
+                }}
                 label={t.ExpirationDate}
                 placeholder={t.EnterTheExpirationDateOfTheContract}
                 type="date"
@@ -360,17 +398,15 @@ const AddContractsModal = ({
           <Grid.Col span={12}>
             <Divider size="xs" mb={16} mt={16} />
             <Center>
-
               <Button
                 type="submit"
                 variant="light"
                 radius="md"
-                 loading={loading}
+                //  loading={loading}
                 className={classes.addButton}
               >
                 {t.AddContract}
               </Button>
-
             </Center>
           </Grid.Col>
         </Grid>

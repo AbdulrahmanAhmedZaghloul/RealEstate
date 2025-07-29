@@ -225,7 +225,6 @@ function Properties() {
 
   return (
     <>
-
       <Card className={classes.mainContainer} radius="lg">
         <div>
           <BurgerButton />
@@ -257,7 +256,6 @@ function Properties() {
             </div>
 
             <div className={classes.addAndSort}>
-
               <Select
                 placeholder={t.ChooseSortingMethod}
                 data={sortOptions}
@@ -301,14 +299,14 @@ function Properties() {
                 rightSection={<Dropdown />}
                 placeholder="Filter by selling status"
                 data={[
-
                   { value: "", label: t.All },
                   { value: "0", label: t.NotSold },
                   { value: "1", label: t.Sold },
-                  
                 ]}
                 value={filters.selling_status || ""}
-                onChange={(value) => setFilters((prev) => ({ ...prev, selling_status: value }))}
+                onChange={(value) =>
+                  setFilters((prev) => ({ ...prev, selling_status: value }))
+                }
                 radius="md"
                 size="sm"
                 styles={{
@@ -377,22 +375,21 @@ function Properties() {
                 className={classes.add}
                 onClick={open}
               >
-                <AddIcon /> {" "} {t.Add}
+                <AddIcon /> {t.Add}
               </button>
             </div>
           </div>
         </header>
 
-
-
-
         {data?.pages.flatMap((page) => page.data.listings).length === 0 ? (
           <Center className={classes.notFound}>
             <img src={notFound} alt="" />
 
-            <Text style={{
-              color: "var(--color-9)"
-            }}>
+            <Text
+              style={{
+                color: "var(--color-9)",
+              }}
+            >
               {t.Nolistingsfound}
             </Text>
           </Center>
@@ -408,8 +405,15 @@ function Properties() {
                     span={{ base: 12, lg: 4, md: 6, sm: 6 }}
                     key={listing.id}
                     onClick={() =>
-                      navigate(`/dashboard/Properties/${listing.id}`)
+                      navigate(
+                        user.role === "supervisor"
+                          ? `/dashboard-supervisor/Properties/${listing.id}`
+                          : `/dashboard/Properties/${listing.id}`
+                      )
                     }
+                    // onClick={() =>
+                    //   navigate(`/dashboard/Properties/${listing.id}`)
+                    // }
                     style={{ cursor: "pointer" }}
                   >
                     <Card className={classes.card}>
@@ -487,7 +491,7 @@ function Properties() {
                           </div>
                         </div>
                         <div className={classes.listingEmployee}>
-                          {t.Category}: {listing.category} / {" "}
+                          {t.Category}: {listing.category} /{" "}
                           {listing.subcategory.name}
                         </div>
                         <div className={classes.listingEmployee}>
@@ -499,19 +503,18 @@ function Properties() {
                         <div className={classes.listingDate}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
+                              (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                            )} ${t.daysAgo}`
+                                (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              )} ${t.daysAgo}`
                             : Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                            ) === 1
-                              ? `${t.Yesterday}`
-                              : `${t.Today}`}
-
+                                (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              ) === 1
+                            ? `${t.Yesterday}`
+                            : `${t.Today}`}
                         </div>
                       </div>
                     </Card>
@@ -530,7 +533,7 @@ function Properties() {
             {/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
             {!isLoading &&
               data?.pages.flatMap((page) => page.data.listings).length ===
-              0 && (
+                0 && (
                 <Center>
                   <Text>{t.NoListingsFound}</Text>
                 </Center>
@@ -557,7 +560,6 @@ function Properties() {
         onReset={handleResetFilters}
         form={filterForm} // 👈 إرسال النموذج للمودال
       />
-
     </>
   );
 }

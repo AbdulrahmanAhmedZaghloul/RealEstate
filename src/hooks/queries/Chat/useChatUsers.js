@@ -8,6 +8,8 @@ const fetchChatUsers = async ({ token }) => {
   const { data } = await axiosInstance.get("chat/users", {
     headers: { Authorization: `Bearer ${token}` },
   });
+  console.log("Fetched chat users:", data);
+  
   return data.data.users.map((user) => ({
     id: user.id,
     name: user.name,

@@ -12,6 +12,7 @@ const sendMessage = async ({ token, receiver_id, message }) => {
   const { data } = await axiosInstance.post("chat", payload, {
     headers: { Authorization: `Bearer ${token}` },
   });
+console.log(data);
 
   return {
     sentMessage: {
@@ -45,7 +46,8 @@ export const useSendMessage = () => {
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["conversation", data.receiver_id] });
-      queryClient.invalidateQueries({ queryKey: ["chatUsers"] });
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
+      queryClient.invalidateQueries({ queryKey: ["unreadCount"] });
     },
     onError: (err, variables, context) => {
       queryClient.setQueryData(["conversation", variables.receiver_id], context.previous);

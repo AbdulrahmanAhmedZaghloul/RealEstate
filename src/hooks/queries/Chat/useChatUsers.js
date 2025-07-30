@@ -15,6 +15,7 @@ const fetchChatUsers = async ({ token }) => {
     name: user.name,
   }));
 };
+;
 
 export const useChatUsers = () => {
   const { user } = useAuth();

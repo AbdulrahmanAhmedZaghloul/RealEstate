@@ -1,9 +1,9 @@
-
 // components/chat/Chat.js
 import { Box, Grid, Drawer } from "@mantine/core";
 import ChatList from "./ChatList";
 import ChatWindow from "./ChatWindow";
 import { useEffect, useState } from "react";
+import { BurgerButton } from "../../components/buttons/burgerButton";
 
 export default function Chat() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -22,22 +22,32 @@ export default function Chat() {
     <>
       {/* للشاشات الصغيرة */}
       {isSmallScreen && (
-        <Drawer
-          opened={drawerOpened}
-          onClose={() => setDrawerOpened(false)}
-          title="Messages"
-          padding="md"
-        >
-          <ChatList
-            onSelectUser={(user) => {
-              setSelectedUser(user);
-              setDrawerOpened(false);
-            }}
-          />
-        </Drawer>
+        <>
+          <BurgerButton />
+          <Drawer
+            opened={drawerOpened}
+            onClose={() => setDrawerOpened(false)}
+            // title="Messages"
+            padding="md"
+          >
+            <ChatList
+              onSelectUser={(user) => {
+                setSelectedUser(user);
+                setDrawerOpened(false);
+              }}
+            />
+          </Drawer>
+        </>
       )}
 
-      <Grid gutter={0} style={{ height: "95vh", overflow: "hidden", backgroundColor:"var(--color-5)" }}>
+      <Grid
+        gutter={0}
+        style={{
+          height: "95vh",
+          overflow: "hidden",
+          backgroundColor: "var(--color-5)",
+        }}
+      >
         {/* القائمة الجانبية */}
         {!isSmallScreen && (
           <Grid.Col span={3}>
@@ -55,4 +65,4 @@ export default function Chat() {
       </Grid>
     </>
   );
-} 
+}

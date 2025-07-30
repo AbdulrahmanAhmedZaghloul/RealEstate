@@ -209,8 +209,6 @@ function RequestsEmployee() {
 
 
   return (
-
-
     <>
       <Card className={classes.mainContainer} radius="lg">
         <div>
@@ -219,7 +217,9 @@ function RequestsEmployee() {
           <Notifications />
         </div>
 
-        <header className={`${classes.header} ${isSticky ? classes.sticky : ""}`}>
+        <header
+          className={`${classes.header} ${isSticky ? classes.sticky : ""}`}
+        >
           <div className={classes.controls}>
             <div className={classes.flexSearch}>
               <div className={classes.divSearch}>
@@ -231,12 +231,10 @@ function RequestsEmployee() {
                 />
                 <Search />
               </div>
-              <span className={classes.add} onClick={openFilterModal}>
+              <span className={classes.FilterIcon} onClick={openFilterModal}>
                 <FilterIcon />
-
               </span>
             </div>
-
 
             <div className={classes.addAndSort}>
               <Select
@@ -247,7 +245,6 @@ function RequestsEmployee() {
                 onChange={setSortBy}
                 radius="md"
                 size="sm"
-
                 styles={{
                   input: {
                     width: "132px",
@@ -281,7 +278,6 @@ function RequestsEmployee() {
               />
               <Select
                 rightSection={<Dropdown />}
-
                 value={transactionType}
                 onChange={setTransactionType}
                 data={transactionOptions}
@@ -338,7 +334,6 @@ function RequestsEmployee() {
         ) : (
           <>
             <Grid className={classes.sty} align="center" spacing="xl">
-
               {data?.pages
                 .flatMap((page) => page.data.listings)
                 .filter((listing) => listing.status === "pending")
@@ -346,7 +341,9 @@ function RequestsEmployee() {
                   <GridCol
                     span={{ base: 12, lg: 4, md: 6, sm: 6 }}
                     key={listing.id}
-                    onClick={() => navigate(`/dashboard-employee/Properties/${listing.id}`)}
+                    onClick={() =>
+                      navigate(`/dashboard-employee/Properties/${listing.id}`)
+                    }
                     style={{ cursor: "pointer" }}
                   >
                     <Card className={classes.card}>
@@ -414,7 +411,7 @@ function RequestsEmployee() {
                           </div>
                         </div>
                         <div className={classes.listingEmployee}>
-                          {t.Category}: {listing.category} / {" "}
+                          {t.Category}: {listing.category} /{" "}
                           {listing.subcategory.name}
                         </div>
                         <div className={classes.listingEmployee}>
@@ -426,18 +423,18 @@ function RequestsEmployee() {
                         <div className={classes.listingDate}>
                           {Math.floor(
                             (new Date() - new Date(listing.created_at)) /
-                            (1000 * 60 * 60 * 24)
+                              (1000 * 60 * 60 * 24)
                           ) > 1
                             ? `${Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                            )} ${t.daysAgo}`
+                                (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              )} ${t.daysAgo}`
                             : Math.floor(
-                              (new Date() - new Date(listing.created_at)) /
-                              (1000 * 60 * 60 * 24)
-                            ) === 1
-                              ? `${t.Yesterday}`
-                              : `${t.Today}`}
+                                (new Date() - new Date(listing.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              ) === 1
+                            ? `${t.Yesterday}`
+                            : `${t.Today}`}
                         </div>
                       </div>
                     </Card>
@@ -454,11 +451,13 @@ function RequestsEmployee() {
               </Center>
             )}
             {/* 👇 اعرض رسالة No Results فقط إذا لم يكن هناك أي بيانات */}
-            {!isLoading && data?.pages.flatMap((page) => page.data.listings).length === 0 && (
-              <Center>
-                <Text>{t.NoListingsFound}</Text>
-              </Center>
-            )}
+            {!isLoading &&
+              data?.pages.flatMap((page) => page.data.listings).length ===
+                0 && (
+                <Center>
+                  <Text>{t.NoListingsFound}</Text>
+                </Center>
+              )}
           </>
         )}
       </Card>
@@ -479,12 +478,8 @@ function RequestsEmployee() {
         onFilter={handleApplyFilters}
         onReset={handleResetFilters}
         form={filterForm} // 👈 إرسال النموذج للمودال
-
       />
     </>
-
-
-
   );
 }
 

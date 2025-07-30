@@ -1,9 +1,10 @@
-.title{
+.title {
       color: var(--color-3);
       font-size: 1.3rem;
       font-weight: 700;
       font-family: Poppins;
 }
+
 
 .divSearch {
       position: relative;
@@ -15,6 +16,7 @@
       position: absolute;
       left: 16px;
 }
+
 .search {
       width: 289px;
       height: 48px;
@@ -23,4 +25,23 @@
       padding: 0 14px;
       padding-left: 56px;
       background-color: var(--color-7);
+}
+
+.conversationUser {
+      color: var(--color-user-chat);
+}
+
+.unread_count {
+      background-color: var(--color-1);
+      width: 14px;
+      height: 14px;
+      font-size: 10px;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 400;
+      border-radius: 10px;
 }

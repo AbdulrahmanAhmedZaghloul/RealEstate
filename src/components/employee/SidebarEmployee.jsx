@@ -57,6 +57,7 @@ export default function SidebarEmployee() {
   }, [location.pathname.split("/")[2]]);
 
   const navlist = [
+   
     {
       link: "/dashboard-employee/Properties",
       label: t["Properties"],
@@ -70,6 +71,21 @@ export default function SidebarEmployee() {
         />
       ),
     },
+
+    {
+      link: "/dashboard-employee/Requests",
+      label: t["Requests"],
+      icon: (
+        <img
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+          src={active === "Requests" ? TransactionsActive : Transactions}
+          className={classes.linkIcon}
+        />
+      ),
+    },
+    
     {
       link: "/dashboard-employee/Chat",
       label: t["Chat"],
@@ -83,6 +99,7 @@ export default function SidebarEmployee() {
         />
       ),
     },
+
     {
       link: "/dashboard-employee/ClientRequests",
       label: t["ClientRequests"],
@@ -92,19 +109,6 @@ export default function SidebarEmployee() {
             [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
           }}
           src={active === "ClientRequests" ? TransactionsActive : Transactions}
-          className={classes.linkIcon}
-        />
-      ),
-    },
-    {
-      link: "/dashboard-employee/Requests",
-      label: t["Requests"],
-      icon: (
-        <img
-          style={{
-            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
-          }}
-          src={active === "Requests" ? TransactionsActive : Transactions}
           className={classes.linkIcon}
         />
       ),
@@ -123,6 +127,7 @@ export default function SidebarEmployee() {
         />
       ),
     },
+  
   ];
 
   const links = navlist.map((item) => (

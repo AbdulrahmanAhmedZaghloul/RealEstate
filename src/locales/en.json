@@ -379,6 +379,7 @@
   "Supervisor": "Supervisor",
   "PersonalInfo": "Personal Info",
   "FullName": "Full Name",
+  "Lastlogin": "Last login",
   "SupervisorID": "Supervisor ID",
   "CreatedAt": "Created At",
   "Noofemployees": "No of employees",

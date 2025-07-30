@@ -57,6 +57,9 @@ import ContactUs from "./pages/ContactUs .jsx";
 import ClientRequestsDetails from "./pages/CRM/ClientRequestsDetails.jsx";
 import ClientRequests from "./pages/CRM/ClientRequests.jsx";
 import Chat from "./pages/Chat/ChatLayout.jsx";
+import LoginAdmin from "./pages/Admin/LoginAdmin.jsx";
+import ProfileAdmin from "./pages/Admin/ProfileAdmin.jsx";
+import DashboardLayoutAdmin from "./pages/Admin/DashboardLayoutAdmin.jsx";
 // import ClientRequestsDetails from "./pages/dashboardCompany/ClientRequestsDetails.jsx";
 
 function App() {
@@ -68,6 +71,7 @@ function App() {
             <EmployeeProvider>
               <Routes>
                 {/* Public Routes */}
+                <Route path="/Login-admin" element={<LoginAdmin />} />
                 <Route path="/MakePayment" element={<MakePayment />} />
                 {/* <Route path="/MatterOrCompany" element={<MatterOrCompany />} /> */}
                 <Route path="/choosePlan" element={<ChoosePlan />} />
@@ -120,6 +124,37 @@ function App() {
                   path="/subscription-plans"
                   element={<SubscriptionPlans />}
                 />
+
+                {/* admin Manager Routes */}
+                <Route
+                  path="/dashboard-admin/"
+                  element={
+                    // <ProtectedRoute allowedRoles={["company"]}>
+                    <DashboardLayoutAdmin />
+                    // </ProtectedRoute>
+                  }
+                >
+                  <Route index element={<ProfileAdmin />} />
+                  {/* <Route path="Team" element={<Staff />} />
+                  <Route path="Contracts" element={<Contracts />} />
+                  <Route path="Analytics" element={<Analytics />} />
+                  <Route path="Categories" element={<Categories />} />
+                  <Route path="Transactions" element={<Transactions />} />
+                  <Route path="employee/:id" element={<EmployeeDetails />} />
+                  <Route
+                    path="supervisor/:id"
+                    element={<SupervisorDetails />}
+                  />
+                  <Route path="Properties/:id" element={<PropertyDetails />} />
+                  <Route path="Properties" element={<Properties />} />
+                  <Route path="Chat" element={<Chat />} />
+                  <Route path="ClientRequests" element={<ClientRequests />} />
+                  <Route
+                    path="ClientRequestsDetails/:id"
+                    element={<ClientRequestsDetails />}
+                  />
+                  <Route path="Contracts/:id" element={<ContractDetails />} /> */}
+                </Route>
 
                 {/* Company Manager Routes */}
                 <Route
@@ -205,35 +240,34 @@ function App() {
                   }
                 >
                   <Route index element={<ProfileSupervisor />} />
-              
+
                   <Route path="Properties" element={<Properties />} />
-              
+
                   <Route path="Requests" element={<Transactions />} />
-              
+
                   <Route path="Team" element={<StaffSupervisor />} />
-              
+
                   <Route
                     path="Contracts"
                     element={<Contracts role="supervisor" />}
                   />
-              
+
                   <Route
                     path="Team/:id"
                     element={<EmployeeDetailsSupervisor />}
                   />
                   <Route path="Contracts/:id" element={<ContractDetails />} />
-              
+
                   <Route path="Properties/:id" element={<PropertyDetails />} />
 
                   <Route path="Chat" element={<Chat />} />
 
                   <Route path="ClientRequests" element={<ClientRequests />} />
-              
+
                   <Route
                     path="ClientRequestsDetails/:id"
                     element={<ClientRequestsDetails />}
                   />
-              
                 </Route>
 
                 {/* Employee Routes */}
@@ -245,28 +279,26 @@ function App() {
                     </ProtectedRoute>
                   }
                 >
-                
                   <Route index element={<ProfileEmployee />} />
-                
+
                   <Route path="Properties" element={<PropertiesEmployee />} />
-                
+
                   <Route path="Requests" element={<RequestsEmployee />} />
-                
+
                   <Route path="Chat" element={<Chat />} />
 
                   <Route path="ClientRequests" element={<ClientRequests />} />
-                
+
                   <Route
                     path="ClientRequestsDetails/:id"
                     element={<ClientRequestsDetails />}
                   />
-                
+
                   <Route
                     path="Properties/:id"
                     element={<PropertyDetailsEmployee />}
                   />
                 </Route>
-                
               </Routes>
             </EmployeeProvider>
           </SidebarProvider>

@@ -1,0 +1,12 @@
+/* styles/ProfileAdmin.module.css */
+.container {
+      maxWidth: 600px;
+      margin: 30px auto;
+      padding: 0 16px;
+}
+
+@media (max-width: 576px) {
+      .container {
+            padding: 0 12px;
+      }
+}

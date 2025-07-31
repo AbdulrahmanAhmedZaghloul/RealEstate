@@ -12,10 +12,17 @@
   background-color: var(--color-7);
 }
 
+.CardWeight{
+  border: 1px solid var(--color-border);
+  padding: 2rem;
+  border-radius: 0.7rem;
+}
 .mainThemeToggle {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
+  /* background-color: yellowgreen; */
 }
 
 .ThemeToggle {
@@ -23,12 +30,49 @@
   align-items: center;
 }
 
+.FullNameWeight {
+  font-weight: 400;
+  color: var(--color-2);
+}
+
+.NameWeight {
+  font-weight: 400;
+  color: var(--color-3);
+}
+
+.TextWeight {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--color-3);
+}
+
+
+.emailWeight {
+  font-weight: 400;
+  color: var(--color-3);
+}
+
+.PersonalInfoWeight {
+  font-weight: 700;
+  color: var(--color-3);
+}
+
+
+.Boxmain {
+  background-color: var(--color-5);
+  padding: 20px;
+}
+
 .title {
   font-size: 24px;
   font-weight: 500;
   color: var(--color-3);
-  margin-top: 24px;
+  /* margin-top: 24px; */
+  display: flex;
+  align-items: center;
 }
+
 
 .planContainer {
   padding: 0px;

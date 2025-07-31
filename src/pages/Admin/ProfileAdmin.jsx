@@ -24,10 +24,7 @@ import EditIcon from "../../components/icons/edit";
 import { useTranslation } from "../../context/LanguageContext";
 import { BurgerButton } from "../../components/buttons/burgerButton";
 import { ThemeToggle } from "../../Settings/ThemeToggle";
-import Notifications from "../../components/Notifications/Notifications";
-// import { useAuth } from "../../context/authContext";
-// import { useAdminProfile } from "../../hooks/queries/useAdminProfile";
-// import { useUpdateAdminProfile } from "../../hooks/mutations/useUpdateAdminProfile";
+import Notifications from "../../components/Notifications/Notifications"; 
 import classes from "../../styles/profile.module.css";
 
 function validateSaudiPhoneNumber(phoneNumber) {
@@ -88,14 +85,13 @@ function ProfileAdmin() {
   if (isLoading || !adminData) return <div>Loading...</div>;
 
   return (
-    <Box>
+    <Box className={classes.Boxmain}>
       <div className={classes.mainThemeToggle}>
         <BurgerButton />
         <span className={classes.title}>{t.profile}</span>
         <div className={classes.ThemeToggle}>
           <ThemeToggle />
           <Notifications />
-          {/* <NotificationDropdown /> */}
         </div>
       </div>
       <Stack spacing="md">
@@ -107,15 +103,15 @@ function ProfileAdmin() {
               size="lg"
             />
             <Stack spacing={0}>
-              <Text weight={700} size="lg">
+              <Text className={classes.TextWeight} size="lg">
                 {adminData.name}
               </Text>
-              <Text color="dimmed">{adminData.email}</Text>
+              <Text className={classes.emailWeight}>{adminData.email}</Text>
             </Stack>
           </Group>
         </Group>
 
-        <Card shadow="sm" p="md">
+        <Card shadow="sm" className={classes.CardWeight}>
           <div
             style={{
               display: "flex",
@@ -124,7 +120,9 @@ function ProfileAdmin() {
               marginBottom: "20px",
             }}
           >
-            <Title>{t.PersonalInfo}</Title>
+            <Text size="lg" className={classes.PersonalInfoWeight}>
+              {t.PersonalInfo}
+            </Text>
 
             <Button
               variant="subtle"
@@ -142,22 +140,24 @@ function ProfileAdmin() {
             </Button>
           </div>
 
-          <Grid gutter="xs">
-            <GridCol span={6}>
-              <Text weight={500}>{t.FullName}</Text>
-              <Text>{adminData.name}</Text>
+          <Grid gutter="md">
+            <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
+              <Text className={classes.FullNameWeight}>{t.FullName}</Text>
+              <Text className={classes.NameWeight}>{adminData.name}</Text>
             </GridCol>
-            <GridCol span={6}>
-              <Text weight={500}>{t.Email}</Text>
-              <Text>{adminData.email}</Text>
+            <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
+              <Text className={classes.FullNameWeight}>{t.Email}</Text>
+              <Text className={classes.NameWeight}>{adminData.email}</Text>
             </GridCol>
-            <GridCol span={6}>
-              <Text weight={500}>{t.contactNumber}</Text>
-              <Text>{formatSaudiPhoneNumberForDisplay(adminData.phone)}</Text>
+            <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
+              <Text className={classes.FullNameWeight}>{t.contactNumber}</Text>
+              <Text className={classes.NameWeight}>
+                {formatSaudiPhoneNumberForDisplay(adminData.phone)}
+              </Text>
             </GridCol>
-            <GridCol span={6}>
-              <Text weight={500}>{t.Lastlogin}</Text>
-              <Text>
+            <GridCol span={{ base: 12, lg: 4, md: 6, sm: 6 }}>
+              <Text className={classes.FullNameWeight}>{t.Lastlogin}</Text>
+              <Text className={classes.NameWeight}>
                 {new Date(adminData.last_login_at).toLocaleString("en-US", {
                   dateStyle: "medium",
                   timeStyle: "short",

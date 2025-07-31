@@ -13,17 +13,17 @@ import {
   Grid,
   Anchor,
 } from "@mantine/core";
-import classes from "../../styles/login.module.css";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import classes from "../styles/login.module.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
-import { useAuth } from "../../context/authContext";
-import axiosInstance from "../../api/config";
-import position1 from "../../assets/header/pont.png";
-import image from "../../assets/header/screenshot_landing.png";
-import { validateField } from "../../hooks/Validation/validation";
-import { HeaderMegaMenu } from "../../components/company/HeaderMegaMenu";
-import { useTranslation } from "../../context/LanguageContext";
+import { useAuth } from "../context/authContext";
+import axiosInstance from "../api/config";
+import position1 from "../assets/header/pont.png";
+import image from "../assets/header/screenshot_landing.png";
+import { validateField } from "../hooks/Validation/validation";
+import { HeaderMegaMenu } from "../components/company/HeaderMegaMenu";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function LoginAdmin() {
   const navigate = useNavigate();
@@ -63,10 +63,7 @@ export default function LoginAdmin() {
         })
         .then((response) => {
           const token = response.data.token;
-          console.log(token);
-
-          //     const role = response.data.data.user.role;
-          //     navigate("/dashboard-admin");
+          console.log(token); 
           if (token) {
             login(token, credentials.remember);
             navigate("/dashboard-admin");

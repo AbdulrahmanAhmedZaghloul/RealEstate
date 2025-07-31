@@ -57,23 +57,28 @@ import ContactUs from "./pages/ContactUs .jsx";
 import ClientRequestsDetails from "./pages/CRM/ClientRequestsDetails.jsx";
 import ClientRequests from "./pages/CRM/ClientRequests.jsx";
 import Chat from "./pages/Chat/ChatLayout.jsx";
-import LoginAdmin from "./pages/Admin/LoginAdmin.jsx";
+// import LoginAdmin from "./pages/LoginAdmin.jsx";
 import ProfileAdmin from "./pages/Admin/ProfileAdmin.jsx";
 import DashboardLayoutAdmin from "./pages/Admin/DashboardLayoutAdmin.jsx";
-// import ClientRequestsDetails from "./pages/dashboardCompany/ClientRequestsDetails.jsx";
-
+import LoginAdmin from "./pages/LoginAdmin.jsx";
+import AdminList from "./pages/Admin/AdminList.jsx";
+ 
 function App() {
   return (
     <EmployeeProvider>
+      {/* <Routes>
+        <Route path="/Login-admin" element={<LoginAdmin />} />
+      </Routes> */}
       <LanguageProvider>
         <AuthProvider>
           <SidebarProvider>
             <EmployeeProvider>
               <Routes>
                 {/* Public Routes */}
-                <Route path="/Login-admin" element={<LoginAdmin />} />
                 <Route path="/MakePayment" element={<MakePayment />} />
                 {/* <Route path="/MatterOrCompany" element={<MatterOrCompany />} /> */}
+                <Route path="/Login-admin" element={<LoginAdmin />} />
+
                 <Route path="/choosePlan" element={<ChoosePlan />} />
                 <Route path="/StartAccount" element={<StartAccount />} />
 
@@ -126,15 +131,20 @@ function App() {
                 />
 
                 {/* admin Manager Routes */}
+
                 <Route
                   path="/dashboard-admin/"
                   element={
-                    // <ProtectedRoute allowedRoles={["company"]}>
+                    // <ProtectedRoute allowedRoles={["admin"]}>
                     <DashboardLayoutAdmin />
-                    // </ProtectedRoute>
+                    //  </ProtectedRoute>
                   }
                 >
+
                   <Route index element={<ProfileAdmin />} />
+
+                  <Route path="AdminList" element={<AdminList />} />
+                  
                   {/* <Route path="Team" element={<Staff />} />
                   <Route path="Contracts" element={<Contracts />} />
                   <Route path="Analytics" element={<Analytics />} />

@@ -1,4 +1,3 @@
-
 // AuthContext.js
 
 import { createContext, useContext, useState } from "react";
@@ -49,43 +48,60 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.getItem("token")
           ? (sessionStorage.removeItem("token"),
             sessionStorage.removeItem("role"))
-          : (localStorage.removeItem("token"), 
-          localStorage.removeItem("role"));
-        localStorage.clear()
-        sessionStorage.clear()
+          : (localStorage.removeItem("token"), localStorage.removeItem("role"));
+        localStorage.clear();
+        sessionStorage.clear();
         setUser(null);
         navigate("/");
         notifications.show({
           title: "Logged out successfully.",
           message: "You are now logged out.",
           color: "green",
-        })
+        });
       })
       .catch((error) => {
         console.error(error);
-        notifications.show({
-        })
+        notifications.show({});
       });
   };
 
+  // AuthContext.js
   const isSubscribed = async () => {
-    const token = sessionStorage.getItem("token")
-      ? sessionStorage.getItem("token")
-      : localStorage.getItem("token");
-    return await axiosInstance.get("stripe/subscriptions/current", {
+    const token =
+      sessionStorage.getItem("token") || localStorage.getItem("token");
+    if (!token) return false;
+
+    try {
+      const res = await axiosInstance.get("stripe/subscriptions/current", {
         headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        console.log(res);
-        console.log(token);
-        
-        return true;
-      })
-      .catch((err) => {
-        console.log(err);
-        return false;
       });
+      // تأكد إن الاستجابة فيها بيانات نشطة
+      // console.log(res.data.data);
+      const PLAN =  res?.data?.data?.subscription?.id;
+      localStorage.getItem("")
+      
+      return res.data?.data?.status?.active === true;
+    } catch (err) {
+      return false;
+    }
   };
+  
+  // const isSubscribed = async () => {
+  //   const token = sessionStorage.getItem("token")
+  //     ? sessionStorage.getItem("token")
+  //     : localStorage.getItem("token");
+  //   return await axiosInstance
+  //     .get("stripe/subscriptions/current", {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     })
+  //     .then((res) => {
+  //       return true; // ✅ دا صحيح
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       return false;
+  //     });
+  // };
 
   return (
     <AuthContext.Provider value={{ user, login, logout, isSubscribed }}>

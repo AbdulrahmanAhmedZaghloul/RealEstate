@@ -219,6 +219,26 @@ export default function SidebarAdmin() {
     //     },
 
     {
+      link: "/dashboard-admin/AdminList",
+      label: t["AdminList"],
+      // label: "Profile",
+      icon: (
+        <img
+          src={
+            active === "AdminList" && colorScheme === "light"
+              ? ProfileActive
+              : active === "AdminList" && colorScheme === "dark"
+              ? ProfileActiveDark
+              : Profile
+          }
+          className={classes.linkIcon}
+          style={{
+            [lang === "en" ? "marginRight" : "marginLeft"]: "12px", // ✅ شرط اللغة
+          }}
+        />
+      ),
+    },
+    {
       link: "/dashboard-admin",
       label: t["Profile"],
       // label: "Profile",

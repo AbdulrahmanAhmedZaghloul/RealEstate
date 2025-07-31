@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import classes from "../../styles/profile.module.css";
 import { useTranslation } from "../../context/LanguageContext";
 import { useMyCurrentSubscription } from "../../hooks/queries/useMyCurrentSubscription";
+import { useEffect } from "react";
 
 export default function ProfilePlane() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function ProfilePlane() {
     error,
   } = useMyCurrentSubscription();
   console.log(subscriptionData);
-  
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -41,6 +42,15 @@ export default function ProfilePlane() {
     const percentage = (elapsedTime / totalTime) * 100;
     return Math.round(percentage);
   };
+
+  console.log(subscriptionData);
+  
+  useEffect(() => {
+    if (subscriptionData?.plan_id && subscriptionData?.plan_name) {
+      localStorage.setItem("currentPlanId", subscriptionData.plan_id);
+      localStorage.setItem("currentPlanName", subscriptionData.plan_name);
+    }
+  }, [subscriptionData]);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>{error?.message || "Error fetching subscription data."}</p>;
@@ -91,7 +101,7 @@ export default function ProfilePlane() {
       </div>
 
       <div
-        onClick={() => navigate("/subscription-plans")}
+        onClick={() => navigate("/UpdataPlans")}
         className={classes.Update}
       >
         <span style={{ color: "var(--color-1)" }}>

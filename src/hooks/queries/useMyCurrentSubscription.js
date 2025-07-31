@@ -8,24 +8,44 @@ const fetchCurrentSubscription = async (token) => {
   const { data } = await axiosInstance.get("stripe/subscriptions/current", {
     headers: { Authorization: `Bearer ${token}` },
   });
-  console.log(data);
 
-  const stripe = data.data?.stripe_subscription;
-  const planItem = stripe?.items?.data?.[0];
-  const planId = data?.data?.subscription?.id;
+  if (!data.success || !data.data) {
+    throw new Error("No subscription found");
+  }
+
+  const subscription = data.data.subscription;
+  const stripeSub = data.data.stripe_subscription;
+
+  if (!stripeSub || !stripeSub.items?.data?.length) {
+    return {
+      plan_id: subscription?.id || null,
+      plan_name: subscription?.name || "No Plan",
+      price: 0,
+      currency: "usd",
+      duration_days: 30,
+      start_date: null,
+      end_date: null,
+      status: "inactive",
+      raw: data.data,
+    };
+  }
+
+  const planItem = stripeSub.items.data[0];
+  const price = planItem.price;
+    // localStorage.setItem("currentPlanId", subscription.id);
 
   return {
-    plan_id: planId,
-    plan_name: data.data?.subscription?.name || "Default",
-    price: (planItem?.price?.unit_amount || 0) / 100,
-    currency: planItem?.price?.currency || "usd",
-    duration_days: planItem?.price?.recurring?.interval === "year" ? 365 : 30,
-    start_date: new Date(planItem?.current_period_start * 1000).toISOString(),
-    end_date: new Date(planItem?.current_period_end * 1000).toISOString(),
-    raw: data.data, // (اختياري) لو حبيت ترجع الـ raw data كمان
+    plan_id: subscription.id,
+    plan_name: subscription.name || "Custom Plan",
+    price: (price.unit_amount || 0) / 100, // تحويل من سنتات
+    currency: price.currency || "usd",
+    duration_days: price.recurring?.interval === "year" ? 365 : 30,
+    start_date: new Date(planItem.current_period_start * 1000).toISOString(),
+    end_date: new Date(planItem.current_period_end * 1000).toISOString(),
+    status: stripeSub.status,
+    raw: data.data,
   };
 };
-
 export const useMyCurrentSubscription = () => {
   const { user } = useAuth();
 

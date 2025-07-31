@@ -62,6 +62,7 @@ import ProfileAdmin from "./pages/Admin/ProfileAdmin.jsx";
 import DashboardLayoutAdmin from "./pages/Admin/DashboardLayoutAdmin.jsx";
 import LoginAdmin from "./pages/LoginAdmin.jsx";
 import AdminList from "./pages/Admin/AdminList.jsx";
+import UpdataPlans from "./pages/UpdataPlans.jsx";
  
 function App() {
   return (
@@ -125,6 +126,10 @@ function App() {
                 />
                 <Route path="/ResetPassword" element={<ResetPassword />} />
                 {/* <Route path="*" element={<NotFound />} /> */}
+                <Route
+                  path="/UpdataPlans"
+                  element={<UpdataPlans />}
+                />
                 <Route
                   path="/subscription-plans"
                   element={<SubscriptionPlans />}

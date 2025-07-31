@@ -20,8 +20,6 @@ import BathsIcon from "../icons/BathsIcon";
 import Area from "../icons/area";
 import FloorsIcon from "../icons/FloorsIcon";
 import CategoryIcon from "../icons/CategoryIcon";
-import DeleteIcon from "../icons/DeleteIcon";
-import EditIcon from "../icons/edit";
 import { useQueryClient } from '@tanstack/react-query';
 
 function PropertyDetailsMarketer() {
